@@ -1,0 +1,53 @@
+        fieldset{
+            width: 600px;
+            height: 400px;
+            padding: .35em .625em .75em;
+            margin: auto;
+            border: 2px solid silver;
+            background-color: lightgoldenrodyellow;
+            text-align: center;
+            border-radius: 20px;
+        }
+        .f2{
+            width: 600px;
+            height: 150px;
+        }
+
+        legend {
+            padding: .5em;
+            border: 0;
+            width: auto;
+            margin-bottom: 0px;
+            float: none;
+            font-size: 20px;
+            font-family: 微軟正黑體;
+            font-weight: 900;
+        }
+
+        .form1 {
+            width: 200px;
+            height: 20px;
+            /* display: inline; */
+
+        }
+        .form2{
+            width: 300px;
+            height: 100px;
+        }
+
+        .t1 {
+            width: 100px;
+            float: left;
+            margin-right: 20px;
+        }
+
+        .radio_1 {
+            margin-right: 20px;
+        }
+
+        .d1 {
+            text-align: left;
+        }
+        .d2{
+         	text-align:center;
+        }
