@@ -26,6 +26,9 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+    
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <!-- .js請從此後寫 -->
 
 </head>
 
@@ -49,20 +52,18 @@
 
             <!-- Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="<c:url value='index.jsp' />">
+                <a class="nav-link" href="<c:url value='/' />">
                     <i class='fas fa-home' style='font-size:22px'></i>
                     <span>主頁</span></a>
             </li>
             <li class="nav-item">
-                <!-- 0419連結待修改 -->
-                <a class="nav-link collapsed" href="<c:url value='pages.jsp' />">
+                <a class="nav-link collapsed" href="<c:url value='pages' />">
                     <i class='fas fa-clock' style='font-size:22px'></i>
                     <span id="listname">出勤管理</span>
                 </a>
             </li>
             <li class="nav-item">            
-                <!-- 0419連結待修改 -->
-                <a class="nav-link collapsed" href="<c:url value='pages.jsp' />">
+                <a class="nav-link collapsed" href="<c:url value='pages' />">
                     <i class='fas fa-user-tie' style='font-size:22px'></i>
                     <span id="listname">人員管理</span>
                 </a>
@@ -85,8 +86,8 @@
                     <!-- Topbar Search -->                    
                         <div class="narbar-brand">
                             <h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
-                            <span class="text-dark">特休剩餘時數：${###}小時&nbsp</span><span class="text-danger warning">(請於 ${日期} 前使用完畢)</span><br/>
-                            <span class="text-dark">加班剩餘時數：${###}小時&nbsp</span><span class="text-danger warning">(請注意到期時間)</span>
+                            <span class="text-dark">特休剩餘時數：【】小時&nbsp</span><span class="text-danger warning">(請於 【日期】 前使用完畢)</span><br/>
+                            <span class="text-dark">加班剩餘時數：【】小時&nbsp</span><span class="text-danger warning">(請注意到期時間)</span>
                         </div>  
 
                         <!-- 0419 alert to do -->
@@ -399,7 +400,7 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
-                    <a class="btn btn-primary" href="<c:url value='login.jsp' />">登出</a>
+                    <a class="btn btn-primary" href="<c:url value='login' />">登出</a>
                 </div>
             </div>
         </div>
