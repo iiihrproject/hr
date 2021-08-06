@@ -27,59 +27,95 @@
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
     
+    
+    <!-- Custom styles for this page -->
+    <link href="<c:url value='/vendor/datatables/dataTables.bootstrap4.min.css' />" rel="stylesheet">
+    
+    <!-- jQuery導入 -->
+    <script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
+    
     <!-- 使用today.js -->
     <script src="<c:url value='/js/today.js' />"></script>
     
-    <!-- 公布欄資料載入 -->
-    <script>
+	<!-- 公布欄資料載入 -->
+	<script>
 	window.onload = function() {
-		let bDataArea = document.getElementById("BulletinDataArea");
-		let xhr = new XMLHttpRequest();
-		xhr.open("GET", "<c:url value='/bulletinList'/>");
-		xhr.send();
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState == 4 && xhr.status == 200) {
-				bDataArea.innerHTML = processBulletinData(xhr.responseText);
-			}
-		}
-	}
-    
-	function processBulletinData(jsonString) {
+	$("tr").click(function(){
+	        window.location = $(this).attr('href');
+	        return false;
+	    });
+	};
+	$(document).ready(function() {
 		
-		$(document).ready(function(){
-		    $('table tbody tr').click(function(){
-		        window.location = $(this).attr('href');
-		        return false;
-		    });
-		});
-				
-		console.log(td);
-		
-		let posts = JSON.parse(jsonString);
-		let segment = "";
-		let le=0;
-		if (posts.length>10) {
-			le = 10;}
-		else { le = posts.length;}
-		for (let n = 0; n < le; n++) {
-			let bulletin = posts[n];
-			let link = "href='<c:url value='/bulletinDetail' />?postno=" + bulletin.postno + "''>";
-			let flag = "<i class=' fas fa-info-circle' style='color: #f6c23e; border-color: #f6c23e;'></i>";
-			segment += "<tr "+link;
-			segment += "<td>" + bulletin.type + "</td>";
-			if(bulletin.postDate==td){
-			segment += "<td>" + bulletin.title +" "+flag+"</td>";}
-			else{segment += "<td>" + bulletin.title +"</td>"}
-			segment += "<td>" + "20/"+ bulletin.quota + "</td>";
-			segment += "<td>" + bulletin.postDate + "</td>";
-			segment += "</tr>";
-		}
-		return segment;
-		
-	}
+
+	    $('#dataTable').DataTable( {
+	    	"lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+	        "ajax": {
+	        "url":'<c:url value='/bulletinListMag'/>',
+	        "dataSrc": "",
+	        },
+	        "order": [[ 0, "desc" ]],
+	        "columns": [
+	            { "data": "postno" },
+	            { "data": "type" },
+	            { "data": "title" },
+	            { "data": "description" },
+	            { "data": "postDate" },
+	            { "data": "exp" },
+	            { "data": "quotatype" },
+	            { "data": "quota" },
+	            { "data": "quota" },
+	            { "data": "quota" },
+	            { "data": "postStatus",
+	            	"render": function (data, type, row, meta) {
+	            		let status="";
+	            		if (row.postDate<=td && row.exp>=td) {
+	            			status += "刊登中";
+	            			}else if(row.postDate>td){
+	            				status += "未刊登";
+	            			}else if (row.exp<td) {
+	            				status += "已過期";
+	            			}else{status +="其他";}
+	            		
+	            		return status;
+	                }},
+	        ],
+	    
+            createdRow: function (row, data, index) {
+                if (data.postDate<=td && data.exp>=td) {
+                   $('td', row).eq(10).css('color', 'green')
+                }
+            }, 
+            
+            rowCallback: function(row, data){
+            	console.log("<c:url value='/bulletinDetail'/>?postno=" + data.postno );
+            	$(row).attr("href","<c:url value='/bulletinDetail'/>?postno=" + data.postno);
+            },
+            
+            "language": {
+            	"emptyTable": "表中資料為空",
+                "lengthMenu": "顯示 _MENU_ 則貼文",
+                "zeroRecords": "沒有符合的貼文",
+                "info": "顯示第 _START_ 至 _END_ 則貼文，共 _TOTAL_ 則",
+                "infoEmpty": "顯示第 0 至 0 則貼文，共 0 則",
+                "infoFiltered": "(由 _MAX_ 則貼文過濾)",
+                "search": "搜尋貼文:",
+                "Paginate": {
+                    "First": "首頁",
+                    "Previous": "上一頁",
+                    "Next": "下一頁",
+                    "Last": "尾頁",
+                },
+              }
+            
+	    } );
+	    
+                   
+	} );
 	
 	</script>
-
+	
+	
 </head>
 
 <body id="page-top">
@@ -168,70 +204,53 @@
 
 
                 <!-- Begin Page Content -->
-                <div id="bgcolor" class="container-fluid">
-                    <div class="row">
-                        <!-- Area Chart -->
-                        <div class="col-12 col-lg-6">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold">行事曆</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="contents w-100">
-                                        <!-- <iframe src="https://calendar.google.com/calendar/embed?src=d43m79ddllr6j2psmaqblv1iec%40group.calendar.google.com&ctz=Asia%2FTaipei" style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe> -->
-                                        ##內容寫這裡
-                                    </div>
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-2 text-gray-800">公佈欄管理</h1>
+                    <p class="mb-4">刊登貼文請依循公司規定</p>
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold">貼文列表</h6>
+                            <!--人資公布欄管理區-->
+                            <div class="dropdown no-arrow">
+                                <a href="#" class="btn btn-outline-primary btn-icon-split btn-sm" id="navbarDropdown" 
+                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="text">新增貼文</span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" href="<c:url value='###' />">公告</a>
+                                    <a class="dropdown-item" href="<c:url value='bulletinEventInsert' />">活動</a>
                                 </div>
                             </div>
+                             <!--人資公布欄管理區end-->
                         </div>
-
-                        <!-- 0419 分隔線分隔線 -->
-
-                        <!-- Pie Chart -->
-                        <div class="col-12 col-lg-6">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold">公佈欄</h6>
-                                    <!--人資公布欄管理區-->
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">                                     
-                                            <a class="dropdown-item" href="<c:url value='/bulletinManage' />">管理公佈欄</a>
-                                        </div>
-                                    </div>
-                                   <!--人資公布欄管理區end-->
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="contents w-100">
-                                        <!-- 內容開始 -->
-                                        
-                                        <!-- DataTales Example -->
-											<div class="table-responsive">
-                                				<table class="table table-bordered table-hover" width="100%" cellspacing="0">
-                                   					 <thead>
-                                       					 <tr>
-                                            				<th>類型</th>
-                                            				<th>主旨</th>
-                                            				<th>報名人數</th>
-                                            				<th>刊登日</th>
-                                        				</tr>
-                                    				</thead>
-                                    				
-                                    				<tbody id="BulletinDataArea" class="">
-                                    				</tbody>
-                                				</table> 
-                             				</div>   
-                              				<a href="#" style="color:gray">  more</a>   
-                                        <!-- 內容結束 -->
-                                    </div>
-                                </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>NO.</th>
+                                            <th>類型</th>
+                                            <th>主旨</th>
+                                            <th>內容</th>
+                                            <th>刊登日期</th>
+                                            <th>有效日期</th>
+                                            <th>名額</th>
+                                            <th>可報名額</th>  
+                                            <th>已報名額</th>
+                                            <th>瀏覽人次</th>
+                                            <th>狀態</th>
+                                                                                         
+                                        </tr>
+                                    </thead>
+                                   <tbody id="BulletinMagList">
+                                       
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -288,17 +307,32 @@
         </div>
     </div>
 
+
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<c:url value='/vendor/jquery/jquery.min.js' />"></script>
+    <script src="<c:url value='/vendor/bootstrap/js/bootstrap.bundle.min.js' />"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="<c:url value='/vendor/jquery-easing/jquery.easing.min.js' />"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="<c:url value='/js/sb-admin-2.min.js' />"></script>
+    
+    <!-- Page level plugins -->
+    <script src="<c:url value='/vendor/datatables/jquery.dataTables.min.js' />"></script>
+    <script src="<c:url value='/vendor/datatables/dataTables.bootstrap4.min.js' />"></script>
 
+    <!-- Page level custom scripts -->
+    <%-- <script src="<c:url value='/js/demo/datatables-demo.js' />"></script> --%>
 
+    <!-- Page level plugins -->
+    <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
+
+    <!-- Page level custom scripts -->
+    <!-- <script src="js/demo/chart-area-demo.js"></script> -->
+    <!-- <script src="js/demo/chart-pie-demo.js"></script> -->
+    
+    
 </body>
 
 </html>

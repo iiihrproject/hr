@@ -26,59 +26,8 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+
     
-    <!-- 使用today.js -->
-    <script src="<c:url value='/js/today.js' />"></script>
-    
-    <!-- 公布欄資料載入 -->
-    <script>
-	window.onload = function() {
-		let bDataArea = document.getElementById("BulletinDataArea");
-		let xhr = new XMLHttpRequest();
-		xhr.open("GET", "<c:url value='/bulletinList'/>");
-		xhr.send();
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState == 4 && xhr.status == 200) {
-				bDataArea.innerHTML = processBulletinData(xhr.responseText);
-			}
-		}
-	}
-    
-	function processBulletinData(jsonString) {
-		
-		$(document).ready(function(){
-		    $('table tbody tr').click(function(){
-		        window.location = $(this).attr('href');
-		        return false;
-		    });
-		});
-				
-		console.log(td);
-		
-		let posts = JSON.parse(jsonString);
-		let segment = "";
-		let le=0;
-		if (posts.length>10) {
-			le = 10;}
-		else { le = posts.length;}
-		for (let n = 0; n < le; n++) {
-			let bulletin = posts[n];
-			let link = "href='<c:url value='/bulletinDetail' />?postno=" + bulletin.postno + "''>";
-			let flag = "<i class=' fas fa-info-circle' style='color: #f6c23e; border-color: #f6c23e;'></i>";
-			segment += "<tr "+link;
-			segment += "<td>" + bulletin.type + "</td>";
-			if(bulletin.postDate==td){
-			segment += "<td>" + bulletin.title +" "+flag+"</td>";}
-			else{segment += "<td>" + bulletin.title +"</td>"}
-			segment += "<td>" + "20/"+ bulletin.quota + "</td>";
-			segment += "<td>" + bulletin.postDate + "</td>";
-			segment += "</tr>";
-		}
-		return segment;
-		
-	}
-	
-	</script>
 
 </head>
 
@@ -168,74 +117,47 @@
 
 
                 <!-- Begin Page Content -->
-                <div id="bgcolor" class="container-fluid">
-                    <div class="row">
-                        <!-- Area Chart -->
-                        <div class="col-12 col-lg-6">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold">行事曆</h6>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="contents w-100">
-                                        <!-- <iframe src="https://calendar.google.com/calendar/embed?src=d43m79ddllr6j2psmaqblv1iec%40group.calendar.google.com&ctz=Asia%2FTaipei" style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe> -->
-                                        ##內容寫這裡
-                                    </div>
-                                </div>
-                            </div>
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h5 class="m-0 font-weight-bold text-primary">[ <c:out value="${bulletin.type}" /> ] <c:out value="${bulletin.title}" /></h5>
                         </div>
-
-                        <!-- 0419 分隔線分隔線 -->
-
-                        <!-- Pie Chart -->
-                        <div class="col-12 col-lg-6">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold">公佈欄</h6>
-                                    <!--人資公布欄管理區-->
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">                                     
-                                            <a class="dropdown-item" href="<c:url value='/bulletinManage' />">管理公佈欄</a>
-                                        </div>
-                                    </div>
-                                   <!--人資公布欄管理區end-->
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="contents w-100">
-                                        <!-- 內容開始 -->
+                        <div class="card-body">
+                           <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <tbody>
                                         
-                                        <!-- DataTales Example -->
-											<div class="table-responsive">
-                                				<table class="table table-bordered table-hover" width="100%" cellspacing="0">
-                                   					 <thead>
-                                       					 <tr>
-                                            				<th>類型</th>
-                                            				<th>主旨</th>
-                                            				<th>報名人數</th>
-                                            				<th>刊登日</th>
-                                        				</tr>
-                                    				</thead>
-                                    				
-                                    				<tbody id="BulletinDataArea" class="">
-                                    				</tbody>
-                                				</table> 
-                             				</div>   
-                              				<a href="#" style="color:gray">  more</a>   
-                                        <!-- 內容結束 -->
-                                    </div>
-                                </div>
+                                        <tr>
+                                            <td style="color:black"><c:out value="${bulletin.description}" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td><c:out value="附檔" /></td>
+                                        </tr>
+                                        <tr>
+                                            <td>已報名人數：10&nbsp;／&nbsp;可報名人數：<c:out value="${bulletin.quota}"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>刊登日期：<c:out value="${bulletin.postDate}"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                            <a href="#" class="btn btn-secondary btn-icon-split btn-sm" onclick="history.back()">
+                                        	<span class="text">回前頁</span>
+                                    		</a>
+                                    		&nbsp;
+                                    		<a href="#" class="btn btn-info btn-icon-split btn-sm">
+                                        	<span class="text">報名</span>
+                                    		</a>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <!-- /.container-fluid -->
 
@@ -297,6 +219,10 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+    
+    <!-- Page level plugins -->
+    <!-- <script src="<c:url value='/vendor/datatables/jquery.dataTables.min.js' />"></script>
+    <script src="<c:url value='/vendor/datatables/dataTables.bootstrap4.min.js' />"></script> -->
 
 
 </body>
