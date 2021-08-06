@@ -32,13 +32,13 @@ public class EmployeeController {
 //		return "Y" "N失敗"; 
 		
 	}
-	@GetMapping(path = "yyy") //測試
-	public String Test() {
-		return "EmployeeUser";
-	}
-	
-	@GetMapping(path = "/") //測試
-	public String Test2() {
-		return "EmployeeUser";
-	}
+//	@GetMapping(path = "yyy") //測試
+//	public String Test() {
+//		return "EmployeeUser";
+//	}
+//	
+//	@GetMapping(path = "/") //測試
+//	public String Test2() {
+//		return "EmployeeUser";
+//	}
 }
