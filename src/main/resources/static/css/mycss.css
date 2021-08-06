@@ -1,0 +1,123 @@
+#accordionSidebar {
+    background: #7973AE;
+    font-weight: bold;
+    border-radius: 0 15px 15px 0;
+}
+
+#content .navbar{
+    height: 135px;
+}
+
+#content-wrapper .narbar-brand{
+    margin-left: 15px;
+}
+
+#content-wrapper span{
+    font-size: 16px;
+}
+
+#content-wrapper span.warning{
+    font-size: 14px;
+}
+
+.card-body .contents{
+    height: 38rem;
+}
+
+.modal-footer a{
+    background: #7973AE;
+    border: #7973AE;
+    opacity: 0.9;
+}
+
+.modal-footer a:hover{
+    background: #7973AE;
+    border: #7973AE;
+    opacity: 1;
+}
+
+.container-fluid .fornone{
+    opacity: 0;
+}
+
+
+@media only screen and (max-width: 992px){
+    .card-body .contents{
+        height: 20rem;
+    }
+}
+
+@media only screen and (max-width: 768px){
+    #wrapper img{
+        display: flex;
+        margin: 0 auto;
+        width: 80%;
+    }
+    .card-body .contents{
+        height: 15rem;
+    }
+    #userDropdown img{
+        width: 32px;
+        height: 32px;
+    }
+    .container-fluid .fornone{
+        display: none !important;
+    }
+    .container-fluid .row.h-25{
+        /* margin-bottom: 10%; */
+        margin-bottom: 45px;
+    }
+}
+
+@media only screen and (max-width: 690px){
+    #wrapper img{
+        display: flex;
+        margin: 0 auto;
+        width: 80%;
+    }
+    .card-body .contents{
+        height: 15rem;
+    }
+    nav h2{
+        font-size:x-large;
+    }
+    #content-wrapper span{
+        font-size: 14px;
+    }
+    #content-wrapper span.warning{
+        font-size: 12px;
+    }
+    #userDropdown img{
+        width: 32px;
+        height: 32px;
+    }
+
+}
+
+@media only screen and (max-width: 576px){
+    #wrapper img{
+        display: flex;
+        margin: 0 auto;
+        width: 80%;
+    }
+    .card-body .contents{
+        height: 15rem;
+    }
+    nav h2{
+        font-size:large;
+    }
+    #content-wrapper span{
+        font-size: 12px;
+    }
+    #content-wrapper span.warning{
+        display: none;
+    }
+    .dropdown-menu{
+        width: 160px !important; 
+    }
+    #userDropdown img{
+        width: 32px;
+        height: 32px;
+    }
+
+}
