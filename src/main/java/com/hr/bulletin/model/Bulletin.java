@@ -24,6 +24,8 @@ public class Bulletin {
 
 	private String description;
 	
+	private String desText;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone="Asia/Taipei")
 	private Date exp;
 	
@@ -132,6 +134,14 @@ public class Bulletin {
 
 	public void setQuota(int quota) {
 		this.quota = quota;
+	}
+
+	public String getDesText() {
+		return desText;
+	}
+
+	public void setDesText(String desText) {
+		this.desText = desText;
 	}
 
 }
