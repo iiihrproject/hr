@@ -21,10 +21,10 @@ public class LoginController {
 		return "/login/login";
 	}
 	
-	@PostMapping(path="/index")
+	@GetMapping(path="/index")
 	public String redirectToMainPage() {
 		
-		return "/index/index";
+		return "pages";
 	}
 	
 }
