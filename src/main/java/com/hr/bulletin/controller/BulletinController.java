@@ -44,7 +44,8 @@ import com.hr.login.controller.LoginController;
 @Controller
 public class BulletinController {
 
-	private static Logger log = LoggerFactory.getLogger(LoginController.class);
+	private static Logger log = LoggerFactory.getLogger(BulletinController.class);
+
 
 	@Autowired
 	BulletinService bulletinService;
