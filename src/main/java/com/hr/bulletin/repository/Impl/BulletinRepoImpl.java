@@ -2,8 +2,6 @@ package com.hr.bulletin.repository.Impl;
 
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -24,6 +22,7 @@ public class BulletinRepoImpl implements BulletinRepo {
 	@Override
 	public void insert(Bulletin bulletin) {
 		entityManager.persist(bulletin);
+
 	}
 
 //	執行查詢單筆
@@ -67,5 +66,6 @@ public class BulletinRepoImpl implements BulletinRepo {
 		Bulletin bul = entityManager.find(Bulletin.class, postno);
 		entityManager.remove(bul);
 	}
+	
 
 }

@@ -40,14 +40,17 @@
 	<!-- 公布欄資料載入 -->
 	<script>
 	window.onload = function() {
-	$("tr").click(function(){
-	        window.location = $(this).attr('href');
-	        return false;
-	    });
-	};
-	$(document).ready(function() {
-		
+	
+		$("#dataTable tbody").on("click", "tr", function () {
+	        	window.location = $(this).attr('href');
+	        	return false;
+		});
 
+	};
+
+
+		
+	$(document).ready(function() {		
 	    $('#dataTable').DataTable( {
 	    	"lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
 	        "ajax": {
@@ -88,7 +91,7 @@
             }, 
             
             rowCallback: function(row, data){
-            	console.log("<c:url value='/bulletinDetail'/>?postno=" + data.postno );
+            	console.log("連結：<c:url value='/bulletinDetail'/>?postno=" + data.postno );
             	$(row).attr("href","<c:url value='/bulletinDetail'/>?postno=" + data.postno);
             },
             
@@ -100,18 +103,20 @@
                 "infoEmpty": "顯示第 0 至 0 則貼文，共 0 則",
                 "infoFiltered": "(由 _MAX_ 則貼文過濾)",
                 "search": "搜尋貼文:",
-                "Paginate": {
-                    "First": "首頁",
-                    "Previous": "上一頁",
-                    "Next": "下一頁",
-                    "Last": "尾頁",
-                },
+                "oPaginate": {
+                    "sFirst": "首頁",
+                    "sPrevious": "上一頁",
+                    "sNext": "下一頁",
+                    "sLast": "末頁"
+                 },
               }
             
 	    } );
 	    
+           		
                    
-	} );
+	} )
+		//);
 	
 	</script>
 	

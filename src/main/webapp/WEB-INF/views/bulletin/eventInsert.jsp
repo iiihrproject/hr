@@ -35,10 +35,13 @@
     <script src="<c:url value='/js/today.js' />"></script>
     
     <!-- 公布欄資料載入 -->
-    <script>
+<script>
+
     var hasError = false;
     
     window.onload = function() {
+    	
+    	//檢查表單
     	$("#title").blur(function(){
     		var titleValue = document.getElementById("title").value;
     		var div0 = document.getElementById('result0c');
@@ -79,154 +82,193 @@
     	
     	
     	//預覽載入
-    	var checkinsert = document.getElementById("checkinsert");
+    	let checkinsert = document.getElementById("checkinsert");
     	checkinsert.onclick = function() {
-    		var titleValue = document.getElementById("title").value;
-    		var descriptionValue = $(".ck-content").html();
-    		var destextValue = $(".ck-content").text();
-    		var file1Value = document.getElementById("file1").value;
-    		var quotaValue = $("[name='quota']:checked").val();
-    		var quotanValue = document.getElementById("quotanid").value;
-    		var postdateValue = document.getElementById("postdate").value;
-    		var expValue = document.getElementById("exp").value;
+    		let titleValue = document.getElementById("title").value;
+    		let descriptionValue = $(".ck-content").html();
+    		let destextValue = $(".ck-content").text();
+    		let file1Value = document.getElementById("file1").value;
+    		let quotaValue = $("[name='quotatype']:checked").val();
+    		let quotanValue = document.getElementById("quotanid").value;
+    		let postdateValue = document.getElementById("postdate").value;
+    		let expValue = document.getElementById("exp").value;
     		
     		document.getElementById("chtitle").innerHTML = titleValue;
     		document.getElementById("chdescrib").innerHTML = descriptionValue;
-    		document.getElementById("chfile").innerHTML = file1Value;
-    		document.getElementById("chqu").innerHTML = quotanValue;
+    		if(file1Value==""){
+    			document.getElementById("tdfile").innerHTML = "";
+    		}
+    		else{
+    			document.getElementById("tdfile").innerHTML = "<td>附檔："+file1Value+"</td>";
+    			}
+    		if(quotaValue=="不限"){
+    			document.getElementById("tdqu").innerHTML = "";
+    		}
+    		else{
+    			document.getElementById("tdqu").innerHTML = "<td>已報名人數：&nbsp&nbsp／&nbsp可報名人數："+quotanValue+"</td>";
+    			/* document.getElementById("chqu").innerHTML = quotanValue; */
+    			}
     		document.getElementById("chpd").innerHTML = postdateValue;
     		console.log("titleValue:"+titleValue);
     		console.log("descriptionValue:"+descriptionValue);
     		console.log("file1Value:"+file1Value);
+    		console.log("quotaValue:"+quotaValue);
     		console.log("quotanValue:"+quotanValue);
     		console.log("postdateValue:"+postdateValue);
-    		console.log("notlimitid:"+document.getElementById("notlimitid").value);
-    		console.log("limitid:"+document.getElementById("limitid").value);
-    		   		
+    		console.log("file1:"+document.getElementById("file1").files[0]);
+	   		
     	   }  
-    	 
-    	 //送出新增
-    	 var sendData = document.getElementById("sendData");
-   		 sendData.onclick = function() {
-    		hasError = false;
-    		var titleValue = document.getElementById("title").value;
-    		var descriptionValue = $(".ck-content").html();
-    		var destextValue = $(".ck-content").text();
-    		var file1Value = document.getElementById("file1").value;
-    		var quotaValue = $("[name='quota']:checked").val();
-    		var quotanValue = document.getElementById("quotanid").value;
-    		var postdateValue = document.getElementById("postdate").value;
-    		var expValue = document.getElementById("exp").value;
-    		
-    		console.log(postdateValue);
-    		
-    		//驗證資料
-    		var div0 = document.getElementById('result0c');
-    		var div1 = document.getElementById('result1c');
-    		var div2 = document.getElementById('result2c');
-    		var div3 = document.getElementById('result3c');
-    		if (!titleValue){
-    			setErrorFor(div0, "請輸入主旨");
-       		} 	else {
-          		div0.innerHTML = "";
-       		}
-    		if (!destextValue){
-    			setErrorFor(div1, "請輸入內容");
-    		} else {
-    			div1.innerHTML = "";
-    		} 
+    	
+    	//送出新增
+    	var sendData = document.getElementById("sendData");
+    	sendData.onclick = function() {
+    	hasError = false;
+    	let titleValue = document.getElementById("title").value;
+    	let descriptionValue = $(".ck-content").html();
+    	let destextValue = $(".ck-content").text();
+    	let file1Value = document.getElementById("file1").value;
+    	var quotaValue = $("[name='quotatype']:checked").val();
+    	let quotanValue = document.getElementById("quotanid").value;
+    	let postdateValue = document.getElementById("postdate").value;
+    	let expValue = document.getElementById("exp").value;
+    	let file = $('#file1')[0].files[0]
+    	//var formData = new FormData($('#inserForm')[0]);
 
-       		if (!postdateValue){
-    			setErrorFor(div2, "請輸入刊登日期");  
-       		} else {
-           		div3.innerHTML = "";
-       		}
-       		if (!expValue){
-    			setErrorFor(div3, "請輸入刊登日期");  
-       		} else {
-           		div3.innerHTML = "";
-       		}
-       		if (hasError){
-           		return false;
-       		} 
-			console.log(hasError);
-       		//送出新增資料
-       		var xhr1 = new XMLHttpRequest();
-       		xhr1.open("POST", "<c:url value='/insertBulletion' />", true);
-       		//下方為一個JavaScript物件 JSON的寫法
-    		var jsonBulletin = {
-    			"title": titleValue, 	
-    			"description": descriptionValue,
-    			"desText": destextValue,
-    			"file1": file1Value,
-    			"quotatype": quotaValue,
-    			"quota": quotanValue,
-    			"postDate": postdateValue,
-    			"exp": expValue,
-    			"type": "活動",
-    			"postStatus": "normal",
-       		}
-       		console.log(jsonBulletin)
-      		xhr1.setRequestHeader("Content-Type", "application/json"); //用post要說明請求標頭
-      		xhr1.send(JSON.stringify(jsonBulletin));
+    	   		//驗證資料
+    	   		var div0 = document.getElementById('result0c');
+    	   		var div1 = document.getElementById('result1c');
+    	   		var div2 = document.getElementById('result2c');
+    	   		var div3 = document.getElementById('result3c');
+    	   		if (!titleValue){
+    	   			setErrorFor(div0, "請輸入主旨");
+    	      		} 	else {
+    	         		div0.innerHTML = "";
+    	      		}
+    	   		if (!destextValue){
+    	   			setErrorFor(div1, "請輸入內容");
+    	   		} else {
+    	   			div1.innerHTML = "";
+    	   		} 
+
+    	      		if (!postdateValue){
+    	   			setErrorFor(div2, "請輸入刊登日期");  
+    	      		} else {
+    	          		div3.innerHTML = "";
+    	      		}
+    	      		if (!expValue){
+    	   			setErrorFor(div3, "請輸入刊登日期");  
+    	      		} else {
+    	          		div3.innerHTML = "";
+    	      		}
+    	      		if (hasError){
+    	          		return false;
+    	      		} 
+    				console.log(hasError);
+    				
+    	      		//送出新增資料
+    	      		var formData = new FormData();
+    	   		
+    	   			formData.append("title",titleValue);
+    	   			formData.append("description",descriptionValue);
+    	   		
+    	   			formData.append("file1",file);
+    	   			formData.append("quotatype",quotaValue);
+    	   			formData.append("quota",quotanValue);
+    	   			formData.append("postdate",postdateValue);
+    	   			formData.append("exp",expValue);
+    	      		
+    	      		$.ajax({ 
+    				type: 'post', 
+    				url: "<c:url value='/insertEventBulletion' />", 
+    				data: formData, 
+    				cache: false, 
+    				processData: false, 
+    				contentType: false, 
+    				})
+    	     		
+
+    	     	
+     		//傳回新增結果
+     	var xhr1 = new XMLHttpRequest();
+  		xhr1.onreadystatechange = function() {
+  		var divResult = document.getElementById('resultMsg');
+  		console.log("divResult:"+divResult);
+  		
+  		if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201) ) {
+      		result = JSON.parse(xhr1.responseText);
       		
-      		//新增結果
-      		xhr1.onreadystatechange = function() {
-      		var divResult = document.getElementById('resultMsg');
-      		
-      		if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201) ) {
-          		result = JSON.parse(xhr1.responseText);
-          		
-          		if (result.fail) {
-    		 		divResult.innerHTML = "<font color='red' >" + result.fail + "</font>";
-    	  		} else if (result.success) {
-    				divResult.innerHTML = "<font color='GREEN'>" + result.success + "</font>";
-    				div0.innerHTML = "";	
-    				div1.innerHTML = "";
-    				div2.innerHTML = "";
-    				div3.innerHTML = "";
-    				$("#resultbutton").html("<a class='btn btn-primary' href='<c:url value="/bulletinManage" />'>確認</a>");
-    	 		} else {
-    				if (result.titleError) {
-              			div0.innerHTML = "<font color='green' size='-2'>"
-    	     				+ result.titleError + "</font>";
-    				} else {
-              			div0.innerHTML = "";
-    				}
-    				if (result.descriptionError) {
-    	      			div1.innerHTML = "<font color='green' size='-2'>"
-    						+ result.descriptionError + "</font>";
-    				} else {
-    	      			div1.innerHTML = "";
-    	   			}
-    				if (result.postdateError) {
-              			div2.innerHTML = "<font color='green' size='-2'>"
-    						+ result.postdateError + "</font>";
-    				} else {
-              			div2.innerHTML = "";
-        			}
-    				if (result.expError) {
-    	    			div3.innerHTML = "<font color='green' size='-2'>"
-    						+ result.expError + "</font>";
-    				} else {
-              			div3.innerHTML = "";
-    				}
-          		}
+      		if (result.fail) {
+		 		divResult.innerHTML = "<font color='red' >" + result.fail + "</font>";
+	  		} else if (result.success) {
+				divResult.innerHTML = "<font color='GREEN'>" + result.success + "</font>";
+				div0.innerHTML = "";	
+				div1.innerHTML = "";
+				div2.innerHTML = "";
+				div3.innerHTML = "";
+				$("#resultbutton").html("<a class='btn btn-primary' href='<c:url value="/bulletinManage" />'>確認</a>");
+	 		} else {
+				if (result.titleError) {
+          			div0.innerHTML = "<font color='green' size='-2'>"
+	     				+ result.titleError + "</font>";
+				} else {
+          			div0.innerHTML = "";
+				}
+				if (result.descriptionError) {
+	      			div1.innerHTML = "<font color='green' size='-2'>"
+						+ result.descriptionError + "</font>";
+				} else {
+	      			div1.innerHTML = "";
+	   			}
+				if (result.postdateError) {
+          			div2.innerHTML = "<font color='green' size='-2'>"
+						+ result.postdateError + "</font>";
+				} else {
+          			div2.innerHTML = "";
+    			}
+				if (result.expError) {
+	    			div3.innerHTML = "<font color='green' size='-2'>"
+						+ result.expError + "</font>";
+				} else {
+          			div3.innerHTML = "";
+				}
       		}
-      		}
-      		
-      		
-      		
-    	   }  
+  		}
+  		}
+    
+
+}
     }
     
     function setErrorFor(input, message){
     	input.innerHTML = "<font color='red' size='-2'>" + message + "</font>";
         hasError = true;
     }
+    
+    function loadImageFileAsURL(){
+        let filesSelected = document.getElementById("file1").files;
+        if (filesSelected.length > 0)
+        {
+            let fileToLoad = filesSelected[0];
+    		
+            let fileReader = new FileReader();
+
+            fileReader.onload = function(fileLoadedEvent) 
+            {
+                
+            	fileDataURL = fileLoadedEvent.target.result;
+                textAreaFileContents.innerHTML = fileLoadedEvent.target.result;
+                console.log("name=" + fileLoadedEvent.name);
+                console.log("type=" + fileLoadedEvent.type );
+            };
+
+            fileReader.readAsDataURL(fileToLoad);
+        }
+    }
+    
+    
 	</script>
-	
-	<style>
+
+<style>
 	.ck-editor__editable_inline {
 	/* 設定最低高度 */
     min-height: 200px;
@@ -330,45 +372,49 @@
                         </div>
                         <div class="card-body">
                            <div class="table-responsive">
+                           
                           <table class="table table-bordered" width="100%" cellspacing="0">
                                     <tbody>
+                                    <form enctype="multipart/form-data" id="inserForm">
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">主&emsp;&emsp;旨 :</label></td>
-                                            <td><input type="text" id="title" class="form-control"  size="30" maxlength="30" style="width:600px;" required />
+                                            <td><input type="text" id="title" name="title" class="form-control"  size="30" maxlength="30" style="width:600px;" required />
                                             	<span id="result0c" class="form-text"></span></td>
                                         </tr>
                                         <tr>
                                         	<td style="text-align: right"><label for="" class="col-form-label">內&emsp;&emsp;容 :</label></td>
                     						<td style="color:black">
-                    						<div class="editor"></div>
+                    						<textarea class="editor" name="description"></textarea>
                     						<!-- <textarea id="description" id="description" class="form-control" cols="50" rows="6" required style="width:600px;" ></textarea> -->
                     						<span id=result1c class="form-text"></span>
                     						</td>
                                         </tr>
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">附&emsp;&emsp;件 :</label></td>
-                                            <td><input type="file" id="file1" class="btn-sm"></td>
+                                            <td><input type="file" id="file1" name="file1" class="btn-sm" onchange="loadImageFileAsURL():"></td>
                                         </tr>
-                                        
+                                        <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">名&emsp;&emsp;額 :</label></td>
-                                            <td><input type="radio" name="quota" id="notlimitid" value="不限" checked><label for="">不限</label>&emsp;
-                    							<input type="radio" name="quota" id="limitid" value="限制">限制
-                                            	<input type="number" name="quotan" id="quotanid" min="0" max="1000" disabled >人</td>
+                                            <td><input type="radio" name="quotatype" id="notlimitid" value="不限"/><label for="">不限</label>&emsp;
+                    							<input type="radio" name="quotatype" id="limitid" value="限制" checked/>限制
+                                            	<input type="number" name="quota" id="quotanid" min="0" max="1000"/>人
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label ">刊登日期 :</label></td>
                 							<td>
-                    						<input type="date" id="postdate" class="form-control" style="width:200px;" required >
+                    						<input type="date" id="postdate" name="postdate" class="form-control" style="width:200px;" required >
                     						<span id=result2c class="form-text"></span>
                     						</td>
                                         </tr>
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">有效日期 :</label></td>
                 							<td>
-                    						<input type="date" id="exp" class="form-control" style="width:200px;" required >
+                    						<input type="date" id="exp" name="exp" class="form-control" style="width:200px;" required >
                     						<span id=result3c class="form-text"></span>
                     						</td>
                                         </tr>
+                                        </form> 
                                         <tr>
                                            <td colspan="2">
                                             <a href="#" class="btn btn-secondary btn-icon-split btn-sm" onclick="history.back()">
@@ -379,13 +425,15 @@
                                         	<span class="text">&nbsp;預覽&nbsp;</span>
                                     		</a>
                                     		&nbsp;
-                                    		<a class="btn btn-success btn-icon-split btn-sm" href="#" data-toggle="modal" id="sendData"  data-target="#resultModal">
+                                    		<button type="submit" class="btn btn-success btn-icon-split btn-sm" data-toggle="modal" id="sendData"  data-target="#resultModal">
                                         	<span class="text">&nbsp;新增&nbsp;</span>
-                                    		</a>
+                                    		</button>
                                     		</td>
                                     	</tr>
+                                    	
                                     </tbody>
-                                 </table> 
+                                 </table>
+                                 
                             </div>
                         </div>
                     </div>
@@ -453,14 +501,15 @@
     
     
     <script> 
-	$("#limitid").change(function(){
+
+	$("#limitid").focus(function(){
 		quotanid.disabled=false; 
     });
 	
-	$("#notlimitid").change(function(){
+	$("#notlimitid").focus(function(){
 		quotanid.disabled=true; 
-    });
-    </script> 
+    }); 
+    </script>
     
     <!-- Check Modal-->
     <div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel"
@@ -482,11 +531,11 @@
                                         <tr >
                                             <td style="color:black" id="chdescrib"></td>
                                         </tr>
-                                        <tr>
-                                            <td>附檔：<span id="chfile"></span></td>
+                                        <tr id="tdfile">
+                                            <td>附檔：</td>
                                         </tr>
-                                        <tr>
-                                            <td>已報名人數：10&nbsp／&nbsp可報名人數：<span id="chqu"></span></td>
+                                        <tr  id="tdqu">
+                                            <td>已報名人數：  &nbsp／&nbsp可報名人數：<span id="chqu"></span></td>
                                         </tr>
                                         <tr>
                                             <td>刊登日期：<span id="chpd"></span></td>
@@ -514,8 +563,7 @@
                     <h5 class="modal-title mx-auto" id="resultModalLabel">活動貼文</h5>
                 </div>
                 <div class="modal-body">
-                    <span id="resultMsg" style="margin:3px auto"><font color='red' >新增失敗</font><br><br>
-                    尚有欄位未輸入，請再次確認</span><br/>
+                    <span id="resultMsg" style="margin:3px auto"><font color='red' >新增失敗</font></span><br/>
                 </div>
                 <div class="modal-footer justify-content-center" id="resultbutton">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">返回編輯</button>

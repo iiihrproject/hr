@@ -1,5 +1,6 @@
 package com.hr.bulletin.model;
 
+import java.sql.Blob;
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -42,7 +43,8 @@ public class Bulletin {
 	private String quotatype;
 	
 	private Integer quota;
-
+	
+	private byte[] picture;
 	
 
 	public String getFile1() {
@@ -142,6 +144,18 @@ public class Bulletin {
 
 	public void setDesText(String desText) {
 		this.desText = desText;
+	}
+
+
+
+	public byte[] getPicture() {
+		return picture;
+	}
+
+
+
+	public void setPicture(byte[] picture) {
+		this.picture = picture;
 	}
 
 }
