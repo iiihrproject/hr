@@ -32,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		logger.info("Login security");
 		httpSecurity
+		.csrf().disable()
 		  	.authorizeRequests() // Setting authentic system              
 //			    .antMatchers("/login").permitAll() // Pages that allow user to access without authentication
 //			    .antMatchers("/index").authenticated()// Except above pages, all pages should require basic authorization after authentication

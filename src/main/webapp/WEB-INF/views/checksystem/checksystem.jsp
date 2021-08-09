@@ -69,7 +69,7 @@
 		            xhr1.open("POST", "<c:url value='/saveCheckSystem'/>", true);
 		            xhr1.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		            xhr1.send("type=" + type);
-		
+					alert(type);
 		            xhr1.onreadystatechange = function () {
 		                // 伺服器請求完成
 		                if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201)) {
