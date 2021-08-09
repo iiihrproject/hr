@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -141,7 +141,7 @@
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">左上</div>                                          
                                             <!-- 模板一：module(有不同模塊可用標頭搜尋程式碼區塊) -->
-                                            <a href="<c:url value='module' />" class="text-decoration-none">
+                                            <a href="<c:url value='/checkInto' />" class="text-decoration-none">
                                                 <div class="h4 mb-0 font-weight-bold text-center">##簽到/簽退</div>
                                             </a>
                                         </div>
