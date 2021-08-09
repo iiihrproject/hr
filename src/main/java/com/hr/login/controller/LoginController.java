@@ -18,13 +18,13 @@ public class LoginController {
 	
 	@GetMapping(path={"/login", "/"})
 	public String loginPagePath() {
-		return "/login/login";
+		return "/login";
 	}
 	
-	@PostMapping(path="/index")
+	@GetMapping(path="/index")
 	public String redirectToMainPage() {
 		
-		return "/index/index";
+		return "/index";
 	}
 	
 }
