@@ -63,7 +63,6 @@
 		    }).then(function (result) {
 		        if (result.value) {
 		            //使用者按下「確定」要做的事
-		            alert('hi');
 		            
 		            var type = $('#work').attr('name');
 		            var xhr1 = new XMLHttpRequest();
