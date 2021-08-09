@@ -21,7 +21,7 @@ public class LoginController {
 		return "/login";
 	}
 	
-	@GetMapping(path="/index")
+	@GetMapping(path="/pages")
 	public String redirectToMainPage() {
 		return "pages";
 
