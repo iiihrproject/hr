@@ -16,15 +16,15 @@ import com.hr.login.service.LoginService;
 @Controller
 public class LoginController {
 	
-	@GetMapping(path={"/login", "/"})
+	@GetMapping(path="/login")
 	public String loginPagePath() {
-		return "/login/login";
+		return "/login";
 	}
 	
 	@GetMapping(path="/index")
 	public String redirectToMainPage() {
-		
 		return "pages";
+
 	}
 	
 }

@@ -33,8 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		logger.info("Login security");
 		httpSecurity
 		  	.authorizeRequests() // Setting authentic system              
-			    .antMatchers("/login").permitAll() // Pages that allow user to access without authentication
-			    .antMatchers("/index").authenticated()// Except above pages, all pages should require basic authorization after authentication
+//			    .antMatchers("/login").permitAll() // Pages that allow user to access without authentication
+//			    .antMatchers("/index").authenticated()// Except above pages, all pages should require basic authorization after authentication
+			    .anyRequest().permitAll()
 			    .and()
 		    .formLogin()
 			    .loginPage("/login").permitAll() // Rewrite the default login page
