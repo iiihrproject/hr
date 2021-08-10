@@ -136,7 +136,7 @@
                                             <td style="color:black"><c:out value="${bulletin.description}" /></td>
                                         </tr>
                                         <tr>
-                                            <td><img src='/bulletin/getImage?postno=<c:out value="${bulletin.postno}"/>'></td>
+                                            <td><img src="<c:url value='/bulletin/getImage?postno=${bulletin.postno}' />"/></td>
                                         </tr>
                                         <c:choose>
                                         <c:when test="${bulletin.quotatype == '不限'}">

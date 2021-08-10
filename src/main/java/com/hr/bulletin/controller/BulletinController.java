@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -42,9 +43,11 @@ import com.hr.bulletin.service.BulletinService;
 import com.hr.login.controller.LoginController;
 
 @Controller
-public class BulletinController {
+public class BulletinController implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 
-	private static Logger log = LoggerFactory.getLogger(LoginController.class);
+	private static Logger log = LoggerFactory.getLogger(BulletinController.class);
 
 	@Autowired
 	BulletinService bulletinService;
@@ -53,7 +56,7 @@ public class BulletinController {
 	ServletContext ctx;
 	
 
-	// 貼文管理
+	// 貼文管理頁
 	@GetMapping("/bulletinManage")
 	public String bulletinMag() {
 		return "/bulletin/manage";
@@ -89,7 +92,7 @@ public class BulletinController {
 		return "/bulletin/eventInsert";
 	}
 
-	// 把表單裡Json資料送到資料庫新增資料
+	// 把表單裡Json資料送到資料庫新增資料(未處理檔案
 //	@PostMapping("/insertBulletion")
 //	public @ResponseBody Map<String, String> save(@RequestBody Bulletin bulletin) {
 //		// 接JSON形式的資料 //表單綁定自動把資料轉成Member物件
@@ -132,18 +135,21 @@ public class BulletinController {
 
 				if(multipartFile.equals("org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@df40651a")) {
 				}else {
+				//取得原始檔名
 				String fileName = multipartFile.getOriginalFilename();
 				System.out.println("fileName:" + fileName);
 				
-				//檔案路徑(io) 
+				//檔案上傳的路徑(io)
 				String saveDirPath = request.getSession().getServletContext().getRealPath("/") + "uploadTempDir//";  //取得??路徑＋資料夾
 				File savefileDir = new File(saveDirPath);
-				savefileDir.mkdirs();
+				savefileDir.mkdirs(); //mkdirs就算路徑不存在也會建立
 				
-				File saveFilePath = new File(savefileDir, fileName); //(檔案路徑, 檔案名稱)
+				//儲存檔案至臨時資料夾
+				File saveFilePath = new File(savefileDir, fileName); //指定儲存的位置(檔案路徑, 檔案名稱)
 				multipartFile.transferTo(saveFilePath);
 				System.out.println("saveFilePath:" + saveFilePath);
 				
+				//存到資料庫
 				if(fileName!=null && fileName.length()!=0) {
 					String saveFilePathStr = saveDirPath + fileName;
 					bulletin.setFile1(fileName);
@@ -153,15 +159,14 @@ public class BulletinController {
 					fis1.read(b);
 					fis1.close();
 					
-					bulletin.setPicture(b);
-					//bulletin.setPicture(new SerialBlob(b));
+//					bulletin.setPicture(b);
+					bulletin.setPicture(new SerialBlob(b));
 				}
 				}
 				log.info("save方法執行2...");
 				//時間戳記
 				Timestamp ts = new Timestamp(System.currentTimeMillis());
 				
-				//Bulletin resultIns = new Bulletin();
 				bulletin.setType("活動");
 				bulletin.setTitle(title);
 				bulletin.setPostDate(postdate);
@@ -186,34 +191,6 @@ public class BulletinController {
 				return map;
 
 			}
-	
-	//讀圖
-//	@GetMapping("/bulletin/getImage")
-//	public ResponseEntity<byte[]> getImage(@RequestParam("postno") Integer no) {
-//		log.info("getImage方法執行中...");
-//		ResponseEntity<byte[]> re = null;
-//		Bulletin bulletin = bulletinService.findById(no);  //跟service要bean
-//		String filename = bulletin.getFile1();
-//		Blob blob = bulletin.getPicture();
-//		String mimeType = ctx.getMimeType(filename);  //Spring框架有準備ServletContext物件可以使用
-//		MediaType mediaType = MediaType.valueOf(mimeType);
-//		HttpHeaders headers = new HttpHeaders();
-//		try {
-//			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//			InputStream is = blob.getBinaryStream();
-//			byte[] b = new byte[81920];
-//			int len = 0;
-//			while ((len = is.read(b)) != -1) {
-//				baos.write(b, 0, len);
-//			}
-//			headers.setContentType(mediaType);
-//			headers.setCacheControl(CacheControl.noCache().getHeaderValue()); //叫瀏覽器不要cache這張圖片
-//			re = new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.OK);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return re;
-//	}
 	
 
 }

@@ -21,6 +21,7 @@ public class BulletinRepoImpl implements BulletinRepo {
 	//執行新增
 	@Override
 	public void insert(Bulletin bulletin) {
+		if(bulletin!=null)
 		entityManager.persist(bulletin);
 
 	}
