@@ -125,7 +125,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h5 class="m-0 font-weight-bold text-primary">[ <c:out value="${bulletin.type}" /> ] <c:out value="${bulletin.title}" /></h5>
+                            <h5 class="m-0 font-weight-bold text-primary">&nbsp;${bulletin.title}</h5>
                         </div>
                         <div class="card-body">
                            <div class="table-responsive">
@@ -133,22 +133,22 @@
                                     <tbody>
                                         
                                         <tr>
-                                            <td style="color:black"><c:out value="${bulletin.description}" /></td>
+                                            <td style="color:black">${bulletin.description}</td>
                                         </tr>
                                         <tr>
-                                            <td><img src="<c:url value='/bulletin/getImage?postno=${bulletin.postno}' />"/></td>
+                                            <td><img src="<c:url value='/bulletin/getImage?postno=${bulletin.postno}'/>" style="max-width:500px"/></td>
                                         </tr>
                                         <c:choose>
                                         <c:when test="${bulletin.quotatype == '不限'}">
                                         </c:when>
                                         <c:otherwise>
                                         <tr>
-                                            <td>已報名人數：10&nbsp;／&nbsp;可報名人數：<c:out value="${bulletin.quota}"/></td>
+                                            <td>已報名人數：10&nbsp;／&nbsp;可報名人數：${bulletin.quota}</td>
                                         </tr>
                                         </c:otherwise>
                                         </c:choose>
                                         <tr>
-                                            <td>刊登日期：<c:out value="${bulletin.postDate}"/></td>
+                                            <td>刊登日期：${bulletin.postDate}</td>
                                         </tr>
                                         <tr>
                                             <td>

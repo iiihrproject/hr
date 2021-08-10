@@ -44,7 +44,7 @@ public class BulletinRepoImpl implements BulletinRepo {
 	public List<Bulletin> findAllPosting() {
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-		String hql = "FROM Bulletin b WHERE b.exp>=:ts AND b.postDate<=:ts order by postno desc ";
+		String hql = "FROM Bulletin b WHERE b.exp>=:ts AND b.postDate<=:ts order by postDate desc ";
 		return entityManager.createQuery(hql,Bulletin.class).setParameter("ts",ts).getResultList();
 	}
 

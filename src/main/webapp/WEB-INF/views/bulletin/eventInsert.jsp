@@ -39,47 +39,30 @@
 
     var hasError = false;
     
-    window.onload = function() {
-    	//檢查表單
-    	$("#title").blur(function(){
-    		let titleValue = document.getElementById("title").value;
-    		let div0 = document.getElementById('result0c');
-    		if (!titleValue){
-    			setErrorFor(div0, "請輸入主旨");
-       		} 	else {
-          		div0.innerHTML = "";
-       		}
-    	})
-    	$(".ck-content").blur(function(){
-    		let destextValue = $(".ck-content").text();
-    		let div1 = document.getElementById('result1c');
-    		if (!destextValue){
-    			setErrorFor(div1, "請輸入內容");
-    		} else {
-    			div1.innerHTML = "";
-    		} 
-    	})
-    	$("#postdate").blur(function(){
-    		let postdateValue = document.getElementById("postdate").value;
-    		let div2 = document.getElementById('result2c');
-    		if (!postdateValue){
-    			setErrorFor(div2, "請輸入刊登日期");  
-       		} else {
-           		div2.innerHTML = "";
-       		}
-    	})
-    	$("#exp").blur(function(){
-    		let expValue = document.getElementById("exp").value;
-    		let div3 = document.getElementById('result3c');
-    		if (!expValue){
-    			setErrorFor(div3, "請輸入刊登日期");  
-       		} else {
-           		div3.innerHTML = "";
-       		}
-    	})
-    }
-    	
-    window.onload = function() {
+    window.onload = function () {
+    	    	
+        //檢查表單
+        
+        $("#postdate").blur(function () {
+            let postdateValue = document.getElementById("postdate").value;
+            let div2 = document.getElementById('result2c');
+            if (postdateValue<td) {
+                setErrorFor(div2, "刊登日期已過");
+            } else {
+                div2.innerHTML = "";
+            }
+        })
+        $("#exp").blur(function () {
+        	let postdateValue = document.getElementById("postdate").value;
+            let expValue = document.getElementById("exp").value;
+            let div3 = document.getElementById('result3c');
+            if (expValue<postdateValue) {
+                setErrorFor(div3, "有效日期不可小於刊登日期");
+            } else {
+                div3.innerHTML = "";
+            }
+        }) 
+    	    
     	//預覽載入
     	let checkinsert = document.getElementById("checkinsert");
     	checkinsert.onclick = function() {
@@ -91,8 +74,46 @@
     		let quotanValue = document.getElementById("quotanid").value;
     		let postdateValue = document.getElementById("postdate").value;
     		let expValue = document.getElementById("exp").value;
-    		let file = $('#file1')[0].files[0]
+    		let file = $('#file1')[0].files[0];
     		
+    		//預覽前驗證資料
+        	let div0 = document.getElementById('result0c');
+        	let div1 = document.getElementById('result1c');
+        	let div2 = document.getElementById('result2c');
+        	let div3 = document.getElementById('result3c');
+        	let div4 = document.getElementById('result4c');
+        	if (!titleValue){
+        	setErrorFor(div0, "請輸入主旨");
+        	} 	else {
+        	div0.innerHTML = "";
+        	}
+        	if (!destextValue){
+        	setErrorFor(div1, "請輸入內容");
+        	} else {
+        	div1.innerHTML = "";
+        	} 
+        	if (!postdateValue){
+        	setErrorFor(div2, "請輸入刊登日期");  
+        	} else if (postdateValue<td) {
+                setErrorFor(div2, "刊登日期已過");
+            } else {
+        	div2.innerHTML = "";
+        	}
+        	if (!expValue){
+        	setErrorFor(div3, "請輸入刊登日期");  
+        	} else if (expValue<postdateValue) {
+                setErrorFor(div3, "有效日期不可小於刊登日期");
+            } else {
+        	div3.innerHTML = "";
+        	}
+        	if (quotaValue=="限制" && quotanValue==0){
+            setErrorFor(div4, "請輸入可報名額");  
+            } else {
+            div4.innerHTML = "";
+            }
+
+    		
+            //預覽資料載入
     		document.getElementById("chtitle").innerHTML = titleValue;
     		document.getElementById("chdescrib").innerHTML = descriptionValue;
     		if(file1Value==""){
@@ -106,135 +127,157 @@
     		}
     		else{
     			document.getElementById("tdqu").innerHTML = "<td>已報名人數：&nbsp&nbsp／&nbsp可報名人數："+quotanValue+"</td>";
-    			/* document.getElementById("chqu").innerHTML = quotanValue; */
     			}
     		document.getElementById("chpd").innerHTML = postdateValue;
-    		console.log("titleValue:"+titleValue);
-    		console.log("descriptionValue:"+descriptionValue);
-    		console.log("file1Value:"+file1Value);
-    		console.log("quotaValue:"+quotaValue);
-    		console.log("quotanValue:"+quotanValue);
-    		console.log("postdateValue:"+postdateValue);
-    		console.log("file1:"+document.getElementById("file1").files[0]);
+    		console.log("titleValue主旨:"+titleValue);
+    		console.log("descriptionValue內容:"+descriptionValue);
+    		console.log("destextValue內容:"+destextValue);
+    		console.log("file1Value檔案名:"+file1Value);
+    		console.log("quotaValue名額:"+quotaValue);
+    		console.log("quotanValue名額數:"+quotanValue);
+    		console.log("postdateValue刊登日:"+postdateValue);
+    		console.log("expValue有效日:"+expValue);
+    		console.log("file檔案內容:"+file);
+
 	   		
     	}
+      	
+    	//送出新增
+        let sendData = document.getElementById("sendData");
+        sendData.onclick = function () {
+            hasError = false;
+            let titleValue = document.getElementById("title").value;
+            let descriptionValue = $(".ck-content").html();
+            let destextValue = $(".ck-content").text();
+            let file1Value = document.getElementById("file1").value;
+            let quotaValue = $("[name='quotatype']:checked").val();
+            let quotanValue = document.getElementById("quotanid").value;
+            let postdateValue = document.getElementById("postdate").value;
+            let expValue = document.getElementById("exp").value;
+            let file = $('#file1')[0].files[0]
+            if(!file){
+            	let file = null;
+            }
+
+            //新增前驗證資料
+            let div0 = document.getElementById('result0c');
+        	let div1 = document.getElementById('result1c');
+        	let div2 = document.getElementById('result2c');
+        	let div3 = document.getElementById('result3c');
+        	let div4 = document.getElementById('result4c');
+        	if (!titleValue){
+        	setErrorFor(div0, "請輸入主旨");
+        	} 	else {
+        	div0.innerHTML = "";
+        	}
+        	if (!destextValue){
+        	setErrorFor(div1, "請輸入內容");
+        	} else {
+        	div1.innerHTML = "";
+        	} 
+        	if (!postdateValue){
+        	setErrorFor(div2, "請輸入刊登日期");  
+        	} else if (postdateValue<td) {
+                setErrorFor(div2, "刊登日期已過");
+            } else {
+        	div2.innerHTML = "";
+        	}
+        	if (!expValue){
+        	setErrorFor(div3, "請輸入刊登日期");  
+        	} else if (expValue<postdateValue) {
+                setErrorFor(div3, "有效日期不可小於刊登日期");
+            } else {
+        	div3.innerHTML = "";
+        	}
+        	if (quotaValue=="限制" && quotanValue==0){
+            setErrorFor(div4, "請輸入可報名額");  
+            } else {
+            div4.innerHTML = "";
+            }
+            if (hasError) {
+                return false;
+            }
+            console.log(hasError);
+
+            //送出新增資料jQuery
+            var formData = new FormData();
+
+            formData.append("title", titleValue);
+            formData.append("description", descriptionValue);
+            formData.append("desText", destextValue);
+            formData.append("file1", file);
+            formData.append("quotatype", quotaValue);
+            if(!quotanValue){
+            	formData.append("quota", 0);
+            }else{
+            	formData.append("quota", quotanValue);
+            }
+            formData.append("postdate", postdateValue);
+            formData.append("exp", expValue);
+            
+            if(!file){
+            $.ajax({
+                type: 'post',
+                url: "<c:url value='/insertEventBulletion2' />",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+            	success: function (data) { 
+            		printresult(data);
+                	console.log("新增成功");
+            	},
+                fail: function (data) { 
+                	printresult("新增失敗");
+                    console.log("新增失敗");
+                }
+            });
+            }else{
+            $.ajax({
+                type: 'post',
+                url: "<c:url value='/insertEventBulletion' />",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) { 
+                	printresult(data);
+                    console.log("新增成功");
+                },
+                fail: function (data) { 
+                	printresult("新增失敗");
+                    console.log("新增失敗");
+                }
+            });
+            }
+
+            //傳回新增結果
+
+            
+        }
     }
     
-    window.onload = function() {    	
-    	//送出新增
-    	let sendData = document.getElementById("sendData");
-    	sendData.onclick = function() {
-    	hasError = false;
-    	let titleValue = document.getElementById("title").value;
-    	let descriptionValue = $(".ck-content").html();
-    	let destextValue = $(".ck-content").text();
-    	let file1Value = document.getElementById("file1").value;
-    	let quotaValue = $("[name='quotatype']:checked").val();
-    	let quotanValue = document.getElementById("quotanid").value;
-    	let postdateValue = document.getElementById("postdate").value;
-    	let expValue = document.getElementById("exp").value;
-    	let file = $('#file1')[0].files[0] 
-
-    	//送出前驗證資料
-    	let div0 = document.getElementById('result0c');
-    	let div1 = document.getElementById('result1c');
-    	let div2 = document.getElementById('result2c');
-    	let div3 = document.getElementById('result3c');
-    	if (!titleValue){
-    	setErrorFor(div0, "請輸入主旨");
-    	} 	else {
-    	div0.innerHTML = "";
-    	}
-    	if (!destextValue){
-    	setErrorFor(div1, "請輸入內容");
-    	} else {
-    	div1.innerHTML = "";
-    	} 
-
-    	if (!postdateValue){
-    	setErrorFor(div2, "請輸入刊登日期");  
-    	} else {
-    	div2.innerHTML = "";
-    	}
-    	if (!expValue){
-    	setErrorFor(div3, "請輸入刊登日期");  
-    	} else {
-    	div3.innerHTML = "";
-    	}
-        if (hasError){
-    	return false;
-    	} 
-    	console.log(hasError);
-    				
-    	//送出新增資料jQuery
-    	var formData = new FormData();
-    	   		
-    	formData.append("title",titleValue);
-    	formData.append("description",descriptionValue);
-    	   		
-    	formData.append("file1",file);
-    	formData.append("quotatype",quotaValue);
-    	formData.append("quota",quotanValue);
-    	formData.append("postdate",postdateValue);
-    	formData.append("exp",expValue);
-    	      		
-    	$.ajax({ 
-    	type: 'post', 
-    	url: "<c:url value='/insertEventBulletion' />", 
-    	data: formData, 
-    	cache: false, 
-    	processData: false, 
-    	contentType: false, 
-    	})
-     	
-     	//傳回新增結果
-     	var xhr1 = new XMLHttpRequest();
-  		xhr1.onreadystatechange = function() {
-  		var divResult = document.getElementById('resultMsg');
-  		
-  		if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201) ) {
-      		result = JSON.parse(xhr1.responseText);
-      		console.log("result:"+result);
-      		
-      		if (result.fail) {
-		 		divResult.innerHTML = "<font color='red' >" + result.fail + "</font>";
-	  		} else if (result.success) {
-				divResult.innerHTML = "<font color='GREEN'>" + result.success + "</font>";
-				div0.innerHTML = "";	
-				div1.innerHTML = "";
-				div2.innerHTML = "";
-				div3.innerHTML = "";
-				$("#resultbutton").html("<a class='btn btn-primary' href='<c:url value="/bulletinManage" />'>確認</a>");
-	 		} else {
-				if (result.titleError) {
-          			div0.innerHTML = "<font color='green' size='-2'>"
-	     				+ result.titleError + "</font>";
-				} else {
-          			div0.innerHTML = "";
-				}
-				if (result.descriptionError) {
-	      			div1.innerHTML = "<font color='green' size='-2'>"
-						+ result.descriptionError + "</font>";
-				} else {
-	      			div1.innerHTML = "";
-	   			}
-				if (result.postdateError) {
-          			div2.innerHTML = "<font color='green' size='-2'>"
-						+ result.postdateError + "</font>";
-				} else {
-          			div2.innerHTML = "";
-    			}
-				if (result.expError) {
-	    			div3.innerHTML = "<font color='green' size='-2'>"
-						+ result.expError + "</font>";
-				} else {
-          			div3.innerHTML = "";
-				}
-      		}
-  		}
-  		}
-    	}
+    function printresult(data){
+    var divResult = document.getElementById('resultMsg');
+        if (data=="新增失敗") {
+            divResult.innerHTML = "<font color='red' >" + data + "</font>";
+        } else if (data=="新增成功") {
+            divResult.innerHTML = "<font color='GREEN'>" + data + "</font>";
+            let div0 = document.getElementById('result0c');
+            let div1 = document.getElementById('result1c');
+            let div2 = document.getElementById('result2c');
+            let div3 = document.getElementById('result3c');
+            div0.innerHTML = "";
+            div1.innerHTML = "";
+            div2.innerHTML = "";
+            div3.innerHTML = "";
+            let tomag="<c:url value='/bulletinManage'/>"
+            $("#resultbutton").html("<a class='btn btn-primary' href="+tomag+">確認</a>");
+        } else {
+        	divResult.innerHTML = "<font color='red' >" + data + "</font>";
+        }
     }
+    
     
     function setErrorFor(input, message){
     	input.innerHTML = "<font color='red' size='-2'>" + message + "</font>";
@@ -259,6 +302,10 @@
         }
     }
     
+    
+    $(document).ready( function() {
+        $('#postdate').val(td);
+    });
     
 	</script>
 
@@ -384,14 +431,15 @@
                     						</td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">附&emsp;&emsp;件 :</label></td>
-                                            <td><input type="file" id="file1" name="file1" class="btn-sm" onchange="loadImageFileAsURL():"></td>
+                                            <td style="text-align: right"><label for="" class="col-form-label">上傳圖檔 :</label></td>
+                                            <td><input type="file" id="file1" name="file1" class="btn-sm" onchange="loadImageFileAsURL()"></td>
                                         </tr>
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">名&emsp;&emsp;額 :</label></td>
                                             <td><input type="radio" name="quotatype" id="notlimitid" value="不限"/><label for="">不限</label>&emsp;
                     							<input type="radio" name="quotatype" id="limitid" value="限制" checked/>限制
                                             	<input type="number" name="quota" id="quotanid" min="0" max="1000"/>人
+                                            	<span id=result4c class="form-text"></span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -560,7 +608,7 @@
                     <span id="resultMsg" style="margin:3px auto"><font color='red' >新增失敗</font></span><br/>
                 </div>
                 <div class="modal-footer justify-content-center" id="resultbutton">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">返回編輯</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="resultbutton">返回編輯</button>
                     <%-- <a class="btn btn-primary" href="<c:url value='/bulletinManage' />">確認</a> --%>
                 </div>
             </div>

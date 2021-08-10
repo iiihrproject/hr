@@ -1,20 +1,14 @@
 package com.hr.bulletin.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.sql.Blob;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Base64;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -24,37 +18,29 @@ import javax.sql.rowset.serial.SerialException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hr.bulletin.model.Bulletin;
 import com.hr.bulletin.service.BulletinService;
-import com.hr.login.controller.LoginController;
 
 @Controller
-public class BulletinController implements Serializable{
-	
+public class BulletinController implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	private static Logger log = LoggerFactory.getLogger(BulletinController.class);
 
 	@Autowired
 	BulletinService bulletinService;
-	
+
 	@Autowired
 	ServletContext ctx;
-	
 
 	// 貼文管理頁
 	@GetMapping("/bulletinManage")
@@ -69,7 +55,7 @@ public class BulletinController implements Serializable{
 		log.info("findAllPosting方法執行中...");
 		return bulletinService.findAllPosting();
 	}
-	
+
 	// 人資管理貼文列表
 	// ajax傳回資料庫查詢資料(純JSON資料)
 	@GetMapping("/bulletinListMag")
@@ -93,10 +79,10 @@ public class BulletinController implements Serializable{
 	}
 
 	// 把表單裡Json資料送到資料庫新增資料(未處理檔案
-//	@PostMapping("/insertBulletion")
-//	public @ResponseBody Map<String, String> save(@RequestBody Bulletin bulletin) {
+//	@PostMapping("/insertEventBulletion2")
+//	public @ResponseBody Map<String, String> save2(@RequestBody Bulletin bulletin) {
 //		// 接JSON形式的資料 //表單綁定自動把資料轉成Member物件
-//		log.info("save方法執行中...");
+//		log.info("save2方法執行中...");
 //
 //		// 時間戳記
 //		Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -115,10 +101,11 @@ public class BulletinController implements Serializable{
 //		}
 //		return map;
 //	}
-	
+
+
 	// 把表單資料送到資料庫新增資料
-		@PostMapping("/insertEventBulletion")
-		public  @ResponseBody Map<String, String> save(
+	@PostMapping("/insertEventBulletion")
+		public  @ResponseBody String save(
 				@RequestParam("title")String title, 
 				@RequestParam("description")String description, 
 				@RequestParam("file1") MultipartFile multipartFile, 
@@ -128,12 +115,13 @@ public class BulletinController implements Serializable{
 				@RequestParam("exp")Date exp, 
 				HttpServletRequest request) 
 				throws IllegalStateException, IOException, SerialException, SQLException {
+			
 				Bulletin bulletin = new Bulletin();
 				log.info("save方法執行中...");
 				
 				System.out.println("file1:"+multipartFile);
 
-				if(multipartFile.equals("org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@df40651a")) {
+				if(multipartFile==null||multipartFile.equals("org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@df40651a")) {
 				}else {
 				//取得原始檔名
 				String fileName = multipartFile.getOriginalFilename();
@@ -159,8 +147,8 @@ public class BulletinController implements Serializable{
 					fis1.read(b);
 					fis1.close();
 					
-//					bulletin.setPicture(b);
-					bulletin.setPicture(new SerialBlob(b));
+
+					bulletin.setPicture(new SerialBlob(b));  //	bulletin.setPicture(b);
 				}
 				}
 				log.info("save方法執行2...");
@@ -177,20 +165,62 @@ public class BulletinController implements Serializable{
 				bulletin.setQuotatype(quotatype);
 				bulletin.setQuota(quota);
 				
-				Map<String, String> map = new HashMap<>();
 				System.out.println("bulletin=" + bulletin);
 				String result = "";
 				try {
 					bulletinService.insert(bulletin);
 					result = "新增成功";
-					map.put("success", result);
+					
 				} catch (Exception e) {
 					result = e.getMessage();
-					map.put("fail", result);
+					
 				}
-				return map;
+				return result;
 
 			}
+	
+	@PostMapping("/insertEventBulletion2")
+	public  @ResponseBody String save2(
+			@RequestParam("title")String title, 
+			@RequestParam("description")String description, 
+			@RequestParam("quotatype")String quotatype, 
+			@RequestParam(value="quota",defaultValue="0")Integer quota, 
+			@RequestParam("postdate")Date postdate, 
+			@RequestParam("exp")Date exp, 
+			HttpServletRequest request) 
+			throws IllegalStateException, IOException, SerialException, SQLException {
+		
+			Bulletin bulletin = new Bulletin();
+			log.info("save2方法執行中...");
+
+			//時間戳記
+			Timestamp ts = new Timestamp(System.currentTimeMillis());
+			
+			bulletin.setType("活動");
+			bulletin.setTitle(title);
+			bulletin.setPostDate(postdate);
+			bulletin.setDescription(description);
+			bulletin.setExp(exp);
+			bulletin.setCreateTime(ts);
+			bulletin.setPostStatus("normal");
+			bulletin.setQuotatype(quotatype);
+			bulletin.setQuota(quota);
+			
+			System.out.println("bulletin=" + bulletin);
+			String result = "";
+			try {
+				bulletinService.insert(bulletin);
+				result = "新增成功";
+				
+			} catch (Exception e) {
+				result = "新增失敗";
+				
+			}
+			
+			return result;
+
+		}
+	
 	
 
 }
