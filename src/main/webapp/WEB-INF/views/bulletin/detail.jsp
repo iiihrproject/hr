@@ -26,7 +26,7 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
-
+    
     
 
 </head>
@@ -135,9 +135,16 @@
                                         <tr>
                                             <td style="color:black">${bulletin.description}</td>
                                         </tr>
+                                        
+                                        <c:choose>
+                                        <c:when test="${bulletin.file1==null}">
+                                        </c:when>
+                                        <c:otherwise>
                                         <tr>
                                             <td><img src="<c:url value='/bulletin/getImage?postno=${bulletin.postno}'/>" style="max-width:500px"/></td>
                                         </tr>
+                                        </c:otherwise>
+                                        </c:choose>
                                         <c:choose>
                                         <c:when test="${bulletin.quotatype == '不限'}">
                                         </c:when>

@@ -32,12 +32,14 @@ public class BulletinRepoImpl implements BulletinRepo {
 		return entityManager.find(Bulletin.class, postno);
 	}
 
-//	查詢未刪除多筆
+//	查詢未刪除多筆(管理)
 	@Override
 	public List<Bulletin> findAll() {
 		String hql = "FROM Bulletin b WHERE b.postStatus>=:del order by postno desc";
 		return entityManager.createQuery(hql,Bulletin.class).setParameter("del","deleted").getResultList();
 	}
+	
+	
 	
 	//查詢未過期多筆
 	@Override

@@ -62,7 +62,7 @@
 	            { "data": "postno" },
 	            { "data": "type" },
 	            { "data": "title" },
-	            { "data": "description" },
+	            { "data": "desText" },
 	            { "data": "postDate" },
 	            { "data": "exp" },
 	            { "data": "quotatype" },
