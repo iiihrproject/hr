@@ -124,9 +124,11 @@ function selectImgFile(files) {
 }
 
 //載入今天日期
-$(document).ready( function() {
+$(document).ready( 
+function() {
 	$('#postdate').val(td);
-});
+}
+);
 
 
 //ckeditor
