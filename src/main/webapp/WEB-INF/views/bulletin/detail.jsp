@@ -125,12 +125,15 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h5 class="m-0 font-weight-bold text-primary">&nbsp;${bulletin.title}</h5>
+                            <h6 class="m-0 font-weight-bold text-primary"></h6>
                         </div>
                         <div class="card-body">
                            <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <tbody>
+                                    	<tr>
+                                            <td style="color:black;"><h5 class="m-0 font-weight-bold" style="color:#483ea1">${bulletin.title}</h5></td>
+                                        </tr>
                                         
                                         <tr>
                                             <td style="color:black">${bulletin.description}</td>
@@ -141,7 +144,7 @@
                                         </c:when>
                                         <c:otherwise>
                                         <tr>
-                                            <td><img src="<c:url value='/bulletin/getImage?postno=${bulletin.postno}'/>" style="max-width:500px"/></td>
+                                            <td><img src="<c:url value='/bulletin/getPicture?postno=${bulletin.postno}'/>" style="max-width:500px"/></td>
                                         </tr>
                                         </c:otherwise>
                                         </c:choose>

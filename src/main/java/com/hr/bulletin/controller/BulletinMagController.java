@@ -99,11 +99,10 @@ public class BulletinMagController implements Serializable {
 
 		System.out.println("file1:" + multipartFile);
 
-		if (multipartFile == null 
+		if (multipartFile == null
 //				|| multipartFile.equals(
 //				"org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@df40651a")
-				) 
-		{
+		) {
 		} else {
 			// 取得原始檔名
 			String fileName = multipartFile.getOriginalFilename();
@@ -199,6 +198,28 @@ public class BulletinMagController implements Serializable {
 
 		return result;
 
+	}
+
+	// 編輯貼文
+	@GetMapping("/bulletinDetailMsg")
+	public String findById(@RequestParam("postno") int postno, Model model) {
+		Bulletin bulletin = bulletinService.findById(postno);
+		model.addAttribute("bulletin", bulletin);
+		return "/bulletin/detailMsg";
+	}
+
+	@GetMapping("/bulletinEditEvent")
+	public String findByIdEvent(@RequestParam("postno") int postno, Model model) {
+		Bulletin bulletin = bulletinService.findById(postno);
+		model.addAttribute("bulletin", bulletin);
+		return "/bulletin/eventEdit";
+	}
+
+	@GetMapping("/bulletinEdiAnno")
+	public String findByIdAnno(@RequestParam("postno") int postno, Model model) {
+		Bulletin bulletin = bulletinService.findById(postno);
+		model.addAttribute("bulletin", bulletin);
+		return "/bulletin/editAnno";
 	}
 
 }
