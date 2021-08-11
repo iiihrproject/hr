@@ -48,49 +48,49 @@ public class BulletinfileController {
 	ServletContext ctx;
 
 	// 讀圖
-	@PostMapping("/bulletin/getPicture")
-	public ResponseEntity<byte[]> getPicture(@RequestParam("file1") MultipartFile multipartFile, HttpServletRequest request) throws IllegalStateException, IOException, SerialException, SQLException {
-		log.info("getImage方法執行中...");
-		ResponseEntity<byte[]> re = null;
-		
-		// 取得原始檔名
-		String fileName = multipartFile.getOriginalFilename();
-		System.out.println("fileName:" + fileName);
-
-		// 檔案上傳的路徑(io)
-		String saveDirPath = request.getSession().getServletContext().getRealPath("/") + "uploadTempDir//"; // 取得??路徑＋資料夾
-		File savefileDir = new File(saveDirPath);
-		savefileDir.mkdirs(); // mkdirs就算路徑不存在也會建立
-
-		// 儲存檔案至臨時資料夾
-		File saveFilePath = new File(savefileDir, fileName); // 指定儲存的位置(檔案路徑, 檔案名稱)
-		multipartFile.transferTo(saveFilePath);
-		System.out.println("saveFilePath:" + saveFilePath);
-		
-		String saveFilePathStr = saveDirPath + fileName;		
-		FileInputStream fis1 = new FileInputStream(saveFilePathStr);
-		byte[] by = new byte[fis1.available()];
-
-		Blob blob = new SerialBlob(by);
-		String mimeType = ctx.getMimeType(fileName); // Spring框架有準備ServletContext物件可以使用
-		MediaType mediaType = MediaType.valueOf(mimeType);
-		HttpHeaders headers = new HttpHeaders();
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			InputStream is = blob.getBinaryStream();
-			byte[] b = new byte[81920];
-			int len = 0;
-			while ((len = is.read(b)) != -1) {
-				baos.write(b, 0, len);
-			}
-			headers.setContentType(mediaType);
-			headers.setCacheControl(CacheControl.noCache().getHeaderValue()); // 叫瀏覽器不要cache這張圖片
-			re = new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return re;
-	}
+//	@PostMapping("/bulletin/getPicture")
+//	public ResponseEntity<byte[]> getPicture(@RequestParam("file1") MultipartFile multipartFile, HttpServletRequest request) throws IllegalStateException, IOException, SerialException, SQLException {
+//		log.info("getImage方法執行中...");
+//		ResponseEntity<byte[]> re = null;
+//		
+//		// 取得原始檔名
+//		String fileName = multipartFile.getOriginalFilename();
+//		System.out.println("fileName:" + fileName);
+//
+//		// 檔案上傳的路徑(io)
+//		String saveDirPath = request.getSession().getServletContext().getRealPath("/") + "uploadTempDir//"; // 取得??路徑＋資料夾
+//		File savefileDir = new File(saveDirPath);
+//		savefileDir.mkdirs(); // mkdirs就算路徑不存在也會建立
+//
+//		// 儲存檔案至臨時資料夾
+//		File saveFilePath = new File(savefileDir, fileName); // 指定儲存的位置(檔案路徑, 檔案名稱)
+//		multipartFile.transferTo(saveFilePath);
+//		System.out.println("saveFilePath:" + saveFilePath);
+//		
+//		String saveFilePathStr = saveDirPath + fileName;		
+//		FileInputStream fis1 = new FileInputStream(saveFilePathStr);
+//		byte[] by = new byte[fis1.available()];
+//
+//		Blob blob = new SerialBlob(by);
+//		String mimeType = ctx.getMimeType(fileName); // Spring框架有準備ServletContext物件可以使用
+//		MediaType mediaType = MediaType.valueOf(mimeType);
+//		HttpHeaders headers = new HttpHeaders();
+//		try {
+//			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//			InputStream is = blob.getBinaryStream();
+//			byte[] b = new byte[81920];
+//			int len = 0;
+//			while ((len = is.read(b)) != -1) {
+//				baos.write(b, 0, len);
+//			}
+//			headers.setContentType(mediaType);
+//			headers.setCacheControl(CacheControl.noCache().getHeaderValue()); // 叫瀏覽器不要cache這張圖片
+//			re = new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.OK);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return re;
+//	}
 
 	// 載入圖
 	@GetMapping("/bulletin/getImage")

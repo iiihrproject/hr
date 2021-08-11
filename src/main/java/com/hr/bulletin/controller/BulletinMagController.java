@@ -200,7 +200,7 @@ public class BulletinMagController implements Serializable {
 
 	}
 
-	// 編輯貼文
+	// 編輯貼文頁
 	@GetMapping("/bulletinDetailMsg")
 	public String findById(@RequestParam("postno") int postno, Model model) {
 		Bulletin bulletin = bulletinService.findById(postno);
@@ -208,6 +208,7 @@ public class BulletinMagController implements Serializable {
 		return "/bulletin/detailMsg";
 	}
 
+	// 修改活動貼文頁
 	@GetMapping("/bulletinEditEvent")
 	public String findByIdEvent(@RequestParam("postno") int postno, Model model) {
 		Bulletin bulletin = bulletinService.findById(postno);
@@ -215,11 +216,20 @@ public class BulletinMagController implements Serializable {
 		return "/bulletin/eventEdit";
 	}
 
+	// 修改公告貼文頁
 	@GetMapping("/bulletinEdiAnno")
 	public String findByIdAnno(@RequestParam("postno") int postno, Model model) {
 		Bulletin bulletin = bulletinService.findById(postno);
 		model.addAttribute("bulletin", bulletin);
 		return "/bulletin/editAnno";
+	}
+
+	// 修改活動貼文
+	@GetMapping("/bulletinEditEvent")
+	public String updateEventPost(@RequestParam("postno") int postno) {
+//			Bulletin bulletin = bulletinService.findById(postno);
+//			model.addAttribute("bulletin", bulletin);
+		return "/bulletin/eventEdit";
 	}
 
 }
