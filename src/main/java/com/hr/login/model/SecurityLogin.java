@@ -41,12 +41,14 @@ public class SecurityLogin implements UserDetails {
 
 	@Override
 	public boolean isAccountNonExpired() {
-		return loginModel.getIsAccountNonExpired();
+//		return loginModel.getIsAccountNonExpired();
+		return true;
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		return loginModel.getIsAccountNonLocked();
+//		return loginModel.getIsAccountNonLocked();
+		return true;
 	}
 
 	@Override
@@ -62,13 +64,15 @@ public class SecurityLogin implements UserDetails {
 //		Period difference = Period.between(lastChangeDate, today); 
 //		int dayDifference = difference.getDays();
 //		
-		
-		return loginModel.getIsCredentialsNonExpired();
+//		
+//		return loginModel.getIsCredentialsNonExpired();
+		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return loginModel.getIsEnable();
+//		return loginModel.getIsEnable();
+		return true;
 	}
 
 }

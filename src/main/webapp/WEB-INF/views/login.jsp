@@ -15,11 +15,11 @@
     <div class="container">
       <div class="forms-container">
         <div class="signin-signup">
-          <form method="post" action="<c:url value='/index'/>" class="sign-in-form">
+          <form method="post" action="<c:url value='/login'/>" class="sign-in-form">
             <h2 class="title">歡迎使用,</h2>
             <div class="input-field">
               <i class="fas fa-user"></i>
-              <input type="text" placeholder="員工帳號" name="empno" autofocus/>
+              <input type="text" placeholder="員工帳號" name="username" autofocus/>
             </div>
             <div class="input-field">
               <i class="fas fa-lock"></i>

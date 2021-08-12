@@ -1,9 +1,13 @@
 package com.hr.login.config;
 
+import java.security.Principal;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,6 +26,8 @@ import com.hr.login.service.LoginService;
 @Component
 public class LoginAuthenticationProvider implements AuthenticationProvider {
 	
+	private final Logger LOG = LoggerFactory.getLogger(this.getClass().getName());
+	
 	@Autowired
 	private LoginService loginService;
 	
@@ -32,14 +38,19 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		String empNo = authentication.getName();
 		String pwd = authentication.getCredentials().toString();
+		
+//		LOG.info("empNo is " + empNo + " and pwd is " + pwd);
 		LoginModel loginModel = loginService.getLoginModelByEmpNo(empNo);
 		if (loginModel != null) {
 			if (passwordEncoder.matches(pwd, loginModel.getEmployeePassword())) {
 				return new UsernamePasswordAuthenticationToken(empNo, pwd, getGrantedAuthorities(loginModel.getAuthorities()));
-			} else {
+			} 
+			else {
+				System.out.println("Invalid username or password!");
 				throw new BadCredentialsException("Invalid username or password!");
 			}
-		}else {
+		}
+		else {
 			throw new BadCredentialsException("No user registered with this details!");
 		}
 	}
@@ -54,7 +65,13 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
 
 	@Override
 	public boolean supports(Class<?> authenticationType) {
+		//System.out.println(authenticationType.equals(UsernamePasswordAuthenticationToken.class));
 		return authenticationType.equals(UsernamePasswordAuthenticationToken.class);
 	}
+	
+//	@Override
+//	public boolean supports(Class<?> authentication) {
+//	    return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
+//	}
 
 }

@@ -8,13 +8,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
+import org.springframework.stereotype.Component;
+
+@Entity(name = "authorities")
 @Table(name = "authorities")
+@Component("authorities")
 public class Authorities {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
 	private String authorityName;
 
@@ -22,11 +25,11 @@ public class Authorities {
 	@JoinColumn(name = "emp_id")
 	private LoginModel loginModel;
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
