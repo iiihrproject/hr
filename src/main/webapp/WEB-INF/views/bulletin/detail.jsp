@@ -115,6 +115,7 @@
                 </nav>
                 <!-- End of Topbar -->
 
+		
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -135,11 +136,17 @@
                                             <td style="color:black"><c:out value="${bulletin.description}" /></td>
                                         </tr>
                                         <tr>
-                                            <td><c:out value="附檔" /></td>
+                                            <td><img src='/bulletin/getImage?postno=<c:out value="${bulletin.postno}"/>'></td>
                                         </tr>
+                                        <c:choose>
+                                        <c:when test="${bulletin.quotatype == '不限'}">
+                                        </c:when>
+                                        <c:otherwise>
                                         <tr>
                                             <td>已報名人數：10&nbsp;／&nbsp;可報名人數：<c:out value="${bulletin.quota}"/></td>
                                         </tr>
+                                        </c:otherwise>
+                                        </c:choose>
                                         <tr>
                                             <td>刊登日期：<c:out value="${bulletin.postDate}"/></td>
                                         </tr>

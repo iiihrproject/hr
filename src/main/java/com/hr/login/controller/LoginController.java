@@ -23,7 +23,7 @@ public class LoginController {
 	
 	@Autowired
 	private LoginService loginService;
-	
+
 	@GetMapping(path="/login")
 	public String loginPagePath() {
 		return "/login";

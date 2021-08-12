@@ -51,5 +51,6 @@ public class BulletinServiceImpl implements BulletinService {
 	public List<Bulletin> findAllPosting() {
 		return bulletinRepo.findAllPosting();
 	}
-
+	
+	
 }

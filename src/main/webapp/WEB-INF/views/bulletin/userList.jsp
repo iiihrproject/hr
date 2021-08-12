@@ -27,100 +27,67 @@
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
     
-    
     <!-- Custom styles for this page -->
     <link href="<c:url value='/vendor/datatables/dataTables.bootstrap4.min.css' />" rel="stylesheet">
-    
-    <!-- jQuery導入 -->
-    <script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
     
     <!-- 使用today.js -->
     <script src="<c:url value='/js/today.js' />"></script>
     
-	<!-- 公布欄資料載入 -->
-	<script>
-	window.onload = function() {
+    <!-- 公布欄資料載入 -->
+    <script>
+    window.onload = function() {
+		let bMagList = document.getElementById("BulletinMagList");
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET", "<c:url value='/bulletinListMag'/>");
+		xhr.send();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				bMagList.innerHTML = processBMagList(xhr.responseText);
+			}
+		}
+	}
 	
-		$("#dataTable tbody").on("click", "tr", function () {
-	        	window.location = $(this).attr('href');
-	        	return false;
-		});
-
-	};
-
-
+	
+	function processBMagList(jsonString) {
 		
-	$(document).ready(function() {		
-	    $('#dataTable').DataTable( {
-	    	"lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
-	        "ajax": {
-	        "url":'<c:url value='/bulletinListMag'/>',
-	        "dataSrc": "",
-	        },
-	        "order": [[ 0, "desc" ]],
-	        "columns": [
-	            { "data": "postno" },
-	            { "data": "type" },
-	            { "data": "title" },
-	            { "data": "description" },
-	            { "data": "postDate" },
-	            { "data": "exp" },
-	            { "data": "quotatype" },
-	            { "data": "quota" },
-	            { "data": "quota" },
-	            { "data": "quota" },
-	            { "data": "postStatus",
-	            	"render": function (data, type, row, meta) {
-	            		let status="";
-	            		if (row.postDate<=td && row.exp>=td) {
-	            			status += "刊登中";
-	            			}else if(row.postDate>td){
-	            				status += "未刊登";
-	            			}else if (row.exp<td) {
-	            				status += "已過期";
-	            			}else{status +="其他";}
-	            		
-	            		return status;
-	                }},
-	        ],
-	    
-            createdRow: function (row, data, index) {
-                if (data.postDate<=td && data.exp>=td) {
-                   $('td', row).eq(10).css('color', 'green')
-                }
-            }, 
-            
-            rowCallback: function(row, data){
-            	console.log("連結：<c:url value='/bulletinDetail'/>?postno=" + data.postno );
-            	$(row).attr("href","<c:url value='/bulletinDetail'/>?postno=" + data.postno);
-            },
-            
-            "language": {
-            	"emptyTable": "表中資料為空",
-                "lengthMenu": "顯示 _MENU_ 則貼文",
-                "zeroRecords": "沒有符合的貼文",
-                "info": "顯示第 _START_ 至 _END_ 則貼文，共 _TOTAL_ 則",
-                "infoEmpty": "顯示第 0 至 0 則貼文，共 0 則",
-                "infoFiltered": "(由 _MAX_ 則貼文過濾)",
-                "search": "搜尋貼文:",
-                "oPaginate": {
-                    "sFirst": "首頁",
-                    "sPrevious": "上一頁",
-                    "sNext": "下一頁",
-                    "sLast": "末頁"
-                 },
-              }
-            
-	    } );
-	    
-           		
-                   
-	} )
-		//);
+		$(document).ready(function(){
+		    $('table tbody tr').click(function(){
+		        window.location = $(this).attr('href');
+		        return false;
+		    });
+		});
+		
+		let posts = JSON.parse(jsonString);
+		let segment = "";
+		for (let n = 0; n < posts.length; n++) {
+			let bulletin = posts[n];
+			let link = "href='<c:url value='/bulletinDetail' />?postno=" + bulletin.postno + "''>"
+			segment += "<tr "+link;
+			/* segment += "<tr>"; */
+			segment += "<td>" + bulletin.postno + "</td>";
+			segment += "<td>" + bulletin.type + "</td>";
+			segment += "<td>" + bulletin.title + "</td>";
+			segment += "<td>" + bulletin.description + "</td>";
+			segment += "<td>" + bulletin.postDate + "</td>";
+			segment += "<td>" + bulletin.exp + "</td>";
+			segment += "<td>" + bulletin.quotatype + "</td>";
+			segment += "<td>" + bulletin.quota + "</td>";
+			segment += "<td>" + "已報名人數" + "</td>";
+			segment += "<td>" + "瀏覽人次" + "</td>";
+			if (bulletin.postDate>td){
+			segment += "<td>未刊登</td>";}
+			else if (bulletin.exp<td){
+			segment += "<td>已過期</td>";}
+			else {
+			segment += "<td style='color:green;'>刊登中</td>";}
+			segment += "<td><a " + link + "編輯</a></td>";
+			segment += "</tr>";
+		}
+		return segment;
+	}
 	
 	</script>
-	
-	
+
 </head>
 
 <body id="page-top">
@@ -249,7 +216,7 @@
                                             <th>已報名額</th>
                                             <th>瀏覽人次</th>
                                             <th>狀態</th>
-                                                                                         
+                                            <th>編輯</th>                                              
                                         </tr>
                                     </thead>
                                    <tbody id="BulletinMagList">
@@ -312,32 +279,23 @@
         </div>
     </div>
 
-
     <!-- Bootstrap core JavaScript-->
-    <script src="<c:url value='/vendor/jquery/jquery.min.js' />"></script>
-    <script src="<c:url value='/vendor/bootstrap/js/bootstrap.bundle.min.js' />"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="<c:url value='/vendor/jquery-easing/jquery.easing.min.js' />"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="<c:url value='/js/sb-admin-2.min.js' />"></script>
+    <script src="js/sb-admin-2.min.js"></script>
     
     <!-- Page level plugins -->
     <script src="<c:url value='/vendor/datatables/jquery.dataTables.min.js' />"></script>
     <script src="<c:url value='/vendor/datatables/dataTables.bootstrap4.min.js' />"></script>
-
-    <!-- Page level custom scripts -->
-    <%-- <script src="<c:url value='/js/demo/datatables-demo.js' />"></script> --%>
-
-    <!-- Page level plugins -->
-    <!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
-
-    <!-- Page level custom scripts -->
-    <!-- <script src="js/demo/chart-area-demo.js"></script> -->
-    <!-- <script src="js/demo/chart-pie-demo.js"></script> -->
     
     
+
+
 </body>
 
 </html>
