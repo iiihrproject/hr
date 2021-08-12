@@ -63,14 +63,13 @@
 		    }).then(function (result) {
 		        if (result.value) {
 		            //使用者按下「確定」要做的事
-		            alert('hi');
 		            
 		            var type = $('#work').attr('name');
 		            var xhr1 = new XMLHttpRequest();
 		            xhr1.open("POST", "<c:url value='/saveCheckSystem'/>", true);
 		            xhr1.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		            xhr1.send("type=" + type);
-		
+					alert(type);
 		            xhr1.onreadystatechange = function () {
 		                // 伺服器請求完成
 		                if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201)) {

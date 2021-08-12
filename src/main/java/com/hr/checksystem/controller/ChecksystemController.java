@@ -65,7 +65,7 @@ public class ChecksystemController {
 	@PostMapping(path ="/saveCheckSystem")
 	@ResponseBody
 	public String saveCheckSystem(@RequestParam("type") String type, Model model) throws Exception {
-		System.out.println("enter");
+		System.out.println(type);
 		HttpSession httpSession = request.getSession(true);
 		String empNo = (String)httpSession.getAttribute("empNo");
 		Date time = new Date();
