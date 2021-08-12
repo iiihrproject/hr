@@ -276,6 +276,26 @@
                     <span id="resultMsg" style="margin:3px auto">請確認是否刪除貼文</span><br/>
                 </div>
                 <div class="modal-footer justify-content-center" id="resultbutton">
+                <button href="<c:url value='/bulletin/DelEventPage?postno=${bulletin.postno}'/>" class="btn btn-danger" type="button" data-dismiss="modal" id="comfirmBut"  data-target="#comfirmdelModal">確認</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="cancelBut">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	<!-- Result Modal End-->
+	
+	<!-- Result Modal-->
+    <div class="modal fade text-center" id="comfirmdelModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto" id="resultModalLabel">刪除貼文</h5>
+                </div>
+                <div class="modal-body">
+                    <span id="resultMsg" style="margin:3px auto">貼文已刪除${result}</span><br/>
+                </div>
+                <div class="modal-footer justify-content-center" id="resultbutton">
                 <button href="<c:url value='/bulletin/DelEventPage?postno=${bulletin.postno}'/>" class="btn btn-danger" type="button" data-dismiss="modal" id="comfirmBut">確認</button>
                 <button class="btn btn-secondary" type="button" data-dismiss="modal" id="cancelBut">取消</button>
                 </div>
