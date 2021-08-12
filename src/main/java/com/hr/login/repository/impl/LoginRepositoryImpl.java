@@ -21,7 +21,7 @@ public class LoginRepositoryImpl implements LoginRepository {
 	@Override
 	public LoginModel getLoginModelByEmpNo(String empNo) {
 		try {
-			return entityManager.createQuery("from LoginModel where empNo = :empNo", LoginModel.class).getSingleResult();	
+			return (LoginModel)entityManager.createQuery("from loginModel where empNo = :empNo", LoginModel.class).setParameter("empNo", empNo).getSingleResult();	
 		}
 		catch(NoResultException nre) {
 			return null;
