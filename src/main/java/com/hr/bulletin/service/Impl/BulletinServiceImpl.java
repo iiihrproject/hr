@@ -42,15 +42,30 @@ public class BulletinServiceImpl implements BulletinService {
 	}
 
 	// 執行刪除
+//	@Override
+//	public void delete(Bulletin bulletin) {
+//		bulletinRepo.delete(bulletin);
+//	}
+	
 	@Override
 	public void delete(int postno) {
 		bulletinRepo.delete(postno);
 	}
 	
 	//查詢未過期多筆
+	@Override
 	public List<Bulletin> findAllPosting() {
 		return bulletinRepo.findAllPosting();
 	}
+	
+	
+	// 執行修改
+	@Override
+	public void updateop(Bulletin bulletin) {
+		bulletinRepo.updateop(bulletin);
+	}
+	
+	
 	
 	
 }

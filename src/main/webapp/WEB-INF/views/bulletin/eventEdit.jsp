@@ -38,10 +38,11 @@
 	<script>
 
     var hasError = false;
+    var ofile = "notchange";
     
     window.onload = function () {
     	
-    	//送出新增
+    	//送出修改
         let sendData = document.getElementById("sendData");
         sendData.onclick = function () {
             hasError = false;
@@ -100,7 +101,8 @@
 
             //送出新增資料jQuery
             var formData = new FormData();
-
+            
+            formData.append("postno", `${bulletin.postno}`);
             formData.append("title", titleValue);
             formData.append("description", descriptionValue);
             formData.append("desText", destextValue);
@@ -114,38 +116,41 @@
             formData.append("postdate", postdateValue);
             formData.append("exp", expValue);
             
-            if(!file){
+            console.log("ofile:"+ofile);
+            console.log("file:"+file);
+            
+            if(ofile=="notchange"){
             $.ajax({
                 type: 'post',
-                url: "<c:url value='/insertEventBulletion2' />",
+                url: "<c:url value='/bulletin/EditEventop' />",
                 data: formData,
                 cache: false,
                 processData: false,
                 contentType: false,
             	success: function (data) { 
             		printresult(data);
-                	console.log("新增成功");
+                	console.log("前端成功?");
             	},
                 fail: function (data) { 
-                	printresult("新增失敗");
-                    console.log("新增失敗");
+                	printresult("前端失敗");
+                    console.log("前端失敗?");
                 }
             });
             }else{
             $.ajax({
                 type: 'post',
-                url: "<c:url value='/insertEventBulletion' />",
+                url: "<c:url value='/bulletin/EditEvent' />",
                 data: formData,
                 cache: false,
                 processData: false,
                 contentType: false,
                 success: function (data) { 
                 	printresult(data);
-                    console.log("新增成功");
+                    console.log("前端成功");
                 },
                 fail: function (data) { 
-                	printresult("新增失敗");
-                    console.log("新增失敗");
+                	printresult("前端失敗");
+                    console.log("前端失敗");
                 }
             });
             }
@@ -156,9 +161,9 @@
     
     function printresult(data){
     var divResult = document.getElementById('resultMsg');
-        if (data=="新增失敗") {
+        if (data=="修改失敗") {
             divResult.innerHTML = "<font color='red' >" + data + "</font>";
-        } else if (data=="新增成功") {
+        } else if (data=="修改成功") {
             divResult.innerHTML = "<font color='GREEN'>" + data + "</font>";
             let div0 = document.getElementById('result0c');
             let div1 = document.getElementById('result1c');
@@ -175,11 +180,32 @@
         }
     }
     
+    
+    
     function clean(){
     	var obj = document.getElementById('file1') ; 
     	obj.outerHTML=obj.outerHTML;
     	$("#showImg").attr("src","");
+    	ofile = "change";
+    	console.log("ofile(clean):"+ofile);
     	
+    }
+    
+  //載入圖片
+    function selectImgFile(files) {
+    	if (!files.length) {
+    		return false;
+    	}
+
+    	let file = files[0];
+    	let reader = new FileReader();
+    	reader.onload = function() {
+    		document.getElementById('showImg').src = this.result;
+    	};
+
+    	reader.readAsDataURL(file);
+    	ofile = "change";
+    	console.log("ofile(selectImgFile):"+ofile);
     }
 
     
@@ -292,7 +318,7 @@
                            
                           <table class="table table-bordered" width="100%" cellspacing="0">
                                     <tbody>
-                                    <form enctype="multipart/form-data" id="inserForm">
+                                    <form enctype="multipart/form-data;charset=utf-8" id="inserForm">
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">主&emsp;&emsp;旨 :</label></td>
                                             <td><input type="text" id="title" name="title" class="form-control"  size="30" maxlength="30" style="width:600px;" value="${bulletin.title}" required />

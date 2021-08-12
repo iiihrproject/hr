@@ -114,10 +114,9 @@
             formData.append("postdate", postdateValue);
             formData.append("exp", expValue);
             
-            if(!file){
             $.ajax({
                 type: 'post',
-                url: "<c:url value='/insertEventBulletion2' />",
+                url: "<c:url value='/insertEventBulletion' />",
                 data: formData,
                 cache: false,
                 processData: false,
@@ -131,24 +130,7 @@
                     console.log("新增失敗");
                 }
             });
-            }else{
-            $.ajax({
-                type: 'post',
-                url: "<c:url value='/insertEventBulletion' />",
-                data: formData,
-                cache: false,
-                processData: false,
-                contentType: false,
-                success: function (data) { 
-                	printresult(data);
-                    console.log("新增成功");
-                },
-                fail: function (data) { 
-                	printresult("新增失敗");
-                    console.log("新增失敗");
-                }
-            });
-            }
+            
 
             
         }

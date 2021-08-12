@@ -1,5 +1,6 @@
 package com.hr.bulletin.controller;
 
+import org.springframework.stereotype.Controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,7 +32,7 @@ import com.hr.bulletin.model.Bulletin;
 import com.hr.bulletin.service.BulletinService;
 
 @Controller
-public class BulletinMagController implements Serializable {
+public class BulletinUpdController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,63 +44,54 @@ public class BulletinMagController implements Serializable {
 	@Autowired
 	ServletContext ctx;
 
-	// 貼文管理頁
-	@GetMapping("/bulletinManage")
-	public String bulletinMag() {
-		return "/bulletin/manage";
+	// 修改活動貼文頁
+	@GetMapping("/bulletinEditEventPage")
+	public String findByIdEvent(@RequestParam("postno") int postno, Model model) {
+		Bulletin bulletin = bulletinService.findById(postno);
+		model.addAttribute("bulletin", bulletin);
+		return "/bulletin/eventEdit";
 	}
 
-	// 人資管理貼文列表
-	// ajax傳回資料庫查詢資料(純JSON資料)
-	@GetMapping("/bulletinListMag")
-	public @ResponseBody List<Bulletin> findAll() {
-		log.info("findAll方法執行中...");
-		return bulletinService.findAll();
+	// 修改公告貼文頁
+	@GetMapping("/bulletinEdiAnnoPage")
+	public String findByIdAnno(@RequestParam("postno") int postno, Model model) {
+		Bulletin bulletin = bulletinService.findById(postno);
+		model.addAttribute("bulletin", bulletin);
+		return "/bulletin/editAnno";
 	}
 
-	// 新增活動貼文頁
-	@GetMapping("/bulletinEventInsert")
-	public String bei() {
-		return "/bulletin/eventInsert";
+	// 修改活動貼文(原圖)
+	@PostMapping("/bulletin/EditEventop")
+	public @ResponseBody String updateEventOp(Bulletin bulletin) {
+		log.info("updateop方法執行中...");
+		System.out.println("bulletin=" + bulletin);
+		String result = "";
+		try {
+			bulletinService.updateop(bulletin);
+			result = "修改成功";
+		} catch (Exception e) {
+			result = "修改失敗";
+		}
+		return result;
 	}
 
-	// 把表單裡Json資料送到資料庫新增資料(未處理檔案
-//		@PostMapping("/insertEventBulletion2")
-//		public @ResponseBody Map<String, String> save2(@RequestBody Bulletin bulletin) {
-//			// 接JSON形式的資料 //表單綁定自動把資料轉成Member物件
-//			log.info("save2方法執行中...");
-	//
-//			// 時間戳記
-//			Timestamp ts = new Timestamp(System.currentTimeMillis());
-//			bulletin.setCreateTime(ts);
-	//
-//			Map<String, String> map = new HashMap<>();
-//			System.out.println("bulletin=" + bulletin);
-//			String result = "";
-//			try {
-//				bulletinService.insert(bulletin);
-//				result = "新增成功";
-//				map.put("success", result);
-//			} catch (Exception e) {
-//				result = e.getMessage();
-//				map.put("fail", result);
-//			}
-//			return map;
-//		}
-
-	// 把表單資料送到資料庫新增資料
-	@PostMapping("/insertEventBulletion")
-	public @ResponseBody String save(@RequestParam("title") String title,
-			@RequestParam("description") String description, @RequestParam("desText") String desText,
-			@RequestParam(value ="file1", required=false) MultipartFile multipartFile, 
+	// 修改活動貼文(改圖)
+	@PostMapping("/bulletin/EditEvent")
+	public @ResponseBody String save(
+			@RequestParam("postno") int postno,
+			@RequestParam("title") String title,
+			@RequestParam("description") String description, 
+			@RequestParam("desText") String desText,
+			@RequestParam(value = "file1", required = false) MultipartFile multipartFile,
 			@RequestParam("quotatype") String quotatype,
 			@RequestParam(value = "quota", defaultValue = "0") Integer quota, 
 			@RequestParam("postdate") Date postdate,
-			@RequestParam("exp") Date exp, HttpServletRequest request)
+			@RequestParam("exp") Date exp, 
+			HttpServletRequest request)
 			throws IllegalStateException, IOException, SerialException, SQLException {
 
 		Bulletin bulletin = new Bulletin();
-		log.info("save方法執行中...");
+		log.info("update方法執行中...");
 
 		System.out.println("file1:" + multipartFile);
 
@@ -132,44 +124,73 @@ public class BulletinMagController implements Serializable {
 				bulletin.setPicture(new SerialBlob(b)); // bulletin.setPicture(b);
 			}
 		}
-		log.info("save方法執行2...");
-		// 時間戳記
-		Timestamp ts = new Timestamp(System.currentTimeMillis());
+		log.info("update方法執行2...");
 
-		bulletin.setType("活動");
+		bulletin.setPostno(postno);
 		bulletin.setTitle(title);
 		bulletin.setPostDate(postdate);
 		bulletin.setDescription(description);
 		bulletin.setDesText(desText);
 		bulletin.setExp(exp);
-		bulletin.setCreateTime(ts);
-		bulletin.setPostStatus("normal");
 		bulletin.setQuotatype(quotatype);
 		bulletin.setQuota(quota);
 
 		System.out.println("bulletin=" + bulletin);
 		String result = "";
 		try {
-			bulletinService.insert(bulletin);
-			result = "新增成功";
+			bulletinService.update(bulletin);
+			result = "修改成功";
 
 		} catch (Exception e) {
-			result = e.getMessage();
+			result = "修改失敗";
 
 		}
 		return result;
 
 	}
-
-
-	// 編輯貼文頁
-	@GetMapping("/bulletinDetailMsg")
-	public String findById(@RequestParam("postno") int postno, Model model) {
-		Bulletin bulletin = bulletinService.findById(postno);
-		model.addAttribute("bulletin", bulletin);
-		return "/bulletin/detailMsg";
+	
+	//刪除活動貼文頁
+//	@GetMapping("/bulletin/DelEventPage")
+//	public @ResponseBody String delEvent(Bulletin bulletin) {
+//		log.info("updateop方法執行中...");
+//		System.out.println("bulletin=" + bulletin);
+//		String result = "";
+//		try {
+//			bulletinService.delete(bulletin);
+//			result = "修改成功";
+//		} catch (Exception e) {
+//			result = "修改失敗";
+//		}
+//		return result;
+//	}
+	
+	@GetMapping("/bulletin/DelEventPage")
+	public @ResponseBody String delEvent(int postno) {
+		log.info("delEvent方法執行中...");
+		String result = "";
+		try {
+			bulletinService.delete(postno);
+			result = "修改成功";
+		} catch (Exception e) {
+			result = "修改失敗";
+		}
+		return result;
 	}
 
+	// 刪除公告貼文頁
+	@GetMapping("/bulletin/DelAnnoPage")
+	public @ResponseBody String delAnno(Bulletin bulletin) {
+		log.info("updateop方法執行中...");
+		System.out.println("bulletin=" + bulletin);
+		String result = "";
+		try {
+			bulletinService.updateop(bulletin);
+			result = "修改成功";
+		} catch (Exception e) {
+			result = "修改失敗";
+		}
+		return result;
+	}
 
 
 }

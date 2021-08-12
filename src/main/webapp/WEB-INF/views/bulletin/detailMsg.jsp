@@ -168,7 +168,7 @@
                                     		&nbsp;
                                     		<c:choose>
                                         	<c:when test="${bulletin.type == '活動'}">
-                                        	<a href="<c:url value='/bulletinEditEvent?postno=${bulletin.postno}'/>" class="btn btn-warning btn-icon-split btn-sm" style="color:black">
+                                        	<a href="<c:url value='/bulletinEditEventPage?postno=${bulletin.postno}'/>" class="btn btn-warning btn-icon-split btn-sm" style="color:black">
                                         	<span class="text">修改</span>
                                     		</a>
                                         	</c:when>
@@ -179,9 +179,19 @@
                                         	</c:otherwise>
                                         	</c:choose>
                                     		&nbsp;
-                                    		<a href="#" class="btn btn-danger btn-icon-split btn-sm">
+                                    		<c:choose>
+                                        	<c:when test="${bulletin.type == '活動'}">
+                                        	<a href="#" class="btn btn-danger btn-icon-split btn-sm" data-toggle="modal" id="sendDel"  data-target="#delModal">
                                         	<span class="text">刪除</span>
                                     		</a>
+                                        	</c:when>
+                                       	 	<c:otherwise>
+                                        	<a href="#" class="btn btn-danger btn-icon-split btn-sm">
+                                        	<span class="text">刪除</span>
+                                    		</a>
+                                        	</c:otherwise>
+                                        	</c:choose>
+                                    		
                                         </tr>
                                     </tbody>
                                 </table>
@@ -253,6 +263,26 @@
     <!-- Page level plugins -->
     <!-- <script src="<c:url value='/vendor/datatables/jquery.dataTables.min.js' />"></script>
     <script src="<c:url value='/vendor/datatables/dataTables.bootstrap4.min.js' />"></script> -->
+    
+    <!-- Result Modal-->
+    <div class="modal fade text-center" id="delModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto" id="resultModalLabel">刪除貼文</h5>
+                </div>
+                <div class="modal-body">
+                    <span id="resultMsg" style="margin:3px auto">請確認是否刪除貼文</span><br/>
+                </div>
+                <div class="modal-footer justify-content-center" id="resultbutton">
+                <button href="<c:url value='/bulletin/DelEventPage?postno=${bulletin.postno}'/>" class="btn btn-danger" type="button" data-dismiss="modal" id="comfirmBut">確認</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="cancelBut">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+	<!-- Result Modal End-->
 
 
 </body>

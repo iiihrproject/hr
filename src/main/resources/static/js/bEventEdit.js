@@ -79,7 +79,7 @@ checkinsert.onclick = function() {
 	if (file1Value == "") {
 		document.getElementById("tdfile").innerHTML = "";
 	} else {
-		selectImgFile(document.getElementById('file1').files)
+		selectImgFile2(document.getElementById('file1').files)
 	}
 	if (quotaValue == "不限") {
 		document.getElementById("tdqu").innerHTML = "";
@@ -107,8 +107,10 @@ function setErrorFor(input, message) {
 	hasError = true;
 }
 
-//載入圖片
-function selectImgFile(files) {
+
+
+//載入圖片(預覽)
+function selectImgFile2(files) {
 	if (!files.length) {
 		return false;
 	}
@@ -116,7 +118,6 @@ function selectImgFile(files) {
 	let file = files[0];
 	let reader = new FileReader();
 	reader.onload = function() {
-		document.getElementById('showImg').src = this.result;
 		document.getElementById('showImg2').src = this.result;
 	};
 
