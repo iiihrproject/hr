@@ -2,20 +2,25 @@ package com.hr.login.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hr.personnel.model.Personnel;
 
-@Entity
+@Entity(name = "loginModel")
 @Table(name = "loginModel")
 @Component("loginModel")
 public class LoginModel {
@@ -24,14 +29,21 @@ public class LoginModel {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "emp_id")
 	private Integer pk;
+	
+	@JsonIgnore
+	@OneToOne(mappedBy="loginModelInfo",fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private Personnel personnel;
+	
 	private String role;
 	private String empNo;
 	
 	@JsonIgnore
 	@Column(name = "pwd")
 	private String employeePassword;
-	@Column(name = "dept_No")
-	private Integer departmentNumber;
+	
+	@ManyToOne
+	@JoinColumn(name = "dept_No")
+	private DepartmentDetail departmentDetail;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="loginModel",fetch=FetchType.EAGER)
@@ -52,29 +64,20 @@ public class LoginModel {
 		
 	}
 
-	public LoginModel(Integer pk, String role, String empNo, String employeePassword, Integer departmentNumber,
-			Set<Authorities> authorities, Boolean isAccountNonExpired, Boolean isAccountNonLocked,
-			Boolean isCredentialsNonExpired, String lastChangeCredentialsDate, Boolean isEnable) {
-		super();
-		this.pk = pk;
-		this.role = role;
-		this.empNo = empNo;
-		this.employeePassword = employeePassword;
-		this.departmentNumber = departmentNumber;
-		this.authorities = authorities;
-		this.isAccountNonExpired = isAccountNonExpired;
-		this.isAccountNonLocked = isAccountNonLocked;
-		this.isCredentialsNonExpired = isCredentialsNonExpired;
-		this.lastChangeCredentialsDate = lastChangeCredentialsDate;
-		this.isEnable = isEnable;
-	}
-
 	public Integer getPk() {
 		return pk;
 	}
 
 	public void setPk(Integer pk) {
 		this.pk = pk;
+	}
+
+	public Personnel getPersonnel() {
+		return personnel;
+	}
+
+	public void setPersonnel(Personnel personnel) {
+		this.personnel = personnel;
 	}
 
 	public String getRole() {
@@ -101,12 +104,12 @@ public class LoginModel {
 		this.employeePassword = employeePassword;
 	}
 
-	public Integer getDepartmentNumber() {
-		return departmentNumber;
+	public DepartmentDetail getDepartmentDetail() {
+		return departmentDetail;
 	}
 
-	public void setDepartmentNumber(Integer departmentNumber) {
-		this.departmentNumber = departmentNumber;
+	public void setDepartmentDetail(DepartmentDetail departmentDetail) {
+		this.departmentDetail = departmentDetail;
 	}
 
 	public Set<Authorities> getAuthorities() {
@@ -157,14 +160,24 @@ public class LoginModel {
 		this.isEnable = isEnable;
 	}
 
-	public boolean isEmpty() {
-		if(
-				this.getPk().equals(null)
-				) {
-			return true;
-		}
-		else {
-			return false;
-		}
+	public LoginModel(Integer pk, Personnel personnel, String role, String empNo, String employeePassword,
+			DepartmentDetail departmentDetail, Set<Authorities> authorities, Boolean isAccountNonExpired,
+			Boolean isAccountNonLocked, Boolean isCredentialsNonExpired, String lastChangeCredentialsDate,
+			Boolean isEnable) {
+		super();
+		this.pk = pk;
+		this.personnel = personnel;
+		this.role = role;
+		this.empNo = empNo;
+		this.employeePassword = employeePassword;
+		this.departmentDetail = departmentDetail;
+		this.authorities = authorities;
+		this.isAccountNonExpired = isAccountNonExpired;
+		this.isAccountNonLocked = isAccountNonLocked;
+		this.isCredentialsNonExpired = isCredentialsNonExpired;
+		this.lastChangeCredentialsDate = lastChangeCredentialsDate;
+		this.isEnable = isEnable;
 	}
+
+	
 }

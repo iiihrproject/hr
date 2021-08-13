@@ -49,8 +49,6 @@ public class BulletinController implements Serializable {
 		return bulletinService.findAllPosting();
 	}
 
-	
-
 	// 使用者瀏覽貼文內容
 	@GetMapping("/bulletinDetail")
 	public String findById(@RequestParam("postno") int postno, Model model) {
@@ -58,10 +56,6 @@ public class BulletinController implements Serializable {
 		model.addAttribute("bulletin", bulletin);
 		return "/bulletin/detail";
 	}
-
-	
-
-	
 	
 
 }
