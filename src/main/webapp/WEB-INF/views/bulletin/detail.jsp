@@ -26,7 +26,7 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
-
+    
     
 
 </head>
@@ -125,30 +125,40 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h5 class="m-0 font-weight-bold text-primary">[ <c:out value="${bulletin.type}" /> ] <c:out value="${bulletin.title}" /></h5>
+                            <h6 class="m-0 font-weight-bold text-primary"></h6>
                         </div>
                         <div class="card-body">
                            <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <tbody>
+                                    	<tr>
+                                            <td style="color:black;"><h5 class="m-0 font-weight-bold" style="color:#483ea1">${bulletin.title}</h5></td>
+                                        </tr>
                                         
                                         <tr>
-                                            <td style="color:black"><c:out value="${bulletin.description}" /></td>
+                                            <td style="color:black">${bulletin.description}</td>
                                         </tr>
+                                        
+                                        <c:choose>
+                                        <c:when test="${bulletin.file1==null}">
+                                        </c:when>
+                                        <c:otherwise>
                                         <tr>
-                                            <td><img src='/bulletin/getImage?postno=<c:out value="${bulletin.postno}"/>'></td>
+                                            <td><img src="<c:url value='/bulletin/getPicture?postno=${bulletin.postno}'/>" style="max-width:500px"/></td>
                                         </tr>
+                                        </c:otherwise>
+                                        </c:choose>
                                         <c:choose>
                                         <c:when test="${bulletin.quotatype == '不限'}">
                                         </c:when>
                                         <c:otherwise>
                                         <tr>
-                                            <td>已報名人數：10&nbsp;／&nbsp;可報名人數：<c:out value="${bulletin.quota}"/></td>
+                                            <td>已報名人數：10&nbsp;／&nbsp;可報名人數：${bulletin.quota}</td>
                                         </tr>
                                         </c:otherwise>
                                         </c:choose>
                                         <tr>
-                                            <td>刊登日期：<c:out value="${bulletin.postDate}"/></td>
+                                            <td>刊登日期：${bulletin.postDate}</td>
                                         </tr>
                                         <tr>
                                             <td>

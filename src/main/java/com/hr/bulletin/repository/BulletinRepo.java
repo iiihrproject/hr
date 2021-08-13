@@ -18,10 +18,13 @@ public interface BulletinRepo {
 	//	執行修改
 	void update(Bulletin bulletin);
 
-	//	執行刪除
-	void delete(int postno);
 	
 	//	查詢未過期多筆
 	List<Bulletin> findAllPosting();
+	
+
+	void updateop(Bulletin bulletin);
+
+	void delete(int postno);
 
 }
