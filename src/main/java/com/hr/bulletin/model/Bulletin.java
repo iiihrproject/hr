@@ -52,8 +52,6 @@ public class Bulletin implements Serializable {
 	@JsonIgnore
 	private Blob picture;
 	
-//	private byte[] picture;
-	
 
 	public String getFile1() {
 		return file1;
@@ -153,16 +151,6 @@ public class Bulletin implements Serializable {
 	public void setDesText(String desText) {
 		this.desText = desText;
 	}
-
-
-
-//	public byte[] getPicture() {
-//		return picture;
-//	}
-//
-//	public void setPicture(byte[] picture) {
-//		this.picture = picture;
-//	}
 	
 	public Blob getPicture() {
 		return picture;

@@ -43,7 +43,6 @@ public class BulletinController implements Serializable {
 	ServletContext ctx;
 
 	// 首頁貼文列表
-	// ajax傳回資料庫查詢資料(純JSON資料)
 	@GetMapping("/bulletinList")
 	public @ResponseBody List<Bulletin> findAllPosting() {
 		log.info("findAllPosting方法執行中...");

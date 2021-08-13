@@ -50,7 +50,6 @@ public class BulletinMagController implements Serializable {
 	}
 
 	// 人資管理貼文列表
-	// ajax傳回資料庫查詢資料(純JSON資料)
 	@GetMapping("/bulletinListMag")
 	public @ResponseBody List<Bulletin> findAll() {
 		log.info("findAll方法執行中...");
@@ -62,30 +61,6 @@ public class BulletinMagController implements Serializable {
 	public String bei() {
 		return "/bulletin/eventInsert";
 	}
-
-	// 把表單裡Json資料送到資料庫新增資料(未處理檔案
-//		@PostMapping("/insertEventBulletion2")
-//		public @ResponseBody Map<String, String> save2(@RequestBody Bulletin bulletin) {
-//			// 接JSON形式的資料 //表單綁定自動把資料轉成Member物件
-//			log.info("save2方法執行中...");
-	//
-//			// 時間戳記
-//			Timestamp ts = new Timestamp(System.currentTimeMillis());
-//			bulletin.setCreateTime(ts);
-	//
-//			Map<String, String> map = new HashMap<>();
-//			System.out.println("bulletin=" + bulletin);
-//			String result = "";
-//			try {
-//				bulletinService.insert(bulletin);
-//				result = "新增成功";
-//				map.put("success", result);
-//			} catch (Exception e) {
-//				result = e.getMessage();
-//				map.put("fail", result);
-//			}
-//			return map;
-//		}
 
 	// 把表單資料送到資料庫新增資料
 	@PostMapping("/insertEventBulletion")
@@ -105,17 +80,14 @@ public class BulletinMagController implements Serializable {
 
 		if (multipartFile == null) {
 		} else {
-			// 取得原始檔名
 			String fileName = multipartFile.getOriginalFilename();
 			System.out.println("fileName:" + fileName);
 
-			// 檔案上傳的路徑(io)
 			String saveDirPath = request.getSession().getServletContext().getRealPath("/") + "uploadTempDir//"; // 取得??路徑＋資料夾
 			File savefileDir = new File(saveDirPath);
-			savefileDir.mkdirs(); // mkdirs就算路徑不存在也會建立
+			savefileDir.mkdirs(); 
 
-			// 儲存檔案至臨時資料夾
-			File saveFilePath = new File(savefileDir, fileName); // 指定儲存的位置(檔案路徑, 檔案名稱)
+			File saveFilePath = new File(savefileDir, fileName); 
 			multipartFile.transferTo(saveFilePath);
 			System.out.println("saveFilePath:" + saveFilePath);
 
@@ -129,7 +101,7 @@ public class BulletinMagController implements Serializable {
 				fis1.read(b);
 				fis1.close();
 
-				bulletin.setPicture(new SerialBlob(b)); // bulletin.setPicture(b);
+				bulletin.setPicture(new SerialBlob(b)); 
 			}
 		}
 		log.info("save方法執行2...");

@@ -40,12 +40,6 @@ public class BulletinServiceImpl implements BulletinService {
 	public void update(Bulletin bulletin) {
 		bulletinRepo.update(bulletin);
 	}
-
-	// 執行刪除
-//	@Override
-//	public void delete(Bulletin bulletin) {
-//		bulletinRepo.delete(bulletin);
-//	}
 	
 	@Override
 	public void delete(int postno) {

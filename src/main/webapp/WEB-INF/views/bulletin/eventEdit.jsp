@@ -146,11 +146,11 @@
                 contentType: false,
                 success: function (data) { 
                 	printresult(data);
-                    console.log("前端成功");
+                    console.log("送出成功");
                 },
                 fail: function (data) { 
-                	printresult("前端失敗");
-                    console.log("前端失敗");
+                	printresult("送出失敗");
+                    console.log("送出失敗");
                 }
             });
             }

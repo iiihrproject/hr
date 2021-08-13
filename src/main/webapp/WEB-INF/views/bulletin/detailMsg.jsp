@@ -181,7 +181,7 @@
                                     		&nbsp;
                                     		<c:choose>
                                         	<c:when test="${bulletin.type == '活動'}">
-                                        	<a href="#" class="btn btn-danger btn-icon-split btn-sm" data-toggle="modal" id="sendDel"  data-target="#delModal">
+                                        	<a href="#" class="btn btn-danger btn-icon-split btn-sm" data-toggle="modal" id="sendDel" data-target="#comfirmDelModal">
                                         	<span class="text">刪除</span>
                                     		</a>
                                         	</c:when>
@@ -265,8 +265,7 @@
     <script src="<c:url value='/vendor/datatables/dataTables.bootstrap4.min.js' />"></script> -->
     
     <!-- Result Modal-->
-    <div class="modal fade text-center" id="delModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel"
-        aria-hidden="true">
+    <div class="modal fade text-center" id="comfirmDelModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -276,33 +275,48 @@
                     <span id="resultMsg" style="margin:3px auto">請確認是否刪除貼文</span><br/>
                 </div>
                 <div class="modal-footer justify-content-center" id="resultbutton">
-                <button href="<c:url value='/bulletin/DelEventPage?postno=${bulletin.postno}'/>" class="btn btn-danger" type="button" data-dismiss="modal" id="comfirmBut"  data-target="#comfirmdelModal">確認</button>
-                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="cancelBut">取消</button>
+                <button id="delclick" class="btn btn-danger btn-sm">確認</button>
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal" id="cancelBut">取消</button>
                 </div>
             </div>
         </div>
+
     </div>
 	<!-- Result Modal End-->
 	
-	<!-- Result Modal-->
-    <div class="modal fade text-center" id="comfirmdelModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="resultModalLabel">刪除貼文</h5>
-                </div>
-                <div class="modal-body">
-                    <span id="resultMsg" style="margin:3px auto">貼文已刪除${result}</span><br/>
-                </div>
-                <div class="modal-footer justify-content-center" id="resultbutton">
-                <button href="<c:url value='/bulletin/DelEventPage?postno=${bulletin.postno}'/>" class="btn btn-danger" type="button" data-dismiss="modal" id="comfirmBut">確認</button>
-                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="cancelBut">取消</button>
-                </div>
-            </div>
-        </div>
-    </div>
-	<!-- Result Modal End-->
+    <script>
+	$("#delclick").click(function(){
+
+        let pn = `${bulletin.postno}`;
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "<c:url value='/bulletin/DelEventPage?postno=' />" +`${bulletin.postno}`);
+    	xhr.send();
+    	xhr.onreadystatechange = function(){
+    		if (xhr.readyState == 4 && xhr.status == 200){
+    			console.log(xhr.responseText);
+    			printresult(xhr.responseText);
+    		}
+    	}
+        
+        function printresult(data){
+		$("#resultMsg").html("<font color='red' >" + data + "</font>");
+		let li = "<c:url value='/bulletinManage' />";
+ 		$("#delclick").remove(); 
+		$("#cancelBut").remove(); 
+		$("#resultbutton").html('<button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal" id="cancelBut" onclick="history.back()">回公布欄管理</button>')
+		
+		
+		
+		
+
+				
+        }
+		
+	}) 
+
+	</script>	
+	
+	
 
 
 </body>

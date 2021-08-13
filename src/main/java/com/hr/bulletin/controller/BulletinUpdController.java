@@ -36,7 +36,7 @@ public class BulletinUpdController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger log = LoggerFactory.getLogger(BulletinMagController.class);
+	private static Logger log = LoggerFactory.getLogger(BulletinUpdController.class);
 
 	@Autowired
 	BulletinService bulletinService;
@@ -97,21 +97,17 @@ public class BulletinUpdController implements Serializable {
 
 		if (multipartFile == null) {
 		} else {
-			// 取得原始檔名
 			String fileName = multipartFile.getOriginalFilename();
 			System.out.println("fileName:" + fileName);
 
-			// 檔案上傳的路徑(io)
 			String saveDirPath = request.getSession().getServletContext().getRealPath("/") + "uploadTempDir//"; // 取得??路徑＋資料夾
 			File savefileDir = new File(saveDirPath);
-			savefileDir.mkdirs(); // mkdirs就算路徑不存在也會建立
+			savefileDir.mkdirs(); 
 
-			// 儲存檔案至臨時資料夾
-			File saveFilePath = new File(savefileDir, fileName); // 指定儲存的位置(檔案路徑, 檔案名稱)
+			File saveFilePath = new File(savefileDir, fileName); 
 			multipartFile.transferTo(saveFilePath);
 			System.out.println("saveFilePath:" + saveFilePath);
 
-			// 存到資料庫
 			if (fileName != null && fileName.length() != 0) {
 				String saveFilePathStr = saveDirPath + fileName;
 				bulletin.setFile1(fileName);
@@ -121,7 +117,7 @@ public class BulletinUpdController implements Serializable {
 				fis1.read(b);
 				fis1.close();
 
-				bulletin.setPicture(new SerialBlob(b)); // bulletin.setPicture(b);
+				bulletin.setPicture(new SerialBlob(b)); 
 			}
 		}
 		log.info("update方法執行2...");
@@ -150,29 +146,15 @@ public class BulletinUpdController implements Serializable {
 	}
 	
 	//刪除活動貼文頁
-//	@GetMapping("/bulletin/DelEventPage")
-//	public @ResponseBody String delEvent(Bulletin bulletin) {
-//		log.info("updateop方法執行中...");
-//		System.out.println("bulletin=" + bulletin);
-//		String result = "";
-//		try {
-//			bulletinService.delete(bulletin);
-//			result = "修改成功";
-//		} catch (Exception e) {
-//			result = "修改失敗";
-//		}
-//		return result;
-//	}
-	
 	@GetMapping("/bulletin/DelEventPage")
-	public @ResponseBody String delEvent(int postno) {
+	public @ResponseBody String delEvent(@RequestParam("postno") int postno) {
 		log.info("delEvent方法執行中...");
 		String result = "";
 		try {
 			bulletinService.delete(postno);
-			result = "修改成功";
+			result = "刪除成功";
 		} catch (Exception e) {
-			result = "修改失敗";
+			result = "刪除失敗";
 		}
 		return result;
 	}
@@ -185,12 +167,13 @@ public class BulletinUpdController implements Serializable {
 		String result = "";
 		try {
 			bulletinService.updateop(bulletin);
-			result = "修改成功";
+			result = "刪除成功";
 		} catch (Exception e) {
-			result = "修改失敗";
+			result = "刪除失敗";
 		}
 		return result;
 	}
+
 
 
 }

@@ -25,8 +25,6 @@ public interface BulletinRepo {
 
 	void updateop(Bulletin bulletin);
 
-//	void delete(Bulletin bulletin);
-
 	void delete(int postno);
 
 }

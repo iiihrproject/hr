@@ -47,23 +47,6 @@ public class BulletinRepoImpl implements BulletinRepo {
 		return entityManager.createQuery(hql, Bulletin.class).setParameter("ts", ts).getResultList();
 	}
 
-//	執行修改(無圖)
-//	@Override
-//	public void updatenop(Bulletin bulletin) {
-//		Bulletin bul = findById(bulletin.getPostno());
-//		bulletin.setTitle(bul.getTitle());
-//		bulletin.setDescription(bul.getDescription());
-//		bulletin.setDesText(bul.getDesText());
-//		bulletin.setFile1(null);
-//		bulletin.setPicture(null);
-//		bulletin.setQuotatype(bul.getQuotatype());
-//		bulletin.setQuota(bul.getQuota());
-//		bulletin.setPostDate(bul.getPostDate());
-//		bulletin.setPostStatus(bul.getPostStatus());
-//		entityManager.detach(bul);
-//		entityManager.merge(bulletin);
-//	}
-
 	// 執行修改(原圖)
 	@Override
 	public void updateop(Bulletin bulletin) {
@@ -112,28 +95,5 @@ public class BulletinRepoImpl implements BulletinRepo {
 		Bulletin bul = entityManager.find(Bulletin.class, postno);
 		entityManager.remove(bul);
 	}
-	
-//	@Override
-//	public void delete(Bulletin bulletin) {
-//		Bulletin bul = findById(bulletin.getPostno());
-//
-//		bulletin.setFile1(bul.getFile1());
-//		bulletin.setQuotatype(bul.getQuotatype());
-//		bulletin.setExp(bul.getExp());
-//		bulletin.setPostno(bul.getPostno());
-//		bulletin.setType(bul.getType());
-//		bulletin.setTitle(bul.getTitle());
-//		bulletin.setPostDate(bul.getPostDate());
-//		bulletin.setPostStatus("deleted");
-//		bulletin.setCreateTime(bul.getCreateTime());
-//		bulletin.setQuota(bul.getQuota());
-//		bulletin.setDesText(bul.getDesText());
-//		bulletin.setPicture(bul.getPicture());
-//		bulletin.setDescription(bul.getDescription());
-//
-//		entityManager.detach(bul);
-//		entityManager.merge(bulletin);
-//	}
-
 
 }
