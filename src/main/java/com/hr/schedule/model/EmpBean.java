@@ -9,7 +9,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Personnel Info")
+@Table(name="Personnel_Info")
 public class EmpBean {
 	@Id
 	@Column(name="empNo")

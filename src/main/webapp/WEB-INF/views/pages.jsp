@@ -181,7 +181,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">左中</div>
-                                            <a href="###" class="text-decoration-none">
+                                            <a href="<c:url value='/EmpSignApply'/>" class="text-decoration-none">
                                                 <div class="h4 mb-0 font-weight-bold text-center">##出勤異常申請</div>
                                             </a>
                                         </div>
@@ -199,8 +199,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">右中</div>
-                                            <a href="###" class="text-decoration-none">
-                                                <div class="h4 mb-0 font-weight-bold text-center">##補簽申請</div>
+                                            <a href="<c:url value='/employeeOvertime' />"" class="text-decoration-none">
+                                                <div class="h4 mb-0 font-weight-bold text-center">##加班申請</div>
                                             </a>
                                         </div>
                                         <div class="col-auto">
@@ -220,7 +220,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">左下</div>
-                                            <a href="###" class="text-decoration-none">
+                                            <a href="<c:url value='/ManagesystemOvertime' />" class="text-decoration-none">
                                                 <div class="h4 mb-0 font-weight-bold text-center">##申請簽核</div>
                                             </a>
                                         </div>

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hr.login.model.DepartmentDetail;
 import com.hr.overtime.model.OverTimeAuditted;
 import com.hr.overtime.model.OverTimePending;
 import com.hr.overtime.repository.OverTimeRepository;
@@ -23,39 +24,7 @@ public class OverTimeServiceImpl implements OverTimeService {
 	
 	@Override
 	public void savePending(OverTimePending overTimePending) {
-//		String Type = "submit";
-//		String EmpNo = "123";
-//		// String EmpNo = (String) parasession.getAttribute("empno");
-//		String DateOfApplication = request.getParameter("Date of Application");
-//		String EmpName = request.getParameter("EmpName");
-//		String Department = request.getParameter("department");
-//		String Position = request.getParameter("position");
-//		String OvertimeCategory = request.getParameter("Overtime category");
-//		String OvertimeDate = request.getParameter("OvertimeDate");
-//		String StartingTime = request.getParameter("Starting time");
-//		String EndingTime = request.getParameter("Ending time");
-//		double hours = getOverTimeHours(StartingTime, EndingTime);
-//		String Reason = request.getParameter("reason");
-//		String Remarks = request.getParameter("Remarks");
-//
-//		//convert to bean
-//		OverTimePending overtime = new OverTimePending();
-//		overtime.setType(Type);
-//		overtime.setEmpNo(EmpNo);
-//		overtime.setDateOfApplication(getDate(DateOfApplication));
-//		overtime.setEmpName(EmpName);
-//		overtime.setDepartment(Department);
-//		overtime.setPosition(Position);
-//		overtime.setOvertimeCategory(OvertimeCategory);
-//		overtime.setOverTimeDate(getDate(OvertimeDate));
-//		overtime.setStartingTime(StartingTime);
-//		overtime.setEndingTime(EndingTime);
-//		overtime.setOverTimeHours(Double.toString(hours));
-//		overtime.setReason(Reason);
-//		overtime.setRemarks(Remarks);
-//		overtime.setResult("pending");
 		
-		//用start & end 算出 加班時數
 		double hours = getOverTimeHours(overTimePending.getStartingTime(), overTimePending.getEndingTime());
 		
 		overTimePending.setOverTimeHours(Double.toString(hours));
@@ -69,37 +38,59 @@ public class OverTimeServiceImpl implements OverTimeService {
 
 	@Override
 	public List<OverTimePending> findByEmpnoPending(String empNo) {
-		// TODO Auto-generated method stub
-		return null;
+		List<OverTimePending> overtimepending = overTimeRepository.findByEmpnoPending(empNo);
+		return overtimepending;
 	}
 
 	@Override
 	public List<OverTimeAuditted> findByEmpnoAuditted(String empNo) {
-		// TODO Auto-generated method stub
-		return null;
+		List<OverTimeAuditted> overtimeauditted = overTimeRepository.findByEmpnoAuditted(empNo);
+		return overtimeauditted;
 	}
-
+//--------------------------------------------管理員--------------------------------------------------------
 	@Override
 	public List<OverTimePending> findByResult() {
-		// TODO Auto-generated method stub
-		return null;
+		List<OverTimePending> overtimepending = overTimeRepository.findByResult();
+		return overtimepending;
 	}
 
 	@Override
-	public OverTimePending findById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public OverTimePending findById(Integer id) {
+		OverTimePending overtimepending = overTimeRepository.findById(id);
+		return overtimepending;
 	}
 
 	@Override
 	public void deletePending(OverTimePending overTimePending) {
-		// TODO Auto-generated method stub
+		overTimeRepository.deletePending(overTimePending);
 		
 	}
+	
+//	@Override
+//	public DepartmentDetail queryManagerId(int dept_no) {
+//		return overTimeRepository.queryManagerId(dept_no);
+//	}
 
 	@Override
-	public void saveAuditted(OverTimeAuditted overTimeAuditted) {
-		// TODO Auto-generated method stub
+	public void saveAuditted(OverTimePending overTimePending ,String type) {
+		
+		OverTimeAuditted overTimeAuditted = new OverTimeAuditted();
+//		overTimeAuditted.setId(overTimePending.getId());
+		overTimeAuditted.setType(overTimePending.getType());
+		overTimeAuditted.setDateOfApplication(overTimePending.getDateOfApplication());
+		overTimeAuditted.setEmpNo(overTimePending.getEmpNo());
+		overTimeAuditted.setEmpName(overTimePending.getEmpName());
+		overTimeAuditted.setDepartment(overTimePending.getDepartment());
+		overTimeAuditted.setPosition(overTimePending.getPosition());
+		overTimeAuditted.setOvertimeCategory(overTimePending.getOvertimeCategory());
+		overTimeAuditted.setOverTimeDate(overTimePending.getOverTimeDate());
+		overTimeAuditted.setStartingTime(overTimePending.getStartingTime());
+		overTimeAuditted.setEndingTime(overTimePending.getEndingTime());
+		overTimeAuditted.setOverTimeHours(overTimePending.getOverTimeHours());
+		overTimeAuditted.setReason(overTimePending.getReason());
+		overTimeAuditted.setRemarks(overTimePending.getRemarks());
+		overTimeAuditted.setResult(type);
+		overTimeRepository.saveAuditted(overTimeAuditted);
 		
 	}
 	
@@ -124,6 +115,12 @@ public class OverTimeServiceImpl implements OverTimeService {
 
 		return diffHours1;
 
+	}
+
+	@Override
+	public List<OverTimePending> findPartByEmpnoPending(String empNo) {
+	List<OverTimePending>overtimepending = overTimeRepository.findPartByEmpnoPending(empNo);
+		return overtimepending;
 	}
 	
 }

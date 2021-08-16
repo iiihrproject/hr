@@ -3,6 +3,7 @@ package com.hr.checksystem.repository;
 import java.util.List;
 
 import com.hr.checksystem.model.Checksystem;
+import com.hr.login.model.DepartmentDetail;
 
 public interface CheckRepository {
 
@@ -17,6 +18,7 @@ public interface CheckRepository {
 	Checksystem findTodayCheckSystemByEmpno(String empNo);
 
 	Checksystem findYesterdayCheckSystemByEmpno(String empNo);
+
 
 
 }

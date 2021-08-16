@@ -38,4 +38,10 @@ public class LoginController {
 		return "/index";
 	}
 	
+	@GetMapping(path="/pages")
+	public String loginPage() {
+		return "/pages";
+	}
+	
+	
 }

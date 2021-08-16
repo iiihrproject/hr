@@ -14,15 +14,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.hr.checksystem.model.Checksystem;
 import com.hr.checksystem.repository.Impl.CheckSystemRepository;
 import com.hr.checksystem.service.CheckService;
+import com.hr.login.model.LoginModel;
 
 @Controller
+@SessionAttributes("loginModel")
 public class ChecksystemController {
 
 	@Autowired
@@ -32,10 +36,12 @@ public class ChecksystemController {
 	HttpServletRequest request;
 	
 	@GetMapping(path = "/checkInto")
-	public String checkInto(Model model) {
-		HttpSession httpSession = request.getSession(true);
-		String empNo = (String)httpSession.getAttribute("empNo");
-		empNo = "123";
+	public String checkInto(Model model ,LoginModel loginModel) {
+//		HttpSession httpSession = request.getSession(true);
+		String empNo = loginModel.getEmpNo();
+		System.out.println(empNo);
+//		String empNo = (String)httpSession.getAttribute("empNo");
+//		empNo = "123";
 		Checksystem checksystem1 = checkService.findYesterdayCheckSystemByEmpno(empNo);
 		
 		String errorMsg = null;
@@ -64,16 +70,17 @@ public class ChecksystemController {
 	
 	@PostMapping(path ="/saveCheckSystem")
 	@ResponseBody
-	public String saveCheckSystem(@RequestParam("type") String type, Model model) throws Exception {
+	public String saveCheckSystem(@RequestParam("type") String type, Model model,LoginModel loginModel) throws Exception {
 		System.out.println(type);
-		HttpSession httpSession = request.getSession(true);
-		String empNo = (String)httpSession.getAttribute("empNo");
+//		HttpSession httpSession = request.getSession(true);
+//		String empNo = (String)httpSession.getAttribute("empNo");
+		String empNo = loginModel.getEmpNo();
 		Date time = new Date();
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
 		String sDAte = sdfDate.format(time).toString();
 		String sTime = sdfTime.format(time).toString();
-		empNo = "123";
+//		empNo = "123";
 		
 		Checksystem checksystem = checkService.findTodayCheckSystemByEmpno(empNo);
 		System.out.println(checksystem);
@@ -157,10 +164,11 @@ public class ChecksystemController {
 	}
 	
 	@GetMapping(path = "/findCheckByEmpno")
-	public @ResponseBody List<Checksystem> findCheckSystemByEmpNo() {
-		HttpSession httpSession = request.getSession(true);
-		String empNo = (String)httpSession.getAttribute("empNo");
-		empNo = "123";
+	public @ResponseBody List<Checksystem> findCheckSystemByEmpNo(LoginModel loginModel) {
+//		HttpSession httpSession = request.getSession(true);
+//		String empNo = (String)httpSession.getAttribute("empNo");
+//		empNo = "123";
+		String empNo = loginModel.getEmpNo();
 		List<Checksystem> checksystem = checkService.findCheckSystemByEmp(empNo);
 		
 		return checksystem ;
@@ -171,10 +179,11 @@ public class ChecksystemController {
 	
 	@GetMapping(path = "/findCheckByEmp")
 	public String findCheckSystemByEmpno(Model model,@RequestParam(value="pageNo",required = false)Integer pageNo,
-			@RequestParam(value="date",required = false)String date) {
-		HttpSession httpSession = request.getSession(true);
-		String empNo = (String)httpSession.getAttribute("empNo");
-		empNo = "123";
+			@RequestParam(value="date",required = false)String date,LoginModel loginModel) {
+//		HttpSession httpSession = request.getSession(true);
+//		String empNo = (String)httpSession.getAttribute("empNo");
+//		empNo = "123";
+		String empNo = loginModel.getEmpNo();
 		
 		pageNo = pageNo == null ? 0 : pageNo-1;
 		

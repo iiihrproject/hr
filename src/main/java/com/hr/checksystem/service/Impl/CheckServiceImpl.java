@@ -59,6 +59,8 @@ public class CheckServiceImpl implements CheckService {
 
 		List<Checksystem> checksystem = checkRepository.findPartCheckSystem(empNo, days);
 
+		filterIsNeedRepair(checksystem);
+		
 		return checksystem;
 	}
 	
@@ -67,10 +69,10 @@ public class CheckServiceImpl implements CheckService {
 		
 		List<Checksystem> checksystem = checkRepository.findCheckSystemByEmp(empNo);
 		
+		filterIsNeedRepair(checksystem);
+		
 		return checksystem;
 	}
-	
-	
 	
 	//計算上下班是否準時
 	@Override
@@ -83,7 +85,47 @@ public class CheckServiceImpl implements CheckService {
 		return result;
 
 	}
-
+	
+	//判斷是否補簽到
+	public void filterIsNeedRepair(List<Checksystem> checkSystemList) {
+		
+		Date today = transferDate(new Date());
+		
+		for(Checksystem checksystem : checkSystemList) {
+			
+			Date checkTime = transferDate(checksystem.getCreateTime());
+			
+			//判斷小於今天的資料作處理
+			if(today.compareTo(checkTime) == 1) {
+				
+				if(checksystem.getCheckInTime() == null || checksystem.getCheckOutTime() == null || checksystem.getWorkingHours() < 9) {
+					checksystem.setIsNeedRepair("Y");
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	public Date transferDate(Date date) {
+		
+		//yyyy mm dd HH mm ss
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			//yyyy-MM-dd
+			String dateString = sdf.format(date);
+			//yyyy mm dd 00 00 00
+			date = sdf.parse(dateString);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return date;
+		
+	}
+	
 	public Date getTimeByType(String type) {
 		
 		String timeString = null;
@@ -109,18 +151,33 @@ public class CheckServiceImpl implements CheckService {
 	//測試打卡計算分鐘
 	public static void main(String[] args) throws Exception {
 
-		String workTime = "09:00:00";
-		String hour = "09:00:02";
-
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-
-		Date start = sdf.parse(workTime);// 業務時間
-
-		Date end = sdf.parse(hour);// 當前時間
-
-		long cha = end.getTime() - start.getTime();
-		double result = Math.floor(cha * 1.0 / (1000 * 60));
-		System.out.println(result);
+//		String workTime = "09:00:00";
+//		String hour = "09:00:02";
+//
+//		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+//
+//		Date start = sdf.parse(workTime);// 業務時間
+//
+//		Date end = sdf.parse(hour);// 當前時間
+//
+//		long cha = end.getTime() - start.getTime();
+//		double result = Math.floor(cha * 1.0 / (1000 * 60));
+//		System.out.println(result);
+		
+		Date date = new Date();
+		
+		System.out.println("date = " + date);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			String dateString = sdf.format(date);
+			date = sdf.parse(dateString);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("after = " + date);
+		
 	}
 //<------------------------------------------------管理員------------------------------------------------------------>
 	@Override
