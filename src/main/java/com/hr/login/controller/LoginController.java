@@ -29,6 +29,11 @@ public class LoginController {
 		return "/login";
 	}
 	
+  @GetMapping(path="/")
+	public String mainPagePath() {
+		return "redirect:/index";
+	}
+  
 	@GetMapping(path="/index")
 	public String redirectToMainPage(Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -37,11 +42,18 @@ public class LoginController {
 		model.addAttribute("loginModel", loginModel);
 		return "/index";
 	}
-	
+
+	@GetMapping(path="/logout")
+	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    if (auth != null){    
+	        new SecurityContextLogoutHandler().logout(request, response, auth);
+	    }
+	    return "/login";
+
 	@GetMapping(path="/pages")
 	public String loginPage() {
 		return "/pages";
-	}
-	
-	
+
+	}	
 }
