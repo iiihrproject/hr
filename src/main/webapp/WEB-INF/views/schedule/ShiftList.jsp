@@ -6,7 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Shift List</title>
-<script src="<c:url value='/webjars/jquery/3.1.1-1/jquery.min.js' />"></script>
+<%-- <script src="<c:url value='/webjars/jquery/3.1.1-1/jquery.min.js' />"></script> --%>
+<script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
 <script>
 	window.onload = function() {
 		let dataArea = document.getElementById("dataArea");
