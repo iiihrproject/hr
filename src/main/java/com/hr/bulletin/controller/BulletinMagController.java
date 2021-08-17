@@ -43,26 +43,26 @@ public class BulletinMagController implements Serializable {
 	@Autowired
 	ServletContext ctx;
 
-	// 貼文管理頁
+	// 貼文管理頁 //h
 	@GetMapping("/bulletinManage")
 	public String bulletinMag() {
 		return "/bulletin/manage";
 	}
 
-	// 人資管理貼文列表
+	// 人資管理貼文列表 //h
 	@GetMapping("/bulletinListMag")
 	public @ResponseBody List<Bulletin> findAll() {
 		log.info("findAll方法執行中...");
 		return bulletinService.findAll();
 	}
 
-	// 新增活動貼文頁
+	// 新增活動貼文頁 //h
 	@GetMapping("/bulletinEventInsert")
 	public String bei() {
 		return "/bulletin/eventInsert";
 	}
 
-	// 把表單資料送到資料庫新增資料
+	// 把表單資料送到資料庫新增資料 //h
 	@PostMapping("/insertEventBulletion")
 	public @ResponseBody String save(@RequestParam("title") String title,
 			@RequestParam("description") String description, @RequestParam("desText") String desText,
@@ -134,7 +134,7 @@ public class BulletinMagController implements Serializable {
 	}
 
 
-	// 編輯貼文頁
+	// 編輯貼文頁 //h
 	@GetMapping("/bulletinDetailMsg")
 	public String findById(@RequestParam("postno") int postno, Model model) {
 		Bulletin bulletin = bulletinService.findById(postno);

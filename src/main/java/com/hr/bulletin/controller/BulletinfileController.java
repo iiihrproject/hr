@@ -47,7 +47,7 @@ public class BulletinfileController {
 	@Autowired
 	ServletContext ctx;
 
-	// 載入圖
+	// 載入圖 //h
 	@GetMapping("/bulletin/getImage")
 	public ResponseEntity<byte[]> getImage(@RequestParam("postno") Integer no) {
 		log.info("getImage方法執行中...");
