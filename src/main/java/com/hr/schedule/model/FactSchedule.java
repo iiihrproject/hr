@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -23,10 +24,12 @@ public class FactSchedule {
 	@Column(name="Date")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone= "Asia/Taipei")
 	private Date workDate;
-	@Column(name="empno")
-	private String empNo;
-//	@OneToMany(targetEntity=DimShift.class,cascade=CascadeType.ALL)
-//	private Integer keyShift;
+	@OneToOne(targetEntity=EmpBean.class,cascade=CascadeType.DETACH)
+	@JoinColumn(name="empNo", referencedColumnName="empNo")
+	private EmpBean emps;
+	@OneToOne(targetEntity=DimShift.class,cascade=CascadeType.DETACH)
+	@JoinColumn(name="KeyShift", referencedColumnName = "KeyShift")
+	private DimShift keyShift;
 	@Column(name="KeyAvailability")
 	private Integer keyAvailability;
 	@Column(name="HoursOfWork")
@@ -61,21 +64,21 @@ public class FactSchedule {
 		this.workDate = workDate;
 	}
 
-	public String getEmpNo() {
-		return empNo;
+	public EmpBean getEmps() {
+		return emps;
 	}
 
-	public void setEmpNo(String empNo) {
-		this.empNo = empNo;
+	public void setEmps(EmpBean emps) {
+		this.emps = emps;
 	}
-
-//	public Integer getKeyShift() {
-//		return keyShift;
-//	}
-//
-//	public void setKeyShift(Integer keyShift) {
-//		this.keyShift = keyShift;
-//	}
+	
+	public DimShift getKeyShift() {
+		return keyShift;
+	}
+	
+	public void setKeyShift(DimShift keyShift) {
+		this.keyShift = keyShift;
+	}
 
 	public Integer getKeyAvailability() {
 		return keyAvailability;
@@ -92,8 +95,6 @@ public class FactSchedule {
 	public void setHoursOfWork(Double hoursOfWork) {
 		this.hoursOfWork = hoursOfWork;
 	}
-
-
 
 	public String getStart() {
 		return start;
@@ -118,5 +119,5 @@ public class FactSchedule {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 }

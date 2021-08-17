@@ -26,9 +26,11 @@ public class ShiftController {
 	}
 	@GetMapping(value="/schedule/shifts")
 	public String queryAllShift(Model model) {
-		List<DimShift> shifts = service.findAllShifts();
-		model.addAttribute("allShift", shifts);
-		return "schedule/ShiftList";
+//		List<DimShift> shifts = service.findAllShifts();
+//		model.addAttribute("allShift", shifts);
+//		return "schedule/ShiftList";
+		model.addAttribute("body", "schedule/ShiftList.jsp");
+		return "layout/Template";
 	}
 	@GetMapping(value="/schedule/shifts/findAll")
 	public @ResponseBody List<DimShift> findAllShifts(){

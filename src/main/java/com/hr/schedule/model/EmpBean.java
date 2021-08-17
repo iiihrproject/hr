@@ -9,7 +9,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Personnel Info")
+@Table(name="Personnel_Info")
 public class EmpBean {
 	@Id
 	@Column(name="empNo")
@@ -18,7 +18,7 @@ public class EmpBean {
 	@Column(name="Name")
 	private String name;
 	
-	@OneToOne(cascade={CascadeType.ALL})
+	@OneToOne(cascade={CascadeType.DETACH})
 	@JoinColumn(name="deptNo", referencedColumnName = "deptNo")
 	private DeptTree department;
 	
