@@ -52,7 +52,7 @@
 		
 	$(document).ready(function() {		
 	    $('#dataTable').DataTable( {
-	    	"lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+	    	"lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
 	        "ajax": {
 	        "url":'<c:url value='/bulletinListMag'/>',
 	        "dataSrc": "",
@@ -62,12 +62,39 @@
 	            { "data": "postno" },
 	            { "data": "type" },
 	            { "data": "title" },
-	            { "data": "description" },
+	            { "data": "desText" ,
+	            	"render": function (data, type, row) {
+	            		let dText="";
+	            		if(data!=null){
+	            		if (data.length>8){
+	            			dText = data.substr(0,7)+"...";
+	            		} else {
+	            			dText = data;
+	            		}
+	            		return dText;
+	            		}else{
+	            			return data;
+	            		}
+	                }},
 	            { "data": "postDate" },
 	            { "data": "exp" },
 	            { "data": "quotatype" },
-	            { "data": "quota" },
-	            { "data": "quota" },
+	            { "data": "quota" ,
+	            	"render": function (data, type, row) {
+	            		if(row.quotatype=="不限"){
+	            		return "*";
+	            		}else{
+	            			return data;
+	            		}
+	                }},
+	            { "data": "quota" ,
+		            	"render": function (data, type, row) {
+		            		if(row.quotatype=="不限"){
+		            		return "*";
+		            		}else{
+		            			return data;
+		            		}
+		                }},
 	            { "data": "quota" },
 	            { "data": "postStatus",
 	            	"render": function (data, type, row, meta) {
@@ -91,8 +118,8 @@
             }, 
             
             rowCallback: function(row, data){
-            	console.log("連結：<c:url value='/bulletinDetail'/>?postno=" + data.postno );
-            	$(row).attr("href","<c:url value='/bulletinDetail'/>?postno=" + data.postno);
+            	console.log("連結：<c:url value='/bulletinDetailMsg'/>?postno=" + data.postno );
+            	$(row).attr("href","<c:url value='/bulletinDetailMsg'/>?postno=" + data.postno);
             },
             
             "language": {
@@ -192,7 +219,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="###" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">員編員編員編</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">${sessionScope.loginModel.getEmpNo()}</span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -235,7 +262,7 @@
                         <!-- Card Body -->
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-bordered table-hover table-hover-color" id="dataTable" width="100%" cellspacing="0" style="color:#43454e">
                                     <thead>
                                         <tr>
                                             <th>NO.</th>
@@ -247,7 +274,7 @@
                                             <th>名額</th>
                                             <th>可報名額</th>  
                                             <th>已報名額</th>
-                                            <th>瀏覽人次</th>
+                                            <th>瀏覽人數</th>
                                             <th>狀態</th>
                                                                                          
                                         </tr>

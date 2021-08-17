@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hr.bulletin.model.BulMessage;
 import com.hr.bulletin.model.Bulletin;
 import com.hr.bulletin.repository.BulletinRepo;
 import com.hr.bulletin.service.BulletinService;
@@ -21,6 +22,12 @@ public class BulletinServiceImpl implements BulletinService {
 	@Override
 	public void insert(Bulletin bulletin) {
 		bulletinRepo.insert(bulletin);
+	}
+	
+	// 執行新增
+	@Override
+	public void insertMsg(BulMessage bulMassage) {
+		bulletinRepo.insertMsg(bulMassage);
 	}
 
 	// 執行查詢單筆
@@ -40,17 +47,31 @@ public class BulletinServiceImpl implements BulletinService {
 	public void update(Bulletin bulletin) {
 		bulletinRepo.update(bulletin);
 	}
-
-	// 執行刪除
+	
 	@Override
 	public void delete(int postno) {
 		bulletinRepo.delete(postno);
 	}
 	
 	//查詢未過期多筆
+	@Override
 	public List<Bulletin> findAllPosting() {
 		return bulletinRepo.findAllPosting();
 	}
+	
+	
+	// 執行修改
+	@Override
+	public void updateop(Bulletin bulletin) {
+		bulletinRepo.updateop(bulletin);
+	}
+	
+	@Override
+	public List<BulMessage> findAllMsg(int postno){
+		return bulletinRepo.findAllMsg(postno);
+	}
+	
+	
 	
 	
 }

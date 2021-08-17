@@ -3,6 +3,7 @@ package com.hr.bulletin.model;
 import java.sql.Blob;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,10 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "bulletin")
-public class Bulletin {
+public class Bulletin implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	private String type;
 
@@ -44,7 +48,9 @@ public class Bulletin {
 	
 	private Integer quota;
 	
-	private byte[] picture;
+	// 加入修飾字防止Gson轉換此欄位
+	@JsonIgnore
+	private Blob picture;
 	
 
 	public String getFile1() {
@@ -145,16 +151,12 @@ public class Bulletin {
 	public void setDesText(String desText) {
 		this.desText = desText;
 	}
-
-
-
-	public byte[] getPicture() {
+	
+	public Blob getPicture() {
 		return picture;
 	}
 
-
-
-	public void setPicture(byte[] picture) {
+	public void setPicture(Blob picture) {
 		this.picture = picture;
 	}
 

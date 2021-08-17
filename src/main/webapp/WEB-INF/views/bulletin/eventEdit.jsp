@@ -38,10 +38,11 @@
 	<script>
 
     var hasError = false;
+    var ofile = "notchange";
     
     window.onload = function () {
     	
-    	//送出新增
+    	//送出修改
         let sendData = document.getElementById("sendData");
         sendData.onclick = function () {
             hasError = false;
@@ -100,7 +101,8 @@
 
             //送出新增資料jQuery
             var formData = new FormData();
-
+            
+            formData.append("postno", `${bulletin.postno}`);
             formData.append("title", titleValue);
             formData.append("description", descriptionValue);
             formData.append("desText", destextValue);
@@ -114,23 +116,44 @@
             formData.append("postdate", postdateValue);
             formData.append("exp", expValue);
             
+            console.log("ofile:"+ofile);
+            console.log("file:"+file);
+            
+            if(ofile=="notchange"){
             $.ajax({
                 type: 'post',
-                url: "<c:url value='/insertEventBulletion' />",
+                url: "<c:url value='/bulletin/EditEventop' />",
                 data: formData,
                 cache: false,
                 processData: false,
                 contentType: false,
             	success: function (data) { 
             		printresult(data);
-                	console.log("新增成功");
+                	console.log("前端成功?");
             	},
                 fail: function (data) { 
-                	printresult("新增失敗");
-                    console.log("新增失敗");
+                	printresult("前端失敗");
+                    console.log("前端失敗?");
                 }
             });
-            
+            }else{
+            $.ajax({
+                type: 'post',
+                url: "<c:url value='/bulletin/EditEvent' />",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) { 
+                	printresult(data);
+                    console.log("送出成功");
+                },
+                fail: function (data) { 
+                	printresult("送出失敗");
+                    console.log("送出失敗");
+                }
+            });
+            }
 
             
         }
@@ -138,9 +161,9 @@
     
     function printresult(data){
     var divResult = document.getElementById('resultMsg');
-        if (data=="新增失敗") {
+        if (data=="修改失敗") {
             divResult.innerHTML = "<font color='red' >" + data + "</font>";
-        } else if (data=="新增成功") {
+        } else if (data=="修改成功") {
             divResult.innerHTML = "<font color='GREEN'>" + data + "</font>";
             let div0 = document.getElementById('result0c');
             let div1 = document.getElementById('result1c');
@@ -157,11 +180,32 @@
         }
     }
     
+    
+    
     function clean(){
     	var obj = document.getElementById('file1') ; 
     	obj.outerHTML=obj.outerHTML;
     	$("#showImg").attr("src","");
+    	ofile = "change";
+    	console.log("ofile(clean):"+ofile);
     	
+    }
+    
+  //載入圖片
+    function selectImgFile(files) {
+    	if (!files.length) {
+    		return false;
+    	}
+
+    	let file = files[0];
+    	let reader = new FileReader();
+    	reader.onload = function() {
+    		document.getElementById('showImg').src = this.result;
+    	};
+
+    	reader.readAsDataURL(file);
+    	ofile = "change";
+    	console.log("ofile(selectImgFile):"+ofile);
     }
 
     
@@ -267,56 +311,86 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">新增活動貼文</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">修改活動貼文</h6>
                         </div>
                         <div class="card-body">
                            <div class="table-responsive">
                            
                           <table class="table table-bordered" width="100%" cellspacing="0">
                                     <tbody>
-                                    <form enctype="multipart/form-data" id="inserForm">
+                                    <form enctype="multipart/form-data;charset=utf-8" id="inserForm">
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">主&emsp;&emsp;旨 :</label></td>
-                                            <td><input type="text" id="title" name="title" class="form-control"  size="30" maxlength="30" style="width:600px;" required />
+                                            <td><input type="text" id="title" name="title" class="form-control"  size="30" maxlength="30" style="width:600px;" value="${bulletin.title}" required />
                                             	<span id="result0c" class="form-text"></span></td>
                                         </tr>
                                         <tr>
                                         	<td style="text-align: right"><label for="" class="col-form-label">內&emsp;&emsp;容 :</label></td>
                     						<td style="color:black">
-                    						<textarea class="editor" name="description"></textarea>
+                    						<textarea class="editor" name="description">${bulletin.description}</textarea>
                     						<!-- <textarea id="description" id="description" class="form-control" cols="50" rows="6" required style="width:600px;" ></textarea> -->
                     						<span id=result1c class="form-text"></span>
                     						</td>
                                         </tr>
+                                        <c:choose>
+                                        <c:when test="${bulletin.file1==null}">
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">圖&emsp;&emsp;檔 :</label></td>
-                                            <td><input type="file" id="file1" name="file1" class="btn-sm" onchange="selectImgFile(this.files)"/>
+                                            <td style="text-align: right"><label for="" class="col-form-label">上傳圖檔 :</label></td>
+                                            <td>
+                                            <input type="file" id="file1" name="file1" class="btn-sm" onchange="selectImgFile(this.files)" >
                                             <a class="btn btn-secondary btn-icon-split btn-sm" style="height:30px" onclick="clean()">
                                         	<span class="text">清除檔案</span>
                                     		</a>
                                     		<br>
-                                            <img id="showImg" style="max-width:500px"></img>
-                                            </td>
+                                            <img id="showImg" style="max-width:500px"></img></td>
+                                        </tr>
+                                        </c:when>
+                                        <c:otherwise>
+                                        <tr>
+                                        	<td style="text-align: right"><label for="" class="col-form-label">圖&emsp;&emsp;檔 :</label></td>
+                                            <td>
+                                            <img id="showImg" src="<c:url value='/bulletin/getImage?postno=${bulletin.postno}'/>" style="max-width:500px"/></td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">名&emsp;&emsp;額 :</label></td>
+                                            <td style="text-align: right"><label for="" class="col-form-label">變更圖檔 :</label></td>
+                                            <td><input type="file" id="file1" name="file1" class="btn-sm" onchange="selectImgFile(this.files)">
+                                            <a class="btn btn-secondary btn-icon-split btn-sm" style="height:30px" onclick="clean()">
+                                        	<span class="text">清除檔案</span>
+                                    		</a></td>
+                                        </tr>
+                                        </c:otherwise>
+                                        </c:choose>
+                                        <tr>
+                                        <c:choose>
+                                        <c:when test="${bulletin.quotatype=='限制'}">
+                                        	<td style="text-align: right"><label for="" class="col-form-label">名&emsp;&emsp;額 :</label></td>
                                             <td><input type="radio" name="quotatype" id="notlimitid" value="不限"/><label for="">不限</label>&emsp;
                     							<input type="radio" name="quotatype" id="limitid" value="限制" checked/>限制
-                                            	<input type="number" name="quota" id="quotanid" min="0" max="1000"/>人
+                                            	<input type="number" name="quota" id="quotanid" min="0" max="1000" value="${bulletin.quota}" />人
                                             	<span id=result4c class="form-text"></span>
                                             </td>
+                                        </c:when>
+                                        <c:otherwise>
+                                        	<td style="text-align: right"><label for="" class="col-form-label">名&emsp;&emsp;額 :</label></td>
+                                            <td><input type="radio" name="quotatype" id="notlimitid" value="不限" checked/><label for="">不限</label>&emsp;
+                    							<input type="radio" name="quotatype" id="limitid" value="限制" />限制
+                                            	<input type="number" name="quota" id="quotanid" min="0" max="1000" disabled />人
+                                            	<span id=result4c class="form-text"></span>
+                                            </td>
+                                        </c:otherwise>
+                                        </c:choose>
                                         </tr>
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label ">刊登日期 :</label></td>
                 							<td>
-                    						<input type="date" id="postdate" name="postdate" class="form-control" style="width:200px;" required >
+                    						<input type="date" id="postdate" name="postdate" class="form-control" style="width:200px;" value="${bulletin.postDate}" required >
                     						<span id=result2c class="form-text"></span>
                     						</td>
                                         </tr>
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">有效日期 :</label></td>
                 							<td>
-                    						<input type="date" id="exp" name="exp" class="form-control" style="width:200px;" required >
+                    						<input type="date" id="exp" name="exp" class="form-control" style="width:200px;" value="${bulletin.exp}" required >
                     						<span id=result3c class="form-text"></span>
                     						</td>
                                         </tr>
@@ -332,7 +406,7 @@
                                     		</a>
                                     		&nbsp;
                                     		<button type="submit" class="btn btn-success btn-icon-split btn-sm" data-toggle="modal" id="sendData"  data-target="#resultModal">
-                                        	<span class="text">&nbsp;新增&nbsp;</span>
+                                        	<span class="text">&nbsp;修改&nbsp;</span>
                                     		</button>
                                     		</td>
                                     	</tr>
@@ -486,7 +560,7 @@
 
 	<!-- ckeditor end-->
 	
-	<script src="<c:url value='/js/check.js' />"></script>
+	<script src="<c:url value='/js/bEventEdit.js' />"></script>
 	
 
 	
