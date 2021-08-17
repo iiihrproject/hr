@@ -35,14 +35,14 @@
 	<!-- Page Wrapper -->
 	<div id="wrapper">
 		<!-- Sidebar -->
-		<jsp:include page="sidebar.jsp"></jsp:include>
+		<jsp:include page="layout/sidebar.jsp"></jsp:include>
 
 		<!-- Content Wrapper -->
 		<div id="content-wrapper" class="d-flex flex-column">
 			<!-- Main Content -->
 			<div id="content">
 				<!-- Topbar -->
-				<jsp:include page="topbar.jsp"></jsp:include>
+				<jsp:include page="layout/topbar.jsp"></jsp:include>
 				<!-- End of Topbar -->
 				<!-- Begin Page Content -->
 				<div class="container-fluid h-75">
@@ -235,7 +235,7 @@
 			<!-- End of Main Content -->
 
 			<!-- Footer -->
-			<jsp:include page="footer.jsp"></jsp:include>
+			<jsp:include page="layout/footer.jsp"></jsp:include>
 
 		</div>
 		<!-- End of Content Wrapper -->
