@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.hr.login.model.DepartmentDetail;
 import com.hr.login.model.LoginModel;
 import com.hr.overtime.model.OverTimeAuditted;
 import com.hr.overtime.model.OverTimePending;

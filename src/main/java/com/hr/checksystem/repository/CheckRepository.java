@@ -3,7 +3,6 @@ package com.hr.checksystem.repository;
 import java.util.List;
 
 import com.hr.checksystem.model.Checksystem;
-import com.hr.login.model.DepartmentDetail;
 
 public interface CheckRepository {
 
