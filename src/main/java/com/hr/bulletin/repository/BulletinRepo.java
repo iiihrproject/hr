@@ -2,6 +2,7 @@ package com.hr.bulletin.repository;
 
 import java.util.List;
 
+import com.hr.bulletin.model.BulMessage;
 import com.hr.bulletin.model.Bulletin;
 
 public interface BulletinRepo {
@@ -26,5 +27,9 @@ public interface BulletinRepo {
 	void updateop(Bulletin bulletin);
 
 	void delete(int postno);
+
+	void insertMsg(BulMessage bulMassage);
+
+	List<BulMessage> findAllMsg(int postno);
 
 }

@@ -475,7 +475,6 @@
                 </div>
                 <div class="modal-footer justify-content-center" id="resultbutton">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal" id="resultbutton">返回編輯</button>
-                    <%-- <a class="btn btn-primary" href="<c:url value='/bulletinManage' />">確認</a> --%>
                 </div>
             </div>
         </div>

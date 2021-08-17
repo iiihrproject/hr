@@ -21,15 +21,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hr.bulletin.model.Bulletin;
 import com.hr.bulletin.service.BulletinService;
+import com.hr.login.model.LoginModel;
 
 @Controller
+@SessionAttributes("loginModel")
 public class BulletinController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -42,14 +46,14 @@ public class BulletinController implements Serializable {
 	@Autowired
 	ServletContext ctx;
 
-	// 首頁貼文列表
-	@GetMapping("/bulletinList")
+	// 首頁貼文列表 //all
+	@GetMapping("/bulletinList") 
 	public @ResponseBody List<Bulletin> findAllPosting() {
 		log.info("findAllPosting方法執行中...");
 		return bulletinService.findAllPosting();
 	}
 
-	// 使用者瀏覽貼文內容
+	// 使用者瀏覽貼文內容 //all
 	@GetMapping("/bulletinDetail")
 	public String findById(@RequestParam("postno") int postno, Model model) {
 		Bulletin bulletin = bulletinService.findById(postno);

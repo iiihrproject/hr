@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.hr.bulletin.model.BulMessage;
 import com.hr.bulletin.model.Bulletin;
 import com.hr.bulletin.repository.BulletinRepo;
 
@@ -22,7 +23,13 @@ public class BulletinRepoImpl implements BulletinRepo {
 	public void insert(Bulletin bulletin) {
 		if (bulletin != null)
 			entityManager.persist(bulletin);
-
+	}
+	
+	// 執行新增
+	@Override
+	public void insertMsg(BulMessage bulMassage) {
+		if (bulMassage != null)
+			entityManager.persist(bulMassage);
 	}
 
 //	執行查詢單筆
@@ -45,6 +52,13 @@ public class BulletinRepoImpl implements BulletinRepo {
 
 		String hql = "FROM Bulletin b WHERE b.exp>=:ts AND b.postDate<=:ts order by postDate desc ";
 		return entityManager.createQuery(hql, Bulletin.class).setParameter("ts", ts).getResultList();
+	}
+	
+//	查詢多筆留言
+	@Override
+	public List<BulMessage> findAllMsg(int postno) {
+		String hql = "FROM BulMessage m WHERE m.postno=:no order by createTime";
+		return entityManager.createQuery(hql, BulMessage.class).setParameter("no", postno).getResultList();
 	}
 
 	// 執行修改(原圖)

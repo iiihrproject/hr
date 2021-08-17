@@ -2,6 +2,7 @@ package com.hr.bulletin.service;
 
 import java.util.List;
 
+import com.hr.bulletin.model.BulMessage;
 import com.hr.bulletin.model.Bulletin;
 
 public interface BulletinService {
@@ -28,5 +29,9 @@ public interface BulletinService {
 //	void delete(Bulletin bulletin);
 
 	void delete(int postno);
+
+	void insertMsg(BulMessage bulMassage);
+
+	List<BulMessage> findAllMsg(int postno);
 
 }

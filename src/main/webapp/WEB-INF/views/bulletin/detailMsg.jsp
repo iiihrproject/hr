@@ -27,6 +27,35 @@
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
     
+    <script>
+    window.onload = function () {
+    
+	$("#delclick").click(function(){
+
+        let pn = `${bulletin.postno}`;
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", "<c:url value='/bulletin/DelEventPage?postno=' />" +`${bulletin.postno}`);
+    	xhr.send();
+    	xhr.onreadystatechange = function(){
+    		if (xhr.readyState == 4 && xhr.status == 200){
+    			console.log(xhr.responseText);
+    			printresult(xhr.responseText);
+    		}
+    	}
+        
+        function printresult(data){
+		$("#resultMsg").html("<font color='red' >" + data + "</font>");
+		let li = "<c:url value='/bulletinManage' />";
+ 		$("#delclick").remove(); 
+		$("#cancelBut").remove(); 
+		$("#resultbutton").html('<button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal" id="cancelBut" onclick="history.back()">回公布欄管理</button>')	
+        }
+		
+	}) 
+    }
+
+	</script>	
+    
     
 
 </head>
@@ -283,40 +312,7 @@
 
     </div>
 	<!-- Result Modal End-->
-	
-    <script>
-	$("#delclick").click(function(){
 
-        let pn = `${bulletin.postno}`;
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", "<c:url value='/bulletin/DelEventPage?postno=' />" +`${bulletin.postno}`);
-    	xhr.send();
-    	xhr.onreadystatechange = function(){
-    		if (xhr.readyState == 4 && xhr.status == 200){
-    			console.log(xhr.responseText);
-    			printresult(xhr.responseText);
-    		}
-    	}
-        
-        function printresult(data){
-		$("#resultMsg").html("<font color='red' >" + data + "</font>");
-		let li = "<c:url value='/bulletinManage' />";
- 		$("#delclick").remove(); 
-		$("#cancelBut").remove(); 
-		$("#resultbutton").html('<button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal" id="cancelBut" onclick="history.back()">回公布欄管理</button>')
-		
-		
-		
-		
-
-				
-        }
-		
-	}) 
-
-	</script>	
-	
-	
 
 
 </body>

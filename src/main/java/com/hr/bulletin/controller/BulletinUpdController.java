@@ -44,7 +44,7 @@ public class BulletinUpdController implements Serializable {
 	@Autowired
 	ServletContext ctx;
 
-	// 修改活動貼文頁
+	// 修改活動貼文頁 //h
 	@GetMapping("/bulletinEditEventPage")
 	public String findByIdEvent(@RequestParam("postno") int postno, Model model) {
 		Bulletin bulletin = bulletinService.findById(postno);
@@ -52,7 +52,7 @@ public class BulletinUpdController implements Serializable {
 		return "/bulletin/eventEdit";
 	}
 
-	// 修改公告貼文頁
+	// 修改公告貼文頁 //h
 	@GetMapping("/bulletinEdiAnnoPage")
 	public String findByIdAnno(@RequestParam("postno") int postno, Model model) {
 		Bulletin bulletin = bulletinService.findById(postno);
@@ -60,7 +60,7 @@ public class BulletinUpdController implements Serializable {
 		return "/bulletin/editAnno";
 	}
 
-	// 修改活動貼文(原圖)
+	// 修改活動貼文(原圖) //h
 	@PostMapping("/bulletin/EditEventop")
 	public @ResponseBody String updateEventOp(Bulletin bulletin) {
 		log.info("updateop方法執行中...");
@@ -75,7 +75,7 @@ public class BulletinUpdController implements Serializable {
 		return result;
 	}
 
-	// 修改活動貼文(改圖)
+	// 修改活動貼文(改圖) //h
 	@PostMapping("/bulletin/EditEvent")
 	public @ResponseBody String save(
 			@RequestParam("postno") int postno,
@@ -145,7 +145,7 @@ public class BulletinUpdController implements Serializable {
 
 	}
 	
-	//刪除活動貼文頁
+	//刪除活動貼文頁 //h
 	@GetMapping("/bulletin/DelEventPage")
 	public @ResponseBody String delEvent(@RequestParam("postno") int postno) {
 		log.info("delEvent方法執行中...");
@@ -159,7 +159,7 @@ public class BulletinUpdController implements Serializable {
 		return result;
 	}
 
-	// 刪除公告貼文頁
+	// 刪除公告貼文頁 //h
 	@GetMapping("/bulletin/DelAnnoPage")
 	public @ResponseBody String delAnno(Bulletin bulletin) {
 		log.info("updateop方法執行中...");
