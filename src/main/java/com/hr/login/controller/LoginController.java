@@ -47,7 +47,7 @@ public class LoginController {
 		return "/index";
 	}
 	
-	@GetMapping(value="/logout")
+	@GetMapping(path="/logout")
 	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    if (auth != null){    
