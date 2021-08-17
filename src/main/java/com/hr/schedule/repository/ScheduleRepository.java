@@ -13,4 +13,10 @@ public interface ScheduleRepository {
 
 	int saveSchedule(FactSchedule schedule);
 
+	void deleteScheduleByKey(int keySchedule);
+
+	FactSchedule findSchedByPK(int keySchedule);
+
+	void updateSchedule(FactSchedule schedule);
+
 }

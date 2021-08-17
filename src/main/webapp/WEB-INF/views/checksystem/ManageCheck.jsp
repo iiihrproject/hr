@@ -6,10 +6,16 @@
 <head>
 <meta charset="UTF-8">
 <title>管理員查詢系統</title>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
 <script>
 	$(document).ready(function(){
-		let dataArea = $('#dataArea');
+		let dataArea = $('#tb_departments');
 		let xhr = new XMLHttpRequest();
 		xhr.open("GET","<c:url value='/findAllCheck'/>");
 		xhr.send();
@@ -58,7 +64,7 @@
 
 </head>
 <body>
-	<div id='dataArea' align='center'>
+	<div id='tb_departments' align='center' data-toggle="table">
 
 	</div>
 </body>

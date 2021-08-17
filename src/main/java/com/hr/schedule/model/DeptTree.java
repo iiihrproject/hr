@@ -14,11 +14,24 @@ public class DeptTree {
 	private Integer deptNo;
 	@Column(name="Department")
 	private String department;
-	
-//	@OneToOne(mappedBy ="DeptTree")
-//	private EmpBean empBean;
-	
+
 	public DeptTree() {
+	}
+
+	public Integer getDeptNo() {
+		return deptNo;
+	}
+
+	public void setDeptNo(Integer deptNo) {
+		this.deptNo = deptNo;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
 	}
 
 }

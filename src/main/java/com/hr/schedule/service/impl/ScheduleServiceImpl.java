@@ -32,4 +32,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return n;
 	}
 
+	@Override
+	public void deleteScheduleByKey(int keySchedule) {
+		scheduleRepo.deleteScheduleByKey(keySchedule);
+	}
+
+	@Override
+	public FactSchedule findSchedByPK(Integer keySchedule) {
+		return scheduleRepo.findSchedByPK(keySchedule);
+	}
+
+	@Override
+	public void updateSchedule(FactSchedule schedule) {
+		scheduleRepo.updateSchedule(schedule);
+	}
+
 }

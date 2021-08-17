@@ -80,11 +80,12 @@
 		                    } else {
 		                    	swal("今日已打過卡囉，無法再次打卡");
 		                    }
-		                    location.reload();
 		                }
 		            }
 		             
 		         swal("打卡成功!", "今日工作加油", "success");
+// 		         window.location.href = "<c:url value='/checkInto'/>";
+		         //location.reload();
 		     } else if (result.dismiss === "cancel"){
 		          //使用者按下「取消」要做的事
 		         swal("取消打卡", "尚未打卡上班", "error");
@@ -123,7 +124,8 @@
 		           }
 		             
 		         swal("打卡成功!", "今日工作辛苦了", "success");
-		         location.reload();
+// 		         window.location.href = "<c:url value='/checkInto'/>";
+// 		         location.reload();
 		     } else if (result.dismiss === "cancel"){
 		          //使用者按下「取消」要做的事
 		         swal("取消打卡", "尚未打卡下班", "error");
@@ -299,6 +301,9 @@
                             <!-- Custom Text Color Utilities -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
+                                 <a href="<c:url value='/checkInto' />" class="text-decoration-none">
+                                	<button class="btn btn-outline-primary">refresh</button>
+                                 </a>
                                     <h2 class="m-0 font-weight-bold text-primary">員工打卡系統</h2>
                                 </div>
                                 <div class="card-body ">
@@ -370,7 +375,7 @@
                                 <!-- 展開 -->
                                 <div id="showFile" align='center'>
                                 <table class="table table-hover table-bordered">
-									<tr><th>日期</th><th>上班時間</th><th>下班時間</th><th>上班是否遲到</th><th>下班是否準時</th></tr>
+									<tr><th>日期</th><th>上班時間</th><th>下班時間</th><th>上班是否遲到</th><th>下班是否準時</th><th>是否需補簽到</th></tr>
 										<c:forEach var='checksystem' items='${Checksystem}'>
 										  <tr>
 										  	 <td>${fn:substring(checksystem.createTime,0, 10)}</td>
@@ -387,6 +392,12 @@
 										     	  <c:when test="${checksystem.isOnTimeCheckOut == 'Y'}" > 是</c:when>
 										     	  <c:when test="${checksystem.isOnTimeCheckOut == 'N'}" > 否</c:when>
 						       					</c:choose>
+						       				 </td>
+						       				 <td>
+						       				 <c:choose>
+										     	  <c:when test="${checksystem.isNeedRepair == 'Y'}" ><button>補簽到</button></c:when>
+										     	  <c:when test="${checksystem.isNeedRepair == 'N'}" >補簽到</c:when>
+						       				</c:choose>
 						       				 </td>
 										     
 										 </tr>    

@@ -17,10 +17,14 @@ public interface OverTimeRepository {
 
 	List<OverTimePending> findByResult();// 管理員查詢待審核
 
-	OverTimePending findById(int id);// 管理員審核 抓當下那筆
+	OverTimePending findById(Integer id);// 管理員審核 抓當下那筆
 
 	void deletePending(OverTimePending overTimePending);// 管理員批准刪除
 
 	void saveAuditted(OverTimeAuditted overTimeAuditted);// 將刪除資料新增進auditted資料表
+
+	List<OverTimePending> findPartByEmpnoPending(String empNo);
+
+//	DepartmentDetail queryManagerId(int dept_no);
 
 }

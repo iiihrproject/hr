@@ -7,8 +7,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,12 +25,14 @@ public class ScheduleController {
 	@Autowired
 	private ScheduleService service;
 	
-
 	@GetMapping(value="/schedule/MySchedule")
 	public String queryAllSchedule(Model model) {
-		List<FactSchedule> schedule = service.findAllSchedule();
-		model.addAttribute("allSchedule",schedule);
-		return "schedule/MySchedule";
+//		List<FactSchedule> schedule = service.findAllSchedule();
+//		model.addAttribute("allSchedule",schedule);
+//		return "schedule/MySchedule";
+//		<!-- 以下兩個是一組的 --!>
+		model.addAttribute("body", "schedule/MySchedule.jsp");
+		return "layout/Template";
 	}
 	@GetMapping(value="/schedule/findAllScheduleAjax")
 	public @ResponseBody List<FactSchedule> findAllSchedule(){
@@ -40,7 +45,7 @@ public class ScheduleController {
 		model.addAttribute("allEmps", Emps);
 		return "schedule/TimelineScheduling";
 	}
-	@GetMapping("/schedule/getEmp/findAll")
+	@GetMapping("/schedule/findAllEmps")
 	public @ResponseBody List<EmpBean> findAll(){
 		return service.findAllEmps();
 	}
@@ -61,14 +66,65 @@ public class ScheduleController {
 		}
 		return map;
 	}
-
-	@GetMapping("/schedule/TimelineScheduling")
-	public String toSchedule() {
-		return "schedule/TimelineScheduling";
+	
+	@DeleteMapping("/schedule/{keySchedule}")
+	public @ResponseBody Map<String, String> deleteScheduleByKey(@PathVariable(required = true) Integer keySchedule) {
+		Map<String, String> map = new HashMap<>();
+		try {
+			service.deleteScheduleByKey(keySchedule);
+			map.put("success","刪除成功");
+		}catch (Exception e) {
+			e.printStackTrace();
+			map.put("fail", "刪除失敗");
+			System.out.println("刪除失敗");
+		}
+		return map;
 	}
-	@GetMapping("/schedule/tableScheduling")
-	public String tableScheduling() {
-		return "schedule/tableScheduling";
+	
+	// 讀取並傳回單筆會員資料
+	@GetMapping("/schedule/{keySchedule}")
+	public @ResponseBody FactSchedule showEditSchedule(@PathVariable Integer keySchedule) {
+		FactSchedule schedule = service.findSchedByPK(keySchedule);
+		return schedule;
+	}
+
+	// 修改單筆會員資料
+	@PutMapping(value = "/schedule/{keySchedule}", consumes = { "application/json" }, produces = { "application/json" })
+	public @ResponseBody Map<String, String> updateSchedule(@RequestBody FactSchedule schedule, 
+															@PathVariable Integer keySchedule) {
+		FactSchedule sched = null;
+		if (keySchedule != null) {
+			sched = service.findSchedByPK(keySchedule);
+			if (sched == null) {
+				throw new RuntimeException("鍵值不存在, key=" + keySchedule);
+			}
+//			service.evictSchedule(sched);
+		} else {
+			throw new RuntimeException("鍵值不存在, key=" + keySchedule);
+		}
+//		copyUnupdateField(sched, schedule);
+
+		Map<String, String> map = new HashMap<>();
+		try {
+			service.updateSchedule(schedule);
+			map.put("success", "更新成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("fail", "更新失敗");
+		}
+		return map;
+	}
+	
+	
+	@GetMapping("/schedule/TimelineScheduling")
+	public String toSchedule(Model model) {
+		model.addAttribute("body", "schedule/TimelineScheduling.jsp");
+		return "layout/Template";
+	}
+	@GetMapping("/schedule/TableScheduling")
+	public String TableScheduling(Model model) {
+		model.addAttribute("body", "schedule/TableScheduling.jsp");
+		return "layout/Template";
 	}
 	@GetMapping("/module")
 	public String module() {
@@ -78,9 +134,9 @@ public class ScheduleController {
 	public String module_1() {
 		return "module-1";
 	}
-	@GetMapping("/template")
+	@GetMapping("/Template")
 	public String template() {
-		return "schedule/template";
+		return "layout/Template";
 	}
 	
 }//end of class

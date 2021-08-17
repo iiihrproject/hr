@@ -29,7 +29,7 @@
 <!-- 載入 Datatables -->
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-<!-- <!-- 載入 Bootstrap --> -->
+<!-- 載入 Bootstrap --> 
 <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 
 <!-- checksystem css -->
@@ -52,7 +52,8 @@
 				{ "data":"checkOutTime"},
 				{ "data":"isLateCheckIn"},
 				{ "data":"isOnTimeCheckOut"},
-				{ "data":"workingHours"}
+				{ "data":"workingHours"},
+				{ "data":"isNeedRepair"}
 			],
 			
 			columnDefs:[
@@ -77,6 +78,14 @@
 		             // return moment(data).format('HH:mm:ss');
 		        	  if(data == "Y") return "是";
 		        	  else return "否";
+		          },
+		        },
+		        {
+		          targets: [7],
+		          render: function (data) {   
+		             // return moment(data).format('HH:mm:ss');
+		        	  if(data == "Y") return "<button>補簽到</button>";
+		        	  else return "無需補簽到";
 		          },
 		        }
 		    ],
@@ -196,7 +205,7 @@
                     </ul>
                 </nav>
                 <!-- End of Topbar -->
-                
+            <div id="bgcolor" class="container-fluid h-75" >    
              <div class="row">
 
 
@@ -222,6 +231,7 @@
 		                                            <th>是否遲到</th>
 		                                            <th>是否準時</th>
 		                                            <th>出勤時數</th>
+		                                            <th>是否需補簽到</th>
 		                                        </tr>
 		                                    </thead>
 		                                   <tbody id="BulletinMagList">
@@ -232,8 +242,8 @@
                             </div>
 
                         </div>
-
-					  </div>
+					</div>
+				</div>
              </div>
              
 
