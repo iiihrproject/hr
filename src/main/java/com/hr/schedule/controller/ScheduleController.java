@@ -9,24 +9,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.hr.login.model.LoginModel;
 import com.hr.schedule.model.EmpBean;
 import com.hr.schedule.model.FactSchedule;
 import com.hr.schedule.service.ScheduleService;
 
 @Controller
+@SessionAttributes("loginModel")
 public class ScheduleController {
 	
 	@Autowired
 	private ScheduleService service;
 	
 	@GetMapping(value="/schedule/MySchedule")
-	public String queryAllSchedule(Model model) {
+	public String queryAllSchedule(Model model, @ModelAttribute("loginModel") LoginModel loginModel) {
 //		List<FactSchedule> schedule = service.findAllSchedule();
 //		model.addAttribute("allSchedule",schedule);
 //		return "schedule/MySchedule";
