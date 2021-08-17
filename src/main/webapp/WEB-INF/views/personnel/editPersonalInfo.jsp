@@ -30,11 +30,57 @@
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->
     <script>
-    	window.onload = function(){
-    		let editableTable = $("#personalInfo");
-    		console.log(editableTable);
-    		editableTable.text("");
-    	}
+		window.onload = function(){
+    		let phoneNumber = $("#phoneNumber");
+    		let email = $("#email");
+    		let address = $("#address");
+    		let submit = $("#submit");
+    		let xhr = new XMLHttpRequest();
+    		xhr.open("GET", "<c:url value='/personalInformation'/>", true);
+    		xhr.send();	
+			xhr.onreadystatechange = function() {
+					if (xhr.readyState == 4 && xhr.status == 200) {	
+						let personnel = JSON.parse(xhr.responseText);
+						phoneNumber.text(personnel.phoneNumber);
+						email.text(personnel.email);
+						address.text(personnel.address);
+					}
+        		
+        	}
+			  
+			submit.click(function(){
+				phoneNumberInput = $("#phoneNumberInput").val();
+				emailInput = $("#emailInput").val();
+				addressInput = $("#addressInput").val();
+				let obj = {
+	    				'phoneNumber': phoneNumberInput,	
+	    				'email': emailInput,	
+	    				'address': addressInput,	
+	    			}
+	    		let json = JSON.stringify(obj);		
+	    		let xhrInner = new XMLHttpRequest();
+	    		xhrInner.open("PUT", "<c:url value='/personalInformationUpdate'/>", true);		
+	    		xhrInner.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	    		
+	    		xhrInner.send(json);	
+	    		xhrInner.onreadystatechange = function() {
+						if (xhrInner.readyState == 4 && xhrInner.status == 200) {	
+							let personnel = JSON.parse(xhrInner.responseText);
+							phoneNumber.text(personnel.phoneNumber);
+							email.text(personnel.email);
+							address.text(personnel.address);
+							$("#phoneNumberInput").val() = "";
+							$("#emailInput").val() = "";
+							$("#addressInput").val() = "";
+							alert(personnel.result);
+						}
+	    		}
+				
+			});
+		}
+
+    		
+
     </script>
 
 </head>
@@ -120,6 +166,7 @@
                         </li>
                     </ul>
                 </nav>
+            </div>
             <!-- End of Topbar -->
             <!-- Begin Page Content -->
                 <div class="container-fluid h-75">
@@ -139,10 +186,17 @@
                     </div>
 <!-- form start -->        
             <div id="bgcolor" class="container-fluid">
-            	<table>
-            		<tr><th>欄位</th><th>現有資料</th><th>修改</th></tr>
-            		<tr><td></td><td ></td><td>修改</td></tr>
-            	</teble>
+            	<table border='solid' witdh='1'>
+            	<thead>
+            		<tr height='50px'><th>欄位</th><th>現有資料</th><th>修改</th></tr>
+            	</thead>
+            	<tbody>
+            		<tr height='50px'><td>電話</td><td id="phoneNumber"></td><td><input type='text' id="phoneNumberInput"></input></td></tr>
+            		<tr height='50px'><td>Email</td><td id="email"></td><td><input type='text' id="emailInput"></input></td></tr>
+            		<tr height='50px'><td>住址</td><td id="address"></td><td><input type='text' id="addressInput"></input></td></tr>
+            		<tr height='50px'><td colspan='3' align='center'><button id="submit">送出</button></td></tr>
+            	</tbody>
+            	</table>
             </div>
 <!-- form end -->  
             <!-- /.container-fluid -->    

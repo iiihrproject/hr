@@ -105,7 +105,7 @@
 
             <!-- Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="<c:url value='/' />">
+                <a class="nav-link" href="<c:url value='/index' />">
                     <i class='fas fa-home' style='font-size:22px'></i>
                     <span>主頁</span></a>
             </li>
@@ -116,7 +116,7 @@
                 </a>
             </li>
             <li class="nav-item">            
-                <a class="nav-link collapsed" href="<c:url value='/pages' />">
+                <a class="nav-link collapsed" href="<c:url value='/personnel' />">
                     <i class='fas fa-user-tie' style='font-size:22px'></i>
                     <span id="listname">人員管理</span>
                 </a>
@@ -152,7 +152,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="###" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">員編員編員編</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">${sessionScope.loginModel.getEmpNo()}</span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -283,7 +283,7 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>                  
-                    <a class="btn btn-primary" href="<c:url value='login' />">登出</a>
+                    <a class="btn btn-primary" href="<c:url value='/logout' />">登出</a>
                 </div>
             </div>
         </div>

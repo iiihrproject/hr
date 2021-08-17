@@ -139,7 +139,7 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">左上</div>                                          
+                                            <div class="text-lg font-weight-bold text-primary text-uppercase mb-1"></div>                                          
                                             <!-- 模板一：module(有不同模塊可用標頭搜尋程式碼區塊) -->
                                             <a href="<c:url value='/editPersonalInfo' />" class="text-decoration-none">
                                                 <div class="h4 mb-0 font-weight-bold text-center">編輯個人資料</div>
@@ -153,6 +153,42 @@
                             </div>
                         </div>
                       </div>
+                      <div class="col-12 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-lg font-weight-bold text-primary text-uppercase mb-1"></div>
+                                            <!-- 模板二：module-1(content全空白) -->
+                                            <a href="<c:url value='/department' />"  class="text-decoration-none">
+                                                <div class="h4 mb-0 font-weight-bold text-center">部門編輯</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-lg font-weight-bold text-primary text-uppercase mb-1"></div>
+                                            <!-- 模板二：module-1(content全空白) -->
+                                            <a href="<c:url value='/modifyLoginModel' />"  class="text-decoration-none">
+                                                <div class="h4 mb-0 font-weight-bold text-center">新增/編輯員工</div>
+                                            </a>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     
                     <div class="row fornone">                
                         <div class="col-12 col-md-6 mb-4">

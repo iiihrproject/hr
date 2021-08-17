@@ -8,56 +8,70 @@
 <link href="<c:url value='/css/scheduler/main.min.css' />"
 	rel='stylesheet' type="text/css" />
 <script src="<c:url value='/js/scheduler/main.min.js' />"></script>
-<script src="<c:url value='/webjars/jquery/3.1.1-1/jquery.min.js' />"></script>
+<script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
 <script>
-// //  get emp data from DB
+var resources = [];
+var events = [];
 window.onload = function() {
-	//讀取人員資料
-// // 	let dataArea = document.getElementById("dataArea");
-// 	let xhr = new XMLHttpRequest();
-// 	xhr.open("GET", "<c:url value='/schedule/getEmp/findAll'/>");
-// 	xhr.send();
-// 	xhr.onreadystatechange = function() {
-// 		if (xhr.readyState == 4 && xhr.status == 200) {
-// 			let emp = processEmpData(xhr.responseText);
-// 		}
-// 	}
-	
+	loadSchedule();
+}//end of windows.onload
+
+//讀取人員資料
+function loadEmps(){
+	let xhr2 = new XMLHttpRequest();
+	xhr2.open("GET", "<c:url value='/schedule/findAllEmps'/>");
+	xhr2.send();
+	xhr2.onreadystatechange = function() {
+		if (xhr2.readyState == 4 && xhr2.status == 200) {
+			processEmpData(xhr2.responseText);
+			renderScheduler(events, resources);
+			console.log(events);
+			console.log(resources);
+		}
+	}
+}
+
 //讀取班表資料
+function loadSchedule(){
 	let xhr = new XMLHttpRequest();
 	xhr.open("GET", "<c:url value='/schedule/findAllScheduleAjax'/>");
 	xhr.send();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
-			processScheduleData(xhr.responseText);
+		 processScheduleData(xhr.responseText);
+		 loadEmps();
 		}
 	}
-}//end of windows.onload
-//轉換班表格式
-	function processScheduleData(jsonString) {
-		let roster = JSON.parse(jsonString);
-		console.log(roster.length);
-		
-		const events = roster.map((r) =>{
-			return {id: r.keySchedule,
-				resourceId: r.empNo,
-				start: r.start,
-				end: r.end,
-				title: r.title
-				}
-			});
-		
-		
-		console.log(events);
-		
-		renderScheduler(events);
-	}//end of processScheduleData
+}
 
-// function processEmpData(jsonString) {
-// 	let emps = JSON.parse(jsonString);
-// console.log(emp)}
-	
-function renderScheduler(events) {
+//轉換班表格式
+function processScheduleData(jsonString) {
+	let roster = JSON.parse(jsonString);
+	events = roster.map((r) =>{
+		return {id: r.keySchedule,
+			resourceId: r.emps.empNo,
+			start: r.start,
+			end: r.end,
+			title: r.title
+			}
+		});
+// 	renderScheduler(events);
+}//end of processScheduleData
+// 	console.log(processScheduleData(jsonString));
+
+// 轉換人員格式
+function processEmpData(jsonString) {
+	let emps = JSON.parse(jsonString);
+	resources = emps.map((r)=>{
+		return {
+		id: r.empNo,
+		title: r.name
+		}
+	});
+// 	renderScheduler(resources);
+}//end of processEmpData
+
+function renderScheduler(events,resources) {
 
     /* initialize the external events
     -----------------------------------------------------------------*/
@@ -76,19 +90,26 @@ function renderScheduler(events) {
     -----------------------------------------------------------------*/
 
     var calendarEl = document.getElementById('calendar');
-    var d = new Date().toJSON().substring(0,10);
+    var d = new Date().toJSON();
     var calendar = new FullCalendar.Calendar(calendarEl, {
+      height: 'auto', // enough to active sticky headers
+        stickyHeaderDates: true,
+        stickyFooterScrollbar: true,
       now: d,
       editable: false, // enable draggable events
+      selectable: true,
       droppable: false, // this allows things to be dropped onto the calendar
       aspectRatio: 1.8,
-      scrollTime: '06:00', // undo default 6am scrollTime
+      scrollTime: '08:00', // undo default 6am scrollTime
+      slotMinTime: '06:00',
+      dayMinWidth: 50,
       headerToolbar: {
         left: 'today prev,next',
         center: 'title',
-        right: 'resourceTimelineDay,resourceTimelineThreeDays,timeGridWeek,dayGridMonth'
+        right: 'resourceTimelineDay,resourceTimelineThreeDays,resourceTimeGridWeek,resourceTimelineMonth'
       },
       initialView: 'resourceTimelineDay',
+      nowIndicator: true,
       views: {
         resourceTimelineThreeDays: {
           type: 'resourceTimeline',
@@ -97,17 +118,13 @@ function renderScheduler(events) {
         }
       },
       eventOverlap: false, // will cause the event to take up entire resource height
+      navLinks: true,
       resourceAreaWidth: '10%',
       resourceAreaHeaderContent: 'Employee',
-      resources: [
-        { id: '100001', title: '人員 A', eventColor: 'red'  },
-        { id: '1001', title: '人員 B', eventColor: 'orange' },
-        { id: '400001', title: '人員 C', eventColor: 'yellow' },
-        { id: '457895', title: '人員 D', eventColor: 'green' },
-        { id: '747272', title: '人員 E'},
-        { id: 'f', title: '人員 F', eventColor: 'indigo' },
-        { id: 'g', title: '人員 G', eventColor: 'purple'   }
-      ],
+      allDaySlot: false,
+      businessHours:true,
+      resourceOrder: 'id,title',
+      resources: resources,
       events: events,
       drop: function(arg) {
         console.log('drop date: ' + arg.dateStr)
@@ -130,12 +147,11 @@ function renderScheduler(events) {
       }
     });
     calendar.render();
-  }
+}
 
 </script>
 <style>
 body {
-	margin-top: 40px;
 	font-size: 14px;
 	font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
 }
@@ -184,29 +200,40 @@ body {
 #calendar {
 	float: right;
 	width: 100%;
-	height: 580px;
+	height: 65%;
 }
 </style>
 </head>
 <body>
-	<div id='wrap'>
-
-		<div id='external-events' style='visibility: hidden'>
-			<h4>工作內容</h4>
-			<div class='fc-event'>前端</div>
-			<div class='fc-event'>後端</div>
-			<div class='fc-event'>整合</div>
-			<div class='fc-event'>管理</div>
-			<p>
-				<input type='checkbox' id='drop-remove' /> <label for='drop-remove'>remove
-					after drop</label>
-			</p>
+	<div class="container-fluid h-75">
+		<!-- Basic Card Example -->
+		<div class="card shadow mb-4">
+			<!-- Begin of card-header -->
+			<div class="card-header py-3">
+				<h6 class="m-0 font-weight-bold text-primary">我的班表</h6>
+			</div>
+			<!-- End of Card-header -->
+			<!-- Begin of Card-body -->
+			<div class="card-body">
+				<div id='wrap'>
+					<div id='external-events' style='visibility: hidden'>
+						<h4>工作內容</h4>
+						<div class='fc-event'>前端</div>
+						<div class='fc-event'>後端</div>
+						<div class='fc-event'>整合</div>
+						<div class='fc-event'>管理</div>
+						<p>
+							<input type='checkbox' id='drop-remove' /> <label
+								for='drop-remove'>remove after drop</label>
+						</p>
+					</div>
+					<div id='calendar'></div>
+					<div style='clear: both'></div>
+				</div>
+				<!-- End of Card-body -->
+			</div>
+			<!-- End of Card -->
 		</div>
-
-		<div id='calendar'></div>
-
-		<div style='clear: both'></div>
-
 	</div>
 </body>
 </html>

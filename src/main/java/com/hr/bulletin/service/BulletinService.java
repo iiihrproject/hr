@@ -2,6 +2,7 @@ package com.hr.bulletin.service;
 
 import java.util.List;
 
+import com.hr.bulletin.model.BulMessage;
 import com.hr.bulletin.model.Bulletin;
 
 public interface BulletinService {
@@ -18,10 +19,19 @@ public interface BulletinService {
 	// 執行修改
 	void update(Bulletin bulletin);
 
-	// 執行刪除
-	void delete(int postno);
 	
 	//查詢未過期多筆
 	List<Bulletin> findAllPosting();
+	
+
+	void updateop(Bulletin bulletin);
+
+//	void delete(Bulletin bulletin);
+
+	void delete(int postno);
+
+	void insertMsg(BulMessage bulMassage);
+
+	List<BulMessage> findAllMsg(int postno);
 
 }

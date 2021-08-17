@@ -18,7 +18,7 @@ public class EmpBean {
 	@Column(name="Name")
 	private String name;
 	
-	@OneToOne(cascade={CascadeType.ALL})
+	@OneToOne(cascade={CascadeType.DETACH})
 	@JoinColumn(name="deptNo", referencedColumnName = "deptNo")
 	private DeptTree department;
 	

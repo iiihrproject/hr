@@ -1,4 +1,4 @@
-package com.hr.login.model;
+package com.hr.personnel.model;
 
 import java.util.Set;
 
@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hr.login.model.LoginModel;
 
 @Entity(name = "departmentDetail")
 @Table(name = "departmentDetail")
@@ -78,5 +79,14 @@ public class DepartmentDetail {
 		super();
 	}
 	
-	
+	public boolean equals(DepartmentDetail departmentDetail) {
+		if(
+				this.getDepartmentNumber().equals(departmentDetail.getDepartmentNumber()) &&
+				this.getName().equals(departmentDetail.getName()) &&
+				this.getManagerEmpId().equals(departmentDetail.getManagerEmpId())
+				) {
+			return true;
+		}
+		return false;
+	}
 }

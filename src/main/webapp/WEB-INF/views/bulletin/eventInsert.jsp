@@ -35,236 +35,135 @@
     <script src="<c:url value='/js/today.js' />"></script>
     
     <!-- 公布欄資料載入 -->
-<script>
+	<script>
 
     var hasError = false;
     
-    window.onload = function() {
-    	
-    	//檢查表單
-    	$("#title").blur(function(){
-    		var titleValue = document.getElementById("title").value;
-    		var div0 = document.getElementById('result0c');
-    		if (!titleValue){
-    			setErrorFor(div0, "請輸入主旨");
-       		} 	else {
-          		div0.innerHTML = "";
-       		}
-    	})
-    	$(".ck-content").blur(function(){
-    		var destextValue = $(".ck-content").text();
-    		var div1 = document.getElementById('result1c');
-    		if (!destextValue){
-    			setErrorFor(div1, "請輸入內容");
-    		} else {
-    			div1.innerHTML = "";
-    		} 
-    	})
-    	$("#postdate").blur(function(){
-    		var postdateValue = document.getElementById("postdate").value;
-    		var div2 = document.getElementById('result2c');
-    		if (!postdateValue){
-    			setErrorFor(div2, "請輸入刊登日期");  
-       		} else {
-           		div2.innerHTML = "";
-       		}
-    	})
-    	$("#exp").blur(function(){
-    		var expValue = document.getElementById("exp").value;
-    		var div3 = document.getElementById('result3c');
-    		if (!expValue){
-    			setErrorFor(div3, "請輸入刊登日期");  
-       		} else {
-           		div3.innerHTML = "";
-       		}
-    	})
-    	
-    	
-    	
-    	//預覽載入
-    	let checkinsert = document.getElementById("checkinsert");
-    	checkinsert.onclick = function() {
-    		let titleValue = document.getElementById("title").value;
-    		let descriptionValue = $(".ck-content").html();
-    		let destextValue = $(".ck-content").text();
-    		let file1Value = document.getElementById("file1").value;
-    		let quotaValue = $("[name='quotatype']:checked").val();
-    		let quotanValue = document.getElementById("quotanid").value;
-    		let postdateValue = document.getElementById("postdate").value;
-    		let expValue = document.getElementById("exp").value;
-    		
-    		document.getElementById("chtitle").innerHTML = titleValue;
-    		document.getElementById("chdescrib").innerHTML = descriptionValue;
-    		if(file1Value==""){
-    			document.getElementById("tdfile").innerHTML = "";
-    		}
-    		else{
-    			document.getElementById("tdfile").innerHTML = "<td>附檔："+file1Value+"</td>";
-    			}
-    		if(quotaValue=="不限"){
-    			document.getElementById("tdqu").innerHTML = "";
-    		}
-    		else{
-    			document.getElementById("tdqu").innerHTML = "<td>已報名人數：&nbsp&nbsp／&nbsp可報名人數："+quotanValue+"</td>";
-    			/* document.getElementById("chqu").innerHTML = quotanValue; */
-    			}
-    		document.getElementById("chpd").innerHTML = postdateValue;
-    		console.log("titleValue:"+titleValue);
-    		console.log("descriptionValue:"+descriptionValue);
-    		console.log("file1Value:"+file1Value);
-    		console.log("quotaValue:"+quotaValue);
-    		console.log("quotanValue:"+quotanValue);
-    		console.log("postdateValue:"+postdateValue);
-    		console.log("file1:"+document.getElementById("file1").files[0]);
-	   		
-    	   }  
+    window.onload = function () {
     	
     	//送出新增
-    	var sendData = document.getElementById("sendData");
-    	sendData.onclick = function() {
-    	hasError = false;
-    	let titleValue = document.getElementById("title").value;
-    	let descriptionValue = $(".ck-content").html();
-    	let destextValue = $(".ck-content").text();
-    	let file1Value = document.getElementById("file1").value;
-    	var quotaValue = $("[name='quotatype']:checked").val();
-    	let quotanValue = document.getElementById("quotanid").value;
-    	let postdateValue = document.getElementById("postdate").value;
-    	let expValue = document.getElementById("exp").value;
-    	let file = $('#file1')[0].files[0]
-    	//var formData = new FormData($('#inserForm')[0]);
+        let sendData = document.getElementById("sendData");
+        sendData.onclick = function () {
+            hasError = false;
+            let titleValue = document.getElementById("title").value;
+            let descriptionValue = $(".ck-content").html();
+            let destextValue = $(".ck-content").text();
+            let file1Value = document.getElementById("file1").value;
+            let quotaValue = $("[name='quotatype']:checked").val();
+            let quotanValue = document.getElementById("quotanid").value;
+            let postdateValue = document.getElementById("postdate").value;
+            let expValue = document.getElementById("exp").value;
+            let file = $('#file1')[0].files[0]
+            if(!file){
+            	let file = null;
+            }
 
-    	   		//驗證資料
-    	   		var div0 = document.getElementById('result0c');
-    	   		var div1 = document.getElementById('result1c');
-    	   		var div2 = document.getElementById('result2c');
-    	   		var div3 = document.getElementById('result3c');
-    	   		if (!titleValue){
-    	   			setErrorFor(div0, "請輸入主旨");
-    	      		} 	else {
-    	         		div0.innerHTML = "";
-    	      		}
-    	   		if (!destextValue){
-    	   			setErrorFor(div1, "請輸入內容");
-    	   		} else {
-    	   			div1.innerHTML = "";
-    	   		} 
+            //新增前驗證資料
+            let div0 = document.getElementById('result0c');
+        	let div1 = document.getElementById('result1c');
+        	let div2 = document.getElementById('result2c');
+        	let div3 = document.getElementById('result3c');
+        	let div4 = document.getElementById('result4c');
+        	if (!titleValue){
+        	setErrorFor(div0, "請輸入主旨");
+        	} 	else {
+        	div0.innerHTML = "";
+        	}
+        	if (!destextValue){
+        	setErrorFor(div1, "請輸入內容");
+        	} else {
+        	div1.innerHTML = "";
+        	} 
+        	if (!postdateValue){
+        	setErrorFor(div2, "請輸入刊登日期");  
+        	} else if (postdateValue<td) {
+                setErrorFor(div2, "刊登日期已過");
+            } else {
+        	div2.innerHTML = "";
+        	}
+        	if (!expValue){
+        	setErrorFor(div3, "請輸入刊登日期");  
+        	} else if (expValue<postdateValue) {
+                setErrorFor(div3, "有效日期不可小於刊登日期");
+            } else {
+        	div3.innerHTML = "";
+        	}
+        	if (quotaValue=="限制" && quotanValue==0){
+            setErrorFor(div4, "請輸入可報名額");  
+            } else {
+            div4.innerHTML = "";
+            }
+            if (hasError) {
+                return false;
+            }
+            console.log(hasError);
 
-    	      		if (!postdateValue){
-    	   			setErrorFor(div2, "請輸入刊登日期");  
-    	      		} else {
-    	          		div3.innerHTML = "";
-    	      		}
-    	      		if (!expValue){
-    	   			setErrorFor(div3, "請輸入刊登日期");  
-    	      		} else {
-    	          		div3.innerHTML = "";
-    	      		}
-    	      		if (hasError){
-    	          		return false;
-    	      		} 
-    				console.log(hasError);
-    				
-    	      		//送出新增資料
-    	      		var formData = new FormData();
-    	   		
-    	   			formData.append("title",titleValue);
-    	   			formData.append("description",descriptionValue);
-    	   		
-    	   			formData.append("file1",file);
-    	   			formData.append("quotatype",quotaValue);
-    	   			formData.append("quota",quotanValue);
-    	   			formData.append("postdate",postdateValue);
-    	   			formData.append("exp",expValue);
-    	      		
-    	      		$.ajax({ 
-    				type: 'post', 
-    				url: "<c:url value='/insertEventBulletion' />", 
-    				data: formData, 
-    				cache: false, 
-    				processData: false, 
-    				contentType: false, 
-    				})
-    	     		
+            //送出新增資料jQuery
+            var formData = new FormData();
 
-    	     	
-     		//傳回新增結果
-     	var xhr1 = new XMLHttpRequest();
-  		xhr1.onreadystatechange = function() {
-  		var divResult = document.getElementById('resultMsg');
-  		console.log("divResult:"+divResult);
-  		
-  		if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201) ) {
-      		result = JSON.parse(xhr1.responseText);
-      		
-      		if (result.fail) {
-		 		divResult.innerHTML = "<font color='red' >" + result.fail + "</font>";
-	  		} else if (result.success) {
-				divResult.innerHTML = "<font color='GREEN'>" + result.success + "</font>";
-				div0.innerHTML = "";	
-				div1.innerHTML = "";
-				div2.innerHTML = "";
-				div3.innerHTML = "";
-				$("#resultbutton").html("<a class='btn btn-primary' href='<c:url value="/bulletinManage" />'>確認</a>");
-	 		} else {
-				if (result.titleError) {
-          			div0.innerHTML = "<font color='green' size='-2'>"
-	     				+ result.titleError + "</font>";
-				} else {
-          			div0.innerHTML = "";
-				}
-				if (result.descriptionError) {
-	      			div1.innerHTML = "<font color='green' size='-2'>"
-						+ result.descriptionError + "</font>";
-				} else {
-	      			div1.innerHTML = "";
-	   			}
-				if (result.postdateError) {
-          			div2.innerHTML = "<font color='green' size='-2'>"
-						+ result.postdateError + "</font>";
-				} else {
-          			div2.innerHTML = "";
-    			}
-				if (result.expError) {
-	    			div3.innerHTML = "<font color='green' size='-2'>"
-						+ result.expError + "</font>";
-				} else {
-          			div3.innerHTML = "";
-				}
-      		}
-  		}
-  		}
-    
+            formData.append("title", titleValue);
+            formData.append("description", descriptionValue);
+            formData.append("desText", destextValue);
+            formData.append("file1", file);
+            formData.append("quotatype", quotaValue);
+            if(!quotanValue){
+            	formData.append("quota", 0);
+            }else{
+            	formData.append("quota", quotanValue);
+            }
+            formData.append("postdate", postdateValue);
+            formData.append("exp", expValue);
+            
+            $.ajax({
+                type: 'post',
+                url: "<c:url value='/insertEventBulletion' />",
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+            	success: function (data) { 
+            		printresult(data);
+                	console.log("新增成功");
+            	},
+                fail: function (data) { 
+                	printresult("新增失敗");
+                    console.log("新增失敗");
+                }
+            });
+            
 
-}
-    }
-    
-    function setErrorFor(input, message){
-    	input.innerHTML = "<font color='red' size='-2'>" + message + "</font>";
-        hasError = true;
-    }
-    
-    function loadImageFileAsURL(){
-        let filesSelected = document.getElementById("file1").files;
-        if (filesSelected.length > 0)
-        {
-            let fileToLoad = filesSelected[0];
-    		
-            let fileReader = new FileReader();
-
-            fileReader.onload = function(fileLoadedEvent) 
-            {
-                
-            	fileDataURL = fileLoadedEvent.target.result;
-                textAreaFileContents.innerHTML = fileLoadedEvent.target.result;
-                console.log("name=" + fileLoadedEvent.name);
-                console.log("type=" + fileLoadedEvent.type );
-            };
-
-            fileReader.readAsDataURL(fileToLoad);
+            
         }
     }
     
+    function printresult(data){
+    var divResult = document.getElementById('resultMsg');
+        if (data=="新增失敗") {
+            divResult.innerHTML = "<font color='red' >" + data + "</font>";
+        } else if (data=="新增成功") {
+            divResult.innerHTML = "<font color='GREEN'>" + data + "</font>";
+            let div0 = document.getElementById('result0c');
+            let div1 = document.getElementById('result1c');
+            let div2 = document.getElementById('result2c');
+            let div3 = document.getElementById('result3c');
+            div0.innerHTML = "";
+            div1.innerHTML = "";
+            div2.innerHTML = "";
+            div3.innerHTML = "";
+            let tomag="<c:url value='/bulletinManage'/>"
+            $("#resultbutton").html("<a class='btn btn-primary' href="+tomag+">確認</a>");
+        } else {
+        	divResult.innerHTML = "<font color='red' >" + data + "</font>";
+        }
+    }
+    
+    function clean(){
+    	var obj = document.getElementById('file1') ; 
+    	obj.outerHTML=obj.outerHTML;
+    	$("#showImg").attr("src","");
+    	
+    }
+
     
 	</script>
 
@@ -368,7 +267,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">活動貼文新增</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">新增活動貼文</h6>
                         </div>
                         <div class="card-body">
                            <div class="table-responsive">
@@ -390,14 +289,21 @@
                     						</td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">附&emsp;&emsp;件 :</label></td>
-                                            <td><input type="file" id="file1" name="file1" class="btn-sm" onchange="loadImageFileAsURL():"></td>
+                                            <td style="text-align: right"><label for="" class="col-form-label">圖&emsp;&emsp;檔 :</label></td>
+                                            <td><input type="file" id="file1" name="file1" class="btn-sm" onchange="selectImgFile(this.files)"/>
+                                            <a class="btn btn-secondary btn-icon-split btn-sm" style="height:30px" onclick="clean()">
+                                        	<span class="text">清除檔案</span>
+                                    		</a>
+                                    		<br>
+                                            <img id="showImg" style="max-width:500px"></img>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">名&emsp;&emsp;額 :</label></td>
                                             <td><input type="radio" name="quotatype" id="notlimitid" value="不限"/><label for="">不限</label>&emsp;
                     							<input type="radio" name="quotatype" id="limitid" value="限制" checked/>限制
                                             	<input type="number" name="quota" id="quotanid" min="0" max="1000"/>人
+                                            	<span id=result4c class="form-text"></span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -512,8 +418,7 @@
     </script>
     
     <!-- Check Modal-->
-    <div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel" aria-hidden="true" >
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -522,17 +427,20 @@
                 <div class="modal-body">
 					<div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h5 id="chtitle" class="m-0 font-weight-bold text-primary"></h5>
+                            <h5 class="m-0 font-weight-bold text-primary"></h5>
                         </div>
                         <div class="card-body">
                            <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <tbody>  
+                                    	<tr >
+                                            <td><h5 class="m-0 font-weight-bold" style="color:#483ea1" id="chtitle">${bulletin.title}</h5></td>
+                                        </tr>
                                         <tr >
                                             <td style="color:black" id="chdescrib"></td>
                                         </tr>
                                         <tr id="tdfile">
-                                            <td>附檔：</td>
+                                            <td><img id="showImg2" style="max-width:500px"></img></td>
                                         </tr>
                                         <tr  id="tdqu">
                                             <td>已報名人數：  &nbsp／&nbsp可報名人數：<span id="chqu"></span></td>
@@ -563,11 +471,10 @@
                     <h5 class="modal-title mx-auto" id="resultModalLabel">活動貼文</h5>
                 </div>
                 <div class="modal-body">
-                    <span id="resultMsg" style="margin:3px auto"><font color='red' >新增失敗</font></span><br/>
+                    <span id="resultMsg" style="margin:3px auto"><font color='red' ></font></span><br/>
                 </div>
                 <div class="modal-footer justify-content-center" id="resultbutton">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">返回編輯</button>
-                    <%-- <a class="btn btn-primary" href="<c:url value='/bulletinManage' />">確認</a> --%>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="resultbutton">返回編輯</button>
                 </div>
             </div>
         </div>
@@ -576,54 +483,12 @@
 	
 	<!-- ckeditor-->
 	<script src="<c:url value='/build/ckeditor.js' />"></script>
-		<script>ClassicEditor
-		.create( document.querySelector( '.editor' ), {
-			
-			toolbar: {
-				items: [
-					
-					'bold',
-					'italic',
-					'bulletedList',
-					'numberedList',
-					'alignment',
-					'|',
-					'fontFamily',
-					'fontColor',
-					'fontSize',
-					'fontBackgroundColor',
-					'|',
-					'outdent',
-					'indent',
-					'|',
-					'insertTable',
-					'|',
-					'undo',
-					'redo'
-				]
-			},
-			language: 'zh',
-				licenseKey: '',
-				
-				
-				
-			} )
-			.then( editor => {
-				window.editor = editor;
-		
-				
-				
-				
-			} )
-			.catch( error => {
-				console.error( 'Oops, something went wrong!' );
-				console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-				console.warn( 'Build id: uxohsv80y3i-k42ot45c5h7d' );
-				console.error( error );
-			} );
-		</script>
-	
+
 	<!-- ckeditor end-->
+	
+	<script src="<c:url value='/js/check.js' />"></script>
+	
+
 	
 	
 
