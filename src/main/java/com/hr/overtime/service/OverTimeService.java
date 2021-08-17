@@ -2,7 +2,6 @@ package com.hr.overtime.service;
 
 import java.util.List;
 
-import com.hr.login.model.DepartmentDetail;
 import com.hr.overtime.model.OverTimeAuditted;
 import com.hr.overtime.model.OverTimePending;
 

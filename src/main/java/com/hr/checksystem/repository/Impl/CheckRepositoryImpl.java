@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.hr.checksystem.model.Checksystem;
 import com.hr.checksystem.repository.CheckRepository;
-import com.hr.login.model.DepartmentDetail;
 
 @Repository
 public class CheckRepositoryImpl implements CheckRepository {

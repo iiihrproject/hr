@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.hr.login.model.DepartmentDetail;
 import com.hr.overtime.model.OverTimeAuditted;
 import com.hr.overtime.model.OverTimePending;
 import com.hr.overtime.repository.OverTimeRepository;
