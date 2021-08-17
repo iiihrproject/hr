@@ -31,54 +31,62 @@
     <!-- .js請從此後寫 -->
     <script>
 		window.onload = function(){
-    		let phoneNumber = $("#phoneNumber");
-    		let email = $("#email");
-    		let address = $("#address");
-    		let submit = $("#submit");
+    		//let submit = $("#edit");
+    		let segment="";
     		let xhr = new XMLHttpRequest();
-    		xhr.open("GET", "<c:url value='/personalInformation'/>", true);
+    		xhr.open("GET", "<c:url value='/departmentDetail'/>", true);
     		xhr.send();	
 			xhr.onreadystatechange = function() {
-					if (xhr.readyState == 4 && xhr.status == 200) {	
-						let personnel = JSON.parse(xhr.responseText);
-						phoneNumber.text(personnel.phoneNumber);
-						email.text(personnel.email);
-						address.text(personnel.address);
+				if (xhr.readyState == 4 && xhr.status == 200) {	
+					let tableInfo = JSON.parse(xhr.responseText);
+					
+					segment += "<table border='solid' witdh='1'>";
+					segment += "<thead><tr height='50px'><th>部門編號</th><th>部門名稱</th><th>部門主管編號</th><th>部門主管名稱</th><th colspan='2' align='center'>更換部門主管(請輸入員工編號)</th></tr></thead><tbody>";
+					for(const key in tableInfo){
+						segment += "<tr height='50px'><td id='departmentNumberKey" + key + "'>" + tableInfo[key].departmentNumber + "</td><td id='departmentNameKey" + key + "'>" + tableInfo[key].name + "</td><td>" + tableInfo[key].managerEmpId + "</td><td >" + tableInfo[key].managerName + "</td><td><input type='text' maxlength='15' id='managerEmpIdKey" + key + "'/></td><td><button onclick='edit(" + key + ")'>確認</button></td></tr>";
+						
 					}
-        		
-        	}
-			  
-			submit.click(function(){
-				phoneNumberInput = $("#phoneNumberInput").val();
-				emailInput = $("#emailInput").val();
-				addressInput = $("#addressInput").val();
-				let obj = {
-	    				'phoneNumber': phoneNumberInput,	
-	    				'email': emailInput,	
-	    				'address': addressInput,	
-	    			}
-	    		let json = JSON.stringify(obj);		
-	    		let xhrInner = new XMLHttpRequest();
-	    		xhrInner.open("PUT", "<c:url value='/personalInformationUpdate'/>", true);		
-	    		xhrInner.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-	    		
-	    		xhrInner.send(json);	
-	    		xhrInner.onreadystatechange = function() {
-						if (xhrInner.readyState == 4 && xhrInner.status == 200) {	
-							let personnel = JSON.parse(xhrInner.responseText);
-							phoneNumber.text(personnel.phoneNumber);
-							email.text(personnel.email);
-							address.text(personnel.address);
-							$("#phoneNumberInput").val() = "";
-							$("#emailInput").val() = "";
-							$("#addressInput").val() = "";
-							alert(personnel.result);
-						}
-	    		}
-				
-			});
-		}
+					segment += "</tbody></table>";
+					
+					$("#bgcolor").html(segment);
 
+				}
+        	}
+		}
+		/*
+		This responds the change immediately solidly without doublechecking
+		*/
+		function edit(key){
+			let departmentNumber = document.getElementById("departmentNumberKey" + key).innerHTML;
+			let departmentName = document.getElementById("departmentNameKey" + key).innerHTML;
+			let newManagerId = document.getElementById("managerEmpIdKey" + key).value;
+			let newSegment="";
+			let obj = {
+    				'departmentNumber': departmentNumber,	
+    				'name': departmentName,	
+    				'managerEmpId': newManagerId
+    			}
+    		let json = JSON.stringify(obj);
+			let xhrInner = new XMLHttpRequest();
+			xhrInner.open("PUT", "<c:url value='/departmentManagerIdUpdate'/>", true);
+			xhrInner.setRequestHeader("Content-Type", "application/json;charset=UTF-8"); 		
+    		xhrInner.send(json);
+    		xhrInner.onreadystatechange = function() {
+				if (xhrInner.readyState == 4 && xhrInner.status == 200) {	
+					let tableInfo = JSON.parse(xhrInner.responseText);
+					
+					newSegment += "<table border='solid' witdh='1'>";
+					newSegment += "<thead><tr height='50px'><th>部門編號</th><th>部門名稱</th><th>部門主管編號</th><th>部門主管名稱</th><th colspan='2' align='center'>更換部門主管(請輸入員工編號)</th></tr></thead><tbody>";
+					for(const key in tableInfo){
+						newSegment += "<tr height='50px'><td id='departmentNumberKey" + key + "'>" + tableInfo[key].departmentNumber + "</td><td id='departmentNameKey" + key + "'>" + tableInfo[key].name + "</td><td>" + tableInfo[key].managerEmpId + "</td><td >" + tableInfo[key].managerName + "</td><td><input type='text' maxlength='15' id='managerEmpIdKey" + key + "'/></td><td><button onclick='edit(" + key + ")'>確認</button></td></tr>";
+						
+					}
+					newSegment += "</tbody></table>";
+					
+					$("#bgcolor").html(newSegment);
+				}
+        	}
+		}
     		
 
     </script>
@@ -166,7 +174,7 @@
                         </li>
                     </ul>
                 </nav>
-            </div>
+              </div>
             <!-- End of Topbar -->
             <!-- Begin Page Content -->
                 <div class="container-fluid h-75">
@@ -184,22 +192,12 @@
                             </div>
                         </div>
                     </div>
-<!-- form start -->        
+            <!-- /.container-fluid --> 
+            <!-- form start -->        
             <div id="bgcolor" class="container-fluid">
-            	<table border='solid' witdh='1'>
-            	<thead>
-            		<tr height='50px'><th>欄位</th><th>現有資料</th><th>修改</th></tr>
-            	</thead>
-            	<tbody>
-            		<tr height='50px'><td>電話</td><td id="phoneNumber"></td><td><input type='text' id="phoneNumberInput"></input></td></tr>
-            		<tr height='50px'><td>Email</td><td id="email"></td><td><input type='text' id="emailInput"></input></td></tr>
-            		<tr height='50px'><td>住址</td><td id="address"></td><td><input type='text' id="addressInput"></input></td></tr>
-            		<tr height='50px'><td colspan='3' align='center'><button id="submit">送出</button></td></tr>
-            	</tbody>
-            	</table>
+             
             </div>
-<!-- form end -->  
-            <!-- /.container-fluid -->    
+			<!-- form end -->     
             <!-- End of Main Content -->
                     <div class="row fornone">                
                         <div class="col-12 col-md-6 mb-4">
@@ -253,7 +251,7 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
-                    <a class="btn btn-primary" href="<c:url value='login' />">登出</a>
+                    <a class="btn btn-primary" href="<c:url value='/logout' />">登出</a>
                 </div>
             </div>
         </div>

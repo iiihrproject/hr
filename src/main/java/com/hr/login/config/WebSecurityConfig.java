@@ -47,7 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
-
 			.csrf()
 				//.ignoringAntMatchers("/contact")
 				//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -55,11 +54,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				//.and()
 		  	.authorizeRequests() // Setting authentic system              
 //			    .antMatchers("/login").permitAll() // Pages that allow user to access without authentication
-			    .antMatchers("/index").hasAnyRole("GENERAL") // Except above pages, all pages should require basic authorization after authentication
-			    .antMatchers("/editPersonalInfo").hasRole("GENERAL")
-			    .antMatchers("/personnel").hasRole("GENERAL")
+			    .antMatchers("/index").authenticated() // Except above pages, all pages should require basic authorization after authentication
+			    .antMatchers("/checkInto").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
+			    .antMatchers("/").authenticated()
+			    .antMatchers("/editPersonalInfo").authenticated()
+			    .antMatchers("/personnel").authenticated()
 			    .antMatchers("/authorization").hasRole("ADMIN")
+			    .antMatchers("/authorizationSeaching").hasRole("ADMIN")
 			    .antMatchers("/department").hasRole("ADMIN")
+			    .antMatchers("/departmentDetail").hasRole("ADMIN")
+			    .antMatchers("/departmentManagerIdUpdate").hasRole("ADMIN")
+			    .antMatchers("/test").permitAll()
 			    .and()
 		    .formLogin()
 			    .loginPage("/login").permitAll() // Rewrite the default login page
