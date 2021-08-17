@@ -51,3 +51,31 @@
         .d2{
          	text-align:center;
         }
+        .overtime{
+         	flex: 0 0 45%;
+		    max-width: 45%;
+		    text-align: center;
+		    margin-left: 60px;
+        
+        }
+        /* 展開收合效果 */
+        .slide_toggle {
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            /* 收合提示字串區塊, 還可加入自訂 CSS 效果 */
+            line-height: 170%;
+            background-color: #eed;
+            border-radius: 7px;
+            width: 300px;
+            height: 30px;
+            margin: auto;
+        }
+
+        .slide_toggle+div {
+            display: none;
+            margin-top: 10px;
+
+            /* 隱藏註解文字區塊, 請加入自訂 CSS 效果 */
+        }
+        

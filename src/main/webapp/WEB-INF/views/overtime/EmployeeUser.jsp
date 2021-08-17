@@ -30,8 +30,8 @@
 <!--     載入 Bootstrap -->
 <!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 	
-    <!-- checksystem css -->
-    <link rel='stylesheet' href="<c:url value='/css/checksystem.css' />" type="text/css" />
+    <!-- overtime css -->
+    <link rel='stylesheet' href="<c:url value='/css/overTime.css' />" type="text/css" />
     
     <!--引用SweetAlert2.css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css" />
@@ -41,176 +41,66 @@
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->
 	<script type="text/javascript">
-	$(document).ready(function () {
-		var errorMsg = '${errorMsg}';
-		
-		if(errorMsg != '') {
-			swal("貼心提醒",errorMsg,"warning");
-		}
+	$( document ).ready(function() {
+	    
 
-
-		$('#work').click(function () {
-		
-			swal('打卡上班');
+		var sendData = document.getElementById("sendData");
+		sendData.onclick = function(){
 			
-			swal({
-		        title: "打卡上班!",
-		        html: "確定上班嗎?!",
-		        type: "question",
-		        confirmButtonText: "確定",
-		      	cancelButtonText: "取消",
-		        showCancelButton: true//顯示取消按鈕
-		    }).then(function (result) {
-		        if (result.value) {
-		            //使用者按下「確定」要做的事
-		            
-		            var type = $('#work').attr('name');
-		            var xhr1 = new XMLHttpRequest();
-		            xhr1.open("POST", "<c:url value='/saveCheckSystem'/>", true);
-		            xhr1.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		            xhr1.send("type=" + type);
-					alert(type);
-		            xhr1.onreadystatechange = function () {
-		                // 伺服器請求完成
-		                if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201)) {
-		                    var response = xhr1.responseText;
+			alert($('#empname').val());
+			
+			var empnameValue = $('#empname').val();  
+			var dateValue = $('#date').val();
+			var depValue = $('#dep').val();
+			var posValue = $('#pos').val();
+			var otCategoryValue = $('input[name=Overtime_category]:checked').val()
+			var overtimeDateValue = $('#OvertimeDate').val();
+			var stimeValue = $('#stime').val();
+			var endtimeValue = $('#endtime').val();
+			var causeValue = $('#Cause').val();
+			var remarksValue = $('#Remarks').val();
+			
+			var xhr1 = new XMLHttpRequest();
+			xhr1.open("POST", "<c:url value='/saveOvertime' />", true);
+			var jsonOverTimePending = {
+					"empName": empnameValue, 	
+					"dateOfApplication": dateValue,
+					"department": depValue,
+					"position": posValue,
+					"overtimeCategory": otCategoryValue,
+					"overTimeDate": overtimeDateValue,
+					"startingTime": stimeValue,
+					"endingTime": endtimeValue,
+					"reason": causeValue,
+					"remarks": remarksValue
+		   		}
+			xhr1.setRequestHeader("Content-Type", "application/json");
+	  		xhr1.send(JSON.stringify(jsonOverTimePending));
+	  		xhr1.onreadystatechange = function() {
+				// 伺服器請求完成
+				if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201) ) {
+		  			window.location.href = "<c:url value='/xxx'/>";
+		  			
+		  			
+				}
+	  		}
+			
+		}
 		
-		                    if ('Success' == response) {
-		//                         window.location.href = "<c:url value='/findCheck'/>?type=" + type;
-		                    } else {
-		                    	swal("今日已打過卡囉，無法再次打卡");
-		                    }
-		                }
-		            }
-		             
-		         swal("打卡成功!", "今日工作加油", "success");
-// 		         window.location.href = "<c:url value='/checkInto'/>";
-		         //location.reload();
-		     } else if (result.dismiss === "cancel"){
-		          //使用者按下「取消」要做的事
-		         swal("取消打卡", "尚未打卡上班", "error");
-		     }//end else  
-		  });//end then 
 		
-		    
-		})
-		
-		$('#offwork').click(function () {
-		// 	swal('打卡下班');
-		//swal.resetDefaults();//清空自訂預設值
-				swal({
-		        title: "打卡下班!",
-		        html: "確定下班嗎?!",
-		        type: "question",
-		        confirmButtonText: "確定",
-		      	cancelButtonText: "取消",
-		        showCancelButton: true//顯示取消按鈕
-		    }).then(function (result) {
-		        if (result.value) {
-		            //使用者按下「確定」要做的事
-		           var type = $('#offwork').attr('name');
-		           var xhr1 = new XMLHttpRequest();
-		           xhr1.open("POST", "<c:url value='/saveCheckSystem'/>", true);
-		           xhr1.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		           xhr1.send("type=" + type);
-		
-		           xhr1.onreadystatechange = function () {
-		               // 伺服器請求完成
-		               if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201)) {
-		                   var response = xhr1.responseText;
-		                   var response = 'Success';
-		               }
-		
-		           }
-		             
-		         swal("打卡成功!", "今日工作辛苦了", "success");
-// 		         window.location.href = "<c:url value='/checkInto'/>";
-// 		         location.reload();
-		     } else if (result.dismiss === "cancel"){
-		          //使用者按下「取消」要做的事
-		         swal("取消打卡", "尚未打卡下班", "error");
-		     }//end else  
-		  });//end then 
-		
-		});
 		$(".slide_toggle").click(function () {
 		    $(this).next().slideToggle();
 		});
 		
-	})
+
+	});
 	
 	
 	</script>
 	
-	
-	<script type="text/javascript">
-	//畫面效果
-	$(function () {
-	    $('#switchID1').click(function () {
-	        if ($('#offwork').is(':hidden')) {
-	            $('#offwork').show();
-	            $('#work').hide();
-	            //$('#click_event').val('隐藏');
-	        }
-	        else {
-	            // $('#hidden_enent').hide();
-	            // $('#click_event').val('顯示');
-	            $('#work').show();
-	            $('#offwork').hide();
-	        }
-	    })
-	})
-	
-	function ShowTime() {
-	    var NowDate = new Date();
-	    var h = NowDate.getHours();
-	    var m = NowDate.getMinutes();
-	    var s = NowDate.getSeconds();
-	    var ampm = h >= 12 ? 'PM' : 'AM';
-	    h = h % 12;
-	    h = h ? h : 12; // the hour '0' should be '12'
-	    h = h < 10 ? '0' + h : h;
-	    m = m < 10 ? '0' + m : m;
-	    s = s < 10 ? '0' + s : s;
-	    document.getElementById('showbox').innerHTML = h + ':' + m + ':' + s + " " + ampm;
-	    setTimeout('ShowTime()', 1000);
-	}
-	
-	function week() {
-	
-	    var d = new Date();
-	    var weekday = new Array(7)
-	    weekday[0] = "星期天"
-	    weekday[1] = "星期一"
-	    weekday[2] = "星期二"
-	    weekday[3] = "星期三"
-	    weekday[4] = "星期四"
-	    weekday[5] = "星期五"
-	    weekday[6] = "星期六"
-	
-	    return weekday[d.getDay()];
-	}
-	
-	
-	function ShowDate() {
-	    var NowDate = new Date();
-	    var y = NowDate.getFullYear();
-	    var m = NowDate.getMonth() + 1;
-	    var d = NowDate.getDate();
-	    document.getElementById('showdate').innerHTML = m + '月' + d + '日 ' + week();
-	    setTimeout('ShowDate()', 1000);
-	}
-
-
-
-
-
-
-</script>
-
 </head>
 
-<body id="page-top" onload="ShowTime() , ShowDate() " >
+<body id="page-top"  >
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -296,24 +186,65 @@
              <div class="row">
 
                         <!-- First Column -->
-                        <div class="col-lg-4 mycss">
+                        <div class="col-lg-4 overtime">
 
                             <!-- Custom Text Color Utilities -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                 <a href="<c:url value='/checkInto' />" class="text-decoration-none">
-                                	<button class="btn btn-outline-primary">refresh</button>
-                                 </a>
                                     <h2 class="m-0 font-weight-bold text-primary">員工打卡系統</h2>
                                 </div>
                                 <div class="card-body ">
                                 
-                                      <div class="gowork ">
-							            <h5 id="showdate"></h5>
-							            <h1 id="showbox"></h1>
-							            <br> <br> <br> <br> <br> <br> <br>
-							            <br> <br> <br>
-        							   </div>
+                                    <fieldset class="f1">
+										<legend>員工請假申請表</legend>
+										<div class="form-group">
+											<label for="empname" class="t1">申請人:</label> <input type="text"
+												class="form-control form1" id="empname" name="EmpName">
+										</div>
+										<div class="form-group">
+											<label for="date" class="t1">申請日期:</label> <input type="date"
+												class="form-control form1" id="date" name="Date of Application">
+										</div>
+								
+										<div class="form-group">
+											<label for="dep" class="t1">申請部門:</label> <input type="text"
+												class="form-control form1" id="dep" name="department">
+										</div>
+										<div class="form-group">
+											<label for="pos" class="t1">職稱:</label> <input type="text"
+												class="form-control form1" id="pos" name="position">
+										</div>
+								
+								
+										<div class="form-group">
+											<label class="t1">加班類型:</label>
+										</div>
+								
+										<div class="form-group d1 ">
+											<input type="radio" class="form-check-input" name="Overtime_category"value="平日加班" id="nday"> 
+											<label for="nday" class="form-check-label radio_1">平日加班</label> 
+											<input type="radio" class="form-check-input" name="Overtime_category" value="假日加班" id="holiday"> 
+											<label for="holiday" class="form-check-label radio_1" >假日加班</label> 
+											<input type="radio"class="form-check-input" name="Overtime_category" value="休假加班" id="break">
+											<label for="break" class="form-check-label radio_1" >休假加班</label>
+										</div>
+										<div class="form-group">
+											<label for="Overtime" class="t1">加班日期:</label> <input type="date"
+												class="form-control form1" id="OvertimeDate" name="OvertimeDate">
+										</div>
+										<div class="form-group">
+											<label for="stime" class="t1">開始時間:</label> <input type="time"
+												class="form-control form1" id="stime" name="Starting time">
+										</div>
+										<div class="form-group">
+											<label for="endtime" class="t1">結束時間:</label> <input type="time"
+												class="form-control form1" id="endtime" name="Ending time">
+										</div>
+										<div class="form-group">
+											<label for="Cause" class="t1">加班事由:</label> <input type="text"
+												class="form-control form1" id="Cause" name="reason">
+										</div>
+									</fieldset>
                                 </div>
                             </div>
 
@@ -323,16 +254,16 @@
                                     <h6 class="m-0 font-weight-bold text-primary">請確認上班型態是否正確</h6>
                                 </div>
                                 <div class="card-body gowork">
-								     <button type="button" class="work btn btn-primary" id="work" name="checkIn">上班打卡</button>
-								     <button type="button" class="offwork btn btn-primary" id="offwork" name="checkOut"
-								                style="display: none;">下班打卡</button><br><br>
-        								                        
-                                     <div class="switch">
-							            <input class="switch-checkbox" id="switchID1" type="checkbox" name="switch-checkbox"> 
-							            <label class="switch-label" for="switchID1"> <span class="switch-txt" turnOn="下班" turnOff="上班"></span>
-							            <span class="switch-Round-btn"></span>
-							            </label>
-        							</div>
+								    <fieldset class="f2">
+										<div class="form-group">
+											<label for="Remarks" class="t1">備註:</label> <input type="text"
+												class="form-control form2" id="Remarks" name="Remarks">
+										</div>
+									</fieldset>
+									<br>
+									<div class="d2">
+										<button type="button" class="btn btn-primary" id='sendData'>送出</button>
+									</div>
                                 </div>
                             </div>
 
@@ -362,48 +293,42 @@
 <!--                         </div> -->
 
                         <!-- Third Column -->
-                        <div class="col-lg-4 mycss ">
+                        <div class="col-lg-4  overtime">
 
                             <!-- Grayscale Utilities -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h2 class="m-0 font-weight-bold text-primary">我的出勤紀錄
-                                    </h2>
+                                    <h2 class="m-0 font-weight-bold text-primary">加班申請紀錄</h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="slide_toggle" id="showCheck">展開近五筆</div>
                                 <!-- 展開 -->
                                 <div id="showFile" align='center'>
                                 <table class="table table-hover table-bordered">
-									<tr><th>日期</th><th>上班時間</th><th>下班時間</th><th>上班是否遲到</th><th>下班是否準時</th><th>是否需補簽到</th></tr>
-										<c:forEach var='checksystem' items='${Checksystem}'>
+									<tr>
+									<th>申請日期</th>
+<!-- 									<th>姓名</th> -->
+									<th>部門</th>
+									<th>職位</th>
+									<th>加班日期</th>
+									<th>加班類型</th>
+									<th>加班時數</th>
+									<th>審核狀態</th>
+									</tr>
+										<c:forEach var='pending' items='${overtimePartPending}'>
 										  <tr>
-										  	 <td>${fn:substring(checksystem.createTime,0, 10)}</td>
-										     <td>${fn:substring(checksystem.checkInTime,11,19)}</td>
-										     <td>${fn:substring(checksystem.checkOutTime,11,19)}</td>
-										     <td>
-										     	<c:choose>
-										     	  <c:when test="${checksystem.isLateCheckIn == 'Y'}" > 是</c:when>
-										     	  <c:when test="${checksystem.isLateCheckIn == 'N'}" > 否</c:when>
-						       					</c:choose>
-										     </td>
-										     <td> 
-										     	<c:choose>
-										     	  <c:when test="${checksystem.isOnTimeCheckOut == 'Y'}" > 是</c:when>
-										     	  <c:when test="${checksystem.isOnTimeCheckOut == 'N'}" > 否</c:when>
-						       					</c:choose>
-						       				 </td>
-						       				 <td>
-						       				 <c:choose>
-										     	  <c:when test="${checksystem.isNeedRepair == 'Y'}" ><button>補簽到</button></c:when>
-										     	  <c:when test="${checksystem.isNeedRepair == 'N'}" >補簽到</c:when>
-						       				</c:choose>
-						       				 </td>
-										     
+										  	 <td>${fn:substring(pending.dateOfApplication,0, 10)}</td>
+<%-- 										  	 <td>${pending.empName}</td>	 --%>
+										  	 <td>${pending.department}</td>
+										  	 <td>${pending.position}</td>			
+										  	 <td>${fn:substring(pending.overTimeDate,0, 10)}</td>		
+										  	 <td>${pending.overtimeCategory}</td>
+										     <td>${pending.overTimeHours}</td>	
+										     <td>${pending.result}</td>	
 										 </tr>    
 										</c:forEach>
 								  </table>
-								  <a href="<c:url value='/empCheck' />" class="text-decoration-none">
+								  <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">
 		                            <button type="button" class="btn btn-outline-primary">查看完整資訊</button>
 		                          </a>
 								  </div>
@@ -412,13 +337,6 @@
                         </div>
 
                     </div>
-                    
-                    
-             			
-
-                
-
-               
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">

@@ -19,4 +19,5 @@ public interface CheckRepository {
 	Checksystem findYesterdayCheckSystemByEmpno(String empNo);
 
 
+
 }

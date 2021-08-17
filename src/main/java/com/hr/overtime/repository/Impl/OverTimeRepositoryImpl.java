@@ -3,6 +3,7 @@ package com.hr.overtime.repository.Impl;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class OverTimeRepositoryImpl implements OverTimeRepository {
 		TypedQuery<OverTimePending> query = entityManager.createQuery(hql, OverTimePending.class);
 		query.setParameter("empNo", empNo);
 
-		List<OverTimePending> overTimeList = query.getResultList();
+		List<OverTimePending> overtimepending = query.getResultList();
 
-		return overTimeList;
+		return overtimepending;
 	}
 
 	@Override
@@ -46,6 +47,16 @@ public class OverTimeRepositoryImpl implements OverTimeRepository {
 
 		return overTimeList;
 	}
+	
+//	@Override
+//	public DepartmentDetail queryManagerId(int dept_no) {
+//		String hql = "select managerEmpId  from DepartmentDetail where dept_no = :dept_no ";
+//		TypedQuery<DepartmentDetail> query = entityManager.createQuery(hql, DepartmentDetail.class);
+//		
+//		query.setParameter("dept_no", dept_no);
+//		
+//		return query.getSingleResult();
+//	}
 	//--------------------------------------管理員----------------------------------------------//
 	@Override
 	public List<OverTimePending> findByResult() {
@@ -58,7 +69,7 @@ public class OverTimeRepositoryImpl implements OverTimeRepository {
 	}
 
 	@Override
-	public OverTimePending findById(int id) {
+	public OverTimePending findById(Integer id) {
 		String hql = "from OverTimePending where id = :id ";
 		
 		TypedQuery<OverTimePending> query = entityManager.createQuery(hql, OverTimePending.class);
@@ -84,5 +95,14 @@ public class OverTimeRepositoryImpl implements OverTimeRepository {
 		if(overTimeAuditted != null) {
 			entityManager.persist(overTimeAuditted);
 		}
+	}
+
+	@Override
+	public List<OverTimePending> findPartByEmpnoPending(String empNo) {
+		String hql = " Select Top 3 * From overtimeapplicationpending where empNo = :empNo   ";
+		Query query = entityManager.createNativeQuery(hql , OverTimePending.class);
+		query.setParameter("empNo", empNo);
+		List<OverTimePending> overtimePart = query.getResultList();
+		return overtimePart;
 	}
 }

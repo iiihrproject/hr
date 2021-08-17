@@ -1,6 +1,6 @@
 package com.hr.overtime.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,57 +8,69 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "overtimeapplicationauditted")
 @Component("overtimeapplicationauditted")
 public class OverTimeAuditted {
-	
+
 	@Id
 	@Column(name = "ID")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	@Column(name = "TYPE")
 	private String type;
-	
+
 	@Column(name = "DATEOFAPPLICATION")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Taipei")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateOfApplication;
-	
+
+	@Column(name = "MANAGEREMPID")
+	private Integer managerEmpId;
+
 	@Column(name = "EMPNO")
 	private String empNo;
-	
+
 	@Column(name = "EMPNAME")
 	private String empName;
-	
+
 	@Column(name = "DEPARTMENT")
 	private String department;
-	
+
 	@Column(name = "POSITION")
 	private String position;
-	
+
 	@Column(name = "OVERTIMECATEGORY")
 	private String overtimeCategory;
-	
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Taipei")
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "OVERTIMEDATE")
 	private Date overTimeDate;
-	
+
 	@Column(name = "STARTINGTIME")
 	private String startingTime;
-	
+
 	@Column(name = "ENDINGTIME")
 	private String endingTime;
-	
+
 	@Column(name = "OVERTIMEHOURS")
 	private String overTimeHours;
-	
+
 	@Column(name = "REASON")
 	private String reason;
-	
+
 	@Column(name = "REMARKS")
 	private String remarks;
-	
+
 	@Column(name = "RESULT")
 	private String result;
 
@@ -205,6 +217,14 @@ public class OverTimeAuditted {
 
 	public void setResult(String result) {
 		this.result = result;
+	}
+
+	public Integer getManagerEmpId() {
+		return managerEmpId;
+	}
+
+	public void setManagerEmpId(Integer managerEmpId) {
+		this.managerEmpId = managerEmpId;
 	}
 
 }

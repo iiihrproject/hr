@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.springframework.stereotype.Component;
 
@@ -30,12 +31,12 @@ public class Checksystem {
 	private String empNo;
 
 	@Column(name = "CHECKINTIME")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss",timezone="Asia/Taipei")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Taipei")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date checkInTime;
 
 	@Column(name = "CHECKOUTTIME")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss" ,timezone="Asia/Taipei")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Taipei")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date checkOutTime;
 
@@ -56,10 +57,21 @@ public class Checksystem {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 
+	@Transient
+	private String isNeedRepair = "N";
+
 //	private String checkInLate = null;
 //	
 //	private String checkOutOnTime = null;
-	
+
+	public String getIsNeedRepair() {
+		return isNeedRepair;
+	}
+
+	public void setIsNeedRepair(String isNeedRepair) {
+		this.isNeedRepair = isNeedRepair;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -132,6 +144,7 @@ public class Checksystem {
 		this.createTime = createTime;
 	}
 
+
 //	public String getCheckInLate() {
 //		if("Y".equals(this.isLateCheckIn)) return "是";
 //		else return "否";
@@ -141,5 +154,5 @@ public class Checksystem {
 //		if("Y".equals(this.isOnTimeCheckOut)) return "是";
 //		else return "否";
 //	}
-	
+
 }
