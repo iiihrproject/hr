@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hr.personnel.model.DepartmentDetail;
 import com.hr.personnel.model.Personnel;
 
 @Entity(name = "loginModel")
@@ -35,6 +36,11 @@ public class LoginModel {
 	private Personnel personnel;
 	
 	private String role;
+	
+	private String personalIdNumber;
+	
+	private String name;
+	
 	private String empNo;
 	
 	@JsonIgnore
@@ -64,6 +70,27 @@ public class LoginModel {
 		
 	}
 
+	public LoginModel(Integer pk, Personnel personnel, String role, String personalIdNumber, String name, String empNo,
+			String employeePassword, DepartmentDetail departmentDetail, Set<Authorities> authorities,
+			Boolean isAccountNonExpired, Boolean isAccountNonLocked, Boolean isCredentialsNonExpired,
+			String lastChangeCredentialsDate, Boolean isEnable) {
+		super();
+		this.pk = pk;
+		this.personnel = personnel;
+		this.role = role;
+		this.personalIdNumber = personalIdNumber;
+		this.name = name;
+		this.empNo = empNo;
+		this.employeePassword = employeePassword;
+		this.departmentDetail = departmentDetail;
+		this.authorities = authorities;
+		this.isAccountNonExpired = isAccountNonExpired;
+		this.isAccountNonLocked = isAccountNonLocked;
+		this.isCredentialsNonExpired = isCredentialsNonExpired;
+		this.lastChangeCredentialsDate = lastChangeCredentialsDate;
+		this.isEnable = isEnable;
+	}
+
 	public Integer getPk() {
 		return pk;
 	}
@@ -86,6 +113,22 @@ public class LoginModel {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getPersonalIdNumber() {
+		return personalIdNumber;
+	}
+
+	public void setPersonalIdNumber(String personalIdNumber) {
+		this.personalIdNumber = personalIdNumber;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmpNo() {
@@ -159,25 +202,15 @@ public class LoginModel {
 	public void setIsEnable(Boolean isEnable) {
 		this.isEnable = isEnable;
 	}
-
-	public LoginModel(Integer pk, Personnel personnel, String role, String empNo, String employeePassword,
-			DepartmentDetail departmentDetail, Set<Authorities> authorities, Boolean isAccountNonExpired,
-			Boolean isAccountNonLocked, Boolean isCredentialsNonExpired, String lastChangeCredentialsDate,
-			Boolean isEnable) {
-		super();
-		this.pk = pk;
-		this.personnel = personnel;
-		this.role = role;
-		this.empNo = empNo;
-		this.employeePassword = employeePassword;
-		this.departmentDetail = departmentDetail;
-		this.authorities = authorities;
-		this.isAccountNonExpired = isAccountNonExpired;
-		this.isAccountNonLocked = isAccountNonLocked;
-		this.isCredentialsNonExpired = isCredentialsNonExpired;
-		this.lastChangeCredentialsDate = lastChangeCredentialsDate;
-		this.isEnable = isEnable;
-	}
-
 	
+	public boolean equals(LoginModel loginModel) {
+		if(
+				this.getPk().equals(loginModel.getPk()) &&
+				this.getPersonalIdNumber().equals(loginModel.getPersonalIdNumber()) &&
+				this.getEmpNo().equals(loginModel.getEmpNo())
+				) {
+			return true;
+		}
+		return false;
+	}
 }

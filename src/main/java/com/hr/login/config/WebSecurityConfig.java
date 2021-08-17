@@ -47,7 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
-
 			.csrf()
 				//.ignoringAntMatchers("/contact")
 				//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -55,13 +54,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				//.and()
 		  	.authorizeRequests() // Setting authentic system              
 //			    .antMatchers("/login").permitAll() // Pages that allow user to access without authentication
-			    .antMatchers("/index").hasAnyRole("GENERAL") // Except above pages, all pages should require basic authorization after authentication
-			    .antMatchers("/editPersonalInfo").hasRole("GENERAL")
-			    .antMatchers("/personnel").hasRole("GENERAL")
-			    .antMatchers("/authorization").hasRole("ADMIN")
-			    .antMatchers("/department").hasRole("ADMIN")
-			    .antMatchers("/bulletinList","/bulletinDetail","insertMessage","bulletinGetMsg").hasAnyRole("ADMIN", "GENERAL", "HR", "MANAGER")
+			    .antMatchers("/index").authenticated() // Except above pages, all pages should require basic authorization after authentication
+			    .antMatchers("/checkInto").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
+			    .antMatchers("/").authenticated()
+			    .antMatchers("/editPersonalInfo").authenticated()
+			    .antMatchers("/personnel").authenticated()
+			    .antMatchers("/authorization", "/authorizationSeaching", "/department", "/departmentDetail", "/departmentManagerIdUpdate").hasRole("ADMIN")
+			    .antMatchers("/test").permitAll()
+			    .antMatchers("/bulletinList","/bulletinDetail","/insertMessage","/bulletinGetMsg").authenticated()
 			    .antMatchers("/bulletinManage","/bulletinListMag","/bulletinEventInsert","/insertEventBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletin/getImage").hasRole("HR")
+
 			    .and()
 		    .formLogin()
 			    .loginPage("/login").permitAll() // Rewrite the default login page
