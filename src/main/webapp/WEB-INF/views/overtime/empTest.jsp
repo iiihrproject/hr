@@ -59,29 +59,6 @@ $(document).ready(function(){
 			
 	});
 	
-// 	$('.pendPageNo').click(function(){
-		
-// 		alert("click")
-		
-// 		var page = this.id;
-// 		var depart = $("#depart").val();
-// 		var date = $("#date").val();
-		
-// 		callPending(page.substring(4),depart,date);
-		
-// 	})
-	
-	
-// 	$('.audiPageNo').click(function(){
-		
-// 		var page = this.id;
-// 		var depart = $("#depart").val();
-// 		var date = $("#date").val();
-		
-// 		callAutiditted(page.substring(4),depart,date);
-// 	})
-	
-	
 	
 });
 	function callPending(page,depart,date){

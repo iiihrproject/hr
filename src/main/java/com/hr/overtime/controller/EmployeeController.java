@@ -1,9 +1,11 @@
 package com.hr.overtime.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,15 +39,18 @@ public class EmployeeController {
 	HttpServletRequest request;
 	
 	@PostMapping(path = "/saveOvertime")
-	private void saveOvertimePending(@RequestBody OverTimePending overTimePending,LoginModel loginModel) {
-		System.out.println("sucssess");
-//		HttpSession httpSession = request.getSession(true);
-//		String empNo = (String)httpSession.getAttribute("empNo");
-//		empNo = "123";
+	private void saveOvertimePending(@RequestBody OverTimePending overTimePending,LoginModel loginModel) throws ParseException {
+		Date date = new Date();
+		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+		String sDate = sdfDate.format(date);
+		date = sdfDate.parse(sDate);
 		String empNo = loginModel.getEmpNo();
+		String empName = loginModel.getName();
 		int managerEmpId = loginModel.getDepartmentDetail().getManagerEmpId();
 		System.out.println(managerEmpId);
+		overTimePending.setDateOfApplication(date);
 		overTimePending.setEmpNo(empNo);
+		overTimePending.setEmpName(empName);
 		overTimePending.setManagerEmpId(managerEmpId);
 		
 		overTimeService.savePending(overTimePending);
@@ -67,9 +72,6 @@ public class EmployeeController {
 			@RequestParam(value="keyword",required = false)String keyword,@RequestParam(value="date",required = false)String date,
 			LoginModel loginModel) {
 		
-//		HttpSession httpSession = request.getSession(true);
-//		String empNo = (String)httpSession.getAttribute("empNo");
-//		empNo = "123";
 		String empNo = loginModel.getEmpNo();
 		
 		int pageNumber = pageNo == null || "null".equals(pageNo) ? 0 : Integer.parseInt(pageNo) -1;
@@ -98,9 +100,6 @@ public class EmployeeController {
 			@RequestParam(value="keyword",required = false)String keyword,@RequestParam(value="date",required = false)String date,
 			LoginModel loginModel) {
 		
-//		HttpSession httpSession = request.getSession(true);
-//		String empNo = (String)httpSession.getAttribute("empNo");
-//		empNo = "123";
 		String empNo = loginModel.getEmpNo();
 		
 		int pageNumber = pageNo == null || "null".equals(pageNo) ? 0 : Integer.parseInt(pageNo) -1;
@@ -125,10 +124,10 @@ public class EmployeeController {
 	}
 	
 	
-	
+	//-----------------------------------------------入口->jsp--------------------------------------
 	@GetMapping(path = "/employeeQuery") 
 	public String employeeQuery() {
-		return "overtime/EmployeeQuery";
+		return "overtime/employeeQuery";
 	}
 	//員工加班 並查詢近五筆送出資料
 	@GetMapping(path = "/employeeOvertime") 
@@ -142,6 +141,6 @@ public class EmployeeController {
 		List<OverTimePending> overtimePartPending = overTimeService.findPartByEmpnoPending(empNo);
 		System.out.println(overtimePartPending.size());
 		model.addAttribute("overtimePartPending" , overtimePartPending );
-		return "overtime/EmployeeUser";
+		return "overtime/employeeUser";
 	}
 }

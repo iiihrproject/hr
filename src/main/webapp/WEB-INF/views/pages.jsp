@@ -153,8 +153,8 @@
 													class="dropdown-menu dropdown-menu-right animated--grow-in"
 													aria-labelledby="ApplicationForm">
 													<a class="dropdown-item" href="#">請假</a>
-													<a class="dropdown-item" href="#">加班</a>
-													<a class="dropdown-item" href="#">補簽</a>
+													<a class="dropdown-item" href="<c:url value='/employeeOvertime' />">加班</a>
+													<a class="dropdown-item" href="<c:url value='/EmpSignApply' />">補簽</a>
 												</div>
 											</div>
 										</div>
@@ -205,8 +205,9 @@
 													class="dropdown-menu dropdown-menu-right animated--grow-in"
 													aria-labelledby="ApplicationReview">
 													<a class="dropdown-item" href="#">請假</a>
-													<a class="dropdown-item" href="#">加班</a>
-													<a class="dropdown-item" href="#">補簽</a>
+													<a class="dropdown-item" href="<c:url value='/MangerQuery' />">打卡紀錄</a>
+													<a class="dropdown-item" href="<c:url value='ManagersystemOvertime' />">加班</a>
+													<a class="dropdown-item" href="<c:url value='/ManagerSignAllQuery' />">補簽</a>
 												</div>
 											</div>
 										</div>

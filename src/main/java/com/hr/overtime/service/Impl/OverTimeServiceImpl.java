@@ -74,7 +74,6 @@ public class OverTimeServiceImpl implements OverTimeService {
 	public void saveAuditted(OverTimePending overTimePending ,String type) {
 		
 		OverTimeAuditted overTimeAuditted = new OverTimeAuditted();
-//		overTimeAuditted.setId(overTimePending.getId());
 		overTimeAuditted.setType(overTimePending.getType());
 		overTimeAuditted.setDateOfApplication(overTimePending.getDateOfApplication());
 		overTimeAuditted.setEmpNo(overTimePending.getEmpNo());

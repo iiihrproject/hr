@@ -22,4 +22,6 @@ public interface CheckService {
 	Checksystem findTodayCheckSystemByEmpno(String empNo);
 
 	Checksystem findYesterdayCheckSystemByEmpno(String empNo);
+
+	Checksystem getCheckSystemByTime(String dateString);
 }

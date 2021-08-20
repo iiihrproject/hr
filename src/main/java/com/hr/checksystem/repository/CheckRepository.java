@@ -18,6 +18,6 @@ public interface CheckRepository {
 
 	Checksystem findYesterdayCheckSystemByEmpno(String empNo);
 
-
+	Checksystem getCheckSystemByTime(String dateString);
 
 }

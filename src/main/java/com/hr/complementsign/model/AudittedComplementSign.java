@@ -42,9 +42,9 @@ public class AudittedComplementSign {
 	@Column(name = "managerNo")
 	private Integer managerNo;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-ddTHH:mm:ss", timezone = "Asia/Taipei")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Taipei")
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "applied Date")
+	@Column(name = "applied_Date")
 	private Date appliedDate;
 
 //	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Taipei")
@@ -53,7 +53,7 @@ public class AudittedComplementSign {
 //	private Date appliedTime;
 
 	@Id
-	@Column(name = "Serial Number")
+	@Column(name = "Serial_Number")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int serialNumber;
 

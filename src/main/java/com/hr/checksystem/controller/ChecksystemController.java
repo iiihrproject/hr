@@ -80,7 +80,6 @@ public class ChecksystemController {
 		SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
 		String sDAte = sdfDate.format(time).toString();
 		String sTime = sdfTime.format(time).toString();
-//		empNo = "123";
 		
 		Checksystem checksystem = checkService.findTodayCheckSystemByEmpno(empNo);
 		System.out.println(checksystem);
@@ -199,6 +198,13 @@ public class ChecksystemController {
 		return  "checksystem/CheckResult";
 	}
 //	<-------------------------------------------------管理員----------------------------------------------------->
+	
+	@GetMapping(path = "/MangerQuery")
+	public String managerCheckSystem() {
+		return "checksystem/managerCheck";
+	}
+	
+	
 	@GetMapping(path = "/findAllCheck")
 	public @ResponseBody List<Checksystem> findCheckSystem() {
 		List<Checksystem> checksystem = checkService.findAllCheckSystem();
@@ -207,7 +213,7 @@ public class ChecksystemController {
 	}
 //	<-------------------------------------------------員工查詢----------------------------------------------------->	
 	@GetMapping(path = "/empCheck")
-	public String manageCheckSystem() {
+	public String empCheckSystem() {
 		return "checksystem/empCheckResult";
 	}
 	

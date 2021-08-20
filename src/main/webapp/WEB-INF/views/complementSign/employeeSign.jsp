@@ -1,0 +1,213 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>HR有限公司 人力資源系統</title>
+
+    <!-- Custom fonts for this template-->
+    
+    <link href="<c:url value='vendor/fontawesome-free/css/all.min.css' />" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    
+    <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
+    <link rel="icon" href="<c:url value='img/favicon.png' />">
+    <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+    <!-- 載入 Bootstrap -->
+	<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
+    
+    <!--引用SweetAlert2.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css" />
+    
+    <!--引用SweetAlert2.js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.0/sweetalert2.all.js"></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <!-- .js請從此後寫 -->
+	<script type="text/javascript">
+	$(document).ready(function(){
+		let pending = $('#overtimepending');
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET","<c:url value='/empPendoingQuery'/>");
+		xhr.send();
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState == 4 && xhr.status == 200){
+				pending.html(findEmpSignPending(xhr.response));
+				
+			}
+		}
+		
+		let auditted = $('#overtimeauditted');
+		let xhr1 = new XMLHttpRequest();
+		xhr1.open("GET","<c:url value='/empAudittedQuery'/>");
+		xhr1.send();
+		xhr1.onreadystatechange = function(){
+			if(xhr1.readyState == 4 && xhr1.status == 200){
+				auditted.html(findEmpSignAuditted(xhr1.response));
+			}
+		}
+		
+		
+		
+		
+	});
+
+	function findEmpSignPending(jsonString){
+		
+		let pending = $('#signpending');
+		
+		let signpendings = JSON.parse(jsonString);
+		let segment ="<table border='1'class='table table-bordered' >";
+		
+		if(signpendings != null){
+			segment += "<tr><th colspan='6'>員工補簽查詢系統(待審核)</th></tr>";
+			segment += "<tr><th>申請日期</th><th>員編</th><th>補簽日期</th><th>補簽時間</th><th>審核狀態</th><th>原由</th></tr>";
+			
+			for(let n = 0 ; n< signpendings.length; n++){
+				let signpending = signpendings[n];
+				segment += "<tr>";
+				segment += "<td>"+ (signpending.date).substring(0,10) + "</td>";
+				segment += "<td>"+ signpending.empNo + "</td>";
+				segment += "<td>"+ (signpending.appliedDate).substring(0,10) + "</td>";
+				segment += "<td>"+ (signpending.appliedDate).substring(11,16) + "</td>";
+				segment += "<td>"+ signpending.status + "</td>";
+				segment += "<td>"+ signpending.reason + "</td>";
+			}
+			segment += "</table>";
+			
+//	 		var totalPage = result.totalPage;
+//	 		var currentPage = result.currentPage;
+			
+//	 		for(let n = 1 ; n<= totalPage; n++){
+				
+//	 			var isCurrent = "";
+				
+//	 			if(n == currentPage) isCurrent = "currentPage";
+				
+//	 			var id = 'page' + n;
+				
+//	 			segment += "<button onclick='pendPageClick(this)' class='pendPageNo " + isCurrent + "'  id='" + id + "' " + ">" + n + "</button>";
+				
+//	 		}
+		}
+		
+		pending.html(segment);
+		
+	}
+
+
+	function findEmpSignAuditted(jsonString){
+		
+		let auditted = $('#signauditted');
+		
+		
+		let signauditteds = JSON.parse(jsonString);
+		let segment ="<table border='1'class='table table-bordered' >";
+		if(signauditteds !== null){
+			segment += "<tr><th colspan='6'>員工補簽查詢系統(已審核)</th></tr>";
+			segment += "<tr><th>申請日期</th><th>員編</th><th>補簽日期</th><th>補簽時間</th><th>審核狀態</th><th>原由</th></tr>";
+			for(let n = 0 ; n< signauditteds.length; n++){
+				let signauditted = signauditteds[n];
+				segment += "<tr>";
+				segment += "<td>"+ (signauditted.date).substring(0,10) + "</td>";
+				segment += "<td>"+ signauditted.empNo + "</td>";
+				segment += "<td>"+ (signauditted.appliedDate).substring(0,10) + "</td>";
+				segment += "<td>"+ (signauditted.appliedDate).substring(11,16) + "</td>";
+				segment += "<td>"+ signauditted.status + "</td>";
+				segment += "<td>"+ signauditted.reason + "</td>";
+			}
+//	 		segment += "</table>";
+			
+//	 		var totalPage = result.totalPage;
+//	 		var currentPage = result.currentPage;
+			
+//	 		for(let n = 1 ; n<= totalPage; n++){
+				
+//	 			var isCurrent = "";
+				
+//	 			if(n == currentPage) isCurrent = "currentPage";
+				
+//	 			var id = 'page' + n;
+				
+//	 			segment += "<button onclick='audiPageClick(this)' class='audiPageNo " + isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
+				
+//	 		}
+		}
+		
+		auditted.html(segment);
+		
+	}
+	
+	
+	</script>
+
+</head>
+
+<body id="page-top" >
+
+    <jsp:include page="../header.jsp"></jsp:include>
+    
+                <!-- header刪掉 End-->
+                
+             <div id="bgcolor" class="container-fluid">
+				<div class="">
+					<div class="card shadow mb-4">
+						<div class="card-body">
+							
+						
+							<div id="signpending" data-toggle='table' align=center ></div>
+							<br><br>
+							<div id="signauditted" data-toggle='table' align=center ></div>
+							
+						</div>
+					 </div>
+				</div>
+
+			</div>
+                    
+             <!-- /.container-fluid -->
+
+	
+			<!-- End of Main Content -->       
+             			
+
+            <jsp:include page="../footer.jsp"></jsp:include>
+            
+            <!-- footer刪掉 start -->
+
+               
+
+            
+
+    <!-- footer刪掉 end -->
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+
+</body>
+
+</html>

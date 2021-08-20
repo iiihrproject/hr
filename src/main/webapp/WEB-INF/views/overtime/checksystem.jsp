@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,8 +30,8 @@
 <!--     載入 Bootstrap -->
 <!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 	
-    <!-- overtime css -->
-    <link rel='stylesheet' href="<c:url value='/css/overTime.css' />" type="text/css" />
+    <!-- checksystem css -->
+    <link rel='stylesheet' href="<c:url value='/css/checksystem.css' />" type="text/css" />
     
     <!--引用SweetAlert2.css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css" />
@@ -42,43 +42,140 @@
     <!-- .js請從此後寫 -->
 	<script type="text/javascript">
 	$(document).ready(function(){
-		
-		var sendData = document.getElementById("sendData");
-		sendData.onclick = function(){
-			
-			var dateValue = $('#date').val();
-			var typeValue = $("select[name='Type']").val();
-			var reasonValue = $('#reason').val();
-			
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST","<c:url value='/saveEmpComplementSign' />", true);
-			var jsonPendingComplementSign={
-				"appliedDate" : dateValue,
-				"type" : typeValue,
-				"reason" : reasonValue
+		let pending = $('#overtimepending');
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET","<c:url value='/empPendoingQuery'/>");
+		xhr.send();
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState == 4 && xhr.status == 200){
+				pending.html(findEmpSignPending(xhr.response));
+				
 			}
-			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(jsonPendingComplementSign));
-	  		xhr.onreadystatechange = function() {
-	  			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201) ) {
-		  			window.location.href = "<c:url value='/xxx'/>";
-		  			
-	  			}
+		}
+		
+		let auditted = $('#overtimeauditted');
+		let xhr1 = new XMLHttpRequest();
+		xhr1.open("GET","<c:url value='/empAudittedQuery'/>");
+		xhr1.send();
+		xhr1.onreadystatechange = function(){
+			if(xhr1.readyState == 4 && xhr1.status == 200){
+				auditted.html(findEmpSignAuditted(xhr1.response));
 			}
-		}	
+		}
 		
-		$(".slide_toggle").click(function () {
-		    $(this).next().slideToggle();
-		});
 		
-	})
+		
+		
+	});
+
+	function findEmpSignPending(jsonString){
+		
+		let pending = $('#signpending');
+		
+		let result = JSON.parse(jsonString);
+		let signpendings = result.result;
+		let segment ="<table border='1'class='table table-bordered' >";
+		
+		if(signpendings != null){
+			segment += "<tr><th colspan='6'>員工補簽查詢系統(待審核)</th></tr>";
+			segment += "<tr><th>申請日期</th><th>員編</th><th>補簽日期</th><th>補簽時間</th><th>審核狀態</th><th>原由</th></tr>";
+			
+			for(let n = 0 ; n< signpendings.length; n++){
+				let signpending = signpendings[n];
+				segment += "<tr>";
+				segment += "<td>"+ (signpending.date).substring(0,10) + "</td>";
+				segment += "<td>"+ signpending.empNo + "</td>";
+				segment += "<td>"+ (signpending.appliedDate).substring(0,10) + "</td>";
+				segment += "<td>"+ (signpending.appliedDate).substring(11,16) + "</td>";
+				segment += "<td>"+ signpending.status + "</td>";
+				segment += "<td>"+ signpending.reason + "</td>";
+			}
+			segment += "</table>";
+			
+//	 		var totalPage = result.totalPage;
+//	 		var currentPage = result.currentPage;
+			
+//	 		for(let n = 1 ; n<= totalPage; n++){
+				
+//	 			var isCurrent = "";
+				
+//	 			if(n == currentPage) isCurrent = "currentPage";
+				
+//	 			var id = 'page' + n;
+				
+//	 			segment += "<button onclick='pendPageClick(this)' class='pendPageNo " + isCurrent + "'  id='" + id + "' " + ">" + n + "</button>";
+				
+//	 		}
+		}
+		
+		pending.html(segment);
+		
+	}
+
+
+	function findEmpSignAuditted(jsonString){
+		
+		let auditted = $('#signauditted');
+		
+		let result = JSON.parse(jsonString);
+		
+		let signauditteds = result.result;
+		let segment ="<table border='1'class='table table-bordered' >";
+		if(signauditteds !== null){
+			segment += "<tr><th colspan='6'>員工加班查詢系統(已審核)</th></tr>";
+			segment += "<tr><th>申請日期</th><th>員編</th><th>補簽日期</th><th>補簽時間</th><th>審核狀態</th><th>原由</th></tr>";
+			for(let n = 0 ; n< signauditteds.length; n++){
+				let signauditted = signauditteds[n];
+				segment += "<tr>";
+				segment += "<td>"+ (signauditted.date).substring(0,10) + "</td>";
+				segment += "<td>"+ signauditted.empNo + "</td>";
+				segment += "<td>"+ (signauditted.appliedDate).substring(0,10) + "</td>";
+				segment += "<td>"+ (signauditted.appliedDate).substring(11,16) + "</td>";
+				segment += "<td>"+ signauditted.status + "</td>";
+				segment += "<td>"+ signauditted.reason + "</td>";
+			}
+//	 		segment += "</table>";
+			
+//	 		var totalPage = result.totalPage;
+//	 		var currentPage = result.currentPage;
+			
+//	 		for(let n = 1 ; n<= totalPage; n++){
+				
+//	 			var isCurrent = "";
+				
+//	 			if(n == currentPage) isCurrent = "currentPage";
+				
+//	 			var id = 'page' + n;
+				
+//	 			segment += "<button onclick='audiPageClick(this)' class='audiPageNo " + isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
+				
+//	 		}
+		}
+		
+		auditted.html(segment);
+		
+	}
 	
 	
 	</script>
 	
+	
+	
+
+
+
+
+
+
+</script>
+
 </head>
 
-<body id="page-top"  >
+<body id="page-top" onload="ShowTime() , ShowDate() " >
+
+    <jsp:include page="../header.jsp"></jsp:include>
+    
+    <!-- header刪掉 start-->
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -160,70 +257,51 @@
                     </ul>
                 </nav>
                 <!-- End of Topbar -->
+
+                <!-- header刪掉 End-->
                 
              <div class="row">
 
                         <!-- First Column -->
-                        <div class="col-lg-4 overtime">
+                        <div class="col-lg-4 mycss">
 
                             <!-- Custom Text Color Utilities -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h2 class="m-0 font-weight-bold text-primary">員工補簽系統</h2>
+                                 <a href="<c:url value='/checkInto' />" class="text-decoration-none">
+                                	<button class="btn btn-outline-primary">refresh</button>
+                                 </a>
+                                    <h2 class="m-0 font-weight-bold text-primary">員工打卡系統</h2>
                                 </div>
                                 <div class="card-body ">
                                 
-                                    <fieldset class="f1">
-										<legend>員工補簽申請表</legend>
-										
-										<div class="form-group">
-											<label for="date" class="t1">申請補簽日期:</label> <input type="datetime-local"
-												class="form-control form1" id="date" name="appliedDate">
-										</div>
-								
-								<!--         <div class="form-group"> -->
-								<!-- 			<label for="time" class="t1">申請補簽時間:</label> <input type="time" -->
-								<!-- 				class="form-control form1" id="time" name="appliedTime"> -->
-								<!-- 		</div> -->
-								
-										<div class="form-group">
-											<label for="dep" class="t1">補簽類型:</label> 
-								            <select name = "Type" id = type>
-								                <option value= "CheckIn" >上班
-								                </option>  
-								                <option value= "CheckOut">下班
-								                </option>  
-								            </select>  
-										</div>
-										<div class="form-group">
-											<label for="Cause" class="t1">補簽事由:</label> <input type="text"
-												class="form-control form1" id="reason" name="reason">
-										</div>
-									</fieldset>
-									<div class="d2">
-										<button type="button" class="btn btn-primary" id='sendData'>送出</button>
-									</div>
+                                      <div class="gowork ">
+							            <h5 id="showdate"></h5>
+							            <h1 id="showbox"></h1>
+							            <br> <br> <br> <br> <br> <br> <br>
+							            <br> <br> <br>
+        							   </div>
                                 </div>
                             </div>
 
                             <!-- Custom Font Size Utilities -->
-<!--                             <div class="card shadow mb-4"> -->
-<!--                                 <div class="card-header py-3"> -->
-<!--                                     <h6 class="m-0 font-weight-bold text-primary">請確認上班型態是否正確</h6> -->
-<!--                                 </div> -->
-<!--                                 <div class="card-body gowork"> -->
-<!-- 								    <fieldset class="f2"> -->
-<!-- 										<div class="form-group"> -->
-<!-- 											<label for="Remarks" class="t1">備註:</label> <input type="text" -->
-<!-- 												class="form-control form2" id="Remarks" name="Remarks"> -->
-<!-- 										</div> -->
-<!-- 									</fieldset> -->
-<!-- 									<br> -->
-<!-- 									<div class="d2"> -->
-<!-- 										<button type="button" class="btn btn-primary" id='sendData'>送出</button> -->
-<!-- 									</div> -->
-<!--                                 </div> -->
-<!--                             </div> -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">請確認上班型態是否正確</h6>
+                                </div>
+                                <div class="card-body gowork">
+								     <button type="button" class="work btn btn-primary" id="work" name="checkIn">上班打卡</button>
+								     <button type="button" class="offwork btn btn-primary" id="offwork" name="checkOut"
+								                style="display: none;">下班打卡</button><br><br>
+        								                        
+                                     <div class="switch">
+							            <input class="switch-checkbox" id="switchID1" type="checkbox" name="switch-checkbox"> 
+							            <label class="switch-label" for="switchID1"> <span class="switch-txt" turnOn="下班" turnOff="上班"></span>
+							            <span class="switch-Round-btn"></span>
+							            </label>
+        							</div>
+                                </div>
+                            </div>
 
                         </div>
 
@@ -251,42 +329,48 @@
 <!--                         </div> -->
 
                         <!-- Third Column -->
-                        <div class="col-lg-4  overtime">
+                        <div class="col-lg-4 mycss ">
 
                             <!-- Grayscale Utilities -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h2 class="m-0 font-weight-bold text-primary">補簽申請紀錄</h2>
+                                    <h2 class="m-0 font-weight-bold text-primary">我的出勤紀錄
+                                    </h2>
                                 </div>
                                 <div class="card-body">
                                     <div class="slide_toggle" id="showCheck">展開近五筆</div>
                                 <!-- 展開 -->
                                 <div id="showFile" align='center'>
                                 <table class="table table-hover table-bordered">
-									<tr>
-									<th>申請日期</th>
-<!-- 									<th>姓名</th> -->
-									<th>部門</th>
-									<th>職位</th>
-									<th>加班日期</th>
-									<th>加班類型</th>
-									<th>加班時數</th>
-									<th>審核狀態</th>
-									</tr>
-										<c:forEach var='pending' items='${overtimePartPending}'>
+									<tr><th>日期</th><th>上班時間</th><th>下班時間</th><th>上班是否遲到</th><th>下班是否準時</th><th>是否需補簽到</th></tr>
+										<c:forEach var='checksystem' items='${Checksystem}'>
 										  <tr>
-										  	 <td>${fn:substring(pending.dateOfApplication,0, 10)}</td>
-<%-- 										  	 <td>${pending.empName}</td>	 --%>
-										  	 <td>${pending.department}</td>
-										  	 <td>${pending.position}</td>			
-										  	 <td>${fn:substring(pending.overTimeDate,0, 10)}</td>		
-										  	 <td>${pending.overtimeCategory}</td>
-										     <td>${pending.overTimeHours}</td>	
-										     <td>${pending.result}</td>	
+										  	 <td>${fn:substring(checksystem.createTime,0, 10)}</td>
+										     <td>${fn:substring(checksystem.checkInTime,11,19)}</td>
+										     <td>${fn:substring(checksystem.checkOutTime,11,19)}</td>
+										     <td>
+										     	<c:choose>
+										     	  <c:when test="${checksystem.isLateCheckIn == 'Y'}" > 是</c:when>
+										     	  <c:when test="${checksystem.isLateCheckIn == 'N'}" > 否</c:when>
+						       					</c:choose>
+										     </td>
+										     <td> 
+										     	<c:choose>
+										     	  <c:when test="${checksystem.isOnTimeCheckOut == 'Y'}" > 是</c:when>
+										     	  <c:when test="${checksystem.isOnTimeCheckOut == 'N'}" > 否</c:when>
+						       					</c:choose>
+						       				 </td>
+						       				 <td>
+						       				 <c:choose>
+										     	  <c:when test="${checksystem.isNeedRepair == 'Y'}" ><button>補簽到</button></c:when>
+										     	  <c:when test="${checksystem.isNeedRepair == 'N'}" >補簽到</c:when>
+						       				</c:choose>
+						       				 </td>
+										     
 										 </tr>    
 										</c:forEach>
 								  </table>
-								  <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">
+								  <a href="<c:url value='/empCheck' />" class="text-decoration-none">
 		                            <button type="button" class="btn btn-outline-primary">查看完整資訊</button>
 		                          </a>
 								  </div>
@@ -295,6 +379,15 @@
                         </div>
 
                     </div>
+                    
+                    
+             			
+
+            <jsp:include page="../footer.jsp"></jsp:include>
+            
+            <!-- footer刪掉 start -->
+
+               
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
@@ -341,6 +434,8 @@
             </div>
         </div>
     </div>
+
+    <!-- footer刪掉 end -->
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
