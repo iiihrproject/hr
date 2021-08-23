@@ -188,6 +188,11 @@ public class CheckServiceImpl implements CheckService {
 		return checksystem;
 	}
 
+	@Override
+	public Checksystem getCheckSystemByTime(String dateString) {
+		return checkRepository.getCheckSystemByTime(dateString);
+	}
+
 	
 
 }
