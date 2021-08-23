@@ -1,5 +1,6 @@
 package com.hr.login.model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,7 +25,7 @@ import com.hr.personnel.model.Personnel;
 @Entity(name = "loginModel")
 @Table(name = "loginModel")
 @Component("loginModel")
-public class LoginModel {
+public class LoginModel implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

@@ -22,6 +22,7 @@
 				dataArea.innerHTML = processScheduleData(xhr.responseText);
 				loadEmps(empName);
 				loadCSS();
+				console.log(xhr.responseText);
 			}
 		}
 	}
@@ -35,10 +36,10 @@
 				+ "<td><select name='empList' id='empList' onfocus='setToday (this.id)'></select></td>"
 				+ "<td><input type='datetime-local' name='start' id='start' onchange='setEnd (this.id)' step='1800'/></td>"
 				+ "<td><input type='datetime-local' name='end' id='end' step='1800' /></td>"
-				+ "<td><input type='text' name='titleList' id='titleList'/></td>"
+				+ "<td><input type='text' name='titleList' id='titleList' value='上班' /></td>"
 				+ "<td><button id='sendData' onclick='sendData()' class=''>新增</button>"
 				+ "<button id='updateData' onclick='updateData()' style='visibility:hidden' class=''>更新</button>"
-				+ "<button id='cancelUpdate' onclick='loadData()' style='visibility:hidden' class=''>取消</button></td>"
+				+ "<button id='cancelUpdate' onclick='cancelUpdate()' style='visibility:hidden' class=''>取消</button></td>"
 				+ "</tr></thead><tbody>"
 
 		for (let i = 0; i < schedule.length; i++) {
@@ -62,13 +63,14 @@
 	
 	function loadEmps(empName){
 		let xhr2 = new XMLHttpRequest();
-		xhr2.open("GET", "<c:url value='/schedule/findAllEmps'/>");
+		var myDeptNo = ${sessionScope.loginModel.getDepartmentDetail().getDepartmentNumber()};
+		xhr2.open("GET", "<c:url value='/Leave/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo, true);
 		xhr2.send();
 		xhr2.onreadystatechange = function() {
 			if (xhr2.readyState == 4 && xhr2.status == 200) {
 				var emps =JSON.parse(xhr2.responseText);
 				for(let i=0;i<emps.length;i++){
-					var emp = [emps[i].name,emps[i].empNo];
+					var emp = [emps[i].name,emps[i].pk];
 					empName.push(emp);
 				}
 				addOption(empName);
@@ -147,6 +149,11 @@
 			}
 		}
 	}
+//取消修改資料
+	function cancelUpdate(){
+		document.getElementById("messageBox").innerHTML="";
+		loadData();
+	}
 //送出修改資料
 	function updateData() {
 		document.getElementById("sendData").disabled = false;
@@ -179,7 +186,7 @@
 		let obj={
 				"keySchedule":ks,
 				"emps" : {
-					"empNo" : empNo
+					"pk" : empNo
 				},
 				"start" : start,
 				"end" : end,
@@ -229,7 +236,7 @@
 					&& (xhr4.status == 200 || xhr4.status == 201)) {
 				let sched = JSON.parse(xhr4.responseText);
 				document.getElementById("keySchedule").value = sched.keySchedule;
-				document.getElementById("empList").value = sched.emps.empNo;
+				document.getElementById("empList").value = sched.emps.pk;
 				document.getElementById("start").value = sched.start;
 				document.getElementById("end").value = sched.end;
 				document.getElementById("titleList").value = sched.title;
@@ -266,9 +273,10 @@
 		}
 		var xhr1 = new XMLHttpRequest();
 		xhr1.open("POST", "<c:url value='/schedule/addSchedule'/>", true);
-		var jsonSchedule = {
+		var jsonSchedule = 
+		{
 			"emps" : {
-				"empNo" : empNo
+				"pk" : empNo
 			},
 			"start" : start,
 			"end" : end,
