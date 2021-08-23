@@ -94,12 +94,12 @@ public class LeaveController {
 	}
 
 	@PostMapping("/Insert")
-	public @ResponseBody Map<String, String> save(@RequestBody LeaveBean leave) {
+	public @ResponseBody Map<String, String> save(@RequestBody LeaveBean leave,LoginModel loginModel) {
 		Map<String, String> map = new HashMap<>();
 		String result = "";
 		try {
 			System.out.println(leave);
-			service.save(leave);
+			service.save(leave,loginModel);
 			result = "新增成功";
 			map.put("success", result);
 		} catch (Exception e) {
