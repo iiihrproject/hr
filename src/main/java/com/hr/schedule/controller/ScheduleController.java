@@ -67,6 +67,7 @@ public class ScheduleController {
 			}
 		} catch (Exception e) {
 			map.put("fail", e.getMessage());
+			e.printStackTrace();
 		}
 		return map;
 	}

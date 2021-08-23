@@ -13,40 +13,40 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hr.login.model.LoginModel;
 
 @Entity
 @Table(name="factSchedule")
 public class FactSchedule {
 	@Id
-	@Column(name="KeySchedule")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "KeySchedule")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer keySchedule;
-	@Column(name="Date")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone= "Asia/Taipei")
+	@Column(name = "Date")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Taipei")
 	private Date workDate;
-	@OneToOne(targetEntity=EmpBean.class,cascade=CascadeType.DETACH)
-	@JoinColumn(name="empNo", referencedColumnName="empNo")
-	private EmpBean emps;
-	@OneToOne(targetEntity=DimShift.class,cascade=CascadeType.DETACH)
-	@JoinColumn(name="KeyShift", referencedColumnName = "KeyShift")
-	private DimShift keyShift;
-	@Column(name="KeyAvailability")
+	
+	@OneToOne(targetEntity = LoginModel.class, cascade = CascadeType.DETACH)
+	@JoinColumn(name = "empID", referencedColumnName = "emp_id")
+	private LoginModel emps;
+	
+	@OneToOne(targetEntity = DimShift.class, cascade = CascadeType.DETACH)
+	@JoinColumn(name = "KeyShift", referencedColumnName = "KeyShift")
+	private DimShift dimShift;
+	
+	@Column(name = "KeyAvailability")
 	private Integer keyAvailability;
-	@Column(name="HoursOfWork")
+	@Column(name = "HoursOfWork")
 	private Double hoursOfWork;
-	@Column(name="Start")
+	@Column(name = "Start")
 	private String start;
-	@Column(name="EndOfShift")
+	@Column(name = "EndOfShift")
 	private String end;
-	@Column(name="Title")
+	@Column(name = "Title")
 	private String title;
 	
 	public FactSchedule() {
 	}
-
-	
-
-
 
 	public Integer getKeySchedule() {
 		return keySchedule;
@@ -64,20 +64,20 @@ public class FactSchedule {
 		this.workDate = workDate;
 	}
 
-	public EmpBean getEmps() {
+	public LoginModel getEmps() {
 		return emps;
 	}
 
-	public void setEmps(EmpBean emps) {
+	public void setEmps(LoginModel emps) {
 		this.emps = emps;
 	}
 	
 	public DimShift getKeyShift() {
-		return keyShift;
+		return dimShift;
 	}
 	
 	public void setKeyShift(DimShift keyShift) {
-		this.keyShift = keyShift;
+		this.dimShift = keyShift;
 	}
 
 	public Integer getKeyAvailability() {
