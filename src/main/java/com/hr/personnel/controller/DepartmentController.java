@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -55,4 +56,24 @@ public class DepartmentController {
 		return map;
 	}
 	
+	@GetMapping(path="/addNewDepartment")
+	public String addNewDepartment() {
+		
+		return "/personnel/addNewDepartment";
+	}
+	
+	@PostMapping(path="/createNewDepartment", consumes="application/json", produces="application/json")
+	public @ResponseBody Map<String, String> createNewDepartment(
+			@RequestBody Map<Integer, DepartmentDetail> departments
+			) {
+		boolean flowCheck = false;
+		flowCheck = departmentService.insertNewDepartments(departments);
+		Map<String, String> map = new HashMap<String, String>();
+		if(flowCheck) {
+			map.put("result", "Update success");
+			return map;
+		}
+		map.put("result", "Update failure");
+		return map;
+	}	
 }

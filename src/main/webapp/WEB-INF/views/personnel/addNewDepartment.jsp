@@ -30,59 +30,76 @@
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->
     <script>
-		window.onload = function(){
-    		let phoneNumber = $("#phoneNumber");
-    		let email = $("#email");
-    		let address = $("#address");
-    		let submit = $("#submit");
-    		let xhr = new XMLHttpRequest();
-    		xhr.open("GET", "<c:url value='/personalInformation'/>", true);
-    		xhr.send();	
-			xhr.onreadystatechange = function() {
-					if (xhr.readyState == 4 && xhr.status == 200) {	
-						let personnel = JSON.parse(xhr.responseText);
-						phoneNumber.text(personnel.phoneNumber);
-						email.text(personnel.email);
-						address.text(personnel.address);
-					}
-        		
-        	}
-			  
-			submit.click(function(){
-				phoneNumberInput = $("#phoneNumberInput").val();
-				emailInput = $("#emailInput").val();
-				addressInput = $("#addressInput").val();
+    	let i = 0;
+    	let idController = 0;
+    	let name = {};
+    	let managerId = {}
+    	let departments = {};
+    	let json = "";
+    	let segment = "";
+		function add(){
+			i++;
+			segment += "<tr><td><input type='text' id='departmentName" + i + "' onchange='onChange()'></td><td><input type='text' id='managerEmpNo" + i + "' onchange='onChange()'></td></tr>";
+			$("#tBody").html(segment);
+			for(l = 1; l <= i; l++){
+
+				if(typeof name[l] === "undefined" || name[l] === null){
+					document.querySelector("#departmentName" + l).value = "";
+				}
+				else{
+					document.querySelector("#departmentName" + l).value = name[l];
+				}
 				
-				let obj = {
-	    				'phoneNumber': phoneNumberInput,	
-	    				'email': emailInput,	
-	    				'address': addressInput,	
-	    			}
-	    		let json = JSON.stringify(obj);		
-	    		let xhrInner = new XMLHttpRequest();
-	    		xhrInner.open("PUT", "<c:url value='/personalInformationUpdate'/>", true);		
-	    		xhrInner.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-	    		
-	    		xhrInner.send(json);	
-	    		xhrInner.onreadystatechange = function() {
-						if (xhrInner.readyState == 4 && xhrInner.status == 200) {	
-							let personnel = JSON.parse(xhrInner.responseText);
-							phoneNumber.text(personnel.phoneNumber);
-							email.text(personnel.email);
-							address.text(personnel.address);
-							document.querySelector("#phoneNumberInput").value = "";
-							document.querySelector("#emailInput").value = "";
-							document.querySelector("#addressInput").value = "";
-							alert(personnel.result);
-						}
-	    		}
-				
-			});
+				if(typeof managerId[l] === "undefined" || managerId[l] === null){
+					document.querySelector("#managerEmpNo" + l).value = "";
+				}
+				else{
+					document.querySelector("#managerEmpNo" + l).value = managerId[l];
+				}
+			}
 		}
-
-    		
-
-    </script>
+		
+		function onChange(){
+			for(k = 1; k <= i; k++){
+				name[k] = document.querySelector("#departmentName" + k).value
+				managerId[k] = document.querySelector("#managerEmpNo" + k).value
+			}
+		}
+		
+		function submit(){
+			for(j = 1; j <= i; j++){
+				let departmentName = document.getElementById('departmentName' + j).value;
+				let managerEmpNo = document.getElementById('managerEmpNo' + j).value;
+				if(!(departmentName == "" || managerEmpNo == "")){
+					const temp ={
+						"name": departmentName,
+						"managerEmpId": managerEmpNo
+					};
+					if(!(j in departments)){
+						departments[j] = temp;
+					}
+				}
+			}
+			json = JSON.stringify(departments);
+			departments = {};
+			$("#tBody").children().remove();
+			segment = "";
+			
+			let xhr = new XMLHttpRequest();
+			xhr.open("POST", "<c:url value='/createNewDepartment'/>", true);
+			xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");  		
+			xhr.send(json);
+			i = 0;
+    		managerId = {};
+    		name = {};
+    		xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4 && xhr.status == 200) {	
+					let result = JSON.parse(xhr.responseText);
+					alert(result.result);
+				}
+        	}
+		}
+	</script>
 
 </head>
 
@@ -167,40 +184,33 @@
                         </li>
                     </ul>
                 </nav>
-            </div>
+             
             <!-- End of Topbar -->
-            <!-- Begin Page Content -->
-                <div class="container-fluid h-75">
-                    <div class="row fornone">                
-                        <div class="col-12 col-md-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">                                  
-                                </div>
-                            </div>
-                        </div>                
-                        <div class="col-12 col-md-6 mb-4">
-                            <div class="card">
-                                <div class="card-body">                                  
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-<!-- form start -->        
-            <div id="bgcolor" class="container-fluid">
-            	<table border='solid' witdh='1' class="table table-bordered table-hover table-hover-color dataTable no-footer">
-            	<thead>
-            		<tr height='50px'><th>欄位</th><th>現有資料</th><th>修改</th></tr>
-            	</thead>
-            	<tbody>
-            		<tr height='50px'><td>電話</td><td id="phoneNumber"></td><td><input type='text' id="phoneNumberInput"></input></td></tr>
-            		<tr height='50px'><td>Email</td><td id="email"></td><td><input type='text' id="emailInput"></input></td></tr>
-            		<tr height='50px'><td>住址</td><td id="address"></td><td><input type='text' id="addressInput"></input></td></tr>
-            		<tr height='50px'><td colspan='3' align='center'><button id="submit">送出</button></td></tr>
-            	</tbody>
-            	</table>
+            <!-- Begin Page Content -->             
+                    <!-- form start -->        
+						<table id="table" class="table table-bordered table-hover table-hover-color dataTable no-footer">
+							<thead>
+								<tr>
+									<th>部門名稱</th><th>部門主管員工編號</th>
+								</tr>
+							</thead>
+							<tbody id="tBody">
+							</tbody>
+							<tfoot>
+								<tr>
+									<th colspan="2"><button onclick="add()">新增欄位</button></th>	
+								</tr>
+								<tr>
+									<th colspan="2"><button onclick="submit()">送出</button></th>
+								</tr>
+							</tfoot>
+						</table>
+                </div>
+					<!-- form end -->   
+            <!-- /.container-fluid --> 
             </div>
-<!-- form end -->  
-            <!-- /.container-fluid -->    
+            </div>
+    
             <!-- End of Main Content -->
                     <div class="row fornone">                
                         <div class="col-12 col-md-6 mb-4">
@@ -227,16 +237,14 @@
             </footer>
             <!-- End of Footer -->
 
-        </div>
+
         <!-- End of Content Wrapper -->
 
-    </div>
     <!-- End of Page Wrapper -->
 	<!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
     <!-- Logout Modal-->
     <div class="modal fade text-center" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -254,7 +262,7 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
-                    <a class="btn btn-primary" href="<c:url value='login' />">登出</a>
+                    <a class="btn btn-primary" href="<c:url value='/logout' />">登出</a>
                 </div>
             </div>
         </div>

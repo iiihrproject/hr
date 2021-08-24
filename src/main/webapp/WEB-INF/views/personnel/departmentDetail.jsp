@@ -40,16 +40,14 @@
 				if (xhr.readyState == 4 && xhr.status == 200) {	
 					let tableInfo = JSON.parse(xhr.responseText);
 					
-					segment += "<table border='solid' witdh='1'>";
+					segment += "<table class='table table-bordered table-hover table-hover-color dataTable no-footer'>";
 					segment += "<thead><tr height='50px'><th>部門編號</th><th>部門名稱</th><th>部門主管編號</th><th>部門主管名稱</th><th colspan='2' align='center'>更換部門主管(請輸入員工編號)</th></tr></thead><tbody>";
-					for(const key in tableInfo){
 						segment += "<tr height='50px'><td id='departmentNumberKey" + key + "'>" + tableInfo[key].departmentNumber + "</td><td id='departmentNameKey" + key + "'>" + tableInfo[key].name + "</td><td>" + tableInfo[key].managerEmpId + "</td><td >" + tableInfo[key].managerName + "</td><td><input type='text' maxlength='15' id='managerEmpIdKey" + key + "'/></td><td><button onclick='edit(" + key + ")'>確認</button></td></tr>";
 						
 					}
 					segment += "</tbody></table>";
 					
 					$("#bgcolor").html(segment);
-
 				}
         	}
 		}
@@ -75,7 +73,7 @@
 				if (xhrInner.readyState == 4 && xhrInner.status == 200) {	
 					let tableInfo = JSON.parse(xhrInner.responseText);
 					
-					newSegment += "<table border='solid' witdh='1'>";
+					newSegment += "<table border='solid' witdh='1' class='table table-bordered table-hover table-hover-color dataTable no-footer'>";
 					newSegment += "<thead><tr height='50px'><th>部門編號</th><th>部門名稱</th><th>部門主管編號</th><th>部門主管名稱</th><th colspan='2' align='center'>更換部門主管(請輸入員工編號)</th></tr></thead><tbody>";
 					for(const key in tableInfo){
 						newSegment += "<tr height='50px'><td id='departmentNumberKey" + key + "'>" + tableInfo[key].departmentNumber + "</td><td id='departmentNameKey" + key + "'>" + tableInfo[key].name + "</td><td>" + tableInfo[key].managerEmpId + "</td><td >" + tableInfo[key].managerName + "</td><td><input type='text' maxlength='15' id='managerEmpIdKey" + key + "'/></td><td><button onclick='edit(" + key + ")'>確認</button></td></tr>";
@@ -87,7 +85,7 @@
 				}
         	}
 		}
-    		
+		
 
     </script>
 
@@ -194,10 +192,16 @@
                     </div>
             <!-- /.container-fluid --> 
             <!-- form start -->        
-            <div id="bgcolor" class="container-fluid">
-             
+			<div class="container-fluid">
+				<span>
+					<a href="<c:url value='/addNewDepartment'/>">
+						<button>新增</button>
+					</a>
+				</span>
+				<div id="bgcolor">
+				</div>             
             </div>
-			<!-- form end -->     
+<!-- form end -->     
             <!-- End of Main Content -->
                     <div class="row fornone">                
                         <div class="col-12 col-md-6 mb-4">
