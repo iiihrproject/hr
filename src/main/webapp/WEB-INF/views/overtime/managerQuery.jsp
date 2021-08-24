@@ -28,9 +28,8 @@
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
 <!--     載入 Bootstrap -->
-<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous"> -->
-<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous"> -->
-<!-- <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css"> -->
+	<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
 	
     <!-- checksystem css -->
     <link rel='stylesheet' href="<c:url value='/css/overtimeMange.css' />" type="text/css" />
@@ -112,8 +111,8 @@
 		let result = JSON.parse(jsonString);
 		let managequerys = result.result;
 		
-		let segment ="<table border='1' align='center'>";
-		segment += "<tr><th colspan='11'>管理員審核系統</th></tr>";
+		let segment ="<table border='1' align='center' class='table table-bordered'>";
+		segment += "<tr><th colspan='12'>管理員審核系統</th></tr>";
 		segment += "<tr><th>申請日期</th><th>姓名</th><th>部門</th><th>職位</th><th>加班類型</th><th>加班日期</th><th>開始時間</th><th>結束時間</th><th>加班時數</th><th>加班原因</th><th>審核狀態</th>";
 		for(let n = 0 ; n< managequerys.length; n++){
 			let managequery = managequerys[n];
@@ -300,7 +299,7 @@
                                 
                                 </div>
                                 
-                                <div class="card-body " id="managequery" data-toggle='table'>
+                                <div class="card-body " id="managequery" data-toggle='table' align=center>
                                 
                                       
                                 </div>
@@ -393,7 +392,9 @@
 <!--     Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
 <!--     Core plugin JavaScript -->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 

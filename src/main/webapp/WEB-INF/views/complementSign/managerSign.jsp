@@ -37,6 +37,16 @@
 <!--引用SweetAlert2.js-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.0/sweetalert2.all.js"></script>
 <script src="js/jquery-3.6.0.min.js"></script>
+<style type="text/css">
+		.currentPage{
+			background-color: green;
+		}
+		table{
+			text-align: center;
+		}
+
+	</style>
+
 <!-- .js請從此後寫 -->
 <script type="text/javascript">
 $(document).ready(function(){
@@ -50,12 +60,21 @@ $(document).ready(function(){
 		}
 	}
 	
+	$('#search').click(function(){
+		
+		var date = $("#date").val();
+		
+		callAjax(null,date);
+			
+	});
+	
 })
 
 
 function manageQuerySign(jsonString){
-	let managequerysigns = JSON.parse(jsonString);
-	let segment ="<table border='1' class='table table-bordered'>";
+	let managesignresult = JSON.parse(jsonString);
+	let managequerysigns = managesignresult.result;
+	let segment ="<table border='1' align='center' class='table table-bordered'>";
 	segment += "<tr><th colspan='7'>管理員審核系統</th></tr>";
 	segment += "<tr><th>申請日期</th><th>姓名</th><th>補簽日期</th><th>補簽時間</th><th>審核狀態</th><th>原由</th></tr>";
 	for(let n = 0 ; n< managequerysigns.length; n++){
@@ -68,10 +87,26 @@ function manageQuerySign(jsonString){
 		segment += "<td>"+ (managequerysign.appliedDate).substring(11,16) + "</td>";
 		segment += "<td>"+ managequerysign.status + "</td>";
 		segment += "<td>"+ managequerysign.reason + "</td>";
-		segment += "<td>"+"<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-primary btn-lg b1' value='Pass'>"+"Pass"+"</button>"+" ";
+		segment += "<td>"+"<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-primary btn-lg b1' value='Pass'>"+"Pass"+"</button>"+"&emsp;&ensp;";
 		segment += "<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-primary btn-lg b2' value='Deny'>"+"Deny"+"</button>"+"</td>";
 	}
 	segment += "</table>";
+	
+	var totalPage = managesignresult.totalPage;
+	var currentPage = managesignresult.currentPage;
+	
+	for(let n = 1 ; n<= totalPage; n++){
+		
+		var isCurrent = "";
+		
+		if(n == currentPage) isCurrent = "currentPage";
+		
+		var id = 'page' + n;
+		
+		segment += "<button onclick='pageClick(this)' class='pageNo " + isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
+		
+	}
+	
 	return segment;
 }
 
@@ -138,6 +173,30 @@ function passAnDdenyClick(e){
 	}
 }
 
+function pageClick(e){
+	
+	var date = $("#date").val();
+	var page = e.getAttribute("id");
+	
+	callAjax(page.substring(4,(page.length)),date);
+}
+
+function callAjax(page,date){
+	
+	date = date == '' ? null : date;
+	page = page == '' ? 1 : page;
+	
+	let managequery = $('#managerSignQuery');
+	let xhr = new XMLHttpRequest();
+	xhr.open("GET","<c:url value='/ManagerSignQuery'/>?date=" + date + "&pageNo=" + page);
+	xhr.send();
+	xhr.onreadystatechange = function(){
+		if(xhr.readyState == 4 && xhr.status == 200){
+			managequery.html(manageQuerySign(xhr.responseText));
+		}
+	}
+}
+
 
 </script>
 
@@ -153,11 +212,26 @@ function passAnDdenyClick(e){
 
                 <!-- header刪掉 End-->
                 
-             <div id="bgcolor" class="container-fluid">
+             <div id="bgcolor" class="container-fluid h-75">
 				<div class="">
 					<div class="card shadow mb-4">
 						<div class="card-body">
-								
+							<h2 class="m-0 font-weight-bold text-primary">管理員查詢系統</h2>	
+							
+								<div>
+									<select  id="date">
+									    <option value>請選擇</option>
+									    <option value="2021-05">2021-05</option>
+									    <option value="2021-06">2021-06</option>
+									    <option value="2021-07">2021-07</option>
+									    <option value="2021-08">2021-08</option>
+									    <option value="2021-09">2021-09</option>
+									</select>
+									
+									<button id="search">搜尋</button>
+                                
+                                </div>
+							
 							<div id="managerSignQuery" data-toggle='table' align=center ></div>
 								
 						</div>

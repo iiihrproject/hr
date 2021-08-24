@@ -27,6 +27,8 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+    <!-- complementSignForEmp css -->
+    <link rel='stylesheet' href="<c:url value='/css/complementSignForEmp.css' />" type="text/css" />
     <!-- 載入 Bootstrap -->
 	<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
@@ -42,7 +44,7 @@
 	$(document).ready(function(){
 		let pending = $('#overtimepending');
 		let xhr = new XMLHttpRequest();
-		xhr.open("GET","<c:url value='/empPendoingQuery'/>");
+		xhr.open("GET","<c:url value='/empPendingQuery'/>");
 		xhr.send();
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState == 4 && xhr.status == 200){
@@ -61,16 +63,62 @@
 			}
 		}
 		
+		$('#search').click(function(){
+			
+			var date = $("#date").val();
+			
+			callPending(null,date);
+// 			callAutiditted(null,depart,date);
+				
+		});
+		
 		
 		
 		
 	});
-
+// 	再次呼叫以條件查詢兩個資料表
+	function callPending(page,date){
+			
+			var url = "<c:url value='/empPendingQuery'/>";
+			
+// 			depart = depart == '' ? null : depart;
+			date = date == '' ? null : date;
+			page = page == '' ? 1 : page;
+			
+			let xhr = new XMLHttpRequest();
+			xhr.open("GET","<c:url value='/empPendingQuery'/>?date=" + date + "&pageNo=" + page);
+			xhr.send();
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState == 4 && xhr.status == 200){
+					findEmpSignPending(xhr.response);
+					
+				}
+			}
+			
+		}
+	
+	function callAutiditted(page,date){
+			
+			var url = "<c:url value='/empAudittedQuery'/>";
+			
+			date = date == '' ? null : date;
+			page = page == '' ? 1 : page;
+			
+			let xhr1 = new XMLHttpRequest();
+			xhr1.open("GET","<c:url value='/empAudittedQuery'/>?date=" + date + "&pageNo=" + page);
+			xhr1.send();
+			xhr1.onreadystatechange = function(){
+				if(xhr1.readyState == 4 && xhr1.status == 200){
+					findEmpSignAuditted(xhr1.response);
+				}
+			}
+		}
+// 查詢資料列印表格
 	function findEmpSignPending(jsonString){
 		
 		let pending = $('#signpending');
-		
-		let signpendings = JSON.parse(jsonString);
+		let pendingresult = JSON.parse(jsonString);
+		let signpendings = pendingresult.result;
 		let segment ="<table border='1'class='table table-bordered' >";
 		
 		if(signpendings != null){
@@ -89,20 +137,20 @@
 			}
 			segment += "</table>";
 			
-//	 		var totalPage = result.totalPage;
-//	 		var currentPage = result.currentPage;
+	 		var totalPage = pendingresult.totalPage;
+	 		var currentPage = pendingresult.currentPage;
 			
-//	 		for(let n = 1 ; n<= totalPage; n++){
+	 		for(let n = 1 ; n<= totalPage; n++){
 				
-//	 			var isCurrent = "";
+	 			var isCurrent = "";
 				
-//	 			if(n == currentPage) isCurrent = "currentPage";
+	 			if(n == currentPage) isCurrent = "currentPage";
 				
-//	 			var id = 'page' + n;
+	 			var id = 'page' + n;
 				
-//	 			segment += "<button onclick='pendPageClick(this)' class='pendPageNo " + isCurrent + "'  id='" + id + "' " + ">" + n + "</button>";
+	 			segment += "<button onclick='pendPageClick(this)' class='pendPageNo " + isCurrent + "'  id='" + id + "' " + ">" + n + "</button>";
 				
-//	 		}
+	 		}
 		}
 		
 		pending.html(segment);
@@ -113,9 +161,9 @@
 	function findEmpSignAuditted(jsonString){
 		
 		let auditted = $('#signauditted');
+		let audittedresult = JSON.parse(jsonString);
 		
-		
-		let signauditteds = JSON.parse(jsonString);
+		let signauditteds = audittedresult.result;
 		let segment ="<table border='1'class='table table-bordered' >";
 		if(signauditteds !== null){
 			segment += "<tr><th colspan='6'>員工補簽查詢系統(已審核)</th></tr>";
@@ -130,26 +178,41 @@
 				segment += "<td>"+ signauditted.status + "</td>";
 				segment += "<td>"+ signauditted.reason + "</td>";
 			}
-//	 		segment += "</table>";
+			segment += "</table>";
 			
-//	 		var totalPage = result.totalPage;
-//	 		var currentPage = result.currentPage;
+			var totalPage = audittedresult.totalPage;
+			var currentPage = audittedresult.currentPage;
 			
-//	 		for(let n = 1 ; n<= totalPage; n++){
+			for(let n = 1 ; n<= totalPage; n++){
 				
-//	 			var isCurrent = "";
+				var isCurrent = "";
 				
-//	 			if(n == currentPage) isCurrent = "currentPage";
+				if(n == currentPage) isCurrent = "currentPage";
 				
-//	 			var id = 'page' + n;
+				var id = 'page' + n;
 				
-//	 			segment += "<button onclick='audiPageClick(this)' class='audiPageNo " + isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
+				segment += "<button onclick='audiPageClick(this)' class='audiPageNo " + isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
 				
-//	 		}
+			}
+			
 		}
 		
 		auditted.html(segment);
 		
+	}
+	
+	function pendPageClick(e){
+		var date = $("#date").val();
+		var page = e.getAttribute("id");//page1
+		
+		callPending(page.substring(4,(page.length)),date);
+	}
+	
+	function audiPageClick(e){
+		var date = $("#date").val();
+		var page = e.getAttribute("id");
+		
+		callAutiditted(page.substring(4,(page.length)),date);
 	}
 	
 	
@@ -163,12 +226,76 @@
     
                 <!-- header刪掉 End-->
                 
-             <div id="bgcolor" class="container-fluid">
+             <div id="bgcolor" class="container-fluid h-80">
+             	<div class="row">
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                第一行的1/3</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <a href="<c:url value='/EmpSignQuery' />" class="text-decoration-none">補簽查詢</a>##內容寫這裡</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                第一行的2/3</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">加班查詢</a>##內容寫這裡</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                第一行的3/3</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <a href="<c:url value='/checkInto' />" class="text-decoration-none">請假查詢</a>##內容寫這裡</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 				<div class="">
 					<div class="card shadow mb-4">
 						<div class="card-body">
+							<select  id="date">
+							    <option value>請選擇</option>
+							    <option value="2021-05">2021-05</option>
+							    <option value="2021-06">2021-06</option>
+							    <option value="2021-07">2021-07</option>
+							    <option value="2021-08">2021-08</option>
+							    <option value="2021-09">2021-09</option>
+							</select>
 							
-						
+							<button id="search">搜尋</button>
+							
 							<div id="signpending" data-toggle='table' align=center ></div>
 							<br><br>
 							<div id="signauditted" data-toggle='table' align=center ></div>

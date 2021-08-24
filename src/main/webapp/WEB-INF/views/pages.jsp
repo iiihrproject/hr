@@ -122,7 +122,7 @@
 												class="text-lg font-weight-bold text-danger text-uppercase mb-1">My
 												Attendance</div>
 											<div class="h4 mb-0 font-weight-bold text-center">
-												<a href="<c:url value='#' />" class="text-decoration-none">出勤異常查詢</a>
+												<a href="<c:url value='/intoQuery' />" class="text-decoration-none">出勤異常查詢</a>
 											</div>
 
 										</div>
