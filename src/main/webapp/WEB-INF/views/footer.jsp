@@ -44,6 +44,7 @@
                 <div class="modal-footer justify-content-center">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>                  
                     <a class="btn btn-primary" href="<c:url value='/logout' />">登出</a>
+
                 </div>
             </div>
         </div>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.hr.checksystem.model.Checksystem;
 import com.hr.checksystem.repository.CheckRepository;
+import com.hr.complementsign.model.AudittedComplementSign;
 
 @Repository
 public class CheckRepositoryImpl implements CheckRepository {
@@ -76,6 +77,7 @@ public class CheckRepositoryImpl implements CheckRepository {
 	}
 	
 	
+	
 	//<----------------------------------------管理員--------------------------------------------------->
 	
 	public List<Checksystem> findAllCheckSystem(){
@@ -86,4 +88,18 @@ public class CheckRepositoryImpl implements CheckRepository {
 		
 	}
 
+	@Override
+	public Checksystem getCheckSystemByTime(String dateString) {
+		String hql = "select * from checksystem \r\n"
+				+ "  where (CONVERT(varchar(100), checkInTime, 23) = :dateString or CONVERT(varchar(100), checkOutTime, 23) = :dateString) ";
+		Query query = entityManager.createNativeQuery(hql,Checksystem.class);
+		
+		query.setParameter("dateString", dateString);
+		
+		if(query.getResultList().size() != 0) {
+			return (Checksystem)query.getSingleResult();
+		}
+		
+		return null;
+	}
 }

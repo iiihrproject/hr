@@ -77,8 +77,8 @@ public class ManagerController {
 		return response;
 	}
 	
-	@GetMapping(path = "/ManagesystemOvertime") //測試
+	@GetMapping(path = "/ManagersystemOvertime") //測試
 	public String Test() {
-		return "overtime/ManageQueryTest";
+		return "overtime/managerQuery";
 	}
 }

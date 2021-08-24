@@ -9,15 +9,21 @@ public interface ComplementSignRepository {
 
 	void saveComplementSign(PendingComplementSign pendingcomplementSign);
 
-	List<PendingComplementSign> findPartComplementSign(String empNo);
+	List<PendingComplementSign> findPartPendingComplementSign(String empNo);
 
-	List<PendingComplementSign> findAllComplementSign(Integer mangaerNo);
+	List<PendingComplementSign> findAllComplementSign(Integer managerNo);
 
 	void deletePendingComplementSign(PendingComplementSign pendingComplementSign);
 
 	void saveAudittedComplementSign(AudittedComplementSign audittedComplementSign);
 
 	PendingComplementSign findById(int id);
+
+	List<AudittedComplementSign> findPartAudittedComplementSign(String empNo);
+
+	List<PendingComplementSign> findPendingComplementSign(String empNo);
+
+	List<AudittedComplementSign> findAudittedComplementSign(String empNo);
 
 
 }

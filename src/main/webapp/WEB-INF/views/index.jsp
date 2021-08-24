@@ -67,7 +67,8 @@
 		for (let n = 0; n < le; n++) {
 			let bulletin = posts[n];
 			let link = "href='<c:url value='/bulletinDetail' />?postno=" + bulletin.postno + "''>";
-			let flag = "<i class=' fas fa-info-circle' style='color: #f6c23e; border-color: #f6c23e;'></i>";
+			/* let flag = "<i class=' fas fa-info-circle' style='color: #f6c23e; border-color: #f6c23e;'></i>"; */
+			let flag = "<img id='logo' src='img/new.png' style='height:16px'>";
 			segment += "<tr "+link;
 			segment += "<td>" + bulletin.type + "</td>";
 			if(bulletin.postDate==td){

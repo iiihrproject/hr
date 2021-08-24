@@ -2,9 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
-<html lang='en'>
+<html lang='zh-TW'>
 <head>
-<meta charset='utf-8' />
+<meta charset='UTF-8' />
 <link href="<c:url value='/css/scheduler/main.min.css' />"
 	rel='stylesheet' type="text/css" />
 <script src="<c:url value='/js/scheduler/main.min.js' />"></script>
@@ -19,7 +19,8 @@ window.onload = function() {
 //讀取人員資料
 function loadEmps(){
 	let xhr2 = new XMLHttpRequest();
-	xhr2.open("GET", "<c:url value='/schedule/findAllEmps'/>");
+	var myDeptNo = ${sessionScope.loginModel.getDepartmentDetail().getDepartmentNumber()};
+	xhr2.open("GET", "<c:url value='/Leave/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo);
 	xhr2.send();
 	xhr2.onreadystatechange = function() {
 		if (xhr2.readyState == 4 && xhr2.status == 200) {
@@ -120,7 +121,7 @@ function renderScheduler(events,resources) {
       eventOverlap: false, // will cause the event to take up entire resource height
       navLinks: true,
       resourceAreaWidth: '10%',
-      resourceAreaHeaderContent: 'Employee',
+      resourceAreaHeaderContent: '${sessionScope.loginModel.departmentDetail.name}',
       allDaySlot: false,
       businessHours:true,
       resourceOrder: 'id,title',
