@@ -32,8 +32,8 @@ public class FactSchedule {
 	private LoginModel emps;
 	
 	@OneToOne(targetEntity = DimShift.class, cascade = CascadeType.DETACH)
-	@JoinColumn(name = "KeyShift", referencedColumnName = "KeyShift")
-	private DimShift dimShift;
+	@JoinColumn(name = "ShiftId", referencedColumnName = "KeyShift")
+	private DimShift shifts;
 	
 	@Column(name = "KeyAvailability")
 	private Integer keyAvailability;
@@ -77,12 +77,14 @@ public class FactSchedule {
 		this.emps = emps;
 	}
 	
-	public DimShift getKeyShift() {
-		return dimShift;
+
+
+	public DimShift getShifts() {
+		return shifts;
 	}
-	
-	public void setKeyShift(DimShift keyShift) {
-		this.dimShift = keyShift;
+
+	public void setShifts(DimShift shifts) {
+		this.shifts = shifts;
 	}
 
 	public Integer getKeyAvailability() {

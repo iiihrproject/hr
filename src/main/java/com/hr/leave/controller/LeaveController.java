@@ -98,7 +98,6 @@ public class LeaveController {
 		Map<String, String> map = new HashMap<>();
 		String result = "";
 		try {
-			System.out.println(leave);
 			service.save(leave,loginModel);
 			result = "新增成功";
 			map.put("success", result);
