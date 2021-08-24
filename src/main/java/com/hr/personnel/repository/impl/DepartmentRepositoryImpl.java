@@ -2,6 +2,7 @@ package com.hr.personnel.repository.impl;
 
 import java.util.List;
 
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -46,8 +47,13 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
 	}
 
 	@Override
-	public void updateDepartmentDetail(DepartmentDetail departmentDetail) {
-		entityManager.merge(departmentDetail);		
+	public DepartmentDetail updateDepartmentDetail(DepartmentDetail departmentDetail) {
+		try {	
+			return entityManager.merge(departmentDetail);		
+		}
+		catch(Exception e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -59,4 +65,10 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
 			return null;
 		}
 	}
+
+	@Override
+	public void insertNewDepartments(DepartmentDetail departmentDetail) throws IllegalArgumentException {
+		entityManager.persist(departmentDetail);			
+	}
+	
 }
