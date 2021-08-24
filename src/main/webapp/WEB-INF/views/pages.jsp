@@ -142,11 +142,9 @@
 											<div
 												class="text-lg font-weight-bold text-warning text-uppercase mb-1">Application
 												Form</div>
-											<div
-												class="h4 mb-0 font-weight-bold text-center nav-item dropdown">
+											<div class="h4 mb-0 font-weight-bold text-center nav-item dropdown">
 												<a href="#" id="ApplicationForm"
 													class="nav-link dropdown-toggle"
-													role="button"
 													data-toggle="dropdown" aria-haspopup="true"
 													aria-expanded="false">申請表</a>
 												<div class="dropdown-menu dropdown-menu-right animated--grow-in"
@@ -201,7 +199,7 @@
 													data-toggle="dropdown" aria-haspopup="true"
 													aria-expanded="true"> 簽核管理 </a>
 												<div
-													class="dropdown-menu dropdown-menu-right animated--grow-in"
+													class="dropdown-menu animated--grow-in"
 													aria-labelledby="ApplicationReview">
 													<a class="dropdown-item" href="<c:url value='/Leave/LeaveResult' />">請假</a>
 													<a class="dropdown-item" href="<c:url value='/MangerQuery' />">打卡紀錄</a>

@@ -9,7 +9,8 @@
     <div class="sidebar-brand-icon">
     </div>
     <div class="sidebar-brand-text mx-auto">
-        <img id="logo" src="<c:url value='/img/logo_frame.png' />">
+        <a href="<c:url value='/index' />">
+        <img id="logo" src="<c:url value='/img/logo_frame.png' />"></a>
     </div>
 
     <!-- Divider -->
