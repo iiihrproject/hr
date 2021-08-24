@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.hr.checksystem.model.Checksystem;
 import com.hr.checksystem.repository.CheckRepository;
 import com.hr.complementsign.model.AudittedComplementSign;
+import com.hr.schedule.model.FactSchedule;
 
 @Repository
 public class CheckRepositoryImpl implements CheckRepository {
@@ -74,6 +75,22 @@ public class CheckRepositoryImpl implements CheckRepository {
 		
 		return query.getResultList();
 		
+	}
+	
+	//-----------------------------------------抓排班資料查詢該員工每日上班時間---------------------------------
+	
+	@Override
+	public FactSchedule findWorkTimeByEmpNo(int empID , String date) {
+		String hql = "from FactSchedule where empID = :empID and start like :date ";
+		TypedQuery<FactSchedule> query = entityManager.createQuery(hql, FactSchedule.class);
+		
+		query.setParameter("empID", empID);
+		query.setParameter("date", date);
+		
+		if( query.getResultList().size()>0) {
+			return query.getSingleResult();
+		}
+		return null;
 	}
 	
 	

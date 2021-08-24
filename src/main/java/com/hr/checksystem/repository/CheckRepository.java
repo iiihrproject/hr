@@ -3,6 +3,7 @@ package com.hr.checksystem.repository;
 import java.util.List;
 
 import com.hr.checksystem.model.Checksystem;
+import com.hr.schedule.model.FactSchedule;
 
 public interface CheckRepository {
 
@@ -20,4 +21,6 @@ public interface CheckRepository {
 
 	Checksystem getCheckSystemByTime(String dateString);
 
+	public FactSchedule findWorkTimeByEmpNo(int empID , String date);
+	
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.hr.checksystem.model.Checksystem;
+import com.hr.schedule.model.FactSchedule;
 
 public interface CheckService {
 
@@ -13,7 +14,7 @@ public interface CheckService {
 
 	double judgmentDate(Date workTime, Date currentTime) throws Exception;
 
-	Date getTimeByType(String type);
+	Date getTimeByType(String type,String date,int empId);
 
 	List<Checksystem> findCheckSystemByEmp(String empNo);
 
@@ -24,4 +25,6 @@ public interface CheckService {
 	Checksystem findYesterdayCheckSystemByEmpno(String empNo);
 
 	Checksystem getCheckSystemByTime(String dateString);
+	
+	FactSchedule getFactSchedule(String date,int empID);
 }

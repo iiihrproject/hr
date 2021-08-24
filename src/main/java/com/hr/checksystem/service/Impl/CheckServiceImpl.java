@@ -1,5 +1,6 @@
 package com.hr.checksystem.service.Impl;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hr.checksystem.model.Checksystem;
 import com.hr.checksystem.repository.CheckRepository;
 import com.hr.checksystem.service.CheckService;
+import com.hr.schedule.model.FactSchedule;
 
 @Service
 @Transactional
@@ -126,25 +128,32 @@ public class CheckServiceImpl implements CheckService {
 		
 	}
 	
-	public Date getTimeByType(String type) {
+	public Date getTimeByType(String type,String date,int empID) {
 		
-		String timeString = null;
+		//用日期取得 排班資料
+		FactSchedule factSchedule = getFactSchedule(date, empID);
 		
-		if("checkIn".equalsIgnoreCase(type)) {
+		if(factSchedule != null) {
 			
-			//撈上班時間
-			timeString = "2021-08-06 09:00:00";
-		}else {
-			//撈下班時間
-			timeString = "2021-08-06 17:00:00";
+			String timeString = null;
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+			
+			if("checkIn".equalsIgnoreCase(type)) {
+				//撈上班時間
+				timeString = factSchedule.getStart();
+			}else {
+				//撈下班時間
+				timeString = factSchedule.getEnd();
+			}
+			
+			try {
+				return sdf.parse(timeString);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			
 		}
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		try{
-			return sdf.parse(timeString);
-		}catch(Exception e) {
-			
-		}
 		return null;
 		
 	}
@@ -164,19 +173,25 @@ public class CheckServiceImpl implements CheckService {
 //		double result = Math.floor(cha * 1.0 / (1000 * 60));
 //		System.out.println(result);
 		
-		Date date = new Date();
+//		Date date = new Date();
+//		
+//		System.out.println("date = " + date);
+//		
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		try {
+//			String dateString = sdf.format(date);
+//			date = sdf.parse(dateString);
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		System.out.println("after = " + date);
 		
-		System.out.println("date = " + date);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			String dateString = sdf.format(date);
-			date = sdf.parse(dateString);
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+		String dateString = "2021-08-21T09:00:00";
 		
-		System.out.println("after = " + date);
+		System.out.println(sdf.parse(dateString));
 		
 	}
 //<------------------------------------------------管理員------------------------------------------------------------>
@@ -191,6 +206,11 @@ public class CheckServiceImpl implements CheckService {
 	@Override
 	public Checksystem getCheckSystemByTime(String dateString) {
 		return checkRepository.getCheckSystemByTime(dateString);
+	}
+
+	@Override //用日期取得 排班資料
+	public FactSchedule getFactSchedule(String date, int empID) {
+		return checkRepository.findWorkTimeByEmpNo(empID, date + "%");
 	}
 
 	

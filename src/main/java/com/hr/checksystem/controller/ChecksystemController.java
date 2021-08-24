@@ -24,6 +24,7 @@ import com.hr.checksystem.model.Checksystem;
 import com.hr.checksystem.repository.Impl.CheckSystemRepository;
 import com.hr.checksystem.service.CheckService;
 import com.hr.login.model.LoginModel;
+import com.hr.schedule.model.FactSchedule;
 
 @Controller
 @SessionAttributes("loginModel")
@@ -42,28 +43,40 @@ public class ChecksystemController {
 		System.out.println(empNo);
 //		String empNo = (String)httpSession.getAttribute("empNo");
 //		empNo = "123";
-		Checksystem checksystem1 = checkService.findYesterdayCheckSystemByEmpno(empNo);
 		
-		String errorMsg = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
-		if(checksystem1 == null) {
-			//沒打卡
-			errorMsg = "昨天沒打卡 扣1000";
+		FactSchedule factSchedule = checkService.getFactSchedule(sdf.format(new Date()), loginModel.getPk());
+		
+		//如果有資料代表昨天不是休假  才去做判斷
+		if(factSchedule != null) {
 			
-		}else {
+			Checksystem checksystem1 = checkService.findYesterdayCheckSystemByEmpno(empNo);
 			
-			System.out.println(checksystem1.getCheckInTime());
+			String errorMsg = null;
 			
-			if(checksystem1.getCheckInTime() == null || checksystem1.getCheckOutTime() == null) {
+			if(checksystem1 == null) {
+				//沒打卡
 				errorMsg = "昨天沒打卡 扣1000";
+				
+			}else {
+				
+				System.out.println(checksystem1.getCheckInTime());
+				
+				if(checksystem1.getCheckInTime() == null || checksystem1.getCheckOutTime() == null) {
+					errorMsg = "昨天沒打卡 扣1000";
+				}
+				
 			}
 			
+			model.addAttribute("errorMsg",errorMsg);
+			
 		}
+		
 		List<Checksystem> checksystem = checkService.findPartCheckSystem(empNo,4);
 		System.out.println("size = " + checksystem.size());
 		
 		model.addAttribute("Checksystem",checksystem);
-		model.addAttribute("errorMsg",errorMsg);
 		
 		return "checksystem/checksystem";
 	}
@@ -84,7 +97,11 @@ public class ChecksystemController {
 		Checksystem checksystem = checkService.findTodayCheckSystemByEmpno(empNo);
 		System.out.println(checksystem);
 		//yyyy-MM-dd HH:mm:ss
-		Date checkTime = checkService.getTimeByType(type);
+		Date checkTime = checkService.getTimeByType(type,sDAte,loginModel.getPk());
+		
+		//如果沒有資料代表今天是休假
+		if(checkTime == null) return "今天不可以打卡唷～";
+		
 		System.out.println(type);
 		
 		double times = checkService.judgmentDate(checkTime, time);

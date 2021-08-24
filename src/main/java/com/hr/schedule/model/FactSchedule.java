@@ -22,6 +22,7 @@ public class FactSchedule {
 	@Column(name = "KeySchedule")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer keySchedule;
+	
 	@Column(name = "Date")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Taipei")
 	private Date workDate;
@@ -36,12 +37,16 @@ public class FactSchedule {
 	
 	@Column(name = "KeyAvailability")
 	private Integer keyAvailability;
+	
 	@Column(name = "HoursOfWork")
 	private Double hoursOfWork;
+	
 	@Column(name = "Start")
 	private String start;
+	
 	@Column(name = "EndOfShift")
 	private String end;
+	
 	@Column(name = "Title")
 	private String title;
 	
