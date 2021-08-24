@@ -20,7 +20,7 @@ import com.hr.login.model.LoginModel;
 import com.hr.overtime.model.OverTimePending;
 import com.hr.overtime.repository.Impl.OverTimePendingRepository;
 import com.hr.overtime.service.OverTimeService;
-import com.hr.overtime.service.bean.OverTimeReponse;
+import com.hr.overtime.service.bean.PublicReponse;
 @Controller
 @SessionAttributes("loginModel")
 public class ManagerController {
@@ -54,7 +54,7 @@ public class ManagerController {
 	
 	//管理員查詢屬於自己部門所有未審核資料
 	@GetMapping(path = "/manageQuery")
-	public @ResponseBody OverTimeReponse findOvertimeByResult(@RequestParam(value="pageNo",required = false)String pageNo,
+	public @ResponseBody PublicReponse findOvertimeByResult(@RequestParam(value="pageNo",required = false)String pageNo,
 			@RequestParam(value="depart",required = false)String depart,
 			@RequestParam(value="keyword",required = false)String keyword,@RequestParam(value="date",required = false)String date,
 			LoginModel loginModel){
@@ -69,7 +69,7 @@ public class ManagerController {
 		
 		List<OverTimePending> overtimepending = result.getContent();
 		
-		OverTimeReponse response = new OverTimeReponse();
+		PublicReponse response = new PublicReponse();
 		response.setResult(overtimepending);
 		response.setTotalPage(result.getTotalPages());
 		response.setCurrentPage(pageNumber + 1);

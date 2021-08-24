@@ -21,7 +21,9 @@
 
             <!-- Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="<c:url value='/' />">
+
+                <a class="nav-link" href="<c:url value='/index' />">
+
                     <i class='fas fa-home' style='font-size:22px'></i>
                     <span>主頁</span></a>
             </li>
@@ -32,7 +34,9 @@
                 </a>
             </li>
             <li class="nav-item">            
-                <a class="nav-link collapsed" href="<c:url value='/pages' />">
+
+                <a class="nav-link collapsed" href="<c:url value='/personnel' />">
+
                     <i class='fas fa-user-tie' style='font-size:22px'></i>
                     <span id="listname">人員管理</span>
                 </a>

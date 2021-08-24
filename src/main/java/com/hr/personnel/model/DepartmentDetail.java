@@ -81,7 +81,6 @@ public class DepartmentDetail {
 	
 	public boolean equals(DepartmentDetail departmentDetail) {
 		if(
-				this.getDepartmentNumber().equals(departmentDetail.getDepartmentNumber()) &&
 				this.getName().equals(departmentDetail.getName()) &&
 				this.getManagerEmpId().equals(departmentDetail.getManagerEmpId())
 				) {

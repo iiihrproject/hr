@@ -1,9 +1,20 @@
 package com.hr.personnel.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.hr.login.model.LoginModel;
 
 public interface ModifyLoginModelService {
 
 	LoginModel loadByEmpNo(String inputEmpNo);
+
+	LoginModel loadByPk(Integer pk);
+
+	boolean updateLoginModel(Map<String, String> inputMap, LoginModel modifiedLoginModel);
+
+	Map<String, String> getReturnMap(LoginModel loginModel);
+
+	List<String> findAuthorities(LoginModel modifiedLoginModel);
 
 }

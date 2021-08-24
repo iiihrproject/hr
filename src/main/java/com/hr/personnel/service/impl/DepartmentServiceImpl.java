@@ -1,8 +1,10 @@
 package com.hr.personnel.service.impl;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,12 +50,34 @@ public class DepartmentServiceImpl implements DepartmentService {
 		/**
 		 * Firstly, merging the DepartmentDetail that given by the front end and check if it succeed
 		 */
-		departmentRepository.updateDepartmentDetail(departmentDetail);
-		Integer id = departmentDetail.getDepartmentNumber();
-		DepartmentDetail newDepartmentDetail = departmentRepository.findDepartment(id);
+		DepartmentDetail newDepartmentDetail = departmentRepository.updateDepartmentDetail(departmentDetail);
 		if(departmentDetail.equals(newDepartmentDetail)) {
 			return findAllDepartmentDetail();
 		}
 		return null;
+	}
+
+	@Override
+	public boolean insertNewDepartments(Map<Integer, DepartmentDetail> departments) {
+		if(departments.isEmpty()) {
+			return false;
+		}
+		Set<Integer> keySet = departments.keySet();
+		@SuppressWarnings("rawtypes")
+		Iterator iterator = keySet.iterator();
+		try {
+			while(iterator.hasNext()) {
+				Integer key = (Integer)iterator.next();
+				DepartmentDetail departmentDetail = departments.get(key);
+				departmentRepository.insertNewDepartments(departmentDetail);
+			}
+		}
+		catch(IllegalArgumentException e) {
+			return false;
+		}
+		catch(Exception e) {
+			return false;
+		}
+		return true;
 	}
 }

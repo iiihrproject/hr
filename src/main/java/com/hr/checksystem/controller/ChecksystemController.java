@@ -217,6 +217,12 @@ public class ChecksystemController {
 		return "checksystem/empCheckResult";
 	}
 	
+	//連結入口
+	@GetMapping(path = "/intoQuery")
+	public String intoQuery() {
+		return "exceptionquery";
+	}
+	
 //	@GetMapping(path = "/manageCheck1")
 //	public String manageCheckSystem1(Model model) {
 //		String empNo = "123";

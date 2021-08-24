@@ -11,8 +11,11 @@ public interface DepartmentRepository {
 
 	LoginModel findLoginModel(Integer managerEmpId);
 
-	void updateDepartmentDetail(DepartmentDetail departmentDetail);
+	DepartmentDetail updateDepartmentDetail(DepartmentDetail departmentDetail);
 
 	DepartmentDetail findDepartment(Integer departmentNumber);
+
+	void insertNewDepartments(DepartmentDetail departmentDetail) throws IllegalArgumentException;
+
 
 }

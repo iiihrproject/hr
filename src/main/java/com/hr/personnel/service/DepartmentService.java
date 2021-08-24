@@ -12,6 +12,8 @@ public interface DepartmentService {
 	Map<Integer, Map<String, String>> findAllDepartmentDetailWithReplacementOfNewManager(
 			DepartmentDetail departmentDetail);
 
+	boolean insertNewDepartments(Map<Integer, DepartmentDetail> departments);
+
 
 
 }

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +28,7 @@ import com.hr.overtime.model.OverTimePending;
 import com.hr.overtime.repository.Impl.OverTimeAuditingRepository;
 import com.hr.overtime.repository.Impl.OverTimePendingRepository;
 import com.hr.overtime.service.OverTimeService;
-import com.hr.overtime.service.bean.OverTimeReponse;
+import com.hr.overtime.service.bean.PublicReponse;
 
 @Controller
 @SessionAttributes("loginModel")
@@ -46,8 +48,10 @@ public class EmployeeController {
 		date = sdfDate.parse(sDate);
 		String empNo = loginModel.getEmpNo();
 		String empName = loginModel.getName();
+		String department = loginModel.getDepartmentDetail().getName();
 		int managerEmpId = loginModel.getDepartmentDetail().getManagerEmpId();
 		System.out.println(managerEmpId);
+		overTimePending.setDepartment(department);
 		overTimePending.setDateOfApplication(date);
 		overTimePending.setEmpNo(empNo);
 		overTimePending.setEmpName(empName);
@@ -67,7 +71,7 @@ public class EmployeeController {
 	
 	@GetMapping(path="/findEmpOvertime")
 	@ResponseBody
-	public OverTimeReponse findEmpOvertimeBypending(@RequestParam(value="pageNo",required = false)String pageNo,
+	public PublicReponse findEmpOvertimeBypending(@RequestParam(value="pageNo",required = false)String pageNo,
 			@RequestParam(value="depart",required = false)String depart,
 			@RequestParam(value="keyword",required = false)String keyword,@RequestParam(value="date",required = false)String date,
 			LoginModel loginModel) {
@@ -75,16 +79,17 @@ public class EmployeeController {
 		String empNo = loginModel.getEmpNo();
 		
 		int pageNumber = pageNo == null || "null".equals(pageNo) ? 0 : Integer.parseInt(pageNo) -1;
-//		depart = "null".equals(depart) ? null : depart;
-//		date = "null".equals(date) ? null : date;
 		
-		Pageable page = PageRequest.of(pageNumber, 10);
+		Sort sort = Sort.by(Direction.DESC, "dateOfApplication");
+		
+		Pageable page = PageRequest.of(pageNumber, 10, sort);
 		
 		Page<OverTimePending> result = overTimePendingRepository.findByEmpNo(page, empNo, date, depart,null);
 		
 		List<OverTimePending> overtimepending = result.getContent();
 		
-		OverTimeReponse response = new OverTimeReponse();
+		
+		PublicReponse response = new PublicReponse();
 		
 		response.setCurrentPage(pageNumber +1);
 		response.setResult(overtimepending);
@@ -95,7 +100,7 @@ public class EmployeeController {
 	
 	@GetMapping(path="/findEmpOvertime2")
 	@ResponseBody
-	public OverTimeReponse findEmpOvertimeByauditted(@RequestParam(value="pageNo",required = false)String pageNo,
+	public PublicReponse findEmpOvertimeByauditted(@RequestParam(value="pageNo",required = false)String pageNo,
 			@RequestParam(value="depart",required = false)String depart,
 			@RequestParam(value="keyword",required = false)String keyword,@RequestParam(value="date",required = false)String date,
 			LoginModel loginModel) {
@@ -103,8 +108,6 @@ public class EmployeeController {
 		String empNo = loginModel.getEmpNo();
 		
 		int pageNumber = pageNo == null || "null".equals(pageNo) ? 0 : Integer.parseInt(pageNo) -1;
-//		depart = "null".equals(depart) ? null : depart;
-//		date = "null".equals(date) ? null : date;
 		
 		Pageable page = PageRequest.of(pageNumber, 10);	
 		
@@ -114,7 +117,7 @@ public class EmployeeController {
 		
 		System.out.println("depart = " + depart);
 		
-		OverTimeReponse response = new OverTimeReponse();
+		PublicReponse response = new PublicReponse();
 		
  		response.setCurrentPage(pageNumber + 1);
 		response.setResult(overtimepending);

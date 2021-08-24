@@ -128,10 +128,8 @@
     <!-- Page Wrapper -->
     
             <div id="bgcolor" class="container-fluid h-75" >    
-             <div class="row">
-
-
-								<!--Second Column -->
+	            
+            	 <div class="row">
 								<!-- 員工查詢  -->
                         <div class="col-lg-4  mycss">
 

@@ -41,37 +41,118 @@
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->
 	<script type="text/javascript">
+	
+	var hasError = false;
 	$(document).ready(function(){
 		
-		var sendData = document.getElementById("sendData");
-		sendData.onclick = function(){
-			
-			var dateValue = $('#date').val();
+	$('#sendData').click(function () {
+			hasError = false;
+		 	var dateValue = $('#date').val();
 			var typeValue = $("select[name='Type']").val();
 			var reasonValue = $('#reason').val();
+			var today = new Date();
+			let span0 = $('#result0c');
+			let span1 = $('#result1c');
 			
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST","<c:url value='/saveEmpComplementSign' />", true);
-			var jsonPendingComplementSign={
-				"appliedDate" : dateValue,
-				"type" : typeValue,
-				"reason" : reasonValue
+			var date = Date.parse(dateValue);
+			
+			if(date > today){
+				setErrorFor(span0 ,"輸入日期不可大於當日");
+				return false;
+			}else{
+				span0.html("");
 			}
-			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(jsonPendingComplementSign));
-	  		xhr.onreadystatechange = function() {
-	  			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201) ) {
-		  			window.location.href = "<c:url value='/xxx'/>";
+	
+			swal({
+		        title: "補簽申請!",
+		        html: "確定送出嗎?!",
+		        type: "question",
+		        confirmButtonText: "確定",
+		      	cancelButtonText: "取消",
+		        showCancelButton: true//顯示取消按鈕
+		    }).then(function (result) {
+		        if (result.value) {
+		            //使用者按下「確定」要做的事
+// 		            var dateValue = $('#date').val();
+// 					var typeValue = $("select[name='Type']").val();
+// 					var reasonValue = $('#reason').val();
+					var xhr = new XMLHttpRequest();
+		 			xhr.open("POST","<c:url value='/saveEmpComplementSign' />", true);
+		 			var jsonPendingComplementSign={
+		 				"appliedDate" : dateValue,
+		 				"type" : typeValue,
+		 				"reason" : reasonValue
+		 			}
+		 			xhr.setRequestHeader("Content-Type", "application/json");
+		 			xhr.send(JSON.stringify(jsonPendingComplementSign));
+		 	  		xhr.onreadystatechange = function() {
+		 	  			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201) ) {
+		 		  			window.location.href = "<c:url value='/xxx'/>";
+				  			
+		 	  			}
+		 			}
+		             
+		         swal("新增成功!", "請等待主管簽核", "success");
+// 		         window.location.href = "<c:url value='/checkInto'/>";
+		         //location.reload();
+		     } else if (result.dismiss === "cancel"){
+		          //使用者按下「取消」要做的事
+		         swal("取消申請", "請再次確認", "error");
+		     }//end else  
+		  });//end then 
+		
+		    
+		})
+		
+// 		var sendData = document.getElementById("sendData");
+// 		sendData.onclick = function(){
+			
+// 			var dateValue = $('#date').val();
+// 			var typeValue = $("select[name='Type']").val();
+// 			var reasonValue = $('#reason').val();
+			
+// 			var xhr = new XMLHttpRequest();
+// 			xhr.open("POST","<c:url value='/saveEmpComplementSign' />", true);
+// 			var jsonPendingComplementSign={
+// 				"appliedDate" : dateValue,
+// 				"type" : typeValue,
+// 				"reason" : reasonValue
+// 			}
+// 			xhr.setRequestHeader("Content-Type", "application/json");
+// 			xhr.send(JSON.stringify(jsonPendingComplementSign));
+// 	  		xhr.onreadystatechange = function() {
+// 	  			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201) ) {
+// 		  			window.location.href = "<c:url value='/xxx'/>";
 		  			
-	  			}
-			}
-		}	
+// 	  			}
+// 			}
+// 		}	
 		
 		$(".slide_toggle").click(function () {
 		    $(this).next().slideToggle();
 		});
 		
+		$("#date").blur(function() {
+			var dateValue = $('#date').val();
+			var today = new Date();
+			let span0 = $('#result0c');
+			var date = Date.parse(dateValue);
+			
+			if (date > today) {
+				setErrorFor(span0, "輸入日期不可大於當日");
+			} else {
+				span0.innerHTML = "";
+			}
 	})
+	})
+	
+	
+	
+	
+	function setErrorFor(input, message) {
+		input.html("<font color='red' size='-2'>" + message + "</font>");
+		hasError = true;
+	}
 	
 	
 	</script>
@@ -82,7 +163,7 @@
 
    <jsp:include page="../header.jsp"></jsp:include>
                 
-             <div class="row">
+             <div class="row  h-75">
 
                         <!-- First Column -->
                         <div class="col-lg-4 overtime">
@@ -94,82 +175,53 @@
                                 </div>
                                 <div class="card-body ">
                                 
-                                    <fieldset class="f1">
-										<legend>員工補簽申請表</legend>
-										
-										<div class="form-group">
-											<label for="date" class="t1">申請補簽日期:</label> <input type="datetime-local"
-												class="form-control form1" id="date" name="appliedDate">
-										</div>
+                                    <div class="table-responsive">
+
+								        <table class="table table-bordered" width="100%" cellspacing="0">
+								            <tbody>
+								                <form enctype="multipart/form-data" id="inserForm">
+								                    <tr>
+								                        <td style="text-align: right"><label for="pos" class="col-form-label">申請補簽日期 :</label></td>
+								                        <td><input type="datetime-local" id="date" name="appliedDate" class="form-control" size="30" maxlength="30"
+								                                style="width:200px;" required />
+								                            <span id="result0c" class="form-text"></span>
+								                        </td>
+								                    </tr>
+								                  
+								                    <tr>
+								                        <td style="text-align: right"><label for="type" class="col-form-label">補簽類型 :</label></td>
+								                        <td style="text-align: left">
+								                        	<select name = "Type" id = type class="selectpicker show-menu-arrow" >
+								                            <option value= "CheckIn">上班
+								                            </option>  
+								                            <option value= "CheckOut">下班
+								                            </option>  
+								                        </select>  
+								                        </td>
+								                    </tr>
+								                    <tr>
+								                        <td style="text-align: right"><label for="reason" class="col-form-label ">補簽事由 :</label></td>
+								                        <td>
+								                            <input type="text"class="form-control" id="reason" name="reason" style="width:300px;" >
+								                            <span id="result1c" class="form-text"></span>
+								                        </td>
+								                    </tr>
+								                    <tr>
+								                        <td colspan="2" style="text-align: right" >
+								                            <CENTER><button type="button" class="btn btn-primary" id='sendData'>送出</button></CENTER>
+								                        </td>
+								                    </tr>	
+								                </form>
+								                
 								
-								<!--         <div class="form-group"> -->
-								<!-- 			<label for="time" class="t1">申請補簽時間:</label> <input type="time" -->
-								<!-- 				class="form-control form1" id="time" name="appliedTime"> -->
-								<!-- 		</div> -->
-								
-										<div class="form-group">
-											<label for="dep" class="t1">補簽類型:</label> 
-								            <select name = "Type" id = type>
-								                <option value= "CheckIn" >上班
-								                </option>  
-								                <option value= "CheckOut">下班
-								                </option>  
-								            </select>  
-										</div>
-										<div class="form-group">
-											<label for="Cause" class="t1">補簽事由:</label> <input type="text"
-												class="form-control form1" id="reason" name="reason">
-										</div>
-									</fieldset>
-									<div class="d2">
-										<button type="button" class="btn btn-primary" id='sendData'>送出</button>
-									</div>
+								            </tbody>
+								        </table>
+
+    								</div>
                                 </div>
                             </div>
-
-                            <!-- Custom Font Size Utilities -->
-<!--                             <div class="card shadow mb-4"> -->
-<!--                                 <div class="card-header py-3"> -->
-<!--                                     <h6 class="m-0 font-weight-bold text-primary">請確認上班型態是否正確</h6> -->
-<!--                                 </div> -->
-<!--                                 <div class="card-body gowork"> -->
-<!-- 								    <fieldset class="f2"> -->
-<!-- 										<div class="form-group"> -->
-<!-- 											<label for="Remarks" class="t1">備註:</label> <input type="text" -->
-<!-- 												class="form-control form2" id="Remarks" name="Remarks"> -->
-<!-- 										</div> -->
-<!-- 									</fieldset> -->
-<!-- 									<br> -->
-<!-- 									<div class="d2"> -->
-<!-- 										<button type="button" class="btn btn-primary" id='sendData'>送出</button> -->
-<!-- 									</div> -->
-<!--                                 </div> -->
-<!--                             </div> -->
-
-                        </div>
-
-                        <!-- Second Column -->
-<!--                         <div class="col-lg-4"> -->
-
-<!--                             Background Gradient Utilities -->
-<!--                             <div class="card shadow mb-4"> -->
-<!--                                 <div class="card-header py-3"> -->
-<!--                                     <h6 class="m-0 font-weight-bold text-primary">Custom Background Gradient Utilities -->
-<!--                                     </h6> -->
-<!--                                 </div> -->
-<!--                                 <div class="card-body"> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-primary text-white">.bg-gradient-primary</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-secondary text-white">.bg-gradient-secondary</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-success text-white">.bg-gradient-success</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-info text-white">.bg-gradient-info</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-warning text-white">.bg-gradient-warning</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-danger text-white">.bg-gradient-danger</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-light text-white">.bg-gradient-light</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-dark text-white">.bg-gradient-dark</div> -->
-<!--                                 </div> -->
-<!--                             </div> -->
-
-<!--                         </div> -->
+						</div>
+                            
 
                         <!-- Third Column -->
                         <div class="col-lg-4  overtime">
