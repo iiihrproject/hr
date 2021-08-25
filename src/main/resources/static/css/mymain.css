@@ -1,0 +1,121 @@
+.fc .fc-toolbar-title{
+    display: inline;
+}
+
+.fc-dayGridMonth-button, .fc-listWeek-button, .fc-prevYear-button, .fc-nextYear-button, .fc-today-button{
+    background: #7973AE !important;
+    border: transparent !important;
+    opacity: 0.9;
+}
+
+.fc-dayGridMonth-button:hover, .fc-listWeek-button:hover, .fc-prevYear-button:hover, .fc-nextYear-button:hover{
+    opacity: 1;
+}
+
+.fc-prev-button, .fc-next-button{
+    background: transparent !important;
+    border: transparent !important;
+    color: #7973AE !important;
+}
+
+.fc-toolbar-title{
+    color: #454545;
+}
+
+.fc .fc-col-header-cell-cushion, .fc .fc-daygrid-day-number{
+    color: #454545;
+}
+
+/* .fc th:first-child, .fc-scrollgrid-sync-table tr td:first-child{
+    background:#FFECEC;
+}
+
+.fc th:last-child, .fc-scrollgrid-sync-table tr td:last-child{
+    background: #DFFFDF;
+} */
+
+.fc th{
+    background: #DDDFE8;
+}
+
+.fc th:first-child .fc-col-header-cell-cushion,
+.fc-scrollgrid-sync-table tr td:first-child .fc-daygrid-day-number{
+    color:#FF2D2D;
+}
+
+.fc th:last-child .fc-col-header-cell-cushion,
+.fc-scrollgrid-sync-table tr td:last-child .fc-daygrid-day-number{
+    color: #009100;
+}
+
+a{
+	color: #454545;
+}
+
+a:hover{
+	color: #454545;
+    text-decoration: none !important;
+    font-size: 1.03em;
+}
+
+@media only screen and (max-width: 1315px){
+    .fc-button{
+        height: 40px;
+        font-size: 0.75em !important;
+    }
+}
+
+@media only screen and (max-width: 1190px){
+    .fc-button{
+        height: 25px;
+        font-size: 0.5em !important;
+    }
+    .fc-toolbar-title{
+        font-size: 1.2em !important;
+    }
+}
+
+@media only screen and (max-width: 992px){
+    .fc-button{
+        height: 40px;
+        font-size: 0.9em !important;
+    }
+    .fc-toolbar-title{
+        font-size: 2em !important;
+    }
+}
+
+@media only screen and (max-width: 576px){
+    .fc-button{
+        height: 20px;
+        font-size: 0.23em !important;
+    }
+    .fc-toolbar-title{
+        font-size: 1.2em !important;
+    }
+}
+
+#date_, #time_, #start_, #end_{
+    /* width: 40%; */
+    /* display: inline; */
+    text-align: center;
+}
+
+.modal-title{
+    margin-left: 40%;
+}
+
+.modal-footer #add_{
+    background: #7973AE;
+    border: #7973AE;
+    opacity: 0.9;
+}
+
+.modal-footer #add_:hover{
+    background: #7973AE;
+    border: #7973AE;
+    opacity: 1;
+}
+
+
+
