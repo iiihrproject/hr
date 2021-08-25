@@ -8,6 +8,13 @@ $("#postdate").blur(function() {
 	} else {
 		div2.innerHTML = "";
 	}
+	let enddateValue = document.getElementById("enddate").value;
+	let div5 = document.getElementById('result5c');
+	if (enddateValue < postdateValue) {
+        setErrorFor(div5, "報名截止日期不可小於貼文刊登日期");
+    }  else {
+    div5.innerHTML = "";
+    }
 })
 $("#exp").blur(function() {
 	let postdateValue = document.getElementById("postdate").value;
@@ -18,6 +25,26 @@ $("#exp").blur(function() {
 	} else {
 		div3.innerHTML = "";
 	}
+	let enddateValue = document.getElementById("enddate").value;
+	let div5 = document.getElementById('result5c');
+	if (enddateValue > expValue) {
+        setErrorFor(div5, "報名截止日期不可大於貼文下架日期");
+    } else {
+    div5.innerHTML = "";
+    }
+})
+$("#enddate").blur(function() {
+	let enddateValue = document.getElementById("enddate").value;
+	let postdateValue = document.getElementById("postdate").value;
+	let expValue = document.getElementById("exp").value;
+	let div5 = document.getElementById('result5c');
+	if (enddateValue < postdateValue) {
+        setErrorFor(div5, "報名截止日期不可小於貼文刊登日期");
+    } else if (enddateValue > expValue) {
+        setErrorFor(div5, "報名截止日期不可大於貼文下架日期");
+    } else {
+    div5.innerHTML = "";
+    }
 })
 
 //預覽載入
@@ -29,6 +56,7 @@ checkinsert.onclick = function() {
 	let file1Value = document.getElementById("file1").value;
 	let quotaValue = $("[name='quotatype']:checked").val();
 	let quotanValue = document.getElementById("quotanid").value;
+	let enddateValue = document.getElementById("enddate").value;
 	let postdateValue = document.getElementById("postdate").value;
 	let expValue = document.getElementById("exp").value;
 	let file = $('#file1')[0].files[0];
@@ -39,6 +67,7 @@ checkinsert.onclick = function() {
 	let div2 = document.getElementById('result2c');
 	let div3 = document.getElementById('result3c');
 	let div4 = document.getElementById('result4c');
+	let div5 = document.getElementById('result5c');
 	if (!titleValue) {
 		setErrorFor(div0, "請輸入主旨");
 	} else {
@@ -68,6 +97,15 @@ checkinsert.onclick = function() {
 	} else {
 		div4.innerHTML = "";
 	}
+	if (!enddateValue){
+    	setErrorFor(div5, "請輸入報名截止日期");  
+    } else if (enddateValue<postdateValue) {
+        setErrorFor(div5, "報名截止日期不可小於貼文刊登日期");
+    } else if (enddateValue>expValue) {
+        setErrorFor(div5, "報名截止日期不可大於貼文下架日期");
+    } else {
+    div5.innerHTML = "";
+    }
 
 
 	//預覽資料載入
@@ -87,6 +125,7 @@ checkinsert.onclick = function() {
 	else {
 		document.getElementById("tdqu").innerHTML = "<td>已報名人數：&nbsp&nbsp／&nbsp可報名人數：" + quotanValue + "</td>";
 	}
+	document.getElementById("ched").innerHTML = enddateValue;
 	document.getElementById("chpd").innerHTML = postdateValue;
 	console.log("titleValue主旨:" + titleValue);
 	console.log("descriptionValue內容:" + descriptionValue);

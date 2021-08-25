@@ -49,9 +49,7 @@
             let descriptionValue = $(".ck-content").html();
             let destextValue = $(".ck-content").text();
             let file1Value = document.getElementById("file1").value;
-            let quotaValue = $("[name='quotatype']:checked").val();
-            let quotanValue = document.getElementById("quotanid").value;
-            let enddateValue = document.getElementById("enddate").value;
+            let quotaValue = "";
             let postdateValue = document.getElementById("postdate").value;
             let expValue = document.getElementById("exp").value;
             let file = $('#file1')[0].files[0]
@@ -64,8 +62,6 @@
         	let div1 = document.getElementById('result1c');
         	let div2 = document.getElementById('result2c');
         	let div3 = document.getElementById('result3c');
-        	let div4 = document.getElementById('result4c');
-        	let div5 = document.getElementById('result5c');
         	if (!titleValue){
         	setErrorFor(div0, "請輸入主旨");
         	} 	else {
@@ -90,20 +86,6 @@
             } else {
         	div3.innerHTML = "";
         	}
-        	if (quotaValue=="限制" && quotanValue==0){
-            setErrorFor(div4, "請輸入可報名額");  
-            } else {
-            div4.innerHTML = "";
-            }
-        	if (!enddateValue){
-            	setErrorFor(div5, "請輸入報名截止日期");  
-            	} else if (enddateValue<postdateValue) {
-                    setErrorFor(div5, "報名截止日期不可小於貼文刊登日期");
-            	} else if (enddateValue>expValue) {
-                    setErrorFor(div5, "報名截止日期不可大於貼文下架日期");
-                } else {
-            	div5.innerHTML = "";
-            	}
             if (hasError) {
                 return false;
             }
@@ -117,18 +99,12 @@
             formData.append("desText", destextValue);
             formData.append("file1", file);
             formData.append("quotatype", quotaValue);
-            if(!quotanValue){
-            	formData.append("quota", 0);
-            }else{
-            	formData.append("quota", quotanValue);
-            }
-            formData.append("endDate", enddateValue);
             formData.append("postdate", postdateValue);
             formData.append("exp", expValue);
             
             $.ajax({
                 type: 'post',
-                url: "<c:url value='/insertEventBulletion' />",
+                url: "<c:url value='/insertAnnoBulletion' />",
                 data: formData,
                 cache: false,
                 processData: false,
@@ -200,7 +176,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">新增活動貼文</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">新增公告貼文</h6>
                         </div>
                         <div class="card-body">
                            <div class="table-responsive">
@@ -224,39 +200,22 @@
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">圖&emsp;&emsp;檔 :</label></td>
                                             <td><input type="file" id="file1" name="file1" class="btn-sm" onchange="selectImgFile(this.files)"/>
-                                            <a class="btn btn-light btn-icon-split btn-sm" style="height:25px;width:70px;border:1px solid black" onclick="clean()">
-                                        	<span class="text" style="font-size:14px;padding:1px 0px;color:black">清除檔案</span>
+                                            <a class="btn btn-secondary btn-icon-split btn-sm" style="height:30px" onclick="clean()">
+                                        	<span class="text">清除檔案</span>
                                     		</a>
                                     		<br>
                                             <img id="showImg" style="max-width:500px"></img>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">名&emsp;&emsp;額 :</label></td>
-                                            <td><input type="radio" name="quotatype" id="notlimitid" value="不限"/><label for="">不限</label>&emsp;
-                    							<input type="radio" name="quotatype" id="limitid" value="限制" checked/>限制
-                                            	<input type="number" name="quota" id="quotanid" min="0" max="1000"/>人
-                                            	<span id=result4c class="form-text"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                          	<td style="text-align: right">
-                                            	<label for="" class="col-form-label ">報名截止 :</label>
-                                            </td>
-                                            <td>
-                                            	<input type="date" id="enddate" name="enddate" class="form-control" style="width:200px;" required>
-                    							<span id=result5c class="form-text"></span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label ">貼文刊登 :</label></td>
+                                            <td style="text-align: right"><label for="" class="col-form-label ">刊登日期 :</label></td>
                 							<td>
                     						<input type="date" id="postdate" name="postdate" class="form-control" style="width:200px;" required >
                     						<span id=result2c class="form-text"></span>
                     						</td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">貼文下架 :</label></td>
+                                            <td style="text-align: right"><label for="" class="col-form-label">有效日期 :</label></td>
                 							<td>
                     						<input type="date" id="exp" name="exp" class="form-control" style="width:200px;" required >
                     						<span id=result3c class="form-text"></span>
@@ -274,10 +233,11 @@
                                     		</a>
                                     		&nbsp;
                                     		<button type="submit" class="btn btn-success btn-icon-split btn-sm" data-toggle="modal" id="sendData"  data-target="#resultModal">
-                                        	<span class="text">&nbsp;新增活動&nbsp;</span>
+                                        	<span class="text">&nbsp;新增公告&nbsp;</span>
                                     		</button>
                                     		</td>
                                     	</tr>
+                                    	
                                     </tbody>
                                  </table>
                                  
@@ -340,14 +300,7 @@
                                             <td><img id="showImg2" style="max-width:500px"></img></td>
                                         </tr>
                                         <tr>
-                                            <td>貼文刊登：<span id="chpd"></span></td>
-                                        </tr>
-                                        <tr  id="tdqu">
-                                            <td>已報名人數：  &nbsp／&nbsp可報名人數：<span id="chqu"></span></td>
-                                        </tr>
-                                        
-                                        <tr>
-                                            <td>報名截止：<span id="ched"></span></td>
+                                            <td>刊登日期：<span id="chpd"></span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -364,17 +317,18 @@
 	<!-- Check Modal End-->
 	
 	<!-- Result Modal-->
-    <div class="modal fade text-center" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div class="modal fade text-center" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="resultModalLabel">活動貼文</h5>
+                    <h5 class="modal-title mx-auto" id="resultModalLabel">公告貼文</h5>
                 </div>
                 <div class="modal-body">
                     <span id="resultMsg" style="margin:3px auto"><font color='red' ></font></span><br/>
                 </div>
                 <div class="modal-footer justify-content-center" id="resultbutton">
-                	<button class="btn btn-secondary" type="button" data-dismiss="modal" id="resultbutton">返回編輯</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="resultbutton">返回編輯</button>
                 </div>
             </div>
         </div>
@@ -386,7 +340,7 @@
 
 	<!-- ckeditor end-->
 	
-	<script src="<c:url value='/js/check.js' />"></script>
+	<script src="<c:url value='/js/bAnnoCheck.js' />"></script>
 	
 
 	
