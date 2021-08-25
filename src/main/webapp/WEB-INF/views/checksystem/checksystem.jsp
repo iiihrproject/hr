@@ -69,7 +69,6 @@
 		            xhr1.open("POST", "<c:url value='/saveCheckSystem'/>", true);
 		            xhr1.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		            xhr1.send("type=" + type);
-					alert(type);
 		            xhr1.onreadystatechange = function () {
 		                // 伺服器請求完成
 		                if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201)) {
@@ -78,7 +77,7 @@
 		                    if ('Success' == response) {
 		//                         window.location.href = "<c:url value='/findCheck'/>?type=" + type;
 		                    } else {
-		                    	swal("今日已打過卡囉，無法再次打卡");
+		                    	swal(response);
 		                    }
 		                }
 		            }
@@ -240,6 +239,7 @@
 							            <h1 id="showbox"></h1>
 							            <br> <br> <br> <br> <br> <br> <br>
 							            <br> <br> <br>
+							            <h4 id="worktime"><nobr>上班時間:09:00</nobr></h4><h4 id="offworktime" ><nobr>下班時間:18:00</nobr></h4>
         							   </div>
                                 </div>
                             </div>

@@ -68,7 +68,7 @@
 			var date = $("#date").val();
 			
 			callPending(null,date);
-// 			callAutiditted(null,depart,date);
+			callAutiditted(null,date);
 				
 		});
 		

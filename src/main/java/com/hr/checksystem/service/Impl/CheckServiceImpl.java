@@ -132,7 +132,6 @@ public class CheckServiceImpl implements CheckService {
 		
 		//用日期取得 排班資料
 		FactSchedule factSchedule = getFactSchedule(date, empID);
-		
 		if(factSchedule != null) {
 			
 			String timeString = null;
