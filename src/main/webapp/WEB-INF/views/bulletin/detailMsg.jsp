@@ -27,6 +27,12 @@
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
     
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <!-- .js請從此後寫 -->
+    
+    <!-- 使用today.js -->
+    <script src="<c:url value='/js/today.js' />"></script>
+    
     <script>
     window.onload = function () {
     
@@ -52,6 +58,155 @@
         }
 		
 	}) 
+	
+	//留言
+		msgData();
+		
+		var sendMsg = document.getElementById("sendMsg")
+		sendMsg.onclick = function(){
+			let messageValue = document.getElementById("message").value;
+			
+			//新增前驗證資料
+			var divResult = document.getElementById('resultMsg');
+	        let div0 = document.getElementById('result0c');
+	    	
+	        if (!messageValue){
+				setErrorFor(div0, "請輸入留言");
+	   		} 	else {
+	      		div0.innerHTML = "";
+	   		}
+
+			
+			let obj = {
+			   "postno": ${bulletin.postno},
+			   "message": messageValue,
+			   "empNo": `${sessionScope.loginModel.getEmpNo()}`,
+			   "empName": "人資管理員",
+			   "messageDate": td,
+			};
+			
+			console.log(obj);
+			
+			let xhr2 = new XMLHttpRequest();
+			let url = "<c:url value='/insertMessage'  />";
+			console.log(url);
+			xhr2.open("POST", url);
+			xhr2.setRequestHeader("Content-Type", "application/json");
+			xhr2.send(JSON.stringify(obj));
+
+			xhr2.onreadystatechange = function(){
+				if (xhr2.readyState == 4 && xhr2.status == 200){
+					let result 		= JSON.parse(xhr2.responseText);
+					let divResult = document.getElementById('result0c');
+					if (result.success) {
+						divResult.innerHTML = "<font color='GREEN'>" + result.success + "</font>";
+			  		} else  if(result.fail){
+			            divResult.innerHTML = "<font color='red' >" + result.fail + "</font>";
+			  		} else {
+			  			divResult.innerHTML = "<font color='red' >" + result.failnull + "</font>";
+			  		}
+				msgData();
+				}
+				
+			}
+
+		}
+	
+		if(`${bulletin.type}` =='公告'){
+ 			$("#messageArea").html("");
+ 			console.log("type:"+`${bulletin.type}`)
+ 		}
+	
+    } // end of window.onload = function
+    
+    
+    function msgData() {
+		var mDataArea = document.getElementById("BulletinMessageArea");
+
+		var xhr = new XMLHttpRequest();	
+		xhr.open("GET", "<c:url value='/bulletinGetMsg'/>?postno=" + ${bulletin.postno});
+		xhr.send();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				mDataArea.innerHTML = processBulletinMsg(xhr.responseText);
+			}
+		}
+		console.log("msgData執行")
+		}
+    
+	function processBulletinMsg(jsonString) {
+		
+		let posts = JSON.parse(jsonString);
+		let segment = "";
+		let le=0;
+		if(posts.length==0){
+			segment += "<tr>";
+			segment += "<td colspan='4'>尚無留言</td>"
+			segment += "</tr>";
+			console.log("null");
+			console.log("segment:"+segment);
+		}else { 
+			le = posts.length;
+			console.log("le:"+le)
+			for (let n = 0; n < le; n++) {
+				let BulMessage = posts[n];
+			
+				segment += "<tr>";
+				if(BulMessage.msgStatus=="已刪除"){
+					segment += "<td style='font-style:italic; color:#BEBEBE'>"+ BulMessage.message +"</td>";
+					segment += "<td style='font-style:italic; color:#BEBEBE'>"+ BulMessage.empNo +"</td>";
+					segment += "<td style='font-style:italic; color:#BEBEBE'>"+ BulMessage.messageDate +"</td>";
+					segment += "<td style='font-style:italic; color:#BEBEBE'>（此筆留言已刪除）</td>";
+					
+				}else{
+					segment += "<td>"+ BulMessage.message +"</td>";
+					segment += "<td>"+ BulMessage.empNo +"</td>";
+					segment += "<td>"+ BulMessage.messageDate +"</td>";
+					segment += "<td><a onclick='delMsg("+BulMessage.id+")' style='color:#ac2c20' data-toggle='modal' data-target='#massgaeModal'>刪除</a></td>";
+					
+				}
+				segment += "</tr>";
+			}
+		}
+		return segment;
+
+		
+		console.log("processBulletinMsg執行")
+		}
+	
+
+	
+function setErrorFor(input, message){
+	input.innerHTML = "<font color='red' size='-2'>" + message + "</font>";
+    hasError = true;
+}
+    
+    function delMsg (id){
+    	let resultMsg = document.getElementById("resultMsg")
+    	resultMsg.innerHTML = "<font color='red' >請確認是否刪除留言</font>";
+    	
+    	$("#delCheck").click(function(){
+
+    	let xhr3 = new XMLHttpRequest();
+    	xhr3.open("GET", "<c:url value='/bulletinDelMsg' />/?id=" + id);
+    	xhr3.send();
+    	xhr3.onreadystatechange = function() {
+    		if (xhr3.readyState == 4 && xhr3.status == 200){
+    			result =xhr3.responseText;
+    			if (result=='刪除失敗') {
+    				console.log("留言刪除失敗");
+    				msgData();
+    			} else if (result=='刪除成功') {
+    				console.log("留言已刪除");
+    				msgData();
+    			}
+    			else {
+    				console.log("留言未刪除");
+    				msgData();
+    			}
+    		}
+    	}    	
+    	})
     }
 
 	</script>	
@@ -62,89 +217,7 @@
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <div class="sidebar-brand-icon">
-            </div>
-            <div class="sidebar-brand-text mx-auto">
-                <img id="logo" src="img/logo_frame.png">
-            </div>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="<c:url value='/' />">
-                    <i class='fas fa-home' style='font-size:22px'></i>
-                    <span>主頁</span></a>
-            </li>
-            <li class="nav-item">
-                <!-- 0419連結待修改 -->
-                <a class="nav-link collapsed" href="<c:url value='/pages' />">
-                    <i class='fas fa-clock' style='font-size:22px'></i>
-                    <span id="listname">出勤管理</span>
-                </a>
-            </li>
-            <li class="nav-item">            
-                <!-- 0419連結待修改 -->
-                <a class="nav-link collapsed" href="<c:url value='/pages' />">
-                    <i class='fas fa-user-tie' style='font-size:22px'></i>
-                    <span id="listname">人員管理</span>
-                </a>
-            </li>
-        </ul>
-        <!-- End of Sidebar -->
-
-
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    <!-- Topbar Search -->                    
-                        <div class="narbar-brand">
-                            <h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
-                            <span class="text-dark">特休剩餘時數：{}小時&nbsp</span><span class="text-danger warning">(請於 ${日期} 前使用完畢)</span><br/>
-                            <span class="text-dark">加班剩餘時數：{}小時&nbsp</span><span class="text-danger warning">(請注意到期時間)</span>
-                        </div>  
-
-                        <!-- 0419 alert to do -->
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">                   
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="###" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">員編員編員編</span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    登出
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </nav>
-                <!-- End of Topbar -->
-
-		
+	<jsp:include page="../header.jsp"></jsp:include>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -177,8 +250,15 @@
                                         </tr>
                                         </c:otherwise>
                                         </c:choose>
+                                        
+                                        
+                                        
+                                        <tr>
+                                            <td>貼文刊登：${bulletin.postDate}</td>
+                                        </tr>
+                                        
                                         <c:choose>
-                                        <c:when test="${bulletin.quotatype == '不限'}">
+                                        <c:when test="${bulletin.quotatype == '不限'||bulletin.type == '公告'}">
                                         </c:when>
                                         <c:otherwise>
                                         <tr>
@@ -186,38 +266,48 @@
                                         </tr>
                                         </c:otherwise>
                                         </c:choose>
-                                        <tr>
-                                            <td>刊登日期：${bulletin.postDate}</td>
-                                        </tr>
+                                        
+                                        <c:choose>
+                                        	<c:when test="${bulletin.quotatype==null}">
+                                        	</c:when>
+                                        	<c:otherwise>
+                                        	<tr>
+                                        		<td>
+                                    			報名截止：${bulletin.endDate}
+                                    			</td>
+                                        	</tr>
+                                        	</c:otherwise>
+                                        </c:choose>
+                                        
                                         <tr>
                                             <td>
                                             <a href="#" class="btn btn-secondary btn-icon-split btn-sm" onclick="history.back()">
                                         	<span class="text">回前頁</span>
                                     		</a>
                                     		&nbsp;
-                                    		<c:choose>
-                                        	<c:when test="${bulletin.type == '活動'}">
+                                    		<%-- <c:choose>
+                                        	<c:when test="${bulletin.type == '活動'}"> --%>
                                         	<a href="<c:url value='/bulletinEditEventPage?postno=${bulletin.postno}'/>" class="btn btn-warning btn-icon-split btn-sm" style="color:black">
                                         	<span class="text">修改</span>
                                     		</a>
-                                        	</c:when>
+                                        	<%-- </c:when>
                                        	 	<c:otherwise>
                                         	<a href="#" class="btn btn-warning btn-icon-split btn-sm" style="color:black">
                                         	<span class="text">修改</span>
                                     		</a>
                                         	</c:otherwise>
-                                        	</c:choose>
+                                        	</c:choose> --%>
                                     		&nbsp;
                                     		<c:choose>
                                         	<c:when test="${bulletin.type == '活動'}">
-                                        	<a href="#" class="btn btn-danger btn-icon-split btn-sm" data-toggle="modal" id="sendDel" data-target="#comfirmDelModal">
-                                        	<span class="text">刪除</span>
-                                    		</a>
+                                        		<a href="#" class="btn btn-danger btn-icon-split btn-sm" data-toggle="modal" id="sendDel" data-target="#comfirmDelModal">
+                                        		<span class="text">刪除</span>
+                                    			</a>
                                         	</c:when>
                                        	 	<c:otherwise>
-                                        	<a href="#" class="btn btn-danger btn-icon-split btn-sm">
-                                        	<span class="text">刪除</span>
-                                    		</a>
+                                        		<a href="#" class="btn btn-danger btn-icon-split btn-sm">
+                                        		<span class="text">刪除</span>
+                                    			</a>
                                         	</c:otherwise>
                                         	</c:choose>
                                     		
@@ -225,6 +315,55 @@
                                     </tbody>
                                 </table>
                             </div>
+                            
+                            <!-- 留言區 -->
+                            <div  id="messageArea">
+                    		<div class="card mb-4 py-3 border-left-danger">
+                    		
+                    			<div class="card-body">
+                    				<div class="table-responsive">
+                    				
+                    					<table class="" width="100%" cellspacing="0" style="border: 0px solid #fff;">
+                    						<tr>
+                                    			<td>
+                                    			
+                                    			<input type="text" id="message" name="title" class="form-control" maxlength="30" placeholder="請輸入留言......"/>
+                                    			
+                                    			</td>
+                                        		<td>&nbsp;
+                                        		<button class="btn btn-success btn-icon-split btn-sm" id="sendMsg">
+                                        		<span class="text">管理者留言</span>
+                                    			</button>
+                                    			</td>
+                                    		</tr>
+                                    		<tr>
+                                    			<td><span id="result0c" class="form-text" style="font-size:14px"></span></td>
+                                    		</tr>
+                                		</table>
+                                		<br>
+                    				
+                                		<table class="table table-bordered" width="100%" cellspacing="0">
+                                   			<thead>
+                                    			<tr>
+                                    				<th width=40%>留言</th>
+                                    				<th width=20%>留言者</th>
+                                    				<th width=20%>留言日期</th>
+                                    				<th width=20%>刪除</th>
+                                    			</tr>
+                                    		</thead>
+                                    				
+                                   			<tbody id="BulletinMessageArea" class="">
+                                    		</tbody>
+                                		</table> 
+                                		
+                             		</div>   
+                    			</div>
+                    		</div>
+                    		
+                    		</div>
+                    		<!-- 留言區 End-->
+                            
+                            
                         </div>
                     </div>
                 </div>
@@ -232,52 +371,9 @@
 
             </div>
             <!-- End of Main Content -->
+            
+            <jsp:include page="../footer.jsp"></jsp:include>
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade text-center" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="exampleModalLabel">確定要登出？</h5>
-                    <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close"> -->
-                        <!-- <span aria-hidden="true">×</span> -->
-                    <!-- </button> -->
-                </div>
-                <div class="modal-body">
-                    <span>提醒：未儲存之工作項目將會遺失</span><br/>
-                    <span>請確認已完成當前工作，再選擇【登出】。</span>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>                  
-                    <a class="btn btn-primary" href="<c:url value='login.jsp' />">登出</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>

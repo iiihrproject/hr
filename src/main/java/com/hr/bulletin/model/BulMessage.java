@@ -31,6 +31,8 @@ public class BulMessage {
 	private Timestamp createTime;
 	
 	private String empName;
+	
+	private String msgStatus;
 
 	public int getId() {
 		return id;
@@ -86,6 +88,14 @@ public class BulMessage {
 
 	public void setEmpName(String empName) {
 		this.empName = empName;
+	}
+
+	public String getMsgStatus() {
+		return msgStatus;
+	}
+
+	public void setMsgStatus(String msgStatus) {
+		this.msgStatus = msgStatus;
 	}
 	
 	
