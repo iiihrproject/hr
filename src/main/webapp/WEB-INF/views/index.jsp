@@ -50,7 +50,7 @@
 	function processBulletinData(jsonString) {
 		
 		$(document).ready(function(){
-		    $('table tbody tr').click(function(){
+		    $('#datatableid tr').click(function(){
 		        window.location = $(this).attr('href');
 		        return false;
 		    });
@@ -137,7 +137,7 @@
                                         
                                         <!-- DataTales Example -->
 											<div class="table-responsive">
-                                				<table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                                				<table class="table table-bordered table-hover" width="100%" cellspacing="0" id="datatableid">
                                    					 <thead>
                                        					 <tr>
                                             				<th>類型</th>

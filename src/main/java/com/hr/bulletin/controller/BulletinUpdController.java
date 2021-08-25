@@ -65,6 +65,7 @@ public class BulletinUpdController implements Serializable {
 	public @ResponseBody String updateEventOp(Bulletin bulletin) {
 		log.info("updateop方法執行中...");
 		System.out.println("bulletin=" + bulletin);
+		System.out.println("postdate:" + bulletin.getPostDate());
 		String result = "";
 		try {
 			bulletinService.updateop(bulletin);
@@ -85,6 +86,7 @@ public class BulletinUpdController implements Serializable {
 			@RequestParam(value = "file1", required = false) MultipartFile multipartFile,
 			@RequestParam("quotatype") String quotatype,
 			@RequestParam(value = "quota", defaultValue = "0") Integer quota, 
+			@RequestParam("enddate") Date endDate,
 			@RequestParam("postdate") Date postdate,
 			@RequestParam("exp") Date exp, 
 			HttpServletRequest request)
@@ -94,6 +96,7 @@ public class BulletinUpdController implements Serializable {
 		log.info("update方法執行中...");
 
 		System.out.println("file1:" + multipartFile);
+		System.out.println("postdate:" + postdate);
 
 		if (multipartFile == null) {
 		} else {
@@ -124,6 +127,7 @@ public class BulletinUpdController implements Serializable {
 
 		bulletin.setPostno(postno);
 		bulletin.setTitle(title);
+		bulletin.setEndDate(endDate);
 		bulletin.setPostDate(postdate);
 		bulletin.setDescription(description);
 		bulletin.setDesText(desText);

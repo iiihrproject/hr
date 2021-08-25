@@ -52,6 +52,21 @@ public class Bulletin implements Serializable {
 	@JsonIgnore
 	private Blob picture;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone="Asia/Taipei")
+	private Date endDate;
+	
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public void setQuota(Integer quota) {
+		this.quota = quota;
+	}
 
 	public String getFile1() {
 		return file1;

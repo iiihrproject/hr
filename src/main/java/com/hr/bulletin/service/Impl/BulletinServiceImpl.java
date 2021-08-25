@@ -2,10 +2,14 @@ package com.hr.bulletin.service.Impl;
 
 import java.util.List;
 
+import javax.print.attribute.standard.Media;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hr.bulletin.model.BulEnroll;
+import com.hr.bulletin.model.BulLike;
 import com.hr.bulletin.model.BulMessage;
 import com.hr.bulletin.model.Bulletin;
 import com.hr.bulletin.repository.BulletinRepo;
@@ -37,8 +41,14 @@ public class BulletinServiceImpl implements BulletinService {
 	}
 
 	// 執行查詢多筆
+//	@Override
+//	public List<Bulletin> findAll(){
+//		return bulletinRepo.findAll();
+//	}
+	
+	// 執行查詢多筆
 	@Override
-	public List<Bulletin> findAll(){
+	public List<List> findAll(){
 		return bulletinRepo.findAll();
 	}
 
@@ -71,6 +81,31 @@ public class BulletinServiceImpl implements BulletinService {
 		return bulletinRepo.findAllMsg(postno);
 	}
 	
+	@Override
+	public void delMsg(int id) {
+		bulletinRepo.delMsg(id);
+	}
+	
+	@Override
+	public BulLike findLikeByno(String empNo, int postno) {
+		return bulletinRepo.findLikeByno(empNo, postno);
+	}
+	
+	@Override
+	public void changeLike(BulLike bulLike) {
+		bulletinRepo.changeLike(bulLike);
+	}
+
+	@Override
+	public BulEnroll findEnrollByno(String empNo, int postno) {
+		return bulletinRepo.findEnrollByno(empNo, postno);
+	}
+
+	@Override
+	public void insertEnroll(BulEnroll bulEnroll) {
+		bulletinRepo.insertEnroll(bulEnroll);
+		
+	};
 	
 	
 	

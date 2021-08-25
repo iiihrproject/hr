@@ -39,9 +39,73 @@
     <!-- 留言資料載入 -->
 	<script>
 	var hasError = false;
+
 	
 	window.onload = function() {
+ 		msgData();
+ 		loadenrollment();
+ 		loadLike();
+ 		
+ 		
+ 		var sendMsg = document.getElementById("sendMsg")
+ 		sendMsg.onclick = function(){
+ 			let messageValue = document.getElementById("message").value;
+ 			
+ 			//新增前驗證資料
+ 			var divResult = document.getElementById('resultMsg');
+ 	        let div0 = document.getElementById('result0c');
+ 	    	
+ 	        if (!messageValue){
+ 				setErrorFor(div0, "請輸入留言");
+ 	   		} 	else {
+ 	      		div0.innerHTML = "";
+ 	   		}
 
+ 			
+ 			let obj = {
+ 			   "postno": ${bulletin.postno},
+ 			   "message": messageValue,
+ 			   "empNo": `${sessionScope.loginModel.getEmpNo()}`,
+ 			   "messageDate": td,
+ 			};
+ 			
+ 			console.log(obj);
+ 			
+ 			let xhr2 = new XMLHttpRequest();
+ 			let url = "<c:url value='/insertMessage'  />";
+ 			console.log(url);
+ 			xhr2.open("POST", url);
+ 			xhr2.setRequestHeader("Content-Type", "application/json");
+ 			xhr2.send(JSON.stringify(obj));
+
+ 			xhr2.onreadystatechange = function(){
+ 				if (xhr2.readyState == 4 && xhr2.status == 200){
+ 					let result 		= JSON.parse(xhr2.responseText);
+ 					let divResult = document.getElementById('result0c');
+ 					if (result.success) {
+ 						divResult.innerHTML = "<font color='GREEN'>" + result.success + "</font>";
+ 			  		} else  if(result.fail){
+ 			            divResult.innerHTML = "<font color='red' >" + result.fail + "</font>";
+ 			  		} else {
+ 			  			divResult.innerHTML = "<font color='red' >" + result.failnull + "</font>";
+ 			  		}
+ 				msgData();
+ 				}
+ 				
+ 			}
+
+ 		}
+ 		
+ 		if(`${bulletin.type}` =='公告'){
+ 			$("#messageArea").html("");
+ 			console.log("type:"+`${bulletin.type}`);
+ 		}
+ 		
+
+
+	} 
+		
+	function msgData() {
 		var mDataArea = document.getElementById("BulletinMessageArea");
 
 		var xhr = new XMLHttpRequest();	
@@ -51,6 +115,8 @@
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				mDataArea.innerHTML = processBulletinMsg(xhr.responseText);
 			}
+		}
+		console.log("msgData執行")
 		}
 
     
@@ -63,96 +129,191 @@
 			segment += "<tr>";
 			segment += "<td colspan='3'>尚無留言</td>"
 			segment += "</tr>";
-		}
-		else if (posts.length>10) {
-			le = 10;
-			}
-		else { 
+			console.log("null");
+			console.log("segment:"+segment);
+		}else { 
 			le = posts.length;
-		}
-		for (let n = 0; n < le; n++) {
-			let BulMessage = posts[n];
+			console.log("le:"+le)
+			for (let n = 0; n < le; n++) {
+				let BulMessage = posts[n];
 			
-			segment += "<tr>";
-			segment += "<td>"+ BulMessage.message +"</td>";
-			segment += "<td>"+ BulMessage.empNo +"</td>";
-			if(BulMessage.empNo==`${sessionScope.loginModel.getEmpNo()}`){
-				let link = "<c:url value='/bulletinDelMsg' />?postno=" + BulMessage.id;
-				segment += "<td>"+ BulMessage.messageDate +"&emsp;";
-				segment += "<a href='"+link+"' style='color:#ac2c20'>刪除</a></td>";
-			}else{
-				segment += "<td>"+ BulMessage.messageDate +"</td>";
+				segment += "<tr>";
+				if(BulMessage.msgStatus=="已刪除"){
+					segment += "<td style='font-style:italic; color:#BEBEBE'>（此筆留言已刪除）</td>";
+					segment += "<td></td>";
+					segment += "<td></td>";
+				}else{
+					segment += "<td>"+ BulMessage.message +"</td>";
+			
+					segment += "<td>"+ BulMessage.empNo +"</td>";
+					if(BulMessage.empNo==`${sessionScope.loginModel.getEmpNo()}`){
+						segment += "<td>"+ BulMessage.messageDate +"&emsp;";
+						segment += "<a onclick='delMsg("+BulMessage.id+")' style='color:#ac2c20' data-toggle='modal' data-target='#massgaeModal'>刪除</a></td>";
+					}else{
+						segment += "<td>"+ BulMessage.messageDate +"</td>";
+					}
+				}
+				segment += "</tr>";
 			}
-			segment += "</tr>";
 		}
 		return segment;
-		
-	}
-
-	let sendMsg = document.getElementById("sendMsg");
-	sendMsg.onclick = function(){
-
-		let messageValue = document.getElementById("message").value;
-		
-		//新增前驗證資料
-		var divResult = document.getElementById('resultMsg');
-        let div0 = document.getElementById('result0c');
-    	
-        if (!messageValue){
-			setErrorFor(div0, "請輸入留言");
-   		} 	else {
-      		div0.innerHTML = "";
-   		}
 
 		
-		let obj = {
-		   "postno": ${bulletin.postno},
-		   "message": messageValue,
-		   "empNo": `${sessionScope.loginModel.getEmpNo()}`,
-		   "messageDate": td,
-		};
-		
-		console.log(obj);
-		
-		let xhr2 = new XMLHttpRequest();
-		let url = "<c:url value='/insertMessage'  />";
-		console.log(url);
-		xhr2.open("POST", url);
-		xhr2.setRequestHeader("Content-Type", "application/json");
-		xhr2.send(JSON.stringify(obj));
-		//依結果印出成功或失敗
-		xhr2.onreadystatechange = function(){
-			if (xhr2.readyState == 4 && xhr2.status == 200){
-				let result 		= JSON.parse(xhr2.responseText);
-				let divResult = document.getElementById('resultMsg');
-				if (result.success) {
-					divResult.innerHTML = "<font color='GREEN'>" + result.success + "</font>";
-		            let link = "<c:url value='/bulletinDetail' />?postno=" + ${bulletin.postno};
-		            $("#resultbutton").html("<a class='btn btn-primary' href="+link+">確認</a>");
-		  		} else  if(result.fail){
-		            divResult.innerHTML = "<font color='red' >" + result.fail + "</font>";
-		  		} else {
-		  			divResult.innerHTML = "<font color='red' >" + result.failnull + "</font>";
-		  		}
-				
-			}
+		console.log("processBulletinMsg執行")
 		}
-	}
 	
-	$("#like").click(function(){
-		
-		$("#like").toggleClass("btn-outline-heart")
-		$("#like").toggleClass("btn-heart")
-    });
-	
-	
-	}
-	
+
 	
 function setErrorFor(input, message){
 	input.innerHTML = "<font color='red' size='-2'>" + message + "</font>";
     hasError = true;
 }
+
+function delMsg (id){
+	let resultMsg = document.getElementById("resultMsg")
+	resultMsg.innerHTML = "<font color='red' >請確認是否刪除留言</font>";
+	
+	$("#delCheck").click(function(){
+
+	let xhr3 = new XMLHttpRequest();
+	xhr3.open("GET", "<c:url value='/bulletinDelMsg' />/?id=" + id);
+	xhr3.send();
+	xhr3.onreadystatechange = function() {
+		if (xhr3.readyState == 4 && xhr3.status == 200){
+			result =xhr3.responseText;
+			if (result=='刪除失敗') {
+				console.log("留言刪除失敗");
+				msgData();
+			} else if (result=='刪除成功') {
+				console.log("留言已刪除");
+				msgData();
+			}
+			else {
+				console.log("留言未刪除");
+				msgData();
+			}
+			
+		}
+
+	}
+	
+	})
+
+}
+
+
+function loadLike (){
+	let xhr4 = new XMLHttpRequest();
+	let url = "<c:url value='/bulletinFindLike' />";
+	let empnoo = `${sessionScope.loginModel.getEmpNo()}`;
+	xhr4.open("POST", url);
+	xhr4.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr4.send("postno=" + ${bulletin.postno} + "&empNo=" + `${sessionScope.loginModel.getEmpNo()}`);
+	console.log("執行loadLike載入")
+
+	let likeS = "";
+	let bulLike ="";
+	xhr4.onreadystatechange = function(){
+		if (xhr4.readyState == 4 && xhr4.status == 200){
+			if(xhr4.responseText){
+				bulLike = JSON.parse(xhr4.responseText);
+				console.log("有回傳bulLike:"+bulLike);
+				console.log("bulLike.likeStatus:"+bulLike.likeStatus);
+			}
+			
+			if (!bulLike){
+				likeS += '<span class="icon btn-outline-heart" id="like" onclick="changelike()">';
+				likeS += '<i class="bi bi-suit-heart-fill" style="font-size:24px; vertical-align:middle"></i></span>';
+				$("#likespan").html(likeS);
+				console.log("likeS1:"+likeS);	
+			}
+			else if (bulLike.likeStatus=='喜歡'){
+				likeS += '<span class="icon btn-heart" id="like" onclick="changelike()">';
+				likeS += '<i class="bi bi-suit-heart-fill" style="font-size:24px; vertical-align:middle"></i></span>';
+				$("#likespan").html(likeS);
+				console.log("likeS2:"+likeS);	
+				
+			} else{
+				likeS += '<span class="icon btn-outline-heart" id="like" onclick="changelike()">';
+				likeS += '<i class="bi bi-suit-heart-fill" style="font-size:24px; vertical-align:middle"></i></span>';
+				$("#likespan").html(likeS);
+				console.log("likeS3:"+likeS);	
+			}
+			console.log("likeS:"+bulLike.likeStatus);
+		}
+	}
+}
+
+function changelike() {
+	$("#like").toggleClass("btn-outline-heart");
+	$("#like").toggleClass("btn-heart");
+	let xhr5 = new XMLHttpRequest();
+	let url = "<c:url value='/bulletinChangeLike' />";
+	let empnoo = `${sessionScope.loginModel.getEmpNo()}`;
+	xhr5.open("POST", url);
+	xhr5.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr5.send("postno=" + ${bulletin.postno} + "&empNo=" + `${sessionScope.loginModel.getEmpNo()}`);
+}
+
+
+function loadenrollment (){
+	let xhr6 = new XMLHttpRequest();
+	let url = "<c:url value='/bulletinFindEnroll' />";
+	let empnoo = `${sessionScope.loginModel.getEmpNo()}`;
+	xhr6.open("POST", url);
+	xhr6.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr6.send("postno=" + ${bulletin.postno} + "&empNo=" + `${sessionScope.loginModel.getEmpNo()}`);
+
+	let enrollS = "";
+	let bulEnroll ="";
+	xhr6.onreadystatechange = function(){
+		if (xhr6.readyState == 4 && xhr6.status == 200){
+			if(xhr6.responseText){
+				bulEnroll = JSON.parse(xhr6.responseText);
+				console.log("有回傳bulEnroll.enrollStatus:"+bulEnroll.enrollStatus);
+			}
+			
+			if (!bulEnroll){
+				enrollS += '報名';
+				$("#applyspan").html(enrollS);
+				$("#applyMsg").html("請確認是否<font color='red' >報名</font>這項活動");
+				$("#enStatus").html("");
+				console.log("bulEnroll1:"+enrollS);	
+			}
+			else if (bulEnroll.enrollStatus=='參加'){
+				enrollS += '取消報名';
+				$("#applyspan").html(enrollS);
+				$("#applyMsg").html("請確認是否<font color='red' >取消報名</font>這項活動");
+				$("#enStatus").html("<font color='green' ><i class='bi bi-check2-square'></i>&nbsp;已報名</font>");
+				console.log("bulEnroll2:"+enrollS);	
+				
+			} else{
+				enrollS += '報名';
+				$("#applyspan").html(enrollS);
+				$("#applyMsg").html("請確認是否<font color='red' >報名</font>這項活動");
+				$("#enStatus").html("");
+				console.log("bulEnroll3:"+enrollS);	
+			}
+			
+			console.log("bulEnroll:"+bulEnroll.enrollStatus);
+		}
+	}
+}
+
+function sendEnroll () {
+	let xhr7 = new XMLHttpRequest();
+	let url = "<c:url value='/bulletinInsertEnroll' />";
+	let empnoo = `${sessionScope.loginModel.getEmpNo()}`;
+	xhr7.open("POST", url);
+	xhr7.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr7.send("postno=" + ${bulletin.postno} + "&empNo=" + `${sessionScope.loginModel.getEmpNo()}`);
+	xhr7.onreadystatechange = function(){
+		if (xhr7.readyState == 4 && xhr7.status == 200){
+		loadenrollment();
+		}
+	}
+}
+	
 	
 	</script>
 
@@ -162,89 +323,7 @@ function setErrorFor(input, message){
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <div class="sidebar-brand-icon">
-            </div>
-            <div class="sidebar-brand-text mx-auto">
-                <img id="logo" src="img/logo_frame.png">
-            </div>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="<c:url value='/' />">
-                    <i class='fas fa-home' style='font-size:22px'></i>
-                    <span>主頁</span></a>
-            </li>
-            <li class="nav-item">
-                <!-- 0419連結待修改 -->
-                <a class="nav-link collapsed" href="<c:url value='/pages' />">
-                    <i class='fas fa-clock' style='font-size:22px'></i>
-                    <span id="listname">出勤管理</span>
-                </a>
-            </li>
-            <li class="nav-item">            
-                <!-- 0419連結待修改 -->
-                <a class="nav-link collapsed" href="<c:url value='/pages' />">
-                    <i class='fas fa-user-tie' style='font-size:22px'></i>
-                    <span id="listname">人員管理</span>
-                </a>
-            </li>
-        </ul>
-        <!-- End of Sidebar -->
-
-
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    <!-- Topbar Search -->                    
-                        <div class="narbar-brand">
-                            <h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
-                            <span class="text-dark">特休剩餘時數：{}小時&nbsp</span><span class="text-danger warning">(請於 ${日期} 前使用完畢)</span><br/>
-                            <span class="text-dark">加班剩餘時數：{}小時&nbsp</span><span class="text-danger warning">(請注意到期時間)</span>
-                        </div>  
-
-                        <!-- 0419 alert to do -->
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">                   
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="###" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">${sessionScope.loginModel.getEmpNo()}</span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    登出
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </nav>
-                <!-- End of Topbar -->
-
-		
+	<jsp:include page="../header.jsp"></jsp:include>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -272,44 +351,71 @@ function setErrorFor(input, message){
                                         <c:when test="${bulletin.file1==null}">
                                         </c:when>
                                         <c:otherwise>
-                                        <tr>
-                                            <td><img src="<c:url value='/bulletin/getImage?postno=${bulletin.postno}'/>" style="max-width:500px"/></td>
-                                        </tr>
+                                        	<tr>
+                                            	<td><img src="<c:url value='/bulletin/getImage?postno=${bulletin.postno}'/>" style="max-width:500px"/></td>
+                                        	</tr>
                                         </c:otherwise>
                                         </c:choose>
+                                        
+                                        
+                                        
+                                        <tr>
+                                            <td>貼文刊登：${bulletin.postDate}</td>
+                                        </tr>
+                                        
                                         <c:choose>
-                                        <c:when test="${bulletin.quotatype == '不限'}">
+                                        <c:when test="${bulletin.quotatype == '不限'||bulletin.type == '公告'}">
                                         </c:when>
                                         <c:otherwise>
-                                        <tr>
-                                            <td>已報名人數：10&nbsp;／&nbsp;可報名人數：${bulletin.quota}</td>
-                                        </tr>
+                                        	<tr>
+                                            	<td>已報名人數：10&nbsp;／&nbsp;可報名人數：${bulletin.quota}</td>
+                                        	</tr>
                                         </c:otherwise>
                                         </c:choose>
-                                        <tr>
-                                            <td>刊登日期：${bulletin.postDate}</td>
-                                        </tr>
+
+                                    		<c:choose>
+                                        	<c:when test="${bulletin.quotatype==null||bulletin.type == '公告'}">
+                                        	</c:when>
+                                        	<c:otherwise>
+                                        	<tr>
+                                        		<td>
+                                    			報名截止：${bulletin.endDate}&emsp;<span id="enStatus"></span>
+                                    			</td>
+                                        	</tr>
+                                        	</c:otherwise>
+                                        	</c:choose>
+                                        	
+                                        
                                         <tr>
                                             <td>
                                             <a href="#" class="btn btn-secondary btn-icon-split btn-sm" onclick="history.back()">
                                         	<span class="text">回前頁</span>
                                     		</a>
                                     		&nbsp;
-                                    		<a href="#" class="btn btn-info btn-icon-split btn-sm" id="apply">
-                                        	<span class="text">報名</span>
-                                    		</a>
+                                    		<c:choose>
+                                        	<c:when test="${bulletin.quotatype==null||bulletin.quotatype=='null'||bulletin.type == '公告'}">
+                                        	</c:when>
+                                        	<c:otherwise>
+                                        		
+                                        		<a href="#" class="btn btn-info btn-icon-split btn-sm" id="apply" data-toggle="modal" data-target="#applyModal">
+                                        		<span class="text" id="applyspan" >報名</span>
+                                    			</a>
+                                        	</c:otherwise>
+                                        	</c:choose>
+                                    		
                                     		&nbsp;&nbsp;
-                                        	<span class="icon btn-outline-heart" id="like">
-                                            <i class="bi bi-suit-heart-fill" style="font-size:24px; vertical-align:middle"></i>
+                                    		
+                                    		<span id="likespan" >
                                         	</span>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                            
                             <!-- 留言區 -->
+                            <div  id="messageArea">
                             
                     		<div class="card mb-4 py-3 border-left-warning">
-                    		<!-- fcfaf4 -->
                     			<div class="card-body">
                     				<div class="table-responsive">
                     				
@@ -320,14 +426,15 @@ function setErrorFor(input, message){
                                     			<input type="text" id="message" name="title" class="form-control" maxlength="30" placeholder="請輸入留言......"/>
                                     			
                                     			</td>
-                                        		<td>&nbsp;
-                                        		<a href="#" class="btn btn-success btn-icon-split btn-sm" id="sendMsg" data-toggle="modal" data-target="#massgaeModal">
-                                        		<span class="text">留言</span>
-                                    			</a>
+                                        		<td>
+                                        			&nbsp;
+                                        			<button class="btn btn-success btn-icon-split btn-sm" id="sendMsg">
+                                        			<span class="text">留言</span>
+                                    				</button>
                                     			</td>
                                     		</tr>
                                     		<tr>
-                                    			<td><span id="result0c" class="form-text"></span></td>
+                                    			<td><span id="result0c" class="form-text" style="font-size:14px"></span></td>
                                     		</tr>
                                 		</table>
                                 		<br>
@@ -349,7 +456,7 @@ function setErrorFor(input, message){
                     			</div>
                     		</div>
                     		
-                    		
+                    		</div>
                     		<!-- 留言區 End-->
                         </div>
                     </div>
@@ -361,72 +468,51 @@ function setErrorFor(input, message){
 
             </div>
             <!-- End of Main Content -->
+            
+            <jsp:include page="../footer.jsp"></jsp:include>
+            
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade text-center" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="exampleModalLabel">確定要登出？</h5>
-                    <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close"> -->
-                        <!-- <span aria-hidden="true">×</span> -->
-                    <!-- </button> -->
-                </div>
-                <div class="modal-body">
-                    <span>提醒：未儲存之工作項目將會遺失</span><br/>
-                    <span>請確認已完成當前工作，再選擇【登出】。</span>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>                  
-                    <a class="btn btn-primary" href="<c:url value='login.jsp' />">登出</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Logout Modal End-->
-    
     <!-- Result Modal-->
     <div class="modal fade text-center" id="massgaeModal" tabindex="-1" role="dialog" aria-labelledby="massgaeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="resultModalLabel">留言</h5>
+                    <h5 class="modal-title mx-auto" id="resultModalLabel">刪除留言</h5>
                 </div>
                 <div class="modal-body">
-                    <span id="resultMsg" style="margin:3px auto"><font color='red' ></font></span><br/>
+                    <span id="resultMsg" style="margin:3px auto"><font color='red' >請確認是否刪除留言</font></span><br/>
                 </div>
                 <div class="modal-footer justify-content-center" id="resultbutton">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="resultbutton">確認</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="delCal" onclick="history.back()">取消</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal" id="delCheck">確認</button>
+                
                 </div>
             </div>
         </div>
     </div>
 	<!-- Result Modal End-->
+	
+	<!-- Apply Modal-->
+    <div class="modal fade text-center" id="applyModal" tabindex="-1" role="dialog" aria-labelledby="applyModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto" id="applyModalLabel">報名活動</h5>
+                </div>
+                <div class="modal-body">
+                    <span id="applyMsg" style="margin:3px auto">請確認是否<font color='red' >報名</font>這項活動</span><br/>
+                </div>
+                <div class="modal-footer justify-content-center" id="applybutton">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="applyCal">取消</button>
+                <button class="btn btn-info" type="button" data-dismiss="modal" id="applyCheck" onclick="sendEnroll()">確認</button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+	<!-- Apply Modal End-->
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
