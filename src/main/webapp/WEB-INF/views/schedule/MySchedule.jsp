@@ -48,6 +48,16 @@ function loadSchedule(){
 //轉換班表格式
 function processScheduleData(jsonString) {
 	let roster = JSON.parse(jsonString);
+	console.log(roster);
+	if (roster.length == 0) {
+		events = roster.map((r) =>{
+		return {id: 0,
+			resourceId: r.emps.empNo,
+			start: "2021-01-05",
+			end: "2021-01-05",
+			title: "test"
+			}});
+	} else {
 	events = roster.map((r) =>{
 		return {id: r.keySchedule,
 			resourceId: r.emps.empNo,
@@ -55,7 +65,7 @@ function processScheduleData(jsonString) {
 			end: r.end,
 			title: r.title
 			}
-		});
+		});}
 // 	renderScheduler(events);
 }//end of processScheduleData
 // 	console.log(processScheduleData(jsonString));
@@ -211,7 +221,7 @@ body {
 		<div class="card shadow mb-4">
 			<!-- Begin of card-header -->
 			<div class="card-header py-3">
-				<h6 class="m-0 font-weight-bold text-primary">我的班表</h6>
+				<h6 class="m-0 font-weight-bold text-primary">${sessionScope.loginModel.departmentDetail.name}的班表</h6>
 			</div>
 			<!-- End of Card-header -->
 			<!-- Begin of Card-body -->

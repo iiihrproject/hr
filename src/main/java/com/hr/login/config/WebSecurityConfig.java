@@ -63,7 +63,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			    .antMatchers("/test").permitAll()
 			    .antMatchers("/bulletinList","/bulletinDetail","/insertMessage","/bulletinGetMsg").authenticated()
 			    .antMatchers("/bulletinManage","/bulletinListMag","/bulletinEventInsert","/insertEventBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletin/getImage").hasRole("HR")
-
+			    .antMatchers("/Leave/**").authenticated()
+			    .antMatchers("/Leave/**/manager").hasAnyRole("ADMIN", "HR")
+			    .antMatchers("/schedule/**").authenticated()
+			    .antMatchers("/schedule/**/manager").hasAnyRole("ADMIN", "HR")
+			    
 			    .and()
 		    .formLogin()
 			    .loginPage("/login").permitAll() // Rewrite the default login page
