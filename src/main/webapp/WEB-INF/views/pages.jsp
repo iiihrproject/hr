@@ -26,18 +26,17 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
-    
     <script src="js/jquery-3.6.0.min.js"></script>
+    <script>
     <!-- .js請從此後寫 -->
-    
-    
+    window.addEventListener("DOMContentLoaded", function() {
+    	
+    });
 	
 	</script>
-
 </head>
 
 <body id="page-top">
-
 	<jsp:include page="header.jsp"></jsp:include>
 
 	<!-- Begin Page Content -->
@@ -111,7 +110,7 @@
 						<div class="col-12 col-md-6 mb-4">
 							<div class="card border-left-danger shadow h-100 py-2">
 								<div class="card-body"
-									onclick="location.href='<c:url value='#' />';">
+									onclick="location.href='<c:url value="/intoQuery" />';">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
 											<div
@@ -143,11 +142,11 @@
 													class="nav-link dropdown-toggle"
 													data-toggle="dropdown" aria-haspopup="true"
 													aria-expanded="false">申請表</a>
-												<div class="dropdown-menu dropdown-menu-right animated--grow-in"
+												<div class="dropdown-menu dropdown-menu-right"
 													aria-labelledby="ApplicationForm">
-													<a class="dropdown-item" href="<c:url value='/Leave/' />">請假</a>
-													<a class="dropdown-item" href="<c:url value='/employeeOvertime' />">加班</a>
-													<a class="dropdown-item" href="<c:url value='/EmpSignApply' />">補簽</a>
+													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/Leave/' />">請假</a>
+													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/employeeOvertime' />">加班</a>
+													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/EmpSignApply' />">補簽</a>
 												</div>
 											</div>
 										</div>
@@ -195,12 +194,12 @@
 													data-toggle="dropdown" aria-haspopup="true"
 													aria-expanded="true"> 簽核管理 </a>
 												<div
-													class="dropdown-menu animated--grow-in"
+													class="dropdown-menu dropdown-menu-right"
 													aria-labelledby="ApplicationReview">
-													<a class="dropdown-item" href="<c:url value='/Leave/LeaveResult' />">請假</a>
-													<a class="dropdown-item" href="<c:url value='/MangerQuery' />">打卡紀錄</a>
-													<a class="dropdown-item" href="<c:url value='ManagersystemOvertime' />">加班</a>
-													<a class="dropdown-item" href="<c:url value='/ManagerSignAllQuery' />">補簽</a>
+													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/Leave/LeaveResult' />">請假</a>
+													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/MangerQuery' />">打卡紀錄</a>
+													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/ManagersystemOvertime' />">加班</a>
+													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/ManagerSignAllQuery' />">補簽</a>
 												</div>
 											</div>
 										</div>

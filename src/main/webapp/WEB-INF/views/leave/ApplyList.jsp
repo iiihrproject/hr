@@ -37,7 +37,7 @@
 					segment += "<td>" + leave.startDate + " "
 							+ leave.startTime.slice(0, 5) + "~" + leave.endDate
 							+ " " + leave.endTime.slice(0, 5) + "</td>";
-					segment += "<td>" + leave.status + "</td></tr>";
+					segment += "<td>" + leave.statusList.desc_zh + "</td></tr>";
 				}
 					return segment
 				}
@@ -188,7 +188,8 @@
 			"endTime" : endTime,
 			"comments" : comments,
 			"handOff" : handOffSelect.value,
-			"handOffemail" : handOffEmail,
+			"handOffEmail" : handOffEmail,
+			"statusList" : {"code": "S01"}
 		}
 		xhr1.setRequestHeader("Content-Type", "application/json");
 		xhr1.send(JSON.stringify(jsonData));
@@ -199,7 +200,7 @@
 				result = JSON.parse(xhr1.responseText);
 				if (result.fail) {
 					console.log("result.fail: " + result.fail)
-					messageBox.innerHTML = "<font color='red'>出現錯誤，請詢問相關人員</font>";
+					messageBox.innerHTML = "<font color='red'>出現錯誤，快去跪求高手</font>";
 				} else if (result.success) {
 					messageBox.innerHTML = "<font color='Green'>新增成功</font>";
 					loadLeaveData()

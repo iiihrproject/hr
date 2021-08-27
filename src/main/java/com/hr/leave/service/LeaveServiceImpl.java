@@ -54,7 +54,6 @@ public class LeaveServiceImpl implements LeaveService {
 		leave.setTypeOfForm("Leave");
 		leave.setApplicationNo("L"+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMHHmmss")));
 		leave.setDept(loginModel.getDepartmentDetail());
-		leave.setStatus("pending");
 		leaveRepo.save(leave);
 		
 	}

@@ -36,14 +36,14 @@ function loadLeaveData() {
 			for (let i = 0; i < leaveList.length; i++) {
 				let leave = leaveList[i];
 				segment += "<tr>";
-				segment += "<td>" + leave.startDate + "</td>";
+				segment += "<td>" + leave.empNo + "</td>";
 				segment += "<td>" + leave.reasonList.desc_zh + "</td>";
 				segment += "<td>" + leave.startDate + " "
 						+ leave.startTime.slice(0, 5) + "~" + leave.endDate
 						+ " " + leave.endTime.slice(0, 5) + "</td>";
 				segment += "<td>" + leave.days + "</td>";
 				segment += "<td>" + leave.applicationNo + "</td>";
-				segment += "<td>" + leave.status + "</td></tr>";
+				segment += "<td>" + leave.statusList.desc_zh + "</td></tr>";
 			}
 				return segment
 			}
