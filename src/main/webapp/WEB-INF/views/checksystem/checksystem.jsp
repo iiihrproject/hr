@@ -117,7 +117,12 @@
 		               // 伺服器請求完成
 		               if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201)) {
 		                   var response = xhr1.responseText;
-		                   var response = 'Success';
+		                   
+		                   if ('Success' == response) {
+		               		
+  		                    } else {
+  		                    	swal(response);
+  		                    }
 		               }
 		
 		           }
@@ -136,11 +141,12 @@
 		    $(this).next().slideToggle();
 		});
 		
+		
+		
 	})
 	
 	
 	</script>
-	
 	
 	<script type="text/javascript">
 	//畫面效果
@@ -199,13 +205,9 @@
 	    document.getElementById('showdate').innerHTML = m + '月' + d + '日 ' + week();
 	    setTimeout('ShowDate()', 1000);
 	}
-
-
-
-
-
-
 </script>
+
+	
 
 </head>
 
@@ -219,8 +221,8 @@
 
                 <!-- header刪掉 End-->
                 
-             <div class="row">
-
+             <div class="row" style="background-image: url('<c:url value="/img/pages.jpg" />');">
+<%-- 						<img src = "<c:url value='img/pages.png' />" > --%>
                         <!-- First Column -->
                         <div class="col-lg-4 mycss">
 
@@ -239,7 +241,7 @@
 							            <h1 id="showbox"></h1>
 							            <br> <br> <br> <br> <br> <br> <br>
 							            <br> <br> <br>
-							            <h4 id="worktime"><nobr>上班時間:09:00</nobr></h4><h4 id="offworktime" ><nobr>下班時間:18:00</nobr></h4>
+							            <h4 id="worktime"><nobr>上班時間:+${factSchedule.start}</nobr></h4><h4 id="offworktime" ><nobr>下班時間:18:00</nobr></h4>
         							   </div>
                                 </div>
                             </div>
@@ -305,7 +307,12 @@
 									<tr><th>日期</th><th>上班時間</th><th>下班時間</th><th>上班是否遲到</th><th>下班是否準時</th><th>是否需補簽到</th></tr>
 										<c:forEach var='checksystem' items='${Checksystem}'>
 										  <tr>
-										  	 <td>${fn:substring(checksystem.createTime,0, 10)}</td>
+										  	 <td>
+										  	 	<c:choose>
+										     	  <c:when test="${checksystem.checkInTime == null}" > ${fn:substring(checksystem.checkOutTime,0, 10)}</c:when>
+										     	  <c:otherwise>${fn:substring(checksystem.checkInTime,0, 10)}</c:otherwise>
+						       					</c:choose>
+						       				</td>
 										     <td>${fn:substring(checksystem.checkInTime,11,19)}</td>
 										     <td>${fn:substring(checksystem.checkOutTime,11,19)}</td>
 										     <td>
@@ -324,7 +331,7 @@
 						       				 <c:choose>
 										     	  <c:when test="${checksystem.isNeedRepair == 'Y'}" ><a href="<c:url value='/EmpSignApply' />"
 													class="text-decoration-none"><button>補簽到</button></a></c:when>
-										     	  <c:when test="${checksystem.isNeedRepair == 'N'}" >補簽到</c:when>
+										     	  <c:when test="${checksystem.isNeedRepair == 'N'}" >無須補簽到</c:when>
 						       				</c:choose>
 						       				 </td>
 										     
@@ -359,8 +366,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
-
+	
 </body>
 
 </html>
