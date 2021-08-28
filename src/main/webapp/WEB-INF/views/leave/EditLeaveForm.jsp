@@ -77,7 +77,7 @@
 			<input type="text" class="w3-input w3-border w3-round-large"
 				id="hand-off" name="hand-off" value="<%=leave.getHandOff()%>">
 			<input type="email" class="w3-input w3-border w3-round-large"
-				name="hand-offemail" value="<%=leave.getHandOffemail()%>">
+				name="hand-offemail" value="<%=leave.getHandOffEmail()%>">
 			<label for="supportingDoc">相關檔案上傳</label>
 			<input type="file" class="w3-input w3-border w3-round-large"
 				id="supportingDoc" name="supportingDoc" multiple>

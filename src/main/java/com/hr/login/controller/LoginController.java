@@ -56,6 +56,11 @@ public class LoginController {
 	    return "/login";
 	}
 	
+	@GetMapping(path="/pages")
+	public String loginPage() {
+		return "/pages";
+	}	
+	
 	@GetMapping(path="/test")
 	public String test() {
 		return "/test";

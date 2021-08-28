@@ -37,7 +37,7 @@
 					segment += "<td>" + leave.startDate + " "
 							+ leave.startTime.slice(0, 5) + "~" + leave.endDate
 							+ " " + leave.endTime.slice(0, 5) + "</td>";
-					segment += "<td>" + leave.statusList.desc_zh + "</td></tr>";
+					segment += "<td><span class='btn-sm text-dark bg-warning font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
 				}
 					return segment
 				}
@@ -61,7 +61,7 @@
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
 						<h6 class="m-0 font-weight-bold text-primary d-inline">請假申請表</h6>
-						<button id="autofill" type="button" class="btn btn-warning btn-icon-split text-dark">隨機填入</button>
+						<button id="autofill" type="button" class="btn btn-info btn-icon-split">隨機填入</button>
 					</div>
 					<!-- 表單內容 -->
 					<div class="card-body">
@@ -75,11 +75,12 @@
 				<!-- Collapsable Card Example -->
 				<div class="card shadow mb-4">
 					<!-- Card Header - Accordion -->
+					<h6 class="m-0 font-weight-bold text-primary">
 					<a href="#collapseCardExample" class="d-block card-header py-3"
 						data-toggle="collapse" role="button" aria-expanded="true"
 						aria-controls="collapseCardExample">
-						<h6 class="m-0 font-weight-bold text-primary">${sessionScope.loginModel.getEmpNo()}的請假申請紀錄</h6>
-					</a>
+						${sessionScope.loginModel.getEmpNo()}的請假申請紀錄
+					</a></h6>
 					<!-- Card Content - Collapse (表格內容)-->
 					<div class="collapse show" id="collapseCardExample" style="">
 						<div class="card-body">
@@ -115,6 +116,13 @@
 		$("#endDate").val($("#startDate").val());
 		$("#comments").val("需要請假");
 		document.getElementById("handOffSelect").selectedIndex = getRandomNum(1,$("#handOffSelect option").length-1);
+		var handOff = document.getElementById("handOffSelect").value;
+		$.get("<c:url value='/G/findEmpByPk'/>?empId=" + handOff,function(data,status){
+			if(status == "success"){
+				var emp = data;
+				$("#handOffEmail").val(emp[0].email);
+			}
+		});
 	});
 	
 	function getRandom2digit(min,max){
@@ -143,12 +151,12 @@
 		var endTime = document.getElementById("endTime").value;
 		var comments = document.getElementById("comments").value;
 		var handOffSelect = document.getElementById("handOffSelect");
-		var handOffEmail = document.getElementById("handOffEmail").value;
+		var handOffEmail = document.getElementById("handOffEmail");
 		if (reasonList.selectedIndex != 0) {
 		} else{	hasError = true;
 			$("#reasonSelect").addClass("is-invalid");
 			messageBox.innerHTML = "請選擇假別";
-		} if(startDate < endDate) {
+		} if(startDate <= endDate) {
 		} else{	hasError = true;
 			$("#startDate").addClass("is-invalid");
 			$("#endDate").addClass("is-invalid");
@@ -188,7 +196,7 @@
 			"endTime" : endTime,
 			"comments" : comments,
 			"handOff" : handOffSelect.value,
-			"handOffEmail" : handOffEmail,
+			"handOffEmail" : handOffEmail.value,
 			"statusList" : {"code": "S01"}
 		}
 		xhr1.setRequestHeader("Content-Type", "application/json");

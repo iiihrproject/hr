@@ -20,7 +20,7 @@ window.onload = function() {
 function loadEmps(){
 	let xhr2 = new XMLHttpRequest();
 	var myDeptNo = ${sessionScope.loginModel.getDepartmentDetail().getDepartmentNumber()};
-	xhr2.open("GET", "<c:url value='/Leave/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo);
+	xhr2.open("GET", "<c:url value='/G/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo);
 	xhr2.send();
 	xhr2.onreadystatechange = function() {
 		if (xhr2.readyState == 4 && xhr2.status == 200) {

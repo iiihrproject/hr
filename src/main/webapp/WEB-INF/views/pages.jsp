@@ -37,6 +37,7 @@
 	function isAuthMoreThanGEN() {
 		var isAuthMoreThanGEN = false;
 		$.get("<c:url value='/G/findAUTHByEmpNo' />", function(isAuthMoreThanGEN, status) {
+			console.log("isAuthMoreThanGen = " + isAuthMoreThanGEN);
 			if (isAuthMoreThanGEN) {
 				$("#managerCard").removeClass("invisible");
 			}
@@ -130,7 +131,7 @@
 											</div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-clipboard-list fa-4x text-success"></i>
+											<i class="fas fa-calendar-week fa-4x text-success"></i>
 										</div>
 									</div>
 								</div>
@@ -181,7 +182,7 @@
 											</div>
 										</div>
 										<div class="sidebar-brand-text mx-auto">
-											<img src="<c:url value='img/scheduling1.png'/>" class="img-fluid"/>
+											<i class="fas fa-calendar-plus fa-4x text-info"></i>
 										</div>
 									</div>
 								</div>
@@ -212,7 +213,7 @@
 											</div>
 										</div>
 										<div class="sidebar-brand-text mx-auto">
-											<img src="<c:url value='img/approval.png'/>" class="img-fluid"/>
+											<i class="fas fa-stamp fa-4x text-secondary"></i>
 										</div>
 									</div>
 								</div>

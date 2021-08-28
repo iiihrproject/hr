@@ -22,7 +22,7 @@
 		var xhr = new XMLHttpRequest();
 		var myDeptNo = ${sessionScope.loginModel.getDepartmentDetail().getDepartmentNumber()};
 		var myDept = "${sessionScope.loginModel.getDepartmentDetail().getName()}";
-		xhr.open("GET", "<c:url value='/Leave/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo, true);
+		xhr.open("GET", "<c:url value='/G/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo, true);
 		xhr.send();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
@@ -46,7 +46,7 @@
 		document.getElementById("handOffSelect").addEventListener("change",function() {
 			var handOff = document.getElementById("handOffSelect").value;
 			var xhr = new XMLHttpRequest();
-			xhr.open("GET","<c:url value='/Leave/findEmpByPk'/>?empId=" + handOff, true);
+			xhr.open("GET","<c:url value='/G/findEmpByPk'/>?empId=" + handOff, true);
 			xhr.send();
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4 && xhr.status == 200) {
@@ -182,13 +182,13 @@
 					rows="2" placeholder="請輸入相關內容" required></textarea>
 			</div>
 			<div class="form-row">
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-5">
 					<label for="handOffSelect">職務代理人</label>
 					<select class="form-control form-select" id="handOffSelect" name="handOff" required></select>
 				</div>
-				<div class="form-group col-md-8">
-					<label for="handOff">代理人Email</label>
-					<input type="email" class="form-control" id="handOffEmail" name="hand-offemail" readonly placeholder="代理人的Email">
+				<div class="form-group col-md-7">
+					<label for="handOffSelect">代理人Email</label>
+					<input type="email" class="form-control" id="handOffEmail" name="hand-offEmail" readonly placeholder="代理人的Email">
 				</div>
 			</div>
 			<div class="form-group form-inline">
@@ -225,7 +225,7 @@
 // 				endTime : endTime,
 // 				comments : comments,
 // 				handOff : handOff,
-// 				handOffemail : handOffemail,
+// 				handOffEmail : handOffEmail,
 // 				status : "pending"
 // 				},
 // 				function(responseTxt, statusTxt, xhr) {

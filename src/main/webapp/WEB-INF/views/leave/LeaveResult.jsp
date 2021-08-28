@@ -15,153 +15,175 @@
 <script>
 window.addEventListener("DOMContentLoaded", function() {
 	loadLeaveData()
+	
 });
 
 function loadLeaveData() {
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "<c:url value='/Leave/findAllLeave' />", true);
+	var myDeptNo = ${sessionScope.loginModel.getDepartmentDetail().getDepartmentNumber()};
+	xhr.open("GET", "<c:url value='/Leave/findLeaveByDeptNo' />?departmentNumber=" + myDeptNo, true);
+// 	xhr.open("GET", "<c:url value='/Leave/findAllLeave' />", true);
 	xhr.send();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			document.getElementById("tbodycontent").innerHTML = processData(xhr.responseText);
 			// 				let leaveList = JSON.parse(xhr.responseText);
+			setCSS();
 		}
 		function processData(jsonString) {
 			let leaveList = JSON.parse(jsonString);
 							console.log(leaveList);
 			if (leaveList.length == 0) {
-				return "<tr><td colspan=5 style='text-align:center'>目前尚無任何申請資料</td></tr>";
+				return "<tr><td colspan=6 style='text-align:center'>目前尚無任何申請資料</td></tr>";
 			} else {
 			let segment = "";
 			for (let i = 0; i < leaveList.length; i++) {
 				let leave = leaveList[i];
-				segment += "<tr>";
-				segment += "<td>" + leave.empNo + "</td>";
+				segment += "<tr><td>" + leave.empNo + "</td>";
 				segment += "<td>" + leave.reasonList.desc_zh + "</td>";
 				segment += "<td>" + leave.startDate + " "
 						+ leave.startTime.slice(0, 5) + "~" + leave.endDate
 						+ " " + leave.endTime.slice(0, 5) + "</td>";
 				segment += "<td>" + leave.days + "</td>";
-				segment += "<td>" + leave.applicationNo + "</td>";
-				segment += "<td>" + leave.statusList.desc_zh + "</td></tr>";
+				segment += "<td><a href='#"+ leave.applicationNo +"' data-toggle='collapse'>" + leave.applicationNo + "</a></td>";
+				segment += "<td><span class='btn-sm text-dark font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
+				segment +="<tr class='collapse' id='"+ leave.applicationNo +"'>";
+				segment +="<td colspan='2'>備註："+leave.comments+"</td>";
+				segment +="<td>代理人："+leave.handOff+"</td>";
+				segment +="<td colspan='2'>簽核："+leave.approval01Name+"</td>";
+				segment +="<td><a href='#' class='btn btn-sm btn-info btn-icon-split' data-toggle='modal' id='checkinsert' data-target='#detailModal'>";
+				segment +="<span class='icon text-white-50'><i class='fas fa-file-signature'></i></span>";
+				segment +="<span class='text'>查看詳情</span></a></td></tr>";
 			}
 				return segment
 			}
 		}
 	}
 }
-//DataTable setting
-$(document).ready( function () {
-    $("#mainTable").DataTable({
-  	    //屬性區塊:
-  	    searching: true,
-  	    sPaginationType: "full_numbers", 
-  	    lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 
-  	    processing: true, 
-  	    serverSide: false, 
-  	    stateSave: true,
-  	    destroy: true, 
-  	    info: true,
-  	    autoWidth: true, 
-  	    ordering: true, 
-  	    scrollCollapse: false, 
-  	    scrollX: "500px",
-  	    scrollY: "200px",    
-  	    paging: true, 
-  	    dom: '<"top">rt<"bottom"><"clear">',
-  	    //ajax區塊:
-		ajax : {
-			url : "/demo_datatable?UserID=" + UserIDdata,
-			type : "POST",
-			},
-		//資料欄位區塊(columns):
-		columns : [ {
-			data : "Line",		}, {
-			data : "Col_1",		}, {
-			data : "Col_2",		}, {
-			data : "Status",	}, ],
-		//語言區塊(language):
-		 language: {
-		    lengthMenu: "顯示 _MENU_ 筆資料",
-		    sProcessing: "處理中...",
-		    sZeroRecords: "没有匹配结果",
-		    sInfo: "目前有 _MAX_ 筆資料",
-		    sInfoEmpty: "目前共有 0 筆紀錄",
-		    sInfoFiltered: " ",
-		    sInfoPostFix: "",
-		    sSearch: "尋找:",
-		    sUrl: "",
-		    sEmptyTable: "尚未有資料紀錄存在",
-		    sLoadingRecords: "載入資料中...",
-		    sInfoThousands: ",",
-		    oPaginate: {
-		      sFirst: "首頁",
-		      sPrevious: "上一頁",
-		      sNext: "下一頁",
-		      sLast: "末頁",
-	    },
-		    order: [[0, "desc"]],
-		    oAria: {
-		      sSortAscending: ": 以升序排列此列",
-		      sSortDescending: ": 以降序排列此列",
-		    },
-	  },
-		//欄位元素定義區塊(columnDefs):
-	  columnDefs: [
-	    {
-	      targets: [2, 3],
-	      render: function (data) {
-	        if (data != "無更新") {
-	          //https://momentjs.com/
-	          return moment(data).format("YYYY-MM-DD");
-	        } else {
-	          return data;
-	        }
-	      },
-	    },
-	    {
-	      className: "text-center",
-	      targets: [0, 1, 2, 3],
-	    },
-	    {
-	      targets: [0],
-	      createdCell: function (td, cellData, rowData, row, col) {
-	        $(td).css("word-break", "break-all");
-	        $(td).css("width", "0.5%");
-	      },
-	    },
-	    {
-	      targets: [1],
-	      createdCell: function (td, cellData, rowData, row, col) {
-	        $(td).css("word-break", "break-all", "text-center");
-	        $(td).css("width", "1%");
-	      },
-	    },
-	    {
-	      targets: [2],
-	      createdCell: function (td, cellData, rowData, row, col) {
-	        $(td).css("word-break", "break-all");
-	        $(td).css("width", "5%");
-	      },
-	    },
-	    {
-	      targets: [3],
-	      createdCell: function (td, cellData, rowData, row, col) {
-	        $(td).css("word-break", "break-all");
-	        $(td).css("width", "1%");
-	      },
-	    },
-	  ],
-		//列元素區塊(rowCallback):
-	  rowCallback: function (row, data) {
-		    if (data["Status"] == "未完成") {
-		      $(row).addClass("danger");
-		    } else {
-		      $(row).addClass("warning");
-		    }
-		  },
-		});
-	});//end of DataTable Setting
+
+// 設定CSS
+function setCSS(){
+	console.log($("td span").$("this").text());
+	if($("td span").text() == "提出申請"){
+		$("td span").addClass("bg-warning");
+	} else {
+		$("td span").addClass("bg-danger");
+	}
+}
+// //DataTable setting
+// $(document).ready( function () {
+//     $("#mainTable").DataTable({
+//   	    //屬性區塊:
+//   	    searching: true,
+//   	    sPaginationType: "full_numbers", 
+//   	    lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 
+//   	    processing: true, 
+//   	    serverSide: false, 
+//   	    stateSave: true,
+//   	    destroy: true, 
+//   	    info: true,
+//   	    autoWidth: true, 
+//   	    ordering: true, 
+//   	    scrollCollapse: false, 
+//   	    scrollX: "500px",
+//   	    scrollY: "200px",    
+//   	    paging: true, 
+//   	    dom: '<"top">rt<"bottom"><"clear">',
+//   	    //ajax區塊:
+// 		ajax : {
+// 			url : "<c:url value='/Leave/findAllLeave' />",
+// 			type : "POST",
+// 			},
+// 		//資料欄位區塊(columns):
+// 		columns : [ {
+// 			data : "empNo",		}, {
+// 			data : "startDate",		}, {
+// 			data : "startDate",		}, {
+// 			data : "days",		}, {
+// 			data : "applicationNo",		}, {
+// 			data : "startDate",	}, ],
+// 		//語言區塊(language):
+// 		 language: {
+// 		    lengthMenu: "顯示 _MENU_ 筆資料",
+// 		    sProcessing: "處理中...",
+// 		    sZeroRecords: "没有匹配结果",
+// 		    sInfo: "目前有 _MAX_ 筆資料",
+// 		    sInfoEmpty: "目前共有 0 筆紀錄",
+// 		    sInfoFiltered: " ",
+// 		    sInfoPostFix: "",
+// 		    sSearch: "尋找:",
+// 		    sUrl: "",
+// 		    sEmptyTable: "尚未有資料紀錄存在",
+// 		    sLoadingRecords: "載入資料中...",
+// 		    sInfoThousands: ",",
+// 		    oPaginate: {
+// 		      sFirst: "首頁",
+// 		      sPrevious: "上一頁",
+// 		      sNext: "下一頁",
+// 		      sLast: "末頁",
+// 	    },
+// 		    order: [[0, "desc"]],
+// 		    oAria: {
+// 		      sSortAscending: ": 以升序排列此列",
+// 		      sSortDescending: ": 以降序排列此列",
+// 		    },
+// 	  },
+// 		//欄位元素定義區塊(columnDefs):
+// 	  columnDefs: [
+// 	    {
+// 	      targets: [2, 3],
+// 	      render: function (data) {
+// 	        if (data != "無更新") {
+// 	          //https://momentjs.com/
+// 	          return moment(data).format("YYYY-MM-DD");
+// 	        } else {
+// 	          return data;
+// 	        }
+// 	      },
+// 	    },
+// 	    {
+// 	      className: "text-center",
+// 	      targets: [0, 1, 2, 3],
+// 	    },
+// 	    {
+// 	      targets: [0],
+// 	      createdCell: function (td, cellData, rowData, row, col) {
+// 	        $(td).css("word-break", "break-all");
+// 	        $(td).css("width", "0.5%");
+// 	      },
+// 	    },
+// 	    {
+// 	      targets: [1],
+// 	      createdCell: function (td, cellData, rowData, row, col) {
+// 	        $(td).css("word-break", "break-all", "text-center");
+// 	        $(td).css("width", "1%");
+// 	      },
+// 	    },
+// 	    {
+// 	      targets: [2],
+// 	      createdCell: function (td, cellData, rowData, row, col) {
+// 	        $(td).css("word-break", "break-all");
+// 	        $(td).css("width", "5%");
+// 	      },
+// 	    },
+// 	    {
+// 	      targets: [3],
+// 	      createdCell: function (td, cellData, rowData, row, col) {
+// 	        $(td).css("word-break", "break-all");
+// 	        $(td).css("width", "1%");
+// 	      },
+// 	    },
+// 	  ],
+// 		//列元素區塊(rowCallback):
+// 	  rowCallback: function (row, data) {
+// 		    if (data["Status"] == "未完成") {
+// 		      $(row).addClass("danger");
+// 		    } else {
+// 		      $(row).addClass("warning");
+// 		    }
+// 		  },
+// 		});
+// 	});//end of DataTable Setting
 </script>
 </head>
 <body>
@@ -170,7 +192,7 @@ $(document).ready( function () {
 	<h1 class="h3 mb-2 text-gray-800">${sessionScope.loginModel.departmentDetail.name}的請假簽核</h1>
 	<!-- DataTales Example -->
 	<div class="card shadow mb-4">
-		<div class="card-header py-3">
+		<div class="card-header py-3 d-none">
 			<h6 class="m-0 font-weight-bold text-primary">
 				DataTables Example
 				<button class="btn btn-info btn-icon-split btn-sm"
@@ -183,32 +205,32 @@ $(document).ready( function () {
 					class="dataTables_wrapper dt-bootstrap4">
 					<div class="row">
 						<div class="col-sm-12">
-							<table class="table dataTable table-hover" id="mainTable"
-								cellspacing="0" role="grid" aria-describedby="dataTable_info">
-								<thead class="thead-light">
+							<table class="table dataTable table-hover table-striped text-dark" id="mainTable"
+								 role="grid" aria-describedby="dataTable_info">
+								<thead class="thead-dark">
 									<tr role="row">
-										<th class="sorting sorting_asc col-md-auto" tabindex="0"
+										<th class="sorting sorting_asc col-md-3" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
 											aria-sort="ascending"
 											aria-label="Name: activate to sort column descending">申請人</th>
-										<th class="sorting col-md-auto" tabindex="0"
+										<th class="sorting col-md-1" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
 											aria-label="Position: activate to sort column ascending">假別</th>
-										<th class="sorting col-md-auto" tabindex="0"
+										<th class="sorting col-md-4" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
 											aria-label="Office: activate to sort column ascending">期間</th>
-										<th class="sorting col-md-auto" tabindex="0"
+										<th class="sorting col-md-1" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
 											aria-label="Age: activate to sort column ascending">天數</th>
-										<th class="sorting col-md-auto" tabindex="0"
+										<th class="sorting col-md-1" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
 											aria-label="Start date: activate to sort column ascending">申請單號</th>
-										<th class="sorting col-md-auto" tabindex="0"
+										<th class="sorting col-md-2" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
 											aria-label="Start date: activate to sort column ascending">狀態</th>
 									</tr>
 								</thead>
-								<tfoot class="thead-light">
+								<tfoot class="thead-dark">
 									<tr>
 										<th rowspan="1" colspan="1">申請人</th>
 										<th rowspan="1" colspan="1">假別</th>
@@ -224,15 +246,14 @@ $(document).ready( function () {
 										<td>Accountant</td>
 										<td>Tokyo</td>
 										<td>33</td>
-										<td>2008/11/28</td>
+										<td><a href="#demo" data-toggle="collapse">Click me to toggle next row</a></td>
 										<td>2008/11/28</td>
 									</tr>
-									<tr class="even">
-										<td class="sorting_1">Angelica Ramos</td>
-										<td>Chief Executive Officer (CEO)</td>
-										<td>London</td>
-										<td>47</td>
-										<td>2009/10/09</td>
+									<tr class="collapse" id="demo">
+										<td colspan="2">備註：</td>
+										<td>代理人：</td>
+										<td colspan="2">簽核：</td>
+										<td>查看詳情</td>
 									</tr>
 								</tbody>
 							</table>
@@ -244,7 +265,7 @@ $(document).ready( function () {
 	</div>
 </div>
 	<script>
-		
+
 	</script>
 	<!-- Detail Modal -->
 	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog"
@@ -337,10 +358,12 @@ $(document).ready( function () {
 	</div>
 	<!-- End of Detail Modal -->
 	<script>
+// 		彈出視窗的CSS
 		$("#modalTable th").addClass("table-secondary");
 		$("#sig-canvas").css("cursor", "crosshair").css("border",
 				"2px dotted #CCCCCC");
 
+// 		列印按鈕的功能
 		$("#printTable").click(function() {
 // 			document.getElementById("sig-clearBtn").style.display = "none";
 // 			document.getElementById("sig-submitBtn").style.display = "none";
@@ -483,16 +506,13 @@ $(document).ready( function () {
 			var sigImage = document.getElementById("sig-image");
 			var clearBtn = document.getElementById("sig-clearBtn");
 			var submitBtn = document.getElementById("sig-submitBtn");
-			clearBtn
-					.addEventListener(
-							"click",
-							function(e) {
-								clearCanvas();
-								sigText.innerHTML = "Data URL for your signature will go here!";
-								sigImage.setAttribute("src", "");
-								sigCanvas.style.display = "inline";
-								sigImage.style.display = "none";
-							}, false);
+			clearBtn.addEventListener("click",function(e) {
+				clearCanvas();
+				sigText.innerHTML = "Data URL for your signature will go here!";
+				sigImage.setAttribute("src", "");
+				sigCanvas.style.display = "inline";
+				sigImage.style.display = "none";
+			}, false);
 			submitBtn.addEventListener("click", function(e) {
 				var dataUrl = canvas.toDataURL();
 				sigText.innerHTML = dataUrl;
@@ -504,28 +524,22 @@ $(document).ready( function () {
 			}, false);
 		})();
 
-		//驗證的開始
-		(function() {
-			'use strict';
-			window.addEventListener('load',
-					function() {
-						var forms = document.getElementsByClassName('needs-validation');
-						// Loop over them and prevent submission
-						var validation = Array.prototype.filter.call(forms,
-								function(form) {
-									form.addEventListener('submit', function(
-											event) {
-										if (form.checkValidity() === false) {
-											event.preventDefault();
-											event.stopPropagation();
-										}
-										form.classList.add('was-validated');
-									}, false);
-								});
-					}, false);
-		})();
-		//驗證的結束
+//驗證的開始
+(function() {'use strict';window.addEventListener('load',function() {
+	var forms = document.getElementsByClassName('needs-validation');
+	// Loop over them and prevent submission
+	var validation = Array.prototype.filter.call(forms,
+			function(form) {form.addEventListener('submit', function(event) {
+				if (form.checkValidity() === false) {
+					event.preventDefault();
+					event.stopPropagation();
+				}
+					form.classList.add('was-validated');
+				}, false);
+	});
+	}, false);
+})();
+//驗證的結束
 	</script>
 </body>
-
 </html>

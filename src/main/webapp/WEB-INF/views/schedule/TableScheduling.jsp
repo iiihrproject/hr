@@ -59,7 +59,7 @@
 	function loadEmps(empName){
 		let xhr2 = new XMLHttpRequest();
 		var myDeptNo = ${sessionScope.loginModel.getDepartmentDetail().getDepartmentNumber()};
-		xhr2.open("GET", "<c:url value='/Leave/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo, true);
+		xhr2.open("GET", "<c:url value='/G/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo, true);
 		xhr2.send();
 		xhr2.onreadystatechange = function() {
 			if (xhr2.readyState == 4 && xhr2.status == 200) {

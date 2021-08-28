@@ -33,15 +33,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			    .antMatchers("/index").authenticated() // Except above pages, all pages should require basic authorization after authentication
 			    .antMatchers("/checkInto").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
 			    .antMatchers("/").permitAll()
-			    .antMatchers("/editPersonalInfo", "/personnel", "/personalInformationUpdate", "/personalInformation").authenticated()
+			    .antMatchers("/editPersonalInfo", "/personnel", "/personalInformationUpdate", "/personalInformation","/pages").authenticated()
 			    .antMatchers( "/department", "/departmentDetail", "/departmentManagerIdUpdate", "/addNewDepartment", "/createNewDepartment").hasRole("HR_MANAGER")
 			    .antMatchers("/bulletinList","/bulletinDetail","/insertMessage","/bulletinGetMsg").authenticated()
 			    .antMatchers("/bulletinManage","/bulletinListMag","/bulletinEventInsert","/insertEventBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletin/getImage").hasRole("HR")
           .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities").hasRole("HR_MANAGER")
 			    .antMatchers("/css/**", "/vendor/**", "/img/**", "/js/**", "/scss/**").permitAll()
+			    .antMatchers("/Leave/LeaveResult","/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR","RD_MANAGER","SALES_MANAGER")
+			    .antMatchers("/G/**","/Leave/**","/schedule/**").authenticated()
 			    .anyRequest().hasRole("ADMIN")
-			    .antMatchers("/Leave/LeaveResult").hasAnyRole("HR_MANAGER", "HR")
-			    .antMatchers("/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR")
 
 			    .and()
 		    .formLogin()
