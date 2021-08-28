@@ -42,6 +42,8 @@ public class LoginModel implements Serializable{
 	
 	private String name;
 	
+	private String gender;
+	
 	private String empNo;
 	
 	@JsonIgnore
@@ -55,6 +57,8 @@ public class LoginModel implements Serializable{
 	@JsonIgnore
 	@OneToMany(mappedBy="loginModel",fetch=FetchType.EAGER)
 	private Set<Authorities> authorities;
+	
+	private String employedDate;
 	
 	@Column(name = "non_Expired")
 	private Boolean isAccountNonExpired;
@@ -70,140 +74,192 @@ public class LoginModel implements Serializable{
 	public LoginModel() {
 		
 	}
-
-	public LoginModel(Integer pk, Personnel personnel, String role, String personalIdNumber, String name, String empNo,
-			String employeePassword, DepartmentDetail departmentDetail, Set<Authorities> authorities,
-			Boolean isAccountNonExpired, Boolean isAccountNonLocked, Boolean isCredentialsNonExpired,
-			String lastChangeCredentialsDate, Boolean isEnable) {
+	
+	public LoginModel(Integer pk, Personnel personnel, String role, String personalIdNumber, String name, String gender,
+			String empNo, String employeePassword, DepartmentDetail departmentDetail, Set<Authorities> authorities,
+			String employedDate, Boolean isAccountNonExpired, Boolean isAccountNonLocked,
+			Boolean isCredentialsNonExpired, String lastChangeCredentialsDate, Boolean isEnable) {
 		super();
 		this.pk = pk;
 		this.personnel = personnel;
 		this.role = role;
 		this.personalIdNumber = personalIdNumber;
 		this.name = name;
+		this.gender = gender;
 		this.empNo = empNo;
 		this.employeePassword = employeePassword;
 		this.departmentDetail = departmentDetail;
 		this.authorities = authorities;
+		this.employedDate = employedDate;
 		this.isAccountNonExpired = isAccountNonExpired;
 		this.isAccountNonLocked = isAccountNonLocked;
 		this.isCredentialsNonExpired = isCredentialsNonExpired;
 		this.lastChangeCredentialsDate = lastChangeCredentialsDate;
 		this.isEnable = isEnable;
 	}
+
+
 
 	public Integer getPk() {
 		return pk;
 	}
 
+
 	public void setPk(Integer pk) {
 		this.pk = pk;
 	}
+
 
 	public Personnel getPersonnel() {
 		return personnel;
 	}
 
+
 	public void setPersonnel(Personnel personnel) {
 		this.personnel = personnel;
 	}
+
 
 	public String getRole() {
 		return role;
 	}
 
+
 	public void setRole(String role) {
 		this.role = role;
 	}
+
 
 	public String getPersonalIdNumber() {
 		return personalIdNumber;
 	}
 
+
 	public void setPersonalIdNumber(String personalIdNumber) {
 		this.personalIdNumber = personalIdNumber;
 	}
+
 
 	public String getName() {
 		return name;
 	}
 
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
+	public String getGender() {
+		return gender;
+	}
+
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
 
 	public String getEmpNo() {
 		return empNo;
 	}
 
+
 	public void setEmpNo(String empNo) {
 		this.empNo = empNo;
 	}
+
 
 	public String getEmployeePassword() {
 		return employeePassword;
 	}
 
+
 	public void setEmployeePassword(String employeePassword) {
 		this.employeePassword = employeePassword;
 	}
+
 
 	public DepartmentDetail getDepartmentDetail() {
 		return departmentDetail;
 	}
 
+
 	public void setDepartmentDetail(DepartmentDetail departmentDetail) {
 		this.departmentDetail = departmentDetail;
 	}
+
 
 	public Set<Authorities> getAuthorities() {
 		return authorities;
 	}
 
+
 	public void setAuthorities(Set<Authorities> authorities) {
 		this.authorities = authorities;
 	}
+
+
+	public String getEmployedDate() {
+		return employedDate;
+	}
+
+
+	public void setEmployedDate(String employedDate) {
+		this.employedDate = employedDate;
+	}
+
 
 	public Boolean getIsAccountNonExpired() {
 		return isAccountNonExpired;
 	}
 
+
 	public void setIsAccountNonExpired(Boolean isAccountNonExpired) {
 		this.isAccountNonExpired = isAccountNonExpired;
 	}
+
 
 	public Boolean getIsAccountNonLocked() {
 		return isAccountNonLocked;
 	}
 
+
 	public void setIsAccountNonLocked(Boolean isAccountNonLocked) {
 		this.isAccountNonLocked = isAccountNonLocked;
 	}
+
 
 	public Boolean getIsCredentialsNonExpired() {
 		return isCredentialsNonExpired;
 	}
 
+
 	public void setIsCredentialsNonExpired(Boolean isCredentialsNonExpired) {
 		this.isCredentialsNonExpired = isCredentialsNonExpired;
 	}
+
 
 	public String getLastChangeCredentialsDate() {
 		return lastChangeCredentialsDate;
 	}
 
+
 	public void setLastChangeCredentialsDate(String lastChangeCredentialsDate) {
 		this.lastChangeCredentialsDate = lastChangeCredentialsDate;
 	}
+
 
 	public Boolean getIsEnable() {
 		return isEnable;
 	}
 
+
 	public void setIsEnable(Boolean isEnable) {
 		this.isEnable = isEnable;
 	}
-	
+
+
 	public boolean equals(LoginModel loginModel) {
 		if(
 				this.getPk().equals(loginModel.getPk()) &&

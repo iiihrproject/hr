@@ -49,6 +49,7 @@ public class ScheduleController {
 		model.addAttribute("allEmps", Emps);
 		return "schedule/TimelineScheduling";
 	}
+	
 	@GetMapping("/schedule/findAllEmps")
 	public @ResponseBody List<EmpBean> findAll(){
 		return service.findAllEmps();

@@ -1,5 +1,7 @@
 package com.hr.leave.model;
 
+import java.sql.Blob;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hr.personnel.model.DepartmentDetail;
 
 @Entity
@@ -61,8 +64,9 @@ public class LeaveBean {
 	private ListBean statusList;
 	@Column(name = "Approval01Name")
 	private String approval01Name;
+	@JsonIgnore
 	@Column(name = "Approval01Signature")
-	private String approval01Signature;
+	private Blob approval01Signature;
 	@Column(name = "Approval01Date")
 	private String approval01Date;
 
@@ -72,7 +76,7 @@ public class LeaveBean {
 	public LeaveBean(String applicationNo, String typeOfForm, String empNo, DepartmentDetail dept, String requestDate,
 			ListBean reasonList, String startDate, String startTime, String endDate, String endTime, Float days,
 			String comments, String handOff, String handOffEmail, String supportingDoc, ListBean statusList,
-			String approval01Name, String approval01Signature, String approval01Date) {
+			String approval01Name, Blob approval01Signature, String approval01Date) {
 		super();
 		this.applicationNo = applicationNo;
 		this.typeOfForm = typeOfForm;
@@ -278,11 +282,11 @@ public class LeaveBean {
 		this.approval01Name = approval01Name;
 	}
 
-	public String getApproval01Signature() {
+	public Blob getApproval01Signature() {
 		return approval01Signature;
 	}
 
-	public void setApproval01Signature(String approval01Signature) {
+	public void setApproval01Signature(Blob approval01Signature) {
 		this.approval01Signature = approval01Signature;
 	}
 

@@ -71,8 +71,8 @@ public class SecurityLogin implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-//		return loginModel.getIsEnable();
-		return true;
+		return loginModel.getIsEnable();
+		//return true;
 	}
 
 }

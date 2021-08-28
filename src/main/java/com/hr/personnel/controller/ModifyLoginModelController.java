@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class ModifyLoginModelController {
 	public String editLoginModePage() {
 		return "/personnel/modifyLoginModel";
 	}
-	
+
 	@PostMapping(path="/searchLoginModel", produces="application/json")
 	public @ResponseBody Map<String, String> searchLoginModel(
 			@RequestParam(value = "inputEmpNo") String inputEmpNo,
@@ -56,9 +57,10 @@ public class ModifyLoginModelController {
 			@RequestBody Map<String, String> inputMap,
 			@ModelAttribute("modifiedLoginModel") LoginModel modifiedLoginModel
 			) {
-		boolean flowCheck = modifyLoginModelService.updateLoginModel(inputMap, modifiedLoginModel);
+		boolean flowCheckUpdateLoginModel = modifyLoginModelService.updateLoginModel(inputMap, modifiedLoginModel);
+		boolean flowCheckUpdateAuthorities = modifyLoginModelService.updateAuthorities(inputMap, modifiedLoginModel);
 		LoginModel loginModel = null;
-		if(flowCheck) {
+		if(flowCheckUpdateLoginModel && flowCheckUpdateAuthorities) {
 			loginModel = modifyLoginModelService.loadByPk(modifiedLoginModel.getPk());
 		}
 		Map<String, String> map = new HashMap<String, String>();

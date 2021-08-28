@@ -16,16 +16,14 @@ import com.hr.login.service.LoginService;
 @Service
 public class LoginUserDetailsService implements UserDetailsService {
 	
-	private final Logger LOG = LoggerFactory.getLogger(this.getClass().getName());
 	
 	@Autowired
 	private LoginService loginService;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		LOG.info("username is " + username);
+
 		LoginModel loginModel = loginService.getLoginModelByEmpNo(username);
-		LOG.info("loginModel id is " + loginModel.getPk());
 		if (loginModel == null) {
 			throw new UsernameNotFoundException("User details not found for the user : " + username);
 		}

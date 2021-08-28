@@ -19,14 +19,14 @@
 	<!-- Pages Collapse Menu -->
 	<li class="nav-item"><a class="nav-link"
 		href="<c:url value='/index' />"> <i class='fas fa-home'
-			style='font-size: 1.5rem'></i> <span style='font-size: 1.5rem'>主頁</span></a></li>
+			style='font-size: 1.5rem'></i> <span style='font-size: 18px'>主頁</span></a></li>
 	<li class="nav-item"><a class="nav-link collapsed"
 		href="<c:url value='/pages' />"> <i class='fas fa-clock'
-			style='font-size: 1.5rem'></i> <span id="listname" style='font-size: 1.5rem'>出勤管理</span>
+			style='font-size: 1.5rem'></i> <span id="listname" style='font-size: 18px'>出勤管理</span>
 	</a></li>
 	<li class="nav-item"><a class="nav-link collapsed"
 		href="<c:url value='/personnel' />"> <i class='fas fa-user-tie'
-			style='font-size: 1.5rem'></i> <span id="listname" style='font-size: 1.5rem'>人員管理</span>
+			style='font-size: 1.5rem'></i> <span id="listname" style='font-size: 18px'>人員管理</span>
 	</a></li>
 </ul>
 <!-- End of Sidebar -->

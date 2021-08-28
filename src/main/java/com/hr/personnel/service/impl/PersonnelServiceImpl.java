@@ -1,11 +1,17 @@
 package com.hr.personnel.service.impl;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import javax.persistence.TransactionRequiredException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hr.login.model.Authorities;
+import com.hr.login.model.LoginModel;
 import com.hr.personnel.model.Personnel;
 import com.hr.personnel.repository.PersonnelRepository;
 import com.hr.personnel.service.PersonnelService;
@@ -62,6 +68,19 @@ public class PersonnelServiceImpl implements PersonnelService {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public Boolean personnelAuthorization(LoginModel loginModel) {
+		Set<Authorities> set = loginModel.getAuthorities();
+		Set<String> setString = new HashSet<String>();
+		Iterator<Authorities> iterator = set.iterator();
+		while(iterator .hasNext()){
+		    String s = iterator.next().getAuthorityName();
+		    setString.add(s);
+		}
+		Boolean check = setString.contains("ROLE_HR_MANAGER");
+		return check;
 	}
 	
 	
