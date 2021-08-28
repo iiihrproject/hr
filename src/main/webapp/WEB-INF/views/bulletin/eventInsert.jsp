@@ -51,6 +51,7 @@
             let file1Value = document.getElementById("file1").value;
             let quotaValue = $("[name='quotatype']:checked").val();
             let quotanValue = document.getElementById("quotanid").value;
+            let enddateValue = document.getElementById("enddate").value;
             let postdateValue = document.getElementById("postdate").value;
             let expValue = document.getElementById("exp").value;
             let file = $('#file1')[0].files[0]
@@ -64,6 +65,7 @@
         	let div2 = document.getElementById('result2c');
         	let div3 = document.getElementById('result3c');
         	let div4 = document.getElementById('result4c');
+        	let div5 = document.getElementById('result5c');
         	if (!titleValue){
         	setErrorFor(div0, "請輸入主旨");
         	} 	else {
@@ -93,6 +95,15 @@
             } else {
             div4.innerHTML = "";
             }
+        	if (!enddateValue){
+            	setErrorFor(div5, "請輸入報名截止日期");  
+            	} else if (enddateValue<postdateValue) {
+                    setErrorFor(div5, "報名截止日期不可小於貼文刊登日期");
+            	} else if (enddateValue>expValue) {
+                    setErrorFor(div5, "報名截止日期不可大於貼文下架日期");
+                } else {
+            	div5.innerHTML = "";
+            	}
             if (hasError) {
                 return false;
             }
@@ -111,6 +122,7 @@
             }else{
             	formData.append("quota", quotanValue);
             }
+            formData.append("endDate", enddateValue);
             formData.append("postdate", postdateValue);
             formData.append("exp", expValue);
             
@@ -178,86 +190,7 @@
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <div class="sidebar-brand-icon">
-            </div>
-            <div class="sidebar-brand-text mx-auto">
-                <img id="logo" src="img/logo_frame.png">
-            </div>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="<c:url value='/' />">
-                    <i class='fas fa-home' style='font-size:22px'></i>
-                    <span>主頁</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="<c:url value='/pages' />">
-                    <i class='fas fa-clock' style='font-size:22px'></i>
-                    <span id="listname">出勤管理</span>
-                </a>
-            </li>
-            <li class="nav-item">            
-                <a class="nav-link collapsed" href="<c:url value='/pages' />">
-                    <i class='fas fa-user-tie' style='font-size:22px'></i>
-                    <span id="listname">人員管理</span>
-                </a>
-            </li>
-        </ul>
-        <!-- End of Sidebar -->
-
-
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                    <!-- Topbar Search -->                    
-                        <div class="narbar-brand">
-                            <h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
-                            <span class="text-dark">特休剩餘時數：【】小時&nbsp</span><span class="text-danger warning">(請於 【日期】 前使用完畢)</span><br/>
-                            <span class="text-dark">加班剩餘時數：【】小時&nbsp</span><span class="text-danger warning">(請注意到期時間)</span>
-                        </div>  
-
-                        <!-- 0419 alert to do -->
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">                   
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="###" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">員編員編員編</span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    登出
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </nav>
-                <!-- End of Topbar -->
-
+	<jsp:include page="../header.jsp"></jsp:include>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -291,8 +224,8 @@
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label">圖&emsp;&emsp;檔 :</label></td>
                                             <td><input type="file" id="file1" name="file1" class="btn-sm" onchange="selectImgFile(this.files)"/>
-                                            <a class="btn btn-secondary btn-icon-split btn-sm" style="height:30px" onclick="clean()">
-                                        	<span class="text">清除檔案</span>
+                                            <a class="btn btn-light btn-icon-split btn-sm" style="height:25px;width:70px;border:1px solid black" onclick="clean()">
+                                        	<span class="text" style="font-size:14px;padding:1px 0px;color:black">清除檔案</span>
                                     		</a>
                                     		<br>
                                             <img id="showImg" style="max-width:500px"></img>
@@ -307,14 +240,23 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label ">刊登日期 :</label></td>
+                                          	<td style="text-align: right">
+                                            	<label for="" class="col-form-label ">報名截止 :</label>
+                                            </td>
+                                            <td>
+                                            	<input type="date" id="enddate" name="enddate" class="form-control" style="width:200px;" required>
+                    							<span id=result5c class="form-text"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: right"><label for="" class="col-form-label ">貼文刊登 :</label></td>
                 							<td>
                     						<input type="date" id="postdate" name="postdate" class="form-control" style="width:200px;" required >
                     						<span id=result2c class="form-text"></span>
                     						</td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">有效日期 :</label></td>
+                                            <td style="text-align: right"><label for="" class="col-form-label">貼文下架 :</label></td>
                 							<td>
                     						<input type="date" id="exp" name="exp" class="form-control" style="width:200px;" required >
                     						<span id=result3c class="form-text"></span>
@@ -332,11 +274,10 @@
                                     		</a>
                                     		&nbsp;
                                     		<button type="submit" class="btn btn-success btn-icon-split btn-sm" data-toggle="modal" id="sendData"  data-target="#resultModal">
-                                        	<span class="text">&nbsp;新增&nbsp;</span>
+                                        	<span class="text">&nbsp;新增活動&nbsp;</span>
                                     		</button>
                                     		</td>
                                     	</tr>
-                                    	
                                     </tbody>
                                  </table>
                                  
@@ -348,52 +289,8 @@
 
             </div>
             <!-- End of Main Content -->
-
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2021</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-
-        </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade text-center" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="exampleModalLabel">確定要登出？</h5>
-                    <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close"> -->
-                        <!-- <span aria-hidden="true">×</span> -->
-                    <!-- </button> -->
-                </div>
-                <div class="modal-body">
-                    <span>提醒：未儲存之工作項目將會遺失</span><br/>
-                    <span>請確認已完成當前工作，再選擇【登出】。</span>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>                  
-                    <a class="btn btn-primary" href="<c:url value='login' />">登出</a>
-                </div>
-            </div>
-        </div>
-    </div>
+            
+            <jsp:include page="../footer.jsp"></jsp:include>
 
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -442,11 +339,15 @@
                                         <tr id="tdfile">
                                             <td><img id="showImg2" style="max-width:500px"></img></td>
                                         </tr>
+                                        <tr>
+                                            <td>貼文刊登：<span id="chpd"></span></td>
+                                        </tr>
                                         <tr  id="tdqu">
                                             <td>已報名人數：  &nbsp／&nbsp可報名人數：<span id="chqu"></span></td>
                                         </tr>
+                                        
                                         <tr>
-                                            <td>刊登日期：<span id="chpd"></span></td>
+                                            <td>報名截止：<span id="ched"></span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -463,8 +364,7 @@
 	<!-- Check Modal End-->
 	
 	<!-- Result Modal-->
-    <div class="modal fade text-center" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel"
-        aria-hidden="true">
+    <div class="modal fade text-center" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -474,7 +374,7 @@
                     <span id="resultMsg" style="margin:3px auto"><font color='red' ></font></span><br/>
                 </div>
                 <div class="modal-footer justify-content-center" id="resultbutton">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="resultbutton">返回編輯</button>
+                	<button class="btn btn-secondary" type="button" data-dismiss="modal" id="resultbutton">返回編輯</button>
                 </div>
             </div>
         </div>

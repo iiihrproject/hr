@@ -1,8 +1,8 @@
 package com.hr.calendar.service.impl;
 
-import java.sql.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,13 +14,14 @@ import com.hr.calendar.service.CalendarService;
 @Transactional
 public class CalendarServiceImpl implements CalendarService {
 	
+	@Autowired
 	CalendarRepository calendarRepository;
 
 	@Override
 	public void newTask(CalendarTask task) {
-		//待修改
-		calendarRepository.newTask(task);
-		
+		if(task != null) {
+			calendarRepository.newTask(task);
+		}			
 	}
 
 	@Override
@@ -30,8 +31,8 @@ public class CalendarServiceImpl implements CalendarService {
 	}
 
 	@Override
-	public void delete(CalendarTask task) {
-		calendarRepository.delete(task);
+	public void delete(Integer no) {
+		calendarRepository.delete(no);
 
 	}
 
@@ -41,8 +42,8 @@ public class CalendarServiceImpl implements CalendarService {
 	}
 
 	@Override
-	public CalendarTask findTheTask(Date startTime, String taskTitle) {
-		return calendarRepository.findTheTask(startTime, taskTitle);
+	public CalendarTask findTheTask(Integer no) {
+		return calendarRepository.findTheTask(no);
 	}
 
 }

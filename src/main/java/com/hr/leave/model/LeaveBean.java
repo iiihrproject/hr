@@ -1,5 +1,7 @@
 package com.hr.leave.model;
 
+import java.sql.Blob;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hr.personnel.model.DepartmentDetail;
 
 @Entity
@@ -52,30 +55,33 @@ public class LeaveBean {
 	@Column(name = "HANDOFF")
 	private String handOff;
 	@Column(name = "HANDOFFEMAIL")
-	private String handOffemail;
+	private String handOffEmail;
 	@Column(name = "SUPPORTINGDOC")
 	private String supportingDoc;
-	@Column(name = "STATUS")
-	private String status;
+	
+	@OneToOne(targetEntity = ListBean.class, cascade = { CascadeType.DETACH })
+	@JoinColumn(name = "STATUS", referencedColumnName = "code")
+	private ListBean statusList;
+	@Column(name = "Approval01Name")
+	private String approval01Name;
+	@JsonIgnore
+	@Column(name = "Approval01Signature")
+	private Blob approval01Signature;
+	@Column(name = "Approval01Date")
+	private String approval01Date;
 
 	public LeaveBean() {
 	}
 
-	public DepartmentDetail getDept() {
-		return dept;
-	}
-
-	public void setDept(DepartmentDetail dept) {
-		this.dept = dept;
-	}
-
-	public LeaveBean(String applicationNo, String typeOfForm, String empNo, String requestDate, ListBean reasonList,
-			String startDate, String startTime, String endDate, String endTime, Float days, String comments,
-			String handOff, String handOffemail, String supportingDoc, String status) {
+	public LeaveBean(String applicationNo, String typeOfForm, String empNo, DepartmentDetail dept, String requestDate,
+			ListBean reasonList, String startDate, String startTime, String endDate, String endTime, Float days,
+			String comments, String handOff, String handOffEmail, String supportingDoc, ListBean statusList,
+			String approval01Name, Blob approval01Signature, String approval01Date) {
 		super();
 		this.applicationNo = applicationNo;
 		this.typeOfForm = typeOfForm;
 		this.empNo = empNo;
+		this.dept = dept;
 		this.requestDate = requestDate;
 		this.reasonList = reasonList;
 		this.startDate = startDate;
@@ -85,10 +91,15 @@ public class LeaveBean {
 		this.days = days;
 		this.comments = comments;
 		this.handOff = handOff;
-		this.handOffemail = handOffemail;
+		this.handOffEmail = handOffEmail;
 		this.supportingDoc = supportingDoc;
-		this.status = status;
+		this.statusList = statusList;
+		this.approval01Name = approval01Name;
+		this.approval01Signature = approval01Signature;
+		this.approval01Date = approval01Date;
 	}
+
+
 
 	@Override
 	public String toString() {
@@ -99,6 +110,8 @@ public class LeaveBean {
 		builder.append(typeOfForm);
 		builder.append(", empNo=");
 		builder.append(empNo);
+		builder.append(", dept=");
+		builder.append(dept);
 		builder.append(", requestDate=");
 		builder.append(requestDate);
 		builder.append(", reasonList=");
@@ -117,12 +130,18 @@ public class LeaveBean {
 		builder.append(comments);
 		builder.append(", handOff=");
 		builder.append(handOff);
-		builder.append(", handOffemail=");
-		builder.append(handOffemail);
+		builder.append(", handOffEmail=");
+		builder.append(handOffEmail);
 		builder.append(", supportingDoc=");
 		builder.append(supportingDoc);
 		builder.append(", status=");
-		builder.append(status);
+		builder.append(statusList);
+		builder.append(", approval01Name=");
+		builder.append(approval01Name);
+		builder.append(", approval01Signature=");
+		builder.append(approval01Signature);
+		builder.append(", approval01Date=");
+		builder.append(approval01Date);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -223,12 +242,12 @@ public class LeaveBean {
 		this.handOff = handOff;
 	}
 
-	public String getHandOffemail() {
-		return handOffemail;
+	public String getHandOffEmail() {
+		return handOffEmail;
 	}
 
-	public void setHandOffemail(String handOffemail) {
-		this.handOffemail = handOffemail;
+	public void setHandOffEmail(String handOffEmail) {
+		this.handOffEmail = handOffEmail;
 	}
 
 	public String getSupportingDoc() {
@@ -239,12 +258,44 @@ public class LeaveBean {
 		this.supportingDoc = supportingDoc;
 	}
 
-	public String getStatus() {
-		return status;
+	public ListBean getStatusList() {
+		return statusList;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatusList(ListBean statusList) {
+		this.statusList = statusList;
+	}
+
+	public DepartmentDetail getDept() {
+		return dept;
+	}
+
+	public void setDept(DepartmentDetail dept) {
+		this.dept = dept;
+	}
+
+	public String getApproval01Name() {
+		return approval01Name;
+	}
+
+	public void setApproval01Name(String approval01Name) {
+		this.approval01Name = approval01Name;
+	}
+
+	public Blob getApproval01Signature() {
+		return approval01Signature;
+	}
+
+	public void setApproval01Signature(Blob approval01Signature) {
+		this.approval01Signature = approval01Signature;
+	}
+
+	public String getApproval01Date() {
+		return approval01Date;
+	}
+
+	public void setApproval01Date(String approval01Date) {
+		this.approval01Date = approval01Date;
 	}
 
 }

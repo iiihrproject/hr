@@ -2,7 +2,7 @@ package com.hr.overtime.service.bean;
 
 import java.util.List;
 
-public class OverTimeReponse {
+public class PublicReponse {
 
 	private Integer currentPage = null;
 	

@@ -23,4 +23,5 @@ public interface OverTimePendingRepository extends JpaRepository<OverTimePending
 	public Page<OverTimePending> findByEmpNo(Pageable page,@Param("empNo") String empNo ,@Param("date")String date,
 											@Param("depart")String depart,@Param("managerEmpId")Integer managerEmpId);
 	
+	
 }

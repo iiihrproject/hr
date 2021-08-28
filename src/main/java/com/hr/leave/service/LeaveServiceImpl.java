@@ -51,11 +51,9 @@ public class LeaveServiceImpl implements LeaveService {
 
 	@Override
 	public void save(LeaveBean leave, LoginModel loginModel) {
-		System.out.println(leave);
 		leave.setTypeOfForm("Leave");
 		leave.setApplicationNo("L"+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMHHmmss")));
-		leave.setDept().setDepartmentNumber(loginModel.getDepartmentDetail().getDepartmentNumber());
-		leave.setStatus("pending");
+		leave.setDept(loginModel.getDepartmentDetail());
 		leaveRepo.save(leave);
 		
 	}

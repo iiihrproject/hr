@@ -22,21 +22,19 @@
 				dataArea.innerHTML = processScheduleData(xhr.responseText);
 				loadEmps(empName);
 				loadCSS();
-				console.log(xhr.responseText);
 			}
 		}
 	}
 
 	function processScheduleData(jsonString) {
 		let schedule = JSON.parse(jsonString);
-		console.log(schedule);
-		let segment = "<table id='table_id' class='display'>";
-		segment += "<thead><tr><th>編號</th><th>人員</th><th>開始</th><th>結束</th><th>職務</th></tr>"
-		segment += "<tr id='enter'><td><input type='text' name='keySchedule' id='keySchedule' readonly style='width:40px;visibility:hidden';'/></td>"
-				+ "<td><select name='empList' id='empList' onfocus='setToday (this.id)'></select></td>"
-				+ "<td><input type='datetime-local' name='start' id='start' onchange='setEnd (this.id)' step='1800'/></td>"
-				+ "<td><input type='datetime-local' name='end' id='end' step='1800' /></td>"
-				+ "<td><input type='text' name='titleList' id='titleList' value='上班' /></td>"
+		let segment = "<table id='table_id' class='table form-'>";
+		segment += "<thead><tr><th>編號</th><th>人員</th><th>開始</th><th>結束</th><th>職務</th><th>操作</th></tr>"
+		segment += "<tr id='enter'><td><input type='text' class='form-control' name='keySchedule' id='keySchedule' readonly style='width:40px;visibility:hidden';'/></td>"
+				+ "<td><select name='empList' id='empList' onfocus='setToday (this.id)' class='form-control'></select></td>"
+				+ "<td><input type='datetime-local' name='start' id='start' onchange='setEnd (this.id)' step='1800' class='form-control' /></td>"
+				+ "<td><input type='datetime-local' name='end' id='end' step='1800'  class='form-control'/></td>"
+				+ "<td><input type='text' name='titleList' id='titleList' value='到公司上班' class='form-control' /></td>"
 				+ "<td><button id='sendData' onclick='sendData()' class=''>新增</button>"
 				+ "<button id='updateData' onclick='updateData()' style='visibility:hidden' class=''>更新</button>"
 				+ "<button id='cancelUpdate' onclick='cancelUpdate()' style='visibility:hidden' class=''>取消</button></td>"
@@ -47,9 +45,6 @@
 			segment += "<tr>";
 			segment += "<td>" + sche.keySchedule + "</td>";
 			let link = '<a href="#" onclick="editData('+ sche.keySchedule +')">'+ sche.emps.name + '</a>';
-// 			<c:url value='/schedule/'/>'+ sche.keySchedule + '
-// 			segment += "<td>" + link + "</td>";
-// 			segment += "<td onclick='editData("+sche.keySchedule+")'>" + sche.emps.name + "</td>";
 			segment += "<td>" + link + "</td>";
 			segment += "<td>" + sche.start + "</td>";
 			segment += "<td>" + sche.end + "</td>";
@@ -81,12 +76,16 @@
 	//人員的下拉式選單
 	function addOption(empName) {
 		var selectEmps = document.getElementById('empList');
+		var empListDef = document.getElementById('empListDef');
 // 		Option物件的方法
 		var option = new Option("選擇",-1);
 		selectEmps.options[selectEmps.options.length] = option;
+		selectEmps.options[0].disabled = true;
 		for(let i = 0 ;i<empName.length; i++){
 			var option = new Option(empName[i][0],empName[i][1]);
 			selectEmps.options[selectEmps.options.length]=option;
+			var option2 = new Option(empName[i][0],empName[i][1]);
+			empListDef.options[empListDef.options.length]=option2;
 		}
 		//forEach的方法
 // 		empName.forEach(function(element, key) {
@@ -100,6 +99,7 @@
 		// 			titleList[key] = new Option(element, key);
 		// 		})
 	}
+	
 	//填好人員會將開始日期預設為今天
 	function setToday() {
 		var startOclock = parseInt(document.getElementById("defStartH").value);
@@ -258,7 +258,7 @@
 			messageBox.innerHTML = "<font color='red'>請選擇人員</font>";
 		} else if(start > end) {
 			hasError = true;
-			messageBox.innerHTML = "<font color='red'>日期錯誤，結束早於開始，是在哈囉?</font>";
+			messageBox.innerHTML = "<font color='red'>日期錯誤，結束早於開始，累了嗎?</font>";
 		} else if(title == ""){
 			hasError = true;
 			messageBox.innerHTML = "<font color='red'>請填入職務</font>";
@@ -306,34 +306,47 @@
 		$("tbody button").addClass("btn-light");
 		$("#cancelUpdate").addClass("btn-light");
 	}
+	
 </script>
 </head>
 <body>
-	<div class="container-fluid h-75">
+	<div class="container-fluid h-75 pt-4">
 		<!-- Basic Card Example -->
 		<div class="card shadow mb-4">
 			<!-- Begin of card-header -->
 			<div class="card-header py-3">
-				<table style="width: 100%">
-					<tr>
-						<td style="width: 10%"><h6
-								class="m-0 font-weight-bold text-primary">排班表</h6></td>
-						<td style="width: 45%"><strong>今天想要預設...</strong><input
-							type="number" value="9" id="defStartH" style="width: 45px;" />點開始，工作+休息共<input
-							type="number" value="9" id="defPeriod" style="width: 45px;" />小時</td>
-						<td style="width: 45%" id="messageBox"></td>
-					</tr>
-				</table>
+				<div class="row">
+						<div class="col-auto"><h6
+								class="m-0 font-weight-bold text-primary">排班表</h6></div>
+						<div class="col-auto"><strong>今天想要預設...</strong>
+							<input type="number" value="9" id="defStartH" style="width: 45px;" />點開始，工作+休息共<input
+							type="number" value="9" id="defPeriod" style="width: 45px;" />小時，專心排
+							<select name='empListDef' id='empListDef' onfocus='setToday (this.id)'></select>的班，職務都寫
+							<input type="text" value="到公司上班"/>
+							</div>
+						<div class="col-auto" id="messageBox"></div>
+				</div>
 
 			</div>
 			<!-- End of Card-header -->
 			<!-- Begin of Card-body -->
-			<div class="card-body">
+			<div id ="cardBody" class="card-body navbar-nav-scroll">
 				<div id="dataArea"></div>
 			</div>
 			<!-- End of Card-body -->
 		</div>
 		<!-- End of Card -->
 	</div>
+<script>
+$("#empListDef").mouseover(function(){
+	$("#empListDef").val("4");
+	$("#empList").val($("#empListDef" ).val());
+	setToday();
+});
+$(window).resize(function() {
+    var winH = $(this).height();
+    $("#cardBody").height(winH*0.6);
+}).resize();
+</script>
 </body>
 </html>

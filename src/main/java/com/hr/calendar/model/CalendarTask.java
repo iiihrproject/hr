@@ -1,6 +1,5 @@
 package com.hr.calendar.model;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Entity;
@@ -10,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "calendartask")
@@ -19,22 +19,27 @@ public class CalendarTask {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer no;
 	private String empNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH-mm", timezone = "Asia/Taipei")
-	private Date startTime;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH-mm", timezone = "Asia/Taipei")
-	private Date endTime;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Taipei")
+	@JsonProperty("start")
+	private Timestamp startTime;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Taipei")
+	@JsonProperty("end")
+	private Timestamp endTime;
+	@JsonProperty("color")
 	private String colorTag;
+	@JsonProperty("title")
 	private String taskTitle;
+	@JsonProperty("description")
 	private String taskText;
-	private Timestamp createTime;
-	private Timestamp editTime;
+	private String createTime;
+	private String editTime;
 	private Boolean taskStatus;
 
 	public CalendarTask() {
 
 	}
 
-	public CalendarTask(Date startTime, Date endTime, String colorTag, String taskTitle, String taskText,
+	public CalendarTask(Timestamp startTime, Timestamp endTime, String colorTag, String taskTitle, String taskText,
 			Boolean taskStatus) {
 		super();
 		this.startTime = startTime;
@@ -61,19 +66,19 @@ public class CalendarTask {
 		this.empNo = empNo;
 	}
 
-	public Date getStartTime() {
+	public Timestamp getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public Timestamp getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(Timestamp endTime) {
 		this.endTime = endTime;
 	}
 
@@ -101,19 +106,19 @@ public class CalendarTask {
 		this.taskText = taskText;
 	}
 
-	public Timestamp getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 
-	public Timestamp getEditTime() {
+	public String getEditTime() {
 		return editTime;
 	}
 
-	public void setEditTime(Timestamp editTime) {
+	public void setEditTime(String editTime) {
 		this.editTime = editTime;
 	}
 

@@ -1,6 +1,7 @@
 package com.hr.calendar.repository.impl;
 
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -18,45 +19,60 @@ public class CalendarRepositoryImpl implements CalendarRepository {
 	@Autowired
 	EntityManager entityManager;
 
+	
 	@Override
 	public void newTask(CalendarTask task) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date createTime = new Date();
+		task.setCreateTime(sdf.format(createTime));
 		entityManager.persist(task);
-
+		
 	}
+	
 
 	@Override
-	public void edit(CalendarTask task) {
-		CalendarTask editTask = findTheTask(task.getStartTime(), task.getTaskTitle());
-		
-		System.out.println("ex-task: " + editTask);
-		
-		task.setStartTime(editTask.getStartTime());
-		task.setEndTime(editTask.getEndTime());
-		task.setColorTag(editTask.getColorTag());
-		task.setTaskTitle(editTask.getTaskTitle());
-		task.setTaskText(editTask.getTaskText());
-		task.setTaskStatus(editTask.getTaskStatus());
-		task.setEditTime(editTask.getEditTime());
-		
-		entityManager.detach(editTask);
+	public void edit(CalendarTask task) {	
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date editTime = new Date();
+		task.setEditTime(sdf.format(editTime));
 		entityManager.merge(task);
-	}
+		
+		}
+		
+//		CalendarTask editTask = findTheTask(task.getNo());		
+//		task.setStartTime(editTask.getStartTime());
+//		task.setEndTime(editTask.getEndTime());
+//		task.setColorTag(editTask.getColorTag());
+//		task.setTaskTitle(editTask.getTaskTitle());
+//		task.setTaskText(editTask.getTaskText());
+//		task.setTaskStatus(editTask.getTaskStatus());
+//		task.setEditTime(task.getEditTime());
+		
+//		entityManager.detach(editTask);
+//		entityManager.merge(task);		
+		
+
+	
 
 	@Override
-	public void delete(CalendarTask task) {
-		entityManager.remove(task);
+	public void delete(Integer no) {
+//		CalendarTask userTask = entityManager.find(CalendarTask.class, no);
+		CalendarTask userTask = findTheTask(no);
+		entityManager.remove(userTask);
 	}
 
+	
 	@Override
 	public List<CalendarTask> showTasksByEmpNo(String empNo) {
-		String hql = "FROM calendartask ct WHERE ct.empNo = :empNo";
-		return entityManager.createQuery(hql, CalendarTask.class).getResultList();
+//		empNo="general";
+		String hql = "FROM CalendarTask ct WHERE ct.empNo =: empNo";
+		return entityManager.createQuery(hql, CalendarTask.class).setParameter("empNo", empNo).getResultList();
 	}
 
+	
 	@Override
-	public CalendarTask findTheTask(Date startTime, String taskTitle) {
-		String hql = "FROM calendartask ct WHERE ct.startTime = :startTime AND ct.taskTitle = :taskTitle";
-		return entityManager.createQuery(hql, CalendarTask.class).getSingleResult();
+	public CalendarTask findTheTask(Integer no) {
+		return entityManager.find(CalendarTask.class, no);
 	}
 
 }

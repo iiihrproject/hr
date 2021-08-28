@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.attribute.standard.Media;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.serial.SerialBlob;
@@ -51,15 +52,28 @@ public class BulletinMagController implements Serializable {
 
 	// 人資管理貼文列表 //h
 	@GetMapping("/bulletinListMag")
-	public @ResponseBody List<Bulletin> findAll() {
+	public @ResponseBody List<List> findAll() {
 		log.info("findAll方法執行中...");
+		System.out.println("-------:"+bulletinService.findAll());
 		return bulletinService.findAll();
 	}
+	
+//	@GetMapping("/bulletinListMag")
+//	public @ResponseBody List<Bulletin> findAll() {
+//		log.info("findAll方法執行中...");
+//		return bulletinService.findAll();
+//	}
 
 	// 新增活動貼文頁 //h
 	@GetMapping("/bulletinEventInsert")
 	public String bei() {
 		return "/bulletin/eventInsert";
+	}
+	
+	// 新增公告貼文頁 
+	@GetMapping("/bulletinAnnoInsert")
+	public String bai() {
+		return "/bulletin/annoInsert";
 	}
 
 	// 把表單資料送到資料庫新增資料 //h
@@ -69,6 +83,7 @@ public class BulletinMagController implements Serializable {
 			@RequestParam(value ="file1", required=false) MultipartFile multipartFile, 
 			@RequestParam("quotatype") String quotatype,
 			@RequestParam(value = "quota", defaultValue = "0") Integer quota, 
+			@RequestParam("endDate") Date endDate,
 			@RequestParam("postdate") Date postdate,
 			@RequestParam("exp") Date exp, HttpServletRequest request)
 			throws IllegalStateException, IOException, SerialException, SQLException {
@@ -111,6 +126,7 @@ public class BulletinMagController implements Serializable {
 		bulletin.setType("活動");
 		bulletin.setTitle(title);
 		bulletin.setPostDate(postdate);
+		bulletin.setEndDate(endDate);
 		bulletin.setDescription(description);
 		bulletin.setDesText(desText);
 		bulletin.setExp(exp);
@@ -132,6 +148,77 @@ public class BulletinMagController implements Serializable {
 		return result;
 
 	}
+	
+	
+	// 把表單資料送到資料庫新增資料 
+	@PostMapping("/insertAnnoBulletion")
+	public @ResponseBody String saveAnno(@RequestParam("title") String title,
+			@RequestParam("description") String description, @RequestParam("desText") String desText,
+			@RequestParam(value ="file1", required=false) MultipartFile multipartFile, 
+			@RequestParam("quotatype") String quotatype,
+			@RequestParam("postdate") Date postdate,
+			@RequestParam("exp") Date exp, HttpServletRequest request)
+			throws IllegalStateException, IOException, SerialException, SQLException {
+
+		Bulletin bulletin = new Bulletin();
+		log.info("saveAnno方法執行中...");
+
+		System.out.println("file1:" + multipartFile);
+
+		if (multipartFile == null) {
+		} else {
+			String fileName = multipartFile.getOriginalFilename();
+			System.out.println("fileName:" + fileName);
+
+			String saveDirPath = request.getSession().getServletContext().getRealPath("/") + "uploadTempDir//"; // 取得??路徑＋資料夾
+			File savefileDir = new File(saveDirPath);
+			savefileDir.mkdirs(); 
+
+			File saveFilePath = new File(savefileDir, fileName); 
+			multipartFile.transferTo(saveFilePath);
+			System.out.println("saveFilePath:" + saveFilePath);
+
+			// 存到資料庫
+			if (fileName != null && fileName.length() != 0) {
+				String saveFilePathStr = saveDirPath + fileName;
+				bulletin.setFile1(fileName);
+
+				FileInputStream fis1 = new FileInputStream(saveFilePathStr);
+				byte[] b = new byte[fis1.available()];
+				fis1.read(b);
+				fis1.close();
+
+				bulletin.setPicture(new SerialBlob(b)); 
+			}
+		}
+		log.info("save方法執行2...");
+		// 時間戳記
+		Timestamp ts = new Timestamp(System.currentTimeMillis());
+
+		bulletin.setType("公告");
+		bulletin.setTitle(title);
+		bulletin.setPostDate(postdate);
+		bulletin.setDescription(description);
+		bulletin.setDesText(desText);
+		bulletin.setExp(exp);
+		bulletin.setCreateTime(ts);
+		bulletin.setPostStatus("normal");
+		bulletin.setQuotatype(quotatype);
+
+		System.out.println("bulletin=" + bulletin);
+		String result = "";
+		try {
+			bulletinService.insert(bulletin);
+			result = "新增成功";
+
+		} catch (Exception e) {
+			result = e.getMessage();
+
+		}
+		return result;
+
+	}
+
 
 
 	// 編輯貼文頁 //h

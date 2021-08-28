@@ -116,7 +116,7 @@ function renderScheduler(events,resources) {
       eventOverlap: false, // will cause the event to take up entire resource height
       navLinks: true,
       resourceAreaWidth: '10%',
-      resourceAreaHeaderContent: 'Employee',
+      resourceAreaHeaderContent: '${sessionScope.loginModel.departmentDetail.name}',
       allDaySlot: false,
       businessHours:true,
 //       [ // 可以設定上班日，其他暗掉
@@ -230,7 +230,7 @@ body {
 </style>
 </head>
 <body>
-	<div class="container-fluid h-75">
+	<div class="container-fluid h-75 pt-4">
 		<!-- Basic Card Example -->
 		<div class="card shadow mb-4">
 			<!-- Begin of Card-body -->

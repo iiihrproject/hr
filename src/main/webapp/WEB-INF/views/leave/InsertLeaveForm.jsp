@@ -28,7 +28,7 @@
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				var colleagues = JSON.parse(xhr.responseText);
 				//塞一個選擇選項
-				var option = new Option("選位" + myDept + "好同事", -1);
+				var option = new Option( myDept + "好同事", -1);
 				handOffSelect.options[handOffSelect.options.length] = option;
 				handOffSelect.options[0].disabled = true;
 				//loop其他選項
@@ -61,7 +61,7 @@
 		var reason = [];
 		var reasonSelect = document.getElementById('reasonSelect');
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "<c:url value='/Leave/findListByCAT'/>" + "?category=REASON_ID", true);
+		xhr.open("GET", "<c:url value='/G/findListByCAT'/>" + "?category=REASON_ID", true);
 		xhr.send();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
@@ -85,7 +85,7 @@
 
 	function initialCSS() {
 		// 		$("form :input").addClass("form-control");
-		$("label").addClass("col-form-label");
+		$("label").addClass("col-form-label text-gray-800");
 	}
 	
 	
@@ -137,9 +137,11 @@
 					<div class="form-control-plaintext">申請人：${sessionScope.loginModel.name}</div>
 					<input class="d-none" id="empPk" value="${sessionScope.loginModel.pk}">
 				</div>
-				<div class="col row form-inline">
-					<label style="margin-left: auto">申請日：</label>
-					<input class="form-control form-control-plaintext" id="requestDate" name="requestDate">
+				<div class="col form-row">
+					<div class="form-control-plaintext" style="text-align:right">申請日：</div>
+				</div>
+				<div class="col form-row">
+					<input type="text" readonly class="form-control-plaintext" id="requestDate" name="requestDate">
 				</div>
 			</div>
 			<div class="form-row">
@@ -147,7 +149,7 @@
 					<label for="reasonSelect">請假事由</label>
 					<select class="form-control form-select" autofocus id="reasonSelect" name="reason"></select>
 				</div>
-				<div class="form-group col-md-6 d-none">
+				<div class="form-group col-md-6">
 					<label for="days">請假天數</label>
 					<input type="text" class="form-control" id="days" name="days" readonly>
 				</div>
@@ -198,84 +200,6 @@
 		</form>
 	</div>
 	<script>
-		//新增資料
-		$("#submitBtn").click(function() {
-			var hasError = false;
-			var messageBox = document.getElementById("messageBox");
-			var empPk = document.getElementById("empPk");
-			var requestDate = document.getElementById("requestDate").value;
-			var reasonList = document.getElementById("reasonSelect");
-			var startDate = document.getElementById("startDate").value;
-			var startTime = document.getElementById("startTime").value;
-			var endDate = document.getElementById("endDate").value;
-			var endTime = document.getElementById("endTime").value;
-			var comments = document.getElementById("comments").value;
-			var handOffSelect = document.getElementById("handOffSelect");
-			var handOffEmail = document.getElementById("handOffEmail").value;
-			if (reasonList.selectedIndex == 0) {
-				hasError = true;
-				$("#reasonSelect").addClass("is-invalid");
-				messageBox.innerHTML = "請選擇假別";
-			} else if(startDate > endDate) {
-				hasError = true;
-				$("#startDate").addClass("is-invalid");
-				$("#endDate").addClass("is-invalid");
-				messageBox.innerHTML = "日期錯誤，結束早於開始";
-			} else if(comments == ""){
-				hasError = true;
-				$("#comments").addClass("is-invalid");
-				messageBox.innerHTML = "請大概敘述一下";
-			} else if(handOffSelect.selectedIndex == 0){
-				hasError = true;
-				$("#handOffSelect").addClass("is-invalid");
-				messageBox.innerHTML = "請點名職務代理人";
-			} else if(handOffSelect.value == empPk.value){
-				hasError = true;
-				$("#handOffSelect").addClass("is-invalid");
-				messageBox.innerHTML = "職務代理人不能是自己";
-			}
-			if (hasError) {
-				$("#messageBox").removeClass("d-none");
-				return false;}
-// 			//前端把秒移除，後端須加回去
-// 			if (start.length == 16) {
-// 				start += ":00"
-// 			}
-// 			if (end.length == 16) {
-// 				end += ":00"
-// 			}
-			var xhr1 = new XMLHttpRequest();
-			xhr1.open("POST", "<c:url value='/Leave/Insert' />", true);
-			var jsonData = {
-				"empNo": '${sessionScope.loginModel.empNo}',
-				"requestDate" : requestDate,
-				"reasonList" : {"code": reasonList.value},
-				"startDate" : startDate,
-				"startTime" : startTime,
-				"endDate" : endDate,
-				"endTime" : endTime,
-				"comments" : comments,
-				"handOff" : handOffSelect.value,
-				"handOffemail" : handOffEmail,
-			}
-			xhr1.setRequestHeader("Content-Type", "application/json");
-			xhr1.send(JSON.stringify(jsonData));
-			xhr1.onreadystatechange = function() {
-				// 伺服器請求完成
-				if (xhr1.readyState == 4
-						&& (xhr1.status == 200 || xhr1.status == 201)) {
-					result = JSON.parse(xhr1.responseText);
-					if (result.fail) {
-						console.log("result.fail: " + result.fail)
-						messageBox.innerHTML = "<font color='red'>出現錯誤，請詢問相關人員</font>";
-					} else if (result.success) {
-						messageBox.innerHTML = "<font color='Green'>新增成功</font>";
-						loadData();
-					}
-				}
-			}
-		});
-		
 // 		//新增資料 練習新法 失敗
 // 		$("#submitBtn").click(function() {
 // 			var requestDate = document.getElementById("requestDate").value;
@@ -327,15 +251,15 @@
 		$("#reasonSelect").change(function(){
 			$(this).removeClass("is-invalid");
 		});
-		$("#startDate").focus(function(){
+		$("#startDate").change(function(){
 			$(this).removeClass("is-invalid");
 			$("#endDate").removeClass("is-invalid");
 		});
-		$("#endDate").focus(function(){
+		$("#endDate").change(function(){
 			$(this).removeClass("is-invalid");
 			$("#startDate").removeClass("is-invalid");
 		});
-		$("#comments").focus(function(){
+		$("#comments").change(function(){
 			$(this).removeClass("is-invalid");
 		});
 		$("#handOffSelect").change(function(){

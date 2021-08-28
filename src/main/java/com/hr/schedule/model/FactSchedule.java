@@ -22,6 +22,7 @@ public class FactSchedule {
 	@Column(name = "KeySchedule")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer keySchedule;
+	
 	@Column(name = "Date")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Taipei")
 	private Date workDate;
@@ -31,17 +32,21 @@ public class FactSchedule {
 	private LoginModel emps;
 	
 	@OneToOne(targetEntity = DimShift.class, cascade = CascadeType.DETACH)
-	@JoinColumn(name = "KeyShift", referencedColumnName = "KeyShift")
-	private DimShift dimShift;
+	@JoinColumn(name = "ShiftId", referencedColumnName = "KeyShift")
+	private DimShift shifts;
 	
 	@Column(name = "KeyAvailability")
 	private Integer keyAvailability;
+	
 	@Column(name = "HoursOfWork")
 	private Double hoursOfWork;
+	
 	@Column(name = "Start")
 	private String start;
+	
 	@Column(name = "EndOfShift")
 	private String end;
+	
 	@Column(name = "Title")
 	private String title;
 	
@@ -72,12 +77,14 @@ public class FactSchedule {
 		this.emps = emps;
 	}
 	
-	public DimShift getKeyShift() {
-		return dimShift;
+
+
+	public DimShift getShifts() {
+		return shifts;
 	}
-	
-	public void setKeyShift(DimShift keyShift) {
-		this.dimShift = keyShift;
+
+	public void setShifts(DimShift shifts) {
+		this.shifts = shifts;
 	}
 
 	public Integer getKeyAvailability() {

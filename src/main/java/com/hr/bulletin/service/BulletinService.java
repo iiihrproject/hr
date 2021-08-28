@@ -2,6 +2,10 @@ package com.hr.bulletin.service;
 
 import java.util.List;
 
+import javax.print.attribute.standard.Media;
+
+import com.hr.bulletin.model.BulEnroll;
+import com.hr.bulletin.model.BulLike;
 import com.hr.bulletin.model.BulMessage;
 import com.hr.bulletin.model.Bulletin;
 
@@ -14,7 +18,10 @@ public interface BulletinService {
 	Bulletin findById(int postno);
 
 	// 執行查詢多筆
-	List<Bulletin> findAll();
+	List<List> findAll();
+	
+	// 執行查詢多筆
+//	List<Media> findAll();
 
 	// 執行修改
 	void update(Bulletin bulletin);
@@ -33,5 +40,15 @@ public interface BulletinService {
 	void insertMsg(BulMessage bulMassage);
 
 	List<BulMessage> findAllMsg(int postno);
+
+	void delMsg(int id);
+
+	BulLike findLikeByno(String empNo, int postno);
+
+	void changeLike(BulLike bulLike);
+
+	BulEnroll findEnrollByno(String empNo, int postno);
+
+	void insertEnroll(BulEnroll bulEnroll);
 
 }

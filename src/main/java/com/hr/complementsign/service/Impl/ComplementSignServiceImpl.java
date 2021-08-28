@@ -15,10 +15,15 @@ import com.hr.complementsign.model.AudittedComplementSign;
 import com.hr.complementsign.model.PendingComplementSign;
 import com.hr.complementsign.repository.ComplementSignRepository;
 import com.hr.complementsign.service.ComplementSignService;
+import com.hr.login.model.LoginModel;
+import com.hr.login.repository.LoginRepository;
 
 @Service
 @Transactional
 public class ComplementSignServiceImpl implements ComplementSignService {
+	
+	@Autowired
+	LoginRepository loginRepository;
 	
 	@Autowired
 	ComplementSignRepository complementSignRepository;
@@ -103,7 +108,11 @@ public class ComplementSignServiceImpl implements ComplementSignService {
 			//新增方法
 			Checksystem checksystem = checkService.getCheckSystemByTime(dateString);
 			
-			Date checkTime = checkService.getTimeByType(type);
+			LoginModel loginModel = loginRepository.getLoginModelByEmpNo(empNo);
+			
+			int empID = loginModel.getPk();
+			
+			Date checkTime = checkService.getTimeByType(type,dateString,empID);
 			
 			double times = checkService.judgmentDate(checkTime, appliedDate);
 			
