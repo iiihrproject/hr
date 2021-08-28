@@ -165,7 +165,7 @@ $(document).ready( function () {
 </script>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container-fluid h-75 pt-4">
 	<!-- Page Heading -->
 	<h1 class="h3 mb-2 text-gray-800">${sessionScope.loginModel.departmentDetail.name}的請假簽核</h1>
 	<!-- DataTales Example -->
@@ -314,8 +314,8 @@ $(document).ready( function () {
 											<canvas id="sig-canvas" class="form-inline"
 												style="display: inline">Get a better browser, bro.</canvas>
 											<img id="sig-image" src="" style="display: none" />
-											<button class="btn btn-primary" id="sig-submitBtn">簽名完成</button>
-											<button class="btn btn-secondary" id="sig-clearBtn">重簽</button>
+											<button class="btn btn-primary d-print-none" id="sig-submitBtn">簽名完成</button>
+											<button class="btn btn-secondary d-print-none" id="sig-clearBtn">重簽</button>
 
 											<textarea id="sig-dataUrl" style="display: none"
 												class="form-control" rows="5">Data URL will go here!</textarea>
@@ -342,8 +342,8 @@ $(document).ready( function () {
 				"2px dotted #CCCCCC");
 
 		$("#printTable").click(function() {
-			document.getElementById("sig-clearBtn").style.display = "none";
-			document.getElementById("sig-submitBtn").style.display = "none";
+// 			document.getElementById("sig-clearBtn").style.display = "none";
+// 			document.getElementById("sig-submitBtn").style.display = "none";
 							
 			var body = $("#printArea").html();
  			var mywindow = window.open("", "", "left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0");
@@ -354,8 +354,8 @@ $(document).ready( function () {
  			mywindow.print();
 // 			mywindow.close();
 			
-			document.getElementById("sig-clearBtn").style.display = "inline";
-			document.getElementById("sig-submitBtn").style.display = "inline";
+// 			document.getElementById("sig-clearBtn").style.display = "inline";
+// 			document.getElementById("sig-submitBtn").style.display = "inline";
 			return true;
 		});
 		

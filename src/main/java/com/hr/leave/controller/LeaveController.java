@@ -39,12 +39,6 @@ public class LeaveController {
 //		return "redirect:/LeavaApplication/GetList";
 //	}
 	
-//	找清單內容
-	@GetMapping(value="/findListByCAT",produces= {"application/json; charset=UTF-8"})
-	public @ResponseBody List<ListBean> findListByCategory(@RequestParam("category") String category) {
-		return service.findListByCategory(category);
-	}
-	
 //	找同事的email
 	@GetMapping(value="/findEmpByPk")
 	public @ResponseBody List<Personnel> findEmpByPk(@RequestParam("empId") Integer empId) {

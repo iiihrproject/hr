@@ -48,9 +48,9 @@
 </head>
 <body>
 	<!-- 最外層 -->
-	<div class="container-fluid">
+	<div class="container-fluid h-75 pt-4">
 		<!-- Page Heading -->
-		<div class="d-sm-flex align-items-center justify-content-between mb-4">
+		<div class="d-sm-flex align-items-center justify-content-between mb-2">
 			<h1 class="h3 mb-0 text-gray-800">請假申請資訊</h1>
 		</div>
 		<!-- End of Page Heading -->
@@ -61,7 +61,7 @@
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
 						<h6 class="m-0 font-weight-bold text-primary d-inline">請假申請表</h6>
-						<button id="autofill" type="button" class="btn btn-warning btn-sm text-gray-900">隨機填入</button>
+						<button id="autofill" type="button" class="btn btn-warning btn-icon-split text-dark">隨機填入</button>
 					</div>
 					<!-- 表單內容 -->
 					<div class="card-body">
@@ -144,25 +144,25 @@
 		var comments = document.getElementById("comments").value;
 		var handOffSelect = document.getElementById("handOffSelect");
 		var handOffEmail = document.getElementById("handOffEmail").value;
-		if (reasonList.selectedIndex == 0) {
-			hasError = true;
+		if (reasonList.selectedIndex != 0) {
+		} else{	hasError = true;
 			$("#reasonSelect").addClass("is-invalid");
 			messageBox.innerHTML = "請選擇假別";
-		} else if(startDate > endDate) {
-			hasError = true;
+		} if(startDate < endDate) {
+		} else{	hasError = true;
 			$("#startDate").addClass("is-invalid");
 			$("#endDate").addClass("is-invalid");
 			messageBox.innerHTML = "日期錯誤，結束早於開始";
-		} else if(comments == ""){
-			hasError = true;
+		} if(comments != ""){
+		}else {hasError = true;
 			$("#comments").addClass("is-invalid");
 			messageBox.innerHTML = "請大概敘述一下";
-		} else if(handOffSelect.selectedIndex == 0){
-			hasError = true;
+		}if(handOffSelect.selectedIndex != 0){
+		}else {	hasError = true;
 			$("#handOffSelect").addClass("is-invalid");
 			messageBox.innerHTML = "請點名職務代理人";
-		} else if(handOffSelect.value == empPk.value){
-			hasError = true;
+		}if(handOffSelect.value != empPk.value){
+		}else {	hasError = true;
 			$("#handOffSelect").addClass("is-invalid");
 			messageBox.innerHTML = "職務代理人不能是自己";
 		}
