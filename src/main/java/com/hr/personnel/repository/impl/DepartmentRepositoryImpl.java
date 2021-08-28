@@ -32,7 +32,7 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
 		CriteriaQuery<DepartmentDetail> allDepartmentDetail = criteriaQuery.select(root);
 		
 		List<DepartmentDetail> departmentDetailList = entityManager.createQuery(allDepartmentDetail).getResultList();
-		
+		System.out.println(departmentDetailList);
 		return departmentDetailList;
 	}
 

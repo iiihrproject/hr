@@ -38,9 +38,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 			 map = new HashMap<String, String>();
 			 map.put("departmentNumber", departmentDetail.getDepartmentNumber().toString());
 			 map.put("name", departmentDetail.getName());
-			 map.put("managerEmpId", managerLoginModel.getPk().toString());
+			 map.put("managerEmpId", managerLoginModel.getEmpNo());
 			 map.put("managerName", managerLoginModel.getName());
-			 result.put(departmentDetail.getManagerEmpId(), map);
+			 result.put(departmentDetail.getDepartmentNumber(), map);
 		}
 		return result;
 	}

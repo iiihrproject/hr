@@ -39,7 +39,7 @@
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send("inputEmpNo=" + inputEmpNo);
 			xhr.onreadystatechange = function() {
-				if (xhr.readyState == 4 && xhr.status == 200) {	
+				if (xhr.readyState == 4 && xhr.status == 200) {
 					let tableInfo = JSON.parse(xhr.responseText);
 					for(const key in tableInfo){
 						let id = "#" + key;
@@ -56,8 +56,6 @@
 					innerxhr.onreadystatechange = function() {
 						if (innerxhr.readyState == 4 && innerxhr.status == 200) {
 							let tableInfo = JSON.parse(innerxhr.responseText);
-							console.log(tableInfo);
-							
 							for(i = 0; i < tableInfo.length; i++){
 								let id = "#" + tableInfo[i];
 								$(id).css("opacity", "1");
@@ -73,19 +71,31 @@
 			let inputName = $("#inputName").val();
 			let inputDepartmentNumber = $("#inputDepartmentNumber").val();
 			let inputIsEnable = $("#inputIsEnable").val();
-			let admin = "";
-			let hr = "";
-			let manager = "";
-			let general = "";
-			if($("#admin").css("opacity") === 1){
-				admin = admin
-			}
 			let edittedLoginModel = {
 				"role": inputRole,
 				"name": inputName,
 				"departmentDetail": inputDepartmentNumber,
-				"isEnable": inputIsEnable
+				"hr_manager": hr_manager,
+				"hr": hr,
+				"rd_manager": rd_manager,
+				"rd": rd,
+				"salse_manager": salse_manager,
+				"salse": salse,
+				"production_manager": production_manager,
+				"production": production,
+				"general": general,
 			};
+			let authorities = $(".button");
+			for(let i = 1; i <= authorities.length; i++){
+				if($("#authorityButton button:nth-child(" + i + ")").css("opacity") === "1"){
+					edittedLoginModel[$("#authorityButton button:nth-child(" + i + ")").id] = "true";
+				}
+				else{
+					edittedLoginModel[$("#authorityButton button:nth-child(" + i + ")").id] = "false";
+				}
+				console.log(edittedLoginModel[$("#authorityButton button:nth-child(" + i + ")").id]);
+			}
+			
 			let xhr = new XMLHttpRequest();
 			let json = JSON.stringify(edittedLoginModel);
 			xhr.open("POST", "<c:url value='/modify' />", true);
@@ -106,13 +116,26 @@
 						}
 						document.querySelector(id).innerHTML = tableInfo[key];
 					}
+					$(".button").css("opacity", "0.4");
+	        		let innerxhr = new XMLHttpRequest();
+					innerxhr.open("POST", "<c:url value='/findAuthorities' />", true);
+					innerxhr.send();
+					innerxhr.onreadystatechange = function() {
+						if (innerxhr.readyState == 4 && innerxhr.status == 200) {
+							let tableInfo = JSON.parse(innerxhr.responseText);
+							for(i = 0; i < tableInfo.length; i++){
+								let id = "#" + tableInfo[i];
+								$(id).css("opacity", "1");
+							}
+						}
+		        	}
 				}
         	}
 			
 		});
 	}
 	function offOrOn(obj){
-		if($(obj).css("opacity")  === 1){
+		if($(obj).css("opacity")  === "1"){
 			$(obj).css("opacity", "0.4");
 		}
 		else{
@@ -151,11 +174,15 @@
 							<tr><td>部門名稱</td><td id='departmentName'></td><td>不可在此更動</td></tr>
 							<tr><td>在職狀態</td><td id='isEnable'></td><td><input type='text' id='inputIsEnable'/></td></tr>
 							<tr><td colspan='3'><div id='authorityButton'>
-								<button id='admin' onclick="offOrOn(this)" class='button'>管理員</button>
+								<button id='hr_manager' onclick="offOrOn(this)" class='button'>人資主管</button>
 								<button id='hr' onclick="offOrOn(this)" class='button'>人資員工</button>
-								<button id='manager' onclick="offOrOn(this)" class='button'>部門經理</button>
+								<button id='rd_manager' onclick="offOrOn(this)" class='button'>研發部門經理</button>
+								<button id='rd' onclick="offOrOn(this)" class='button'>研發部門</button>
+								<button id='salse_manager' onclick="offOrOn(this)" class='button'>業務部門經理</button>
+								<button id='salse' onclick="offOrOn(this)" class='button'>業務部門</button>
+								<button id='production_manager' onclick="offOrOn(this)" class='button'>生產部門經理</button>
+								<button id='production' onclick="offOrOn(this)" class='button'>生產部門</button>
 								<button id='general' onclick="offOrOn(this)" class='button'>一般員工</button>
-<!-- 								  -->
 							</div></td></tr>
 							<tr><td colspan='3'><button id='submit'>修改</button></td>
 						</tbody>
