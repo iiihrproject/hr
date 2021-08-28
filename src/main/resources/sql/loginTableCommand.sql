@@ -5,6 +5,8 @@ drop table IF EXISTS [dbo].[personnel];
 drop table IF EXISTS [dbo].[loginModel];
 drop table IF EXISTS [dbo].[departmentDetail];
 
+use hrdb;
+
 create table departmentDetail(
 	dept_no int not null primary key identity,
 	name nvarchar(max) not null,
@@ -21,16 +23,24 @@ insert into departmentDetail(
 	name,
 	managerEmpId
 )
-values('Sales', 3);
+values('RD', 3);
+
+insert into departmentDetail(
+	name,
+	managerEmpId
+)
+values('SALES', 5);
 
 create table loginModel(
 	emp_id int not null identity primary key,
 	role nvarchar(20) not null,
 	personalIdNumber nvarchar(20) not null, 
 	name nvarchar(max) not null,
+	gender nvarchar(10) not null,
 	empNo nvarchar(max) not null,
 	pwd nvarchar(max) not null,
 	dept_No int not null foreign key references departmentDetail(dept_no),
+	employedDate date not null,
 	non_Expired bit not null,
 	non_Locked bit not null,
 	credentials_Non_Expired bit not null,
@@ -43,49 +53,36 @@ create table authorities(
 	emp_id int not null foreign key references loginModel(emp_id),
 	authorityName nvarchar(20) not null
 );
-/*
- * login password is same as username
- * using default BCrypt strenth which is 10 rounds
- */
+
 insert into loginModel( 
 	role,
 	personalIdNumber,
 	name,
+	gender,
 	empNo,
 	pwd,
 	dept_No,
+	employedDate,
 	non_Expired,
 	non_Locked,
 	credentials_Non_Expired,
 	last_Change,
 	is_Enable)
 values(
-	'ADMIN',
+	'HR MANAGER',
 	'A222222222',
-	'aaaa',
-	'admin',
-	'$2a$12$64k2FImhrK9hstivLPWexee5H6B/843r5LLxZQ6CtX82CIHx.7hby',
+	'Nick Fury',
+	'male',
+	'hrmanager',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
+	1,
+	'2010-07-09',
 	1,
 	1,
 	1,
-	1,
-	'2020-08-07',
+	'2020-05-01',
 	1
 );
-
-insert into authorities (
-	emp_id,
-	authorityName)
-values(
-	1,
-	'ROLE_GENERAL');
-
-insert into authorities (
-	emp_id,
-	authorityName)
-values(
-	1,
-	'ROLE_MANAGER');
 
 insert into authorities (
 	emp_id,
@@ -99,15 +96,17 @@ insert into authorities (
 	authorityName)
 values(
 	1,
-	'ROLE_ADMIN');
+	'ROLE_HR_MANAGER');
 	
 insert into loginModel( 
 	role,
 	personalIdNumber,
 	name,
+	gender,
 	empNo,
 	pwd,
 	dept_No,
+	employedDate,
 	non_Expired,
 	non_Locked,
 	credentials_Non_Expired,
@@ -116,10 +115,12 @@ insert into loginModel(
 values(
 	'HR',
 	'B222222222',
-	'bbbb',
-	'hr',
-	'$2a$12$IrOf4wt1RK2vso6F3.SPeOt3ybZJ0ko.dayrLtznN8v.RsOivCV8e',
+	'Natasha Alianovna Romanoff',
+	'female',
+	'hr1',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
 	1,
+	'2011-01-31',
 	1,
 	1,
 	1,
@@ -132,34 +133,31 @@ insert into authorities (
 	authorityName)
 values(
 	2,
-	'ROLE_GENERAL');
-
-insert into authorities (
-	emp_id,
-	authorityName)
-values(
-	2,
 	'ROLE_HR');
 
 insert into loginModel( 
 	role,
 	personalIdNumber,
 	name,
+	gender,
 	empNo,
 	pwd,
 	dept_No,
+	employedDate,
 	non_Expired,
 	non_Locked,
 	credentials_Non_Expired,
 	last_Change,
 	is_Enable)
 values(
-	'MANAGER',
+	'RD MANAGER',
 	'C222222222',
-	'CCCC',
-	'manager',
-	'$2a$12$5n.p3mUi.l3/BmhftnijC.2lrfMy3OlfK0Y2ik724EbmB/S1l7V.2',
+	'Tony Stark',
+	'male',
+	'rdmanager',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
 	2,
+	'2013-12-04',
 	1,
 	1,
 	1,
@@ -167,43 +165,48 @@ values(
 	1
 );
 
+	
 insert into authorities (
 	emp_id,
 	authorityName)
 values(
 	3,
-	'ROLE_GENERAL');
+	'ROLE_RD');
 
 insert into authorities (
 	emp_id,
 	authorityName)
 values(
 	3,
-	'ROLE_MANAGER');
+	'ROLE_RD_MANAGER');
 
 insert into loginModel( 
 	role,
 	personalIdNumber,
 	name,
+	gender,
 	empNo,
 	pwd,
 	dept_No,
+	employedDate,
 	non_Expired,
 	non_Locked,
 	credentials_Non_Expired,
 	last_Change,
 	is_Enable)
 values(
-	'GENERAL',
+	'RD',
 	'D111111111',
-	'DDDDDD',
-	'general',
-	'$2a$12$mItWBjCCPoO8zPbhlhil.ub3cKllOyTlqeVSr/wc3qNB0AmUnL4SK',
+	'Peter Benjamin Parker',
+	'male',
+	'rd1',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
 	2,
+	'2014-09-16',
 	1,
 	1,
 	1,
-	'2020-08-07',
+	'2020-06-21',
 	1
 );
 
@@ -212,7 +215,238 @@ insert into authorities (
 	authorityName)
 values(
 	4,
-	'ROLE_GENERAL');
+	'ROLE_RD');
+
+insert into loginModel( 
+	role,
+	personalIdNumber,
+	name,
+	gender,
+	empNo,
+	pwd,
+	dept_No,
+	employedDate,
+	non_Expired,
+	non_Locked,
+	credentials_Non_Expired,
+	last_Change,
+	is_Enable)
+values(
+	'Sales MANAGER',
+	'E222222222',
+	'Steve Rogers',
+	'male',
+	'salesmanager',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
+	3,
+	'2014-02-28',
+	1,
+	1,
+	1,
+	'2020-07-13',
+	1
+);
+	
+insert into authorities (
+	emp_id,
+	authorityName)
+values(
+	5,
+	'ROLE_SALES');
+
+insert into authorities (
+	emp_id,
+	authorityName)
+values(
+	5,
+	'ROLE_SALES_MANAGER');
+
+	
+insert into loginModel( 
+	role,
+	personalIdNumber,
+	name,
+	gender,
+	empNo,
+	pwd,
+	dept_No,
+	employedDate,
+	non_Expired,
+	non_Locked,
+	credentials_Non_Expired,
+	last_Change,
+	is_Enable)
+values(
+	'Sales',
+	'E222222222',
+	'Wanda Maximoff',
+	'female',
+	'sales1',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
+	3,
+	'2017-05-24',
+	1,
+	1,
+	1,
+	'2020-08-20',
+	1
+);
+
+insert into authorities (
+	emp_id,
+	authorityName)
+values(
+	6,
+	'ROLE_SALES');
+	
+
+insert into loginModel( 
+	role,
+	personalIdNumber,
+	name,
+	gender,
+	empNo,
+	pwd,
+	dept_No,
+	employedDate,
+	non_Expired,
+	non_Locked,
+	credentials_Non_Expired,
+	last_Change,
+	is_Enable)
+values(
+	'RD',
+	'G111111111',
+	'Bruce Banner',
+	'male',
+	'rd2',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
+	2,
+	'2006-03-12',
+	1,
+	1,
+	1,
+	'2020-04-21',
+	1
+);
+
+insert into authorities (
+	emp_id,
+	authorityName)
+values(
+	7,
+	'ROLE_RD');
+
+insert into loginModel( 
+	role,
+	personalIdNumber,
+	name,
+	gender,
+	empNo,
+	pwd,
+	dept_No,
+	employedDate,
+	non_Expired,
+	non_Locked,
+	credentials_Non_Expired,
+	last_Change,
+	is_Enable)
+values(
+	'RD',
+	'H111333666',
+	'Hank Pym',
+	'male',
+	'rd3',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
+	2,
+	'2008-05-02',
+	1,
+	1,
+	1,
+	'2020-03-17',
+	1
+);
+
+insert into authorities (
+	emp_id,
+	authorityName)
+values(
+	8,
+	'ROLE_RD');
+
+insert into loginModel( 
+	role,
+	personalIdNumber,
+	name,
+	gender,
+	empNo,
+	pwd,
+	dept_No,
+	employedDate,
+	non_Expired,
+	non_Locked,
+	credentials_Non_Expired,
+	last_Change,
+	is_Enable)
+values(
+	'RD',
+	'I222111111',
+	'Victor Shade',
+	'male',
+	'rd4',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
+	2,
+	'2009-10-19',
+	1,
+	1,
+	1,
+	'2020-08-25',
+	1
+);
+
+insert into authorities (
+	emp_id,
+	authorityName)
+values(
+	9,
+	'ROLE_RD');
+
+insert into loginModel( 
+	role,
+	personalIdNumber,
+	name,
+	gender,
+	empNo,
+	pwd,
+	dept_No,
+	employedDate,
+	non_Expired,
+	non_Locked,
+	credentials_Non_Expired,
+	last_Change,
+	is_Enable)
+values(
+	'RD',
+	'J222555777',
+	'Brandt',
+	'female',
+	'rd5',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
+	2,
+	'2016-08-13',
+	1,
+	1,
+	1,
+	'2020-06-30',
+	1
+);
+
+insert into authorities (
+	emp_id,
+	authorityName)
+values(
+	10,
+	'ROLE_RD');
 	
 create table personnel(
 	emp_id int not null primary key references loginModel(emp_id),
@@ -248,3 +482,45 @@ insert into [personnel] (
       ,[address]
       ,[email])
 values (4, '0945678123', 'New Taipei', 'example@test.com');
+
+insert into [personnel] (
+		[emp_id]
+      ,[phoneNumber]
+      ,[address]
+      ,[email])
+values (5, '0945678123', 'New Taipei', 'example@test.com');
+
+insert into [personnel] (
+		[emp_id]
+      ,[phoneNumber]
+      ,[address]
+      ,[email])
+values (6, '0945678123', 'New Taipei', 'example@test.com');
+
+insert into [personnel] (
+		[emp_id]
+      ,[phoneNumber]
+      ,[address]
+      ,[email])
+values (7, '0945678123', 'New Taipei', 'example@test.com');
+
+insert into [personnel] (
+		[emp_id]
+      ,[phoneNumber]
+      ,[address]
+      ,[email])
+values (8, '0945678123', 'New Taipei', 'example@test.com');
+
+insert into [personnel] (
+		[emp_id]
+      ,[phoneNumber]
+      ,[address]
+      ,[email])
+values (9, '0945678123', 'New Taipei', 'example@test.com');
+
+insert into [personnel] (
+		[emp_id]
+      ,[phoneNumber]
+      ,[address]
+      ,[email])
+values (10, '0945678123', 'New Taipei', 'example@test.com');
