@@ -1,5 +1,6 @@
 package com.hr.overtime.repository.Impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -48,15 +49,20 @@ public class OverTimeRepositoryImpl implements OverTimeRepository {
 		return overTimeList;
 	}
 	
-//	@Override
-//	public DepartmentDetail queryManagerId(int dept_no) {
-//		String hql = "select managerEmpId  from DepartmentDetail where dept_no = :dept_no ";
-//		TypedQuery<DepartmentDetail> query = entityManager.createQuery(hql, DepartmentDetail.class);
-//		
-//		query.setParameter("dept_no", dept_no);
-//		
-//		return query.getSingleResult();
-//	}
+	@Override
+	public Double sumOverTimeHours(String empNo) {
+		String hql = "SELECT SUM (convert(decimal,OverTimeHours)) FROM overtimeapplicationauditted where empNo= :empNo";
+		
+		Query query = entityManager.createNativeQuery(hql);
+		query.setParameter("empNo", empNo);
+		
+		if(query.getResultList().size()>0) {
+			
+			BigDecimal val = (BigDecimal)query.getSingleResult();
+			return val != null ? val.doubleValue() : 0;
+		}
+		return null;
+	}
 	//--------------------------------------管理員----------------------------------------------//
 	@Override
 	public List<OverTimePending> findByResult() {

@@ -129,7 +129,8 @@
 		             
 		         swal("打卡成功!", "今日工作辛苦了", "success");
 // 		         window.location.href = "<c:url value='/checkInto'/>";
-// 		         location.reload();
+		         setTimeout('refresh()', 1500);
+
 		     } else if (result.dismiss === "cancel"){
 		          //使用者按下「取消」要做的事
 		         swal("取消打卡", "尚未打卡下班", "error");
@@ -141,6 +142,7 @@
 		    $(this).next().slideToggle();
 		});
 		
+	
 		
 		
 	})
@@ -149,6 +151,11 @@
 	</script>
 	
 	<script type="text/javascript">
+	
+	function refresh(){
+		window.location.href = "<c:url value='/checkInto'/>";
+	}
+	
 	//畫面效果
 	$(function () {
 	    $('#switchID1').click(function () {
@@ -221,17 +228,16 @@
 
                 <!-- header刪掉 End-->
                 
-             <div class="row" style="background-image: url('<c:url value="/img/pages.jpg" />');">
-<%-- 						<img src = "<c:url value='img/pages.png' />" > --%>
+             <div class="row pt-4" style="background-image: url('<c:url value="/img/pages.jpg" />');  background-size: cover;" >
                         <!-- First Column -->
                         <div class="col-lg-4 mycss">
 
                             <!-- Custom Text Color Utilities -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                 <a href="<c:url value='/checkInto' />" class="text-decoration-none">
-                                	<button class="btn btn-outline-primary">refresh</button>
-                                 </a>
+<%--                                  <a href="<c:url value='/checkInto' />" class="text-decoration-none"> --%>
+<!--                                 	<button class="btn btn-outline-primary">refresh</button> -->
+<!--                                  </a> -->
                                     <h2 class="m-0 font-weight-bold text-primary">員工打卡系統</h2>
                                 </div>
                                 <div class="card-body ">
@@ -241,7 +247,7 @@
 							            <h1 id="showbox"></h1>
 							            <br> <br> <br> <br> <br> <br> <br>
 							            <br> <br> <br>
-							            <h4 id="worktime"><nobr>上班時間:+${factSchedule.start}</nobr></h4><h4 id="offworktime" ><nobr>下班時間:18:00</nobr></h4>
+							            <h4 id="worktime"style="float:left; margin-left: 150px;"><nobr>上班時間:${fn:substring(factSchedule.start,11,16)}</nobr></h4><h4 id="offworktime" style="float:right; margin-right: 150px;"><nobr>下班時間:${fn:substring(factSchedule.end,11,16)}</nobr></h4>
         							   </div>
                                 </div>
                             </div>
