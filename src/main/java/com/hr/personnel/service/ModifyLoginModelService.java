@@ -15,6 +15,8 @@ public interface ModifyLoginModelService {
 
 	Map<String, String> getReturnMap(LoginModel loginModel);
 
+	boolean updateAuthorities(Map<String, String> inputMap, LoginModel modifiedLoginModel);
+
 	List<String> findAuthorities(LoginModel modifiedLoginModel);
 
 }

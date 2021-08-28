@@ -7,6 +7,7 @@ import javax.persistence.NonUniqueResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.hr.login.model.Authorities;
 import com.hr.login.model.LoginModel;
 import com.hr.personnel.model.DepartmentDetail;
 import com.hr.personnel.repository.ModifyLoginModelRepository;
@@ -63,4 +64,28 @@ public class ModifyLoginModelRepositoryImpl implements ModifyLoginModelRepositor
 		}
 	}
 
+	@Override
+	public boolean insertAuthorities(Authorities authority) {
+		try {
+			entityManager.persist(authority);
+		}
+		catch(Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+
+	@Override
+	public boolean deleteAuthorities(Authorities authorities) {
+		Integer id = authorities.getId();
+		try {
+			entityManager.createQuery("delete from authorities where id = :id").setParameter("id", id).executeUpdate();
+			return true;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

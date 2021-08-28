@@ -2,6 +2,7 @@ package com.hr.personnel.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -88,5 +89,67 @@ public class ModifyLoginModelServiceImpl implements ModifyLoginModelService {
 			list.add(authority.getAuthorityName().substring(5).toLowerCase());
 		}
 		return list;
+	}
+
+	@Override
+	public boolean updateAuthorities(Map<String, String> inputMap, LoginModel modifiedLoginModel) {
+		// Getting the authorities of this loginModel and use iterator to run through each of it
+		Set<Authorities> authoritiesSet = modifiedLoginModel.getAuthorities();
+		// So creating a string set of authority name
+		// And using a map to take the authority as value and authority name as key
+		Set<String> authoritiesStringSet = new HashSet<String>();
+		Map<String, Authorities> authorityMap = new HashMap<String, Authorities>();
+		// Starting run through each one
+		Iterator<Authorities> authoritiesIterator = authoritiesSet.iterator();
+		while(authoritiesIterator.hasNext()) {
+			Authorities eachAuthorities = authoritiesIterator.next();
+			String authorities = eachAuthorities.getAuthorityName().substring(5).toLowerCase();
+			// The authorities is "admin", "hr", and ect. for authoritiesStringSet and keys of authorityMap
+			authoritiesStringSet.add(authorities);
+			authorityMap.put(authorities, eachAuthorities);
+		}
+		// Using iterator to get only authorities value by checking true or false
+		Map<String, Boolean> authoritiesBooleanMap = new HashMap<String, Boolean>();
+		Set<String> inputMapValue = inputMap.keySet();
+		Iterator<String> inputMapValueIterator = inputMapValue.iterator();
+		while(inputMapValueIterator.hasNext()) {
+			String key = inputMapValueIterator.next();
+			String autoritiesValue = inputMap.get(key);
+			if(autoritiesValue.equals("true") || autoritiesValue.equals("false")) {
+				// So this map only contains the authorities string
+				authoritiesBooleanMap.put(key, Boolean.valueOf(autoritiesValue));
+			}
+		}
+		// Getting the authoritiesMap now and is able to running this map for checking boolean of each authority
+		// The keys are "admin", "hr", and ect..
+		Set<String> inputAutoritiesValue = authoritiesBooleanMap.keySet();
+		Iterator<String> inputAutoritiesValueIterator = inputAutoritiesValue.iterator();
+		while(inputAutoritiesValueIterator.hasNext()) {
+			String key = inputAutoritiesValueIterator.next();
+			if(authoritiesBooleanMap.get(key)) {
+				if(!(authoritiesStringSet.contains(key))) {
+					// if input authorities is true but nothing in the database, then the inserting is needed 
+					Authorities authority = new Authorities();
+					authority.setLoginModel(modifiedLoginModel);
+					String authorityName = "ROLE_" + key.toUpperCase();
+					authority.setAuthorityName(authorityName);
+					boolean flowCheck1 = modifyLoginModelRepository.insertAuthorities(authority);
+					if(!flowCheck1) {
+						return false;
+					}
+				}
+			}
+			else {
+				if(authoritiesStringSet.contains(key)) {
+					// if input authorities is false but there is that authorities in the set of modifiedModel, then the deleting is needed
+					// So using the map created at the beginning when authoritiesStringSet is created
+					boolean flowCheck2 = modifyLoginModelRepository.deleteAuthorities(authorityMap.get(key));
+					if(!flowCheck2) {
+						return false;
+					}
+				}				
+			}
+		}
+		return true;
 	}
 }
