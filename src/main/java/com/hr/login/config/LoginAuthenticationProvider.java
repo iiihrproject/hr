@@ -26,8 +26,6 @@ import com.hr.login.service.LoginService;
 @Component
 public class LoginAuthenticationProvider implements AuthenticationProvider {
 	
-	private final Logger LOG = LoggerFactory.getLogger(this.getClass().getName());
-	
 	@Autowired
 	private LoginService loginService;
 	
@@ -39,7 +37,6 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
 		String empNo = authentication.getName();
 		String pwd = authentication.getCredentials().toString();
 		
-//		LOG.info("empNo is " + empNo + " and pwd is " + pwd);
 		LoginModel loginModel = loginService.getLoginModelByEmpNo(empNo);
 		if (loginModel != null) {
 			if (passwordEncoder.matches(pwd, loginModel.getEmployeePassword())) {
