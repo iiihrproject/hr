@@ -31,7 +31,7 @@ public class BulletinMsgController {
 	@Autowired
 	BulletinService bulletinService;
 	
-	@PostMapping("/insertMessage")
+	@PostMapping("/insertMessage") //all
 	public @ResponseBody Map<String, String> saveMsg(@RequestBody BulMessage bulMessage) {
 		log.info("新增留言方法執行中...");
 
@@ -62,14 +62,14 @@ public class BulletinMsgController {
 		return map;
 	}
 	
-	@GetMapping("/bulletinGetMsg")
+	@GetMapping("/bulletinGetMsg") //all
 	public @ResponseBody List<BulMessage> findMsgByNo(@RequestParam("postno") int postno) {
 		log.info("留言載入方法執行中...");
 		List<BulMessage> bulList = bulletinService.findAllMsg(postno);
 		return bulList;
 	}
 	
-	@GetMapping("/bulletinDelMsg")
+	@GetMapping("/bulletinDelMsg") //all
 	public @ResponseBody String delMsg(int id) {
 		log.info("刪除留言方法執行中...");
 		String result = "";
@@ -82,7 +82,7 @@ public class BulletinMsgController {
 		return result;
 	}
 	
-	@PostMapping("/bulletinChangeLike")
+	@PostMapping("/bulletinChangeLike")  //all
 	public @ResponseBody void changeLike(String empNo, int postno) {
 		log.info("Like方法執行中...");
 		BulLike bulLN = new BulLike();
@@ -115,7 +115,7 @@ public class BulletinMsgController {
 		System.out.println(result);
 	}
 	
-	@PostMapping("/bulletinFindLike")
+	@PostMapping("/bulletinFindLike") //all
 	public @ResponseBody BulLike findLikeByno(@RequestParam String empNo, @RequestParam int postno) {
 		log.info("FindLike方法執行中...");
 		try {

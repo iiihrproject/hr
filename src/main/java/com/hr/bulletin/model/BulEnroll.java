@@ -29,8 +29,7 @@ public class BulEnroll {
 	
 	private String enrollStatus;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone="Asia/Taipei")
-	private Date enrollDate;
+	private Timestamp createTime;
 	
 	private Timestamp updateTime;		// 建檔時間(紀錄寫入表格的時間)
 	
@@ -94,12 +93,12 @@ public class BulEnroll {
 		this.empName = empName;
 	}
 
-	public Date getEnrollDate() {
-		return enrollDate;
+	public Timestamp getCreateTime() {
+		return createTime;
 	}
 
-	public void setEnrollDate(Date enrollDate) {
-		this.enrollDate = enrollDate;
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
 	}
 
 
