@@ -17,51 +17,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.hr.leave.model.LeaveBean;
-import com.hr.leave.model.ListBean;
 import com.hr.leave.service.LeaveService;
 import com.hr.login.model.LoginModel;
-import com.hr.login.service.LoginService;
-import com.hr.personnel.model.Personnel;
 
 @Controller
 @RequestMapping("/Leave")
 @SessionAttributes("loginModel")
 public class LeaveController {
-
 	@Autowired
 	private LeaveService service;
-	@Autowired
-	private LoginService loginService;
-
-//	@DeleteMapping("/leave/{applicationNo}")
+	
+	//	@DeleteMapping("/leave/{applicationNo}")
 //	public String deleteOne(@RequestParam("applicationNo") String applicationNo) {
 //		service.delete(applicationNo);
 //		return "redirect:/LeavaApplication/GetList";
 //	}
-	
-//	找清單內容
-	@GetMapping(value="/findListByCAT",produces= {"application/json; charset=UTF-8"})
-	public @ResponseBody List<ListBean> findListByCategory(@RequestParam("category") String category) {
-		return service.findListByCategory(category);
-	}
-	
-//	找同事的email
-	@GetMapping(value="/findEmpByPk")
-	public @ResponseBody List<Personnel> findEmpByPk(@RequestParam("empId") Integer empId) {
-		return service.findEmpByPk(empId);
-	}
-	
-//	找員工資訊
-	@GetMapping(value="/findEmpByEmpNo")
-	public @ResponseBody LoginModel findEmpByEmpNo(@RequestParam("empNo") String empNo) {
-		return loginService.getLoginModelByEmpNo(empNo);
-	}
-	
-//	找同部門的同事
-	@GetMapping(value="/findEmpsByDept")
-	public @ResponseBody List<LoginModel> findEmpsByDept(@RequestParam("departmentNumber") Integer departmentNumber) {
-		return service.findEmpsByDept(departmentNumber);
-	}
 	
 //  頁面到請假申請
 	@GetMapping("/")
@@ -93,6 +63,7 @@ public class LeaveController {
 		return service.findLeaveByEmpNo(loginModel.getEmpNo());
 	}
 
+//	新增請假
 	@PostMapping("/Insert")
 	public @ResponseBody Map<String, String> save(@RequestBody LeaveBean leave,LoginModel loginModel) {
 		Map<String, String> map = new HashMap<>();
@@ -109,14 +80,12 @@ public class LeaveController {
 		return map;
 	}
 
-//	@GetMapping("/Leave/GetOne")
-//	public String GetOne(@RequestParam("applicationNo") String applicationNo, Model m) {
-//		LeaveBean leave = service.select(applicationNo);
-//		m.addAttribute("reasonList", leaveBeanDao.getReasonList());
-//		m.addAttribute("leave", leave);
-//		return "LeaveApplication/EditLeaveForm";
-//	}
-//
+//	調出該申請單號資料
+	@GetMapping("/findLeaveByAppNo")
+	public @ResponseBody List<LeaveBean> findLeaveByAppNo(@RequestParam("applicationNo") String applicationNo) {
+		return service.findLeaveByAppNo(applicationNo);
+	}
+
 //	@PostMapping("/Insert")
 //	public String Insert(HttpServletRequest request, @RequestParam("reason") String reason_id,
 //			@RequestParam("startDate") String startDate, @RequestParam("startTime") String startTime,

@@ -23,4 +23,6 @@ public interface LeaveRepository {
 
 	List<LeaveBean> findLeaveByDeptNo(Integer departmentNumber);
 
+	List<LeaveBean> findLeaveByAppNo(String applicationNo);
+
 }

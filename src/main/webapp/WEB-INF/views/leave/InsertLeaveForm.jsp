@@ -22,13 +22,13 @@
 		var xhr = new XMLHttpRequest();
 		var myDeptNo = ${sessionScope.loginModel.getDepartmentDetail().getDepartmentNumber()};
 		var myDept = "${sessionScope.loginModel.getDepartmentDetail().getName()}";
-		xhr.open("GET", "<c:url value='/Leave/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo, true);
+		xhr.open("GET", "<c:url value='/G/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo, true);
 		xhr.send();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				var colleagues = JSON.parse(xhr.responseText);
 				//塞一個選擇選項
-				var option = new Option("選位" + myDept + "好同事", -1);
+				var option = new Option( myDept + "好同事", -1);
 				handOffSelect.options[handOffSelect.options.length] = option;
 				handOffSelect.options[0].disabled = true;
 				//loop其他選項
@@ -46,7 +46,7 @@
 		document.getElementById("handOffSelect").addEventListener("change",function() {
 			var handOff = document.getElementById("handOffSelect").value;
 			var xhr = new XMLHttpRequest();
-			xhr.open("GET","<c:url value='/Leave/findEmpByPk'/>?empId=" + handOff, true);
+			xhr.open("GET","<c:url value='/G/findEmpByPk'/>?empId=" + handOff, true);
 			xhr.send();
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4 && xhr.status == 200) {
@@ -61,7 +61,7 @@
 		var reason = [];
 		var reasonSelect = document.getElementById('reasonSelect');
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "<c:url value='/Leave/findListByCAT'/>" + "?category=REASON_ID", true);
+		xhr.open("GET", "<c:url value='/G/findListByCAT'/>" + "?category=REASON_ID", true);
 		xhr.send();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
@@ -85,7 +85,7 @@
 
 	function initialCSS() {
 		// 		$("form :input").addClass("form-control");
-		$("label").addClass("col-form-label");
+		$("label").addClass("col-form-label text-gray-800");
 	}
 	
 	
@@ -137,9 +137,11 @@
 					<div class="form-control-plaintext">申請人：${sessionScope.loginModel.name}</div>
 					<input class="d-none" id="empPk" value="${sessionScope.loginModel.pk}">
 				</div>
-				<div class="col row form-inline">
-					<label style="margin-left: auto">申請日：</label>
-					<input class="form-control form-control-plaintext" id="requestDate" name="requestDate">
+				<div class="col form-row">
+					<div class="form-control-plaintext" style="text-align:right">申請日：</div>
+				</div>
+				<div class="col form-row">
+					<input type="text" readonly class="form-control-plaintext" id="requestDate" name="requestDate">
 				</div>
 			</div>
 			<div class="form-row">
@@ -180,13 +182,13 @@
 					rows="2" placeholder="請輸入相關內容" required></textarea>
 			</div>
 			<div class="form-row">
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-5">
 					<label for="handOffSelect">職務代理人</label>
 					<select class="form-control form-select" id="handOffSelect" name="handOff" required></select>
 				</div>
-				<div class="form-group col-md-8">
-					<label for="handOff">代理人Email</label>
-					<input type="email" class="form-control" id="handOffEmail" name="hand-offemail" readonly placeholder="代理人的Email">
+				<div class="form-group col-md-7">
+					<label for="handOffSelect">代理人Email</label>
+					<input type="email" class="form-control" id="handOffEmail" name="hand-offEmail" readonly placeholder="代理人的Email">
 				</div>
 			</div>
 			<div class="form-group form-inline">
@@ -223,7 +225,7 @@
 // 				endTime : endTime,
 // 				comments : comments,
 // 				handOff : handOff,
-// 				handOffemail : handOffemail,
+// 				handOffEmail : handOffEmail,
 // 				status : "pending"
 // 				},
 // 				function(responseTxt, statusTxt, xhr) {

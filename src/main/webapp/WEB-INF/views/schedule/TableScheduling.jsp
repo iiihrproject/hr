@@ -59,7 +59,7 @@
 	function loadEmps(empName){
 		let xhr2 = new XMLHttpRequest();
 		var myDeptNo = ${sessionScope.loginModel.getDepartmentDetail().getDepartmentNumber()};
-		xhr2.open("GET", "<c:url value='/Leave/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo, true);
+		xhr2.open("GET", "<c:url value='/G/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo, true);
 		xhr2.send();
 		xhr2.onreadystatechange = function() {
 			if (xhr2.readyState == 4 && xhr2.status == 200) {
@@ -258,7 +258,7 @@
 			messageBox.innerHTML = "<font color='red'>請選擇人員</font>";
 		} else if(start > end) {
 			hasError = true;
-			messageBox.innerHTML = "<font color='red'>日期錯誤，結束早於開始，是在哈囉?</font>";
+			messageBox.innerHTML = "<font color='red'>日期錯誤，結束早於開始，累了嗎?</font>";
 		} else if(title == ""){
 			hasError = true;
 			messageBox.innerHTML = "<font color='red'>請填入職務</font>";
@@ -310,7 +310,7 @@
 </script>
 </head>
 <body>
-	<div class="container-fluid h-75">
+	<div class="container-fluid h-75 pt-4">
 		<!-- Basic Card Example -->
 		<div class="card shadow mb-4">
 			<!-- Begin of card-header -->
@@ -330,7 +330,7 @@
 			</div>
 			<!-- End of Card-header -->
 			<!-- Begin of Card-body -->
-			<div class="card-body">
+			<div id ="cardBody" class="card-body navbar-nav-scroll">
 				<div id="dataArea"></div>
 			</div>
 			<!-- End of Card-body -->
@@ -343,6 +343,10 @@ $("#empListDef").mouseover(function(){
 	$("#empList").val($("#empListDef" ).val());
 	setToday();
 });
+$(window).resize(function() {
+    var winH = $(this).height();
+    $("#cardBody").height(winH*0.6);
+}).resize();
 </script>
 </body>
 </html>

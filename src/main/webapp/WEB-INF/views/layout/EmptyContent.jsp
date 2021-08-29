@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<div class="container-fluid h-75">
+<div class="container-fluid h-75 pt-4">
 
 	<div class="col-12">##Lorem ipsum dolor sit amet consectetur,
 		adipisicing elit. Neque nisi minima reprehenderit! Corrupti cupiditate

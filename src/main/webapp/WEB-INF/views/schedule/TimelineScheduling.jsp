@@ -20,7 +20,7 @@ window.onload = function() {
 function loadEmps(){
 	let xhr2 = new XMLHttpRequest();
 	var myDeptNo = ${sessionScope.loginModel.getDepartmentDetail().getDepartmentNumber()};
-	xhr2.open("GET", "<c:url value='/Leave/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo);
+	xhr2.open("GET", "<c:url value='/G/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo);
 	xhr2.send();
 	xhr2.onreadystatechange = function() {
 		if (xhr2.readyState == 4 && xhr2.status == 200) {
@@ -116,7 +116,7 @@ function renderScheduler(events,resources) {
       eventOverlap: false, // will cause the event to take up entire resource height
       navLinks: true,
       resourceAreaWidth: '10%',
-      resourceAreaHeaderContent: 'Employee',
+      resourceAreaHeaderContent: '${sessionScope.loginModel.departmentDetail.name}',
       allDaySlot: false,
       businessHours:true,
 //       [ // 可以設定上班日，其他暗掉
@@ -230,7 +230,7 @@ body {
 </style>
 </head>
 <body>
-	<div class="container-fluid h-75">
+	<div class="container-fluid h-75 pt-4">
 		<!-- Basic Card Example -->
 		<div class="card shadow mb-4">
 			<!-- Begin of Card-body -->

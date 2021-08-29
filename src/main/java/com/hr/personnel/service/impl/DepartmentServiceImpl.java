@@ -38,18 +38,30 @@ public class DepartmentServiceImpl implements DepartmentService {
 			 map = new HashMap<String, String>();
 			 map.put("departmentNumber", departmentDetail.getDepartmentNumber().toString());
 			 map.put("name", departmentDetail.getName());
-			 map.put("managerEmpId", managerLoginModel.getPk().toString());
+			 map.put("managerEmpNo", managerLoginModel.getEmpNo());
 			 map.put("managerName", managerLoginModel.getName());
-			 result.put(departmentDetail.getManagerEmpId(), map);
+			 result.put(departmentDetail.getDepartmentNumber(), map);
 		}
 		return result;
 	}
 
 	@Override
-	public Map<Integer, Map<String, String>> findAllDepartmentDetailWithReplacementOfNewManager(DepartmentDetail departmentDetail) {
+	public Map<Integer, Map<String, String>> findAllDepartmentDetailWithReplacementOfNewManager(Map<String, String> inputMap) {
 		/**
 		 * Firstly, merging the DepartmentDetail that given by the front end and check if it succeed
 		 */
+
+		DepartmentDetail departmentDetail = departmentRepository.findDepartment(Integer.parseInt(inputMap.get("departmentNumber")));
+
+		if(!(inputMap.get("managerEmpNo")).equals("")) {
+			Integer managerId = departmentRepository.findLoginModelByEmpNo(inputMap.get("managerEmpNo")).getPk();
+			departmentDetail.setManagerEmpId(managerId);
+		}
+		
+		if(!(inputMap.get("name")).equals("")) {
+			departmentDetail.setName(inputMap.get("name"));
+		}
+		
 		DepartmentDetail newDepartmentDetail = departmentRepository.updateDepartmentDetail(departmentDetail);
 		if(departmentDetail.equals(newDepartmentDetail)) {
 			return findAllDepartmentDetail();
@@ -58,24 +70,31 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public boolean insertNewDepartments(Map<Integer, DepartmentDetail> departments) {
-		if(departments.isEmpty()) {
+	public boolean insertNewDepartments(Map<Integer, Map<String, String>> inputMap) {
+		if(inputMap.isEmpty()) {
 			return false;
 		}
-		Set<Integer> keySet = departments.keySet();
-		@SuppressWarnings("rawtypes")
-		Iterator iterator = keySet.iterator();
+		Set<Integer> keySet = inputMap.keySet();
+		Iterator<Integer> iterator = keySet.iterator();
 		try {
 			while(iterator.hasNext()) {
-				Integer key = (Integer)iterator.next();
-				DepartmentDetail departmentDetail = departments.get(key);
-				departmentRepository.insertNewDepartments(departmentDetail);
+				Integer key = iterator.next();
+				Map<String, String> detail = inputMap.get(key);
+				Integer managerId = departmentRepository.findLoginModelByEmpNo(detail.get("managerEmpNo")).getPk();
+				DepartmentDetail departmentDetail = new DepartmentDetail();
+				departmentDetail.setManagerEmpId(managerId);
+				departmentDetail.setName(detail.get("name"));
+				boolean flowCheck = departmentRepository.insertNewDepartments(departmentDetail);
+				if(!flowCheck) {
+					throw new Exception();
+				}
 			}
 		}
 		catch(IllegalArgumentException e) {
 			return false;
 		}
 		catch(Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;

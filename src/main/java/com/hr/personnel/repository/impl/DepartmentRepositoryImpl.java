@@ -32,18 +32,8 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
 		CriteriaQuery<DepartmentDetail> allDepartmentDetail = criteriaQuery.select(root);
 		
 		List<DepartmentDetail> departmentDetailList = entityManager.createQuery(allDepartmentDetail).getResultList();
-		
+		System.out.println(departmentDetailList);
 		return departmentDetailList;
-	}
-
-	@Override
-	public LoginModel findLoginModel(Integer managerEmpId) {
-		try {
-			return entityManager.find(LoginModel.class, managerEmpId);	
-		}
-		catch(Exception e) {
-			return null;
-		}
 	}
 
 	@Override
@@ -67,8 +57,40 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
 	}
 
 	@Override
-	public void insertNewDepartments(DepartmentDetail departmentDetail) throws IllegalArgumentException {
-		entityManager.persist(departmentDetail);			
+	public boolean insertNewDepartments(DepartmentDetail departmentDetail) throws IllegalArgumentException {
+		try {
+			entityManager.persist(departmentDetail);	
+			return true;
+		}
+		catch(Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public LoginModel findLoginModelByEmpNo(String managerEmpNo) {
+		try {
+			return (LoginModel)entityManager.createQuery("from loginModel where empNo = :managerEmpNo", LoginModel.class).setParameter("managerEmpNo", managerEmpNo).getSingleResult();	
+		}
+		catch(NoResultException nre) {
+			return null;
+		}
+		catch(NonUniqueResultException nure) {
+			return null;
+		}
+		catch(Exception e) {
+			return null;
+		}
+	}
+
+	@Override
+	public LoginModel findLoginModel(Integer managerEmpId) {
+		try {	
+			return entityManager.find(LoginModel.class, managerEmpId);
+		}
+		catch(Exception e) {
+			return null;
+		}
 	}
 	
 }

@@ -33,6 +33,16 @@ public class PersonnelController {
 		return "/personnel/personnel";
 	}
 	
+	@GetMapping(path="/personnelAuthorization", produces = { "application/json; charset=UTF-8" })
+	public @ResponseBody Map<String, String> personnelAuthorization(
+			@ModelAttribute("loginModel") LoginModel loginModel
+			) {
+		Boolean result = personnelService.personnelAuthorization(loginModel);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("result", result.toString());
+		return map;
+	}
+	
 	/**
 	 * This map problem should be done in service
 	 * I will later on to amend below 2 methods and delete this note if it's finished

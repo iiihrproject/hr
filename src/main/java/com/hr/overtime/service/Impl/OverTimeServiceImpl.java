@@ -46,6 +46,13 @@ public class OverTimeServiceImpl implements OverTimeService {
 		List<OverTimeAuditted> overtimeauditted = overTimeRepository.findByEmpnoAuditted(empNo);
 		return overtimeauditted;
 	}
+	
+	@Override
+	public Double sumOverTimeHours(String empNo) {
+		Double overtimeauditted = overTimeRepository.sumOverTimeHours(empNo);
+		return overtimeauditted;
+	}
+	
 //--------------------------------------------管理員--------------------------------------------------------
 	@Override
 	public List<OverTimePending> findByResult() {
