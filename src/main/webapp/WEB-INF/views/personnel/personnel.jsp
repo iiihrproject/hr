@@ -36,18 +36,17 @@
 			xhr.open("GET", "<c:url value='/personnelAuthorization'/>", true);
 			xhr.send();
 			xhr.onreadystatechange = function() {
-			if (xhr2.readyState == 4 && xhr2.status == 200) {
-				let result = JSON.parse(xhr2.responseText);
-				if(result[result] === "false"){
-					$("#personnel").remove();
-					$("#department").remove();
+				if (xhr.readyState == 4 && xhr.status == 200) {
+					let result = JSON.parse(xhr.responseText);
+					if(result.result === "false"){
+						
+						$("#personnel").remove();
+						$("#department").remove();
+					}
 				}
-				
-			}
-			  
+			}	  
 		}
 	</script>
-
 </head>
 
 <body id="page-top">

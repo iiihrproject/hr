@@ -29,17 +29,72 @@
     
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->
-    
 	<script>
+	function offOrOn(obj){
+		if($(obj).css("opacity")  === "1"){
+			$(obj).css("opacity", "0.4");
+		}
+		else{
+			$(obj).css("opacity", "1");
+		}
+	}
 	window.onload = function(){
-		$("#search").click(function () {
+		$("#submit").click(function () {
+			let inputRole = $("#inputRole").val();
+			let inputPersonalIdNumber = $("#inputPersonalIdNumber").val();
+			let inputName = $("#inputName").val();
+			let inputGender = $("#inputGender").val();
 			let inputEmpNo = $("#inputEmpNo").val();
+			let inputDepartmentNumber = $("#inputDepartmentNumber").val();
+			let hr_manager = "";
+			let hr = "";
+			let rd_manager = "";
+			let rd = "";
+			let sales_manager = "";
+			let sales = "";
+			let production_manager = "";
+			let production = "";
+			let edittedLoginModel = {
+				"role": inputRole,
+				"personalIdNumber": inputPersonalIdNumber,
+				"name": inputName,
+				"gender": inputGender,
+				"empNo": inputEmpNo,
+				"departmentDetail": inputDepartmentNumber,
+				"hr_manager": hr_manager,
+				"hr": hr,
+				"rd_manager": rd_manager,
+				"rd": rd,
+				"sales_manager": sales_manager,
+				"sales": sales,
+				"production_manager": production_manager,
+				"production": production,
+			};
+			let authorities = $(".button");
+			for(let i = 1; i <= authorities.length; i++){
+				let id = $("#authorityButton button:nth-child(" + i + ")").attr('id');
+				if($("#authorityButton button:nth-child(" + i + ")").css("opacity") === "1"){
+					edittedLoginModel[id] = "true";
+				}
+				else{
+					edittedLoginModel[id] = "false";
+				}
+			}
+			//This I can send ajax to the backend
+			let json = JSON.stringify(edittedLoginModel);
+			console.log(json);
 			let xhr = new XMLHttpRequest();
-			xhr.open("POST", "<c:url value='/searchLoginModel' />", true);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.send("inputEmpNo=" + inputEmpNo);
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState == 4 && xhr.status == 200) {
+			xhr.open("POST", "<c:url value='/createNewPersonnel'/>", true);
+			xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");  		
+			xhr.send(json);
+    		xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4 && xhr.status == 200) {	
+					let inputRole = $("#inputRole").val("");
+					let inputPersonalIdNumber = $("#inputPersonalIdNumber").val("");
+					let inputName = $("#inputName").val("");
+					let inputGender = $("#inputGender").val("");
+					let inputEmpNo = $("#inputEmpNo").val("");
+					let inputDepartmentNumber = $("#inputDepartmentNumber").val("");
 					let tableInfo = JSON.parse(xhr.responseText);
 					for(const key in tableInfo){
 						let id = "#" + key;
@@ -63,93 +118,8 @@
 						}
 		        	}
 				}
-			}
-		});
-		
-		$("#submit").click(function () {
-			let inputRole = $("#inputRole").val();
-			let inputName = $("#inputName").val();
-			let inputDepartmentNumber = $("#inputDepartmentNumber").val();
-			let inputIsEnable = $("#inputIsEnable").val();
-			let hr_manager = "";
-			let hr = "";
-			let rd_manager = "";
-			let rd = "";
-			let salse_manager = "";
-			let salse = "";
-			let production_manager = "";
-			let production = "";
-			let edittedLoginModel = {
-				"role": inputRole,
-				"name": inputName,
-				"departmentDetail": inputDepartmentNumber,
-				"isEnable": inputIsEnable,
-				"hr_manager": hr_manager,
-				"hr": hr,
-				"rd_manager": rd_manager,
-				"rd": rd,
-				"salse_manager": salse_manager,
-				"salse": salse,
-				"production_manager": production_manager,
-				"production": production,
-			};
-			let authorities = $(".button");
-			for(let i = 1; i <= authorities.length; i++){
-				let id = $("#authorityButton button:nth-child(" + i + ")").attr('id');
-				if($("#authorityButton button:nth-child(" + i + ")").css("opacity") === "1"){
-					edittedLoginModel[id] = "true";
-				}
-				else{
-					edittedLoginModel[id] = "false";
-				}
-			}
-			
-			let xhr = new XMLHttpRequest();
-			let json = JSON.stringify(edittedLoginModel);
-			xhr.open("PUT", "<c:url value='/modify' />", true);
-			xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-			xhr.send(json);
-			
-			inputRole = $("#inputRole").val("");
-			inputName = $("#inputName").val("");
-			inputDepartmentNumber = $("#inputDepartmentNumber").val("");
-			inputIsEnable = $("#inputIsEnable").val("");
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState == 4 && xhr.status == 200) {	
-					let tableInfo = JSON.parse(xhr.responseText);
-					for(const key in tableInfo){
-						let id = "#" + key;
-						if(key === "result"){
-							alert(tableInfo[key]);
-							return;
-						}
-						document.querySelector(id).innerHTML = tableInfo[key];
-					}
-					$(".button").css("opacity", "0.4");
-	        		let innerxhr = new XMLHttpRequest();
-					innerxhr.open("POST", "<c:url value='/findNewAuthorities' />", true);
-					innerxhr.send();
-					innerxhr.onreadystatechange = function() {
-						if (innerxhr.readyState == 4 && innerxhr.status == 200) {
-							let tableInfo = JSON.parse(innerxhr.responseText);
-							for(i = 0; i < tableInfo.length; i++){
-								let id = "#" + tableInfo[i];
-								$(id).css("opacity", "1");
-							}
-						}
-		        	}
-				}
         	}
-			
 		});
-	}
-	function offOrOn(obj){
-		if($(obj).css("opacity")  === "1"){
-			$(obj).css("opacity", "0.4");
-		}
-		else{
-			$(obj).css("opacity", "1");
-		}
 	}
 	</script>
 	<style>
@@ -157,7 +127,7 @@
 			opacity: 0.4;
 			background-color: #7878FF;
 		}
-	</style>
+	</style>	
 </head>
 
 <body id="page-top">
@@ -167,21 +137,17 @@
 	<div id="bgcolor" class="container-fluid">
 		<div class="row">
 			<div class="col-12">
-				<div>
-	            	<h4>請輸入欲查詢的員工編號</h4>
-	            	<input type="text" id="inputEmpNo" maxlength="20"/><button id='search'>送出</button>
-	            </div>
-	            <div>
-	            	<table class='table table-bordered table-hover table-hover-color dataTable no-footer'>
+				<table class='table table-bordered table-hover table-hover-color dataTable no-footer'>
 						<thead>
-							<tr><th colspan='2'>員工資料</th><th>修改</th></tr>
+							<tr><th colspan='2'>員工資料</th><th>新增</th></tr>
 						</thead>
 						<tbody>
 							<tr><td>職位</td><td id='role'></td><td><input type='text' id='inputRole'/></td></tr>
+							<tr><td>身分證字號</td><td id='personalIdNumber'></td><td><input type='text' id='inputPersonalIdNumber'/></td></tr>
 							<tr><td>姓名</td><td id='name'></td><td><input type='text' id='inputName'/></td></tr>
+							<tr><td>性別</td><td id='gender'></td><td><input type='text' id='inputGender'/></td></tr>
+							<tr><td>員工編號</td><td id='empNo'></td><td><input type='text' id='inputEmpNo'/></td></tr>
 							<tr><td>部門編號</td><td id='departmentNumber'></td><td><input type='text' id='inputDepartmentNumber'/></td></tr>
-							<tr><td>部門名稱</td><td id='departmentName'></td><td>不可在此更動</td></tr>
-							<tr><td>在職狀態</td><td id='isEnable'></td><td><input type='text' id='inputIsEnable'/></td></tr>
 							<tr><td colspan='3'><div id='authorityButton'>
 								<button id='hr_manager' onclick="offOrOn(this)" class='button'>人資主管</button>
 								<button id='hr' onclick="offOrOn(this)" class='button'>人資員工</button>
@@ -192,13 +158,9 @@
 								<button id='production_manager' onclick="offOrOn(this)" class='button'>生產部門經理</button>
 								<button id='production' onclick="offOrOn(this)" class='button'>生產部門</button>
 							</div></td></tr>
-							<tr><td colspan='3'><button id='submit'>修改</button></td>
+							<tr><td colspan='3'><button id='submit'>新增</button></td>
 						</tbody>
 					</table>
-					
-	            </div>        
-	            <div id="result">
-	            </div>
 			</div>
 
 		</div>

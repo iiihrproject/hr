@@ -10,9 +10,9 @@ public interface DepartmentService {
 	Map<Integer, Map<String, String>> findAllDepartmentDetail();
 
 	Map<Integer, Map<String, String>> findAllDepartmentDetailWithReplacementOfNewManager(
-			DepartmentDetail departmentDetail);
+			Map<String, String> inputMap);
 
-	boolean insertNewDepartments(Map<Integer, DepartmentDetail> departments);
+	boolean insertNewDepartments(Map<Integer, Map<String, String>> inputMap);
 
 
 
