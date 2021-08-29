@@ -39,8 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			    .antMatchers("/bulletinManage","/bulletinListMag","/bulletinEventInsert","/insertEventBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletin/getImage").hasRole("HR")
 			    .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities").hasRole("HR_MANAGER")
 			    .antMatchers("/css/**", "/vendor/**", "/img/**", "/js/**", "/scss/**").permitAll()
-			    .antMatchers("/Leave/LeaveResult").hasAnyRole("HR_MANAGER", "HR")
-			    .antMatchers("/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR")
+			    .antMatchers("/Leave/LeaveResult","/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR","RD_MANAGER","SALES_MANAGER")
+			    .antMatchers("/G/**","/Leave/**","/schedule/**").authenticated()
 			    .anyRequest().hasRole("ADMIN")
 
 			    .and()

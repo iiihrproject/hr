@@ -1,5 +1,6 @@
 package com.hr.leave.model;
 
+import java.io.File;
 import java.sql.Blob;
 
 import javax.persistence.CascadeType;
@@ -57,7 +58,7 @@ public class LeaveBean {
 	@Column(name = "HANDOFFEMAIL")
 	private String handOffEmail;
 	@Column(name = "SUPPORTINGDOC")
-	private String supportingDoc;
+	private File supportingDoc;
 	
 	@OneToOne(targetEntity = ListBean.class, cascade = { CascadeType.DETACH })
 	@JoinColumn(name = "STATUS", referencedColumnName = "code")
@@ -75,7 +76,7 @@ public class LeaveBean {
 
 	public LeaveBean(String applicationNo, String typeOfForm, String empNo, DepartmentDetail dept, String requestDate,
 			ListBean reasonList, String startDate, String startTime, String endDate, String endTime, Float days,
-			String comments, String handOff, String handOffEmail, String supportingDoc, ListBean statusList,
+			String comments, String handOff, String handOffEmail, File supportingDoc, ListBean statusList,
 			String approval01Name, Blob approval01Signature, String approval01Date) {
 		super();
 		this.applicationNo = applicationNo;
@@ -250,11 +251,11 @@ public class LeaveBean {
 		this.handOffEmail = handOffEmail;
 	}
 
-	public String getSupportingDoc() {
+	public File getSupportingDoc() {
 		return supportingDoc;
 	}
 
-	public void setSupportingDoc(String supportingDoc) {
+	public void setSupportingDoc(File supportingDoc) {
 		this.supportingDoc = supportingDoc;
 	}
 

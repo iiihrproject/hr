@@ -1,6 +1,5 @@
 package com.hr.schedule.controller;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +17,7 @@ import com.hr.leave.service.LeaveService;
 import com.hr.login.model.Authorities;
 import com.hr.login.model.LoginModel;
 import com.hr.login.service.LoginService;
+import com.hr.personnel.model.Personnel;
 
 @Controller
 @RequestMapping("/G")
@@ -35,19 +35,38 @@ public class GlobalController {
 	public @ResponseBody List<ListBean> findListByCategory(@RequestParam("category") String category) {
 		return leaveService.findListByCategory(category);
 	}
+	
+//	找同事的email
+	@GetMapping(value="/findEmpByPk")
+	public @ResponseBody List<Personnel> findEmpByPk(@RequestParam("empId") Integer empId) {
+		return leaveService.findEmpByPk(empId);
+	}
+	
+//	找員工資訊
+	@GetMapping(value="/findEmpByEmpNo")
+	public @ResponseBody LoginModel findEmpByEmpNo(@RequestParam("empNo") String empNo) {
+		return loginService.getLoginModelByEmpNo(empNo);
+	}
+	
+//	找同部門的同事
+	@GetMapping(value="/findEmpsByDept")
+	public @ResponseBody List<LoginModel> findEmpsByDept(@RequestParam("departmentNumber") Integer departmentNumber) {
+		return leaveService.findEmpsByDept(departmentNumber);
+	}
 
-	@GetMapping(value="/findAUTHByEmpNo",produces= {"application/json; charset=UTF-8"})
+//	判斷角色是否不只General
+	@GetMapping(value = "/findAUTHByEmpNo", produces = { "application/json; charset=UTF-8" })
 	public @ResponseBody boolean isAuthMoreThanGEN(@ModelAttribute("loginModel") LoginModel loginModel) {
-		  LoginModel loginM = loginService.getLoginModelByEmpNo(loginModel.getEmpNo());
-		  
-		  Set<Authorities> set = loginM.getAuthorities();
+		LoginModel loginM = loginService.getLoginModelByEmpNo(loginModel.getEmpNo());
+
+		Set<Authorities> set = loginM.getAuthorities();
 //		  Iterator<Authorities> iterator = set.iterator();
 //		  boolean check = false;
-		  boolean moreThanGen = false;
-		  System.out.println(set.size());
-		  if(set.size() > 1) {
-			  moreThanGen = true;
-		  }
+		boolean moreThanGen = false;
+//		System.out.println(set.size());
+		if (set.size() > 1) {
+			moreThanGen = true;
+		}
 //		  while(iterator.hasNext()){
 //		      String s = iterator.next().getAuthorityName();
 //		      System.out.println(s.toString());
@@ -55,7 +74,7 @@ public class GlobalController {
 //		       check = true;
 //		      }
 //		  }
-		  return moreThanGen;
+		return moreThanGen;
 	}
-	
+
 }

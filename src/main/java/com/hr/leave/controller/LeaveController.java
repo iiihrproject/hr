@@ -27,35 +27,14 @@ import com.hr.personnel.model.Personnel;
 @RequestMapping("/Leave")
 @SessionAttributes("loginModel")
 public class LeaveController {
-
 	@Autowired
 	private LeaveService service;
-	@Autowired
-	private LoginService loginService;
-
-//	@DeleteMapping("/leave/{applicationNo}")
+	
+	//	@DeleteMapping("/leave/{applicationNo}")
 //	public String deleteOne(@RequestParam("applicationNo") String applicationNo) {
 //		service.delete(applicationNo);
 //		return "redirect:/LeavaApplication/GetList";
 //	}
-	
-//	找同事的email
-	@GetMapping(value="/findEmpByPk")
-	public @ResponseBody List<Personnel> findEmpByPk(@RequestParam("empId") Integer empId) {
-		return service.findEmpByPk(empId);
-	}
-	
-//	找員工資訊
-	@GetMapping(value="/findEmpByEmpNo")
-	public @ResponseBody LoginModel findEmpByEmpNo(@RequestParam("empNo") String empNo) {
-		return loginService.getLoginModelByEmpNo(empNo);
-	}
-	
-//	找同部門的同事
-	@GetMapping(value="/findEmpsByDept")
-	public @ResponseBody List<LoginModel> findEmpsByDept(@RequestParam("departmentNumber") Integer departmentNumber) {
-		return service.findEmpsByDept(departmentNumber);
-	}
 	
 //  頁面到請假申請
 	@GetMapping("/")
@@ -87,6 +66,7 @@ public class LeaveController {
 		return service.findLeaveByEmpNo(loginModel.getEmpNo());
 	}
 
+//	新增請假
 	@PostMapping("/Insert")
 	public @ResponseBody Map<String, String> save(@RequestBody LeaveBean leave,LoginModel loginModel) {
 		Map<String, String> map = new HashMap<>();

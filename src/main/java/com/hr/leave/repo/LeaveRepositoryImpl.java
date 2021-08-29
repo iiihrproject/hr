@@ -65,7 +65,7 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 	@Override
 	public List<LeaveBean> findLeaveByDeptNo(Integer departmentNumber) {
 		List<LeaveBean> leaveB = null;
-		String hql = "FROM LeaveBean l WHERE l.departmentDetail.departmentNumber = :departmentNumber";
+		String hql = "FROM LeaveBean l WHERE l.dept.departmentNumber = :departmentNumber";
 		leaveB = entityManager.createQuery(hql, LeaveBean.class).setParameter("departmentNumber", departmentNumber).getResultList();
 		return leaveB;
 	}
