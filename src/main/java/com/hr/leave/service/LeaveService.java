@@ -25,5 +25,7 @@ public interface LeaveService {
 
 	List<LeaveBean> findLeaveByAppNo(String applicationNo);
 
+	void updateSupervisorComment(String applicationNo, String approval01Signature);
+
 
 }

@@ -85,6 +85,11 @@ public class LeaveController {
 	public @ResponseBody List<LeaveBean> findLeaveByAppNo(@RequestParam("applicationNo") String applicationNo) {
 		return service.findLeaveByAppNo(applicationNo);
 	}
+	
+	@PostMapping("/updateSupervisorComment")
+	public void updateSupervisorComment(@RequestBody LeaveBean leaveBean) {
+		service.updateSupervisorComment(leaveBean.getApplicationNo(), leaveBean.getApproval01Signature());
+	}
 
 //	@PostMapping("/Insert")
 //	public String Insert(HttpServletRequest request, @RequestParam("reason") String reason_id,

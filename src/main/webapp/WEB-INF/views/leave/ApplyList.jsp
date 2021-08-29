@@ -162,6 +162,7 @@
 		var empPk = document.getElementById("empPk");
 		var requestDate = document.getElementById("requestDate").value;
 		var reasonList = document.getElementById("reasonSelect");
+		var days = document.getElementById("days").value;
 		var startDate = document.getElementById("startDate").value;
 		var startTime = document.getElementById("startTime").value;
 		var endDate = document.getElementById("endDate").value;
@@ -178,6 +179,11 @@
 			$("#startDate").addClass("is-invalid");
 			$("#endDate").addClass("is-invalid");
 			messageBox.innerHTML = "日期錯誤，結束早於開始";
+		} if(days != "NaN日") {
+		} else{	hasError = true;
+			$("#startDate").addClass("is-invalid");
+			$("#endDate").addClass("is-invalid");
+		messageBox.innerHTML = "你選到了不存在的日期";
 		} if(comments != ""){
 		}else {hasError = true;
 			$("#comments").addClass("is-invalid");

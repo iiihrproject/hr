@@ -24,5 +24,6 @@ public interface LeaveRepository {
 	List<LeaveBean> findLeaveByDeptNo(Integer departmentNumber);
 
 	List<LeaveBean> findLeaveByAppNo(String applicationNo);
-
+	
+	public void updateSupervisorComment(String applicationNo, String approval01Signature);
 }

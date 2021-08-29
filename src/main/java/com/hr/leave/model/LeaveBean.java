@@ -2,6 +2,7 @@ package com.hr.leave.model;
 
 import java.io.File;
 import java.sql.Blob;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -65,41 +66,14 @@ public class LeaveBean {
 	private ListBean statusList;
 	@Column(name = "Approval01Name")
 	private String approval01Name;
-	@JsonIgnore
+	
 	@Column(name = "Approval01Signature")
-	private Blob approval01Signature;
+	private String approval01Signature;
 	@Column(name = "Approval01Date")
-	private String approval01Date;
+	private Date approval01Date;
 
 	public LeaveBean() {
 	}
-
-	public LeaveBean(String applicationNo, String typeOfForm, String empNo, DepartmentDetail dept, String requestDate,
-			ListBean reasonList, String startDate, String startTime, String endDate, String endTime, long days,
-			String comments, String handOff, String handOffEmail, File supportingDoc, ListBean statusList,
-			String approval01Name, Blob approval01Signature, String approval01Date) {
-		super();
-		this.applicationNo = applicationNo;
-		this.typeOfForm = typeOfForm;
-		this.empNo = empNo;
-		this.dept = dept;
-		this.requestDate = requestDate;
-		this.reasonList = reasonList;
-		this.startDate = startDate;
-		this.startTime = startTime;
-		this.endDate = endDate;
-		this.endTime = endTime;
-		this.days = days;
-		this.comments = comments;
-		this.handOff = handOff;
-		this.handOffEmail = handOffEmail;
-		this.supportingDoc = supportingDoc;
-		this.statusList = statusList;
-		this.approval01Name = approval01Name;
-		this.approval01Signature = approval01Signature;
-		this.approval01Date = approval01Date;
-	}
-
 
 
 	@Override
@@ -283,19 +257,19 @@ public class LeaveBean {
 		this.approval01Name = approval01Name;
 	}
 
-	public Blob getApproval01Signature() {
+	public String getApproval01Signature() {
 		return approval01Signature;
 	}
 
-	public void setApproval01Signature(Blob approval01Signature) {
+	public void setApproval01Signature(String approval01Signature) {
 		this.approval01Signature = approval01Signature;
 	}
 
-	public String getApproval01Date() {
+	public Date getApproval01Date() {
 		return approval01Date;
 	}
 
-	public void setApproval01Date(String approval01Date) {
+	public void setApproval01Date(Date approval01Date) {
 		this.approval01Date = approval01Date;
 	}
 

@@ -18,6 +18,16 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 	EntityManager entityManager;
 	
 	@Override
+	public void updateSupervisorComment(String applicationNo, String approval01Signature) {
+		entityManager.createNativeQuery("update LeaveOfAbsense set Approval01Signature = ?1 "
+				+ ", set Approval01Date = getDate() "
+				+ " where applicationNo = ?2")
+			.setParameter(1, approval01Signature)
+			.setParameter(2, applicationNo)
+			.executeUpdate();
+	}
+	
+	@Override
 	public List<ListBean> findListByCategory(String category) {
 		List<ListBean> listB = null;
 		String hql = "FROM ListBean lb WHERE lb.category = :category";
@@ -74,7 +84,9 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 	public List<LeaveBean> findLeaveByAppNo(String applicationNo) {
 		List<LeaveBean> leaveB = null;
 		String hql = "FROM LeaveBean l WHERE l.applicationNo =:applicationNo";
-		leaveB = entityManager.createQuery(hql, LeaveBean.class).setParameter("applicationNo", applicationNo).getResultList();
+		leaveB = entityManager.createQuery(hql, LeaveBean.class)
+				.setParameter("applicationNo", applicationNo)
+				.getResultList();
 		return leaveB;
 	}
 	

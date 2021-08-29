@@ -51,7 +51,16 @@ public class LeaveServiceImpl implements LeaveService {
 	public List<LeaveBean> findLeaveByDeptNo(Integer departmentNumber) {
 		return leaveRepo.findLeaveByDeptNo(departmentNumber);
 	}
-
+	
+	@Override
+	public void updateSupervisorComment(String applicationNo, String approval01Signature) {
+		leaveRepo.updateSupervisorComment(applicationNo, approval01Signature);
+//		LeaveBean leaveBean = leaveRepo.findLeaveByAppNo(applicationNo).get(0);
+//		leaveBean.setApproval01Date(new Date());
+//		leaveBean.setApproval01Signature(approval01Signature);
+//		leaveRepo.save(leaveBean);
+	}
+	
 	@Override
 	public void save(LeaveBean leave, LoginModel loginModel) {
 		long hoursDiff = calTimeDifference(leave.getStartTime(),leave.getEndTime());
@@ -75,8 +84,8 @@ public class LeaveServiceImpl implements LeaveService {
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 			Date startTime = sdf.parse(start);
 			Date endTime = sdf.parse(end);
-			long diffInMillies = Math.abs(endTime.getTime() - startTime.getTime());
-			diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+			long diffInMillies = Math.round(endTime.getTime() - startTime.getTime());
+			diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS)+1;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

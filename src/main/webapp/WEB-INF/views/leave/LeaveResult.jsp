@@ -39,6 +39,11 @@ function loadLeaveData() {
 			let segment = "";
 			for (let i = 0; i < leaveList.length; i++) {
 				let leave = leaveList[i];
+				$.get("<c:url value='/G/findEmpByEmpNo' />?empNo="+leave.empNo,function(empData,status2){
+					if (status2 == "success"){
+						callback(empData);
+					}
+				});
 				segment += "<tr><td>" + leave.empNo + "</td>";
 				segment += "<td>" + leave.reasonList.desc_zh + "</td>";
 				segment += "<td>" + leave.startDate + " "
@@ -60,28 +65,24 @@ function loadLeaveData() {
 		}
 	}
 }
-function findEmpByEmpNo (empNo){
-	$.get("<c:url value='/G/findEmpByEmpNo' />?empNo="+empNo,function(empData,status2){
-		if(status2 == "success"){
-			return empData;
+function findEmpByEmpNo(empNo, callback){
+	$.get("<c:url value='/G/findEmpByEmpNo' />", {empNo:empNo},function(empData,status2){
+		if (status2 == "success"){
+			callback(empData);
 		}
 	});
 }
 
 // 查看詳情
 function seeMore(appNo){
-	$.get("<c:url value='/Leave/findLeaveByAppNo' />?applicationNo="+appNo,function(data,status){
+	$.get("<c:url value='/Leave/findLeaveByAppNo' />", {applicationNo:appNo},function(data,status){
 		if(status == "success"){
 					
-// 			$("#m_name").text(findEmpByEmpNo(data[0].empNo).name);
+			findEmpByEmpNo(data[0].empNo, function(empData) {
+				$("#m_name").text(empData.name);
+			})
 			
-			$.get("<c:url value='/G/findEmpByEmpNo' />?empNo="+data[0].empNo,function(empData,status2){
-				if(status2 == "success"){
-					$("#m_name").text(empData.name);
-				}
-			});
-			
-			$.get("<c:url value='/G/findEmpByPk' />?empId="+data[0].handOff,function(empData2,status3){
+			$.get("<c:url value='/G/findEmpByPk' />,{empId=pk}?empId="+data[0].handOff,function(empData2,status3){
 				if(status3 == "success"){
 					$("#m_handOff").text(empData2[0].loginModelInfo.name);
 // 					console.log(empData2);
@@ -97,6 +98,22 @@ function seeMore(appNo){
 		$("#m_days").text(data[0].days);
 		$("#m_comments").text(data[0].comments);
 		$("#m_supportingDoc").text(data[0].supportingDoc);
+		
+		var sigCanvas = document.getElementById("sig-canvas");
+		var sigText = document.getElementById("sig-dataUrl");
+		var sigImage = document.getElementById("sig-image");
+		var clearBtn = document.getElementById("sig-clearBtn");
+		var submitBtn = document.getElementById("sig-submitBtn");
+		
+// 		sigText.innerHtml = data[0].approval01Signature;
+// 		sigImage.setAttribute("src", data[0].approval01Signature);
+// 		sigImage.style.display = "inline";
+// 		sigImage.setAttribute("src", "");
+// 		clearBtn.style.display = "inline";
+// 		submitBtn.style.display = "inline";
+// 		sigCanvas.style.display = "inline";
+// 		sigCanvas.width = sigCanvas.width;
+// 		sigText.innerHTML = "Data URL for your signature will go here!";
 		}
 	});
 
@@ -369,13 +386,19 @@ function setCSS(){
 									<tr>
 										<th>主管簽核</th>
 										<td>
-											<canvas id="sig-canvas" class="form-inline"
-												style="display: inline">Get a better browser, bro.</canvas>
-											<img id="sig-image" src="" style="display: none" />
-											<button class="btn btn-primary d-print-none" id="sig-submitBtn">簽名完成</button>
-											<button class="btn btn-secondary d-print-none" id="sig-clearBtn">重簽</button>
-
-											<textarea id="sig-dataUrl" style="display: none"
+											<div class="row align-items-center">
+												<div>
+													<canvas id="sig-canvas" class="form-inline"
+														style="display: inline">Get a better browser, bro.</canvas>
+													<img id="sig-image" src="" style="display: none" />
+												</div>
+												<div>
+													<button class="btn btn-primary d-print-none d-block my-2"
+														id="sig-submitBtn">簽名完成</button>
+													<button class="btn btn-secondary d-print-none d-block"
+														id="sig-clearBtn">重簽</button>
+												</div>
+											</div> <textarea id="sig-dataUrl" style="display: none"
 												class="form-control" rows="5">Data URL will go here!</textarea>
 										</td>
 									</tr>
