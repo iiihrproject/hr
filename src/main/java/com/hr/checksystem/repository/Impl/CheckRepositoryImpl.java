@@ -27,9 +27,8 @@ public class CheckRepositoryImpl implements CheckRepository {
 
 	@Override
 	public List<Checksystem> findPartCheckSystem(String empNo, int days ) {
-		String hql = "From Checksystem where DateDiff(dd,createTime,getdate())<= :days and empNo = :empNo "
-				+ "and DateDiff(dd,createTime,getdate())>=0 "
-				+ "order by createTime desc";
+		String hql = "From Checksystem where (DateDiff(dd,checkInTime,getdate()) <= :days or DateDiff(dd,checkOutTime,getdate()) <= :days) and empNo = :empNo "
+				+ "order by case when checkInTime is null then checkOutTime else checkInTime end desc";
 		TypedQuery<Checksystem> query = entityManager.createQuery(hql, Checksystem.class);
 		query.setParameter("days", days);
 		query.setParameter("empNo", empNo);
@@ -54,7 +53,7 @@ public class CheckRepositoryImpl implements CheckRepository {
 	
 	@Override
 	public Checksystem findYesterdayCheckSystemByEmpno(String empNo) {
-		String hql = "From Checksystem where DateDiff(dd,createTime,getdate())= 1 " + "and empNo = :empNo";
+		String hql = "From Checksystem where (DateDiff(dd,checkInTime,getdate())= 1 or DateDiff(dd,checkOutTime,getdate())= 1) " + "and empNo = :empNo";
 		TypedQuery<Checksystem> query = entityManager.createQuery(hql, Checksystem.class);
 		query.setParameter("empNo", empNo);
 		

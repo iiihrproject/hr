@@ -5,35 +5,45 @@
 <html lang="en">
 
 <head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>HR有限公司 人力資源系統</title>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<!-- Custom fonts for this template-->
 
-    <title>HR有限公司 人力資源系統</title>
+<link href="<c:url value='vendor/fontawesome-free/css/all.min.css' />"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
 
-    <!-- Custom fonts for this template-->
-    
-    <link href="<c:url value='vendor/fontawesome-free/css/all.min.css' />" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+<!-- Custom styles for this template-->
 
-    <!-- Custom styles for this template-->
-    
-    <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
-    <link rel="icon" href="<c:url value='img/favicon.png' />">
-    <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
-    <script src="js/jquery-3.6.0.min.js"></script>
-    <script>
-    <!-- .js請從此後寫 -->
-    window.addEventListener("DOMContentLoaded", function() {
-    	
-    });
-	
-	</script>
+<link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
+<link rel="icon" href="<c:url value='img/favicon.png' />">
+<link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+<script src="js/jquery-3.6.0.min.js"></script>
+<script>
+<!-- .js請從此後寫 -->
+	window.addEventListener("load", function() {
+		isAuthMoreThanGEN();
+	});
+
+	//判斷AUTH是否不只General
+	function isAuthMoreThanGEN() {
+		var isAuthMoreThanGEN = false;
+		$.get("<c:url value='/G/findAUTHByEmpNo' />", function(isAuthMoreThanGEN, status) {
+			console.log("isAuthMoreThanGen = " + isAuthMoreThanGEN);
+			if (isAuthMoreThanGEN) {
+				$("#managerCard").removeClass("invisible");
+			}
+		})
+	}
+</script>
 </head>
 
 <body id="page-top">
@@ -41,6 +51,7 @@
 
 	<!-- Begin Page Content -->
 				<div class="container-fluid h-75">
+				
 <!-- 					<div class="row fornone"> -->
 <!-- 					<div class="row"> -->
 <!-- 						展示模板用，之後要置換掉，換成有fornone的上面那個 -->
@@ -75,7 +86,7 @@
 											</div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-business-time fa-2x text-gray-300"></i>
+											<i class="fas fa-business-time fa-3x text-primary"></i>
 										</div>
 									</div>
 								</div>
@@ -96,7 +107,7 @@
 
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+											<i class="fas fa-calendar-check fa-4x text-danger"></i>
 										</div>
 									</div>
 								</div>
@@ -120,7 +131,7 @@
 											</div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+											<i class="fas fa-calendar-week fa-4x text-success"></i>
 										</div>
 									</div>
 								</div>
@@ -149,14 +160,14 @@
 											</div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-file-upload fa-2x text-gray-300"></i>
+											<i class="fas fa-file-upload fa-4x text-warning"></i>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="row h-25">
+					<div class="row h-25 invisible" id="managerCard">
 						<div class="col-12 col-md-6 mb-4">
 							<div class="card border-left-info shadow h-100 py-2">
 								<div class="card-body"
@@ -171,7 +182,7 @@
 											</div>
 										</div>
 										<div class="sidebar-brand-text mx-auto">
-											<img src="<c:url value='img/scheduling1.png'/>" width="50" />
+											<i class="fas fa-calendar-plus fa-4x text-info"></i>
 										</div>
 									</div>
 								</div>
@@ -202,7 +213,7 @@
 											</div>
 										</div>
 										<div class="sidebar-brand-text mx-auto">
-											<img src="<c:url value='img/approval.png'/>" width="50" />
+											<i class="fas fa-stamp fa-4x text-secondary"></i>
 										</div>
 									</div>
 								</div>
@@ -226,9 +237,7 @@
 
 	<!-- End of Main Content -->
 
-
 	<jsp:include page="footer.jsp"></jsp:include>
-
 
 	<!-- Bootstrap core JavaScript-->
 	<script src="vendor/jquery/jquery.min.js"></script>
@@ -240,7 +249,5 @@
 	<!-- Custom scripts for all pages-->
 	<script src="js/sb-admin-2.min.js"></script>
 
-
 </body>
-
 </html>

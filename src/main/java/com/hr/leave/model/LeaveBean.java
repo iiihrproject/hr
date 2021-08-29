@@ -1,5 +1,6 @@
 package com.hr.leave.model;
 
+import java.io.File;
 import java.sql.Blob;
 
 import javax.persistence.CascadeType;
@@ -49,7 +50,7 @@ public class LeaveBean {
 	@Column(name = "ENDTIME")
 	private String endTime;
 	@Column(name = "DAYS")
-	private Float days;
+	private long days;
 	@Column(name = "COMMENTS")
 	private String comments;
 	@Column(name = "HANDOFF")
@@ -57,7 +58,7 @@ public class LeaveBean {
 	@Column(name = "HANDOFFEMAIL")
 	private String handOffEmail;
 	@Column(name = "SUPPORTINGDOC")
-	private String supportingDoc;
+	private File supportingDoc;
 	
 	@OneToOne(targetEntity = ListBean.class, cascade = { CascadeType.DETACH })
 	@JoinColumn(name = "STATUS", referencedColumnName = "code")
@@ -74,8 +75,8 @@ public class LeaveBean {
 	}
 
 	public LeaveBean(String applicationNo, String typeOfForm, String empNo, DepartmentDetail dept, String requestDate,
-			ListBean reasonList, String startDate, String startTime, String endDate, String endTime, Float days,
-			String comments, String handOff, String handOffEmail, String supportingDoc, ListBean statusList,
+			ListBean reasonList, String startDate, String startTime, String endDate, String endTime, long days,
+			String comments, String handOff, String handOffEmail, File supportingDoc, ListBean statusList,
 			String approval01Name, Blob approval01Signature, String approval01Date) {
 		super();
 		this.applicationNo = applicationNo;
@@ -218,11 +219,11 @@ public class LeaveBean {
 		this.endTime = endTime;
 	}
 
-	public Float getDays() {
+	public long getDays() {
 		return days;
 	}
 
-	public void setDays(Float days) {
+	public void setDays(long days) {
 		this.days = days;
 	}
 
@@ -250,11 +251,11 @@ public class LeaveBean {
 		this.handOffEmail = handOffEmail;
 	}
 
-	public String getSupportingDoc() {
+	public File getSupportingDoc() {
 		return supportingDoc;
 	}
 
-	public void setSupportingDoc(String supportingDoc) {
+	public void setSupportingDoc(File supportingDoc) {
 		this.supportingDoc = supportingDoc;
 	}
 

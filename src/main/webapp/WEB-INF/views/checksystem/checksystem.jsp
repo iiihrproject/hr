@@ -117,14 +117,20 @@
 		               // 伺服器請求完成
 		               if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201)) {
 		                   var response = xhr1.responseText;
-		                   var response = 'Success';
+		                   
+		                   if ('Success' == response) {
+		               		
+  		                    } else {
+  		                    	swal(response);
+  		                    }
 		               }
 		
 		           }
 		             
 		         swal("打卡成功!", "今日工作辛苦了", "success");
 // 		         window.location.href = "<c:url value='/checkInto'/>";
-// 		         location.reload();
+		         setTimeout('refresh()', 1500);
+
 		     } else if (result.dismiss === "cancel"){
 		          //使用者按下「取消」要做的事
 		         swal("取消打卡", "尚未打卡下班", "error");
@@ -136,13 +142,20 @@
 		    $(this).next().slideToggle();
 		});
 		
+	
+		
+		
 	})
 	
 	
 	</script>
 	
-	
 	<script type="text/javascript">
+	
+	function refresh(){
+		window.location.href = "<c:url value='/checkInto'/>";
+	}
+	
 	//畫面效果
 	$(function () {
 	    $('#switchID1').click(function () {
@@ -199,13 +212,9 @@
 	    document.getElementById('showdate').innerHTML = m + '月' + d + '日 ' + week();
 	    setTimeout('ShowDate()', 1000);
 	}
-
-
-
-
-
-
 </script>
+
+	
 
 </head>
 
@@ -219,17 +228,16 @@
 
                 <!-- header刪掉 End-->
                 
-             <div class="row">
-
+             <div class="row pt-4" style="background-image: url('<c:url value="/img/pages.jpg" />');  background-size: cover;" >
                         <!-- First Column -->
                         <div class="col-lg-4 mycss">
 
                             <!-- Custom Text Color Utilities -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                 <a href="<c:url value='/checkInto' />" class="text-decoration-none">
-                                	<button class="btn btn-outline-primary">refresh</button>
-                                 </a>
+<%--                                  <a href="<c:url value='/checkInto' />" class="text-decoration-none"> --%>
+<!--                                 	<button class="btn btn-outline-primary">refresh</button> -->
+<!--                                  </a> -->
                                     <h2 class="m-0 font-weight-bold text-primary">員工打卡系統</h2>
                                 </div>
                                 <div class="card-body ">
@@ -239,7 +247,7 @@
 							            <h1 id="showbox"></h1>
 							            <br> <br> <br> <br> <br> <br> <br>
 							            <br> <br> <br>
-							            <h4 id="worktime"><nobr>上班時間:09:00</nobr></h4><h4 id="offworktime" ><nobr>下班時間:18:00</nobr></h4>
+							            <h4 id="worktime"style="float:left; margin-left: 150px;"><nobr>上班時間:${fn:substring(factSchedule.start,11,16)}</nobr></h4><h4 id="offworktime" style="float:right; margin-right: 150px;"><nobr>下班時間:${fn:substring(factSchedule.end,11,16)}</nobr></h4>
         							   </div>
                                 </div>
                             </div>
@@ -305,7 +313,12 @@
 									<tr><th>日期</th><th>上班時間</th><th>下班時間</th><th>上班是否遲到</th><th>下班是否準時</th><th>是否需補簽到</th></tr>
 										<c:forEach var='checksystem' items='${Checksystem}'>
 										  <tr>
-										  	 <td>${fn:substring(checksystem.createTime,0, 10)}</td>
+										  	 <td>
+										  	 	<c:choose>
+										     	  <c:when test="${checksystem.checkInTime == null}" > ${fn:substring(checksystem.checkOutTime,0, 10)}</c:when>
+										     	  <c:otherwise>${fn:substring(checksystem.checkInTime,0, 10)}</c:otherwise>
+						       					</c:choose>
+						       				</td>
 										     <td>${fn:substring(checksystem.checkInTime,11,19)}</td>
 										     <td>${fn:substring(checksystem.checkOutTime,11,19)}</td>
 										     <td>
@@ -324,7 +337,7 @@
 						       				 <c:choose>
 										     	  <c:when test="${checksystem.isNeedRepair == 'Y'}" ><a href="<c:url value='/EmpSignApply' />"
 													class="text-decoration-none"><button>補簽到</button></a></c:when>
-										     	  <c:when test="${checksystem.isNeedRepair == 'N'}" >補簽到</c:when>
+										     	  <c:when test="${checksystem.isNeedRepair == 'N'}" >無須補簽到</c:when>
 						       				</c:choose>
 						       				 </td>
 										     
@@ -359,8 +372,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
-
-
+	
 </body>
 
 </html>
