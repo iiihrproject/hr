@@ -2,6 +2,15 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<%
+	request.setCharacterEncoding("UTF-8");
+	HttpSession httpSession = request.getSession(true);
+
+	Double sumHours = (Double)httpSession.getAttribute("sumHours");
+	
+	Double remainingHours =(Double)httpSession.getAttribute("remainingHours");
+%>
+
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -60,7 +69,8 @@
                         <div class="narbar-brand">
                             <h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
                             <span class="text-dark">特休剩餘時數：【】小時&nbsp</span><span class="text-danger warning">(請於 【日期】 前使用完畢)</span><br/>
-                            <span class="text-dark">加班剩餘時數：【】小時&nbsp</span><span class="text-danger warning">(請注意到期時間)</span>
+                            <span class="text-dark">加班總計時數：【${sessionScope.sumHours}】小時&nbsp</span><span class="text-danger warning">(請注意加班時數是否正確)</span><br/>
+                            <span class="text-dark">加班剩餘時數：【${sessionScope.remainingHours}】小時&nbsp</span><span class="text-danger warning">(請注意剩餘時數)</span>
                         </div>  
 
                         <!-- 0419 alert to do -->

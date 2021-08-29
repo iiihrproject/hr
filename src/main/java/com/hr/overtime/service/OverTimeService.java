@@ -25,6 +25,8 @@ public interface OverTimeService {
 
 		List<OverTimePending> findPartByEmpnoPending(String empNo);
 
+		Double sumOverTimeHours(String empNo);
+
 //		DepartmentDetail queryManagerId(int dept_no);
 
 }

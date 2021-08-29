@@ -31,13 +31,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		  	.authorizeRequests() // Setting authentic system              
 //			    .antMatchers("/login").permitAll() // Pages that allow user to access without authentication
 			    .antMatchers("/index").authenticated() // Except above pages, all pages should require basic authorization after authentication
-			    .antMatchers("/checkInto").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
+			    .antMatchers("/checkInto","/saveCheckSystem").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
 			    .antMatchers("/").permitAll()
 			    .antMatchers("/editPersonalInfo", "/personnel", "/personalInformationUpdate", "/personalInformation","/pages").authenticated()
 			    .antMatchers( "/department", "/departmentDetail", "/departmentManagerIdUpdate", "/addNewDepartment", "/createNewDepartment").hasRole("HR_MANAGER")
 			    .antMatchers("/bulletinList","/bulletinDetail","/insertMessage","/bulletinGetMsg").authenticated()
 			    .antMatchers("/bulletinManage","/bulletinListMag","/bulletinEventInsert","/insertEventBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletin/getImage").hasRole("HR")
-          .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities").hasRole("HR_MANAGER")
+			    .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities").hasRole("HR_MANAGER")
 			    .antMatchers("/css/**", "/vendor/**", "/img/**", "/js/**", "/scss/**").permitAll()
 			    .antMatchers("/Leave/LeaveResult","/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR","RD_MANAGER","SALES_MANAGER")
 			    .antMatchers("/G/**","/Leave/**","/schedule/**").authenticated()
@@ -50,9 +50,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	            .failureUrl("/login") // Redirect to login page if authentication
 			    .and()
 //      "/authorization", "/authorizationSeaching", where is the controller
-//		    .logout()
-//		    	.logoutSuccessUrl("/login").permitAll()
-//		    	.and()
+			    .logout()
+		    	.logoutSuccessUrl("/login").permitAll()
+		    	.and()
 		  	.httpBasic();
 	}
 	

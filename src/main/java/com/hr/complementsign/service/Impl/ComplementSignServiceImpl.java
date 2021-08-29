@@ -107,7 +107,6 @@ public class ComplementSignServiceImpl implements ComplementSignService {
 			
 			//新增方法
 			Checksystem checksystem = checkService.getCheckSystemByTime(dateString);
-			
 			LoginModel loginModel = loginRepository.getLoginModelByEmpNo(empNo);
 			
 			int empID = loginModel.getPk();
@@ -119,7 +118,7 @@ public class ComplementSignServiceImpl implements ComplementSignService {
 			if(checksystem == null) {
 				checksystem = new Checksystem();
 				checksystem.setEmpNo(empNo);
-				
+				System.out.println(" checkSystem == null");
 				//判斷是否上班或下班遲到 早退
 				boolean isNotOnTime = false;
 				if("CheckIn".equals(type)) {
@@ -138,7 +137,7 @@ public class ComplementSignServiceImpl implements ComplementSignService {
 				}
 				
 			}else {
-				
+				System.out.println(" checkSystem != null");
 				//判斷是否上班或下班遲到 早退
 				boolean isNotOnTime = false;
 				if("CheckIn".equals(type)) {

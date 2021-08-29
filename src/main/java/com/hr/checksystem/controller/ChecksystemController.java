@@ -50,6 +50,9 @@ public class ChecksystemController {
 		cal.add(Calendar.DATE,   -1);
 		String yesterday = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 		FactSchedule factSchedule = checkService.getFactSchedule(yesterday, loginModel.getPk());
+		
+		model.addAttribute("factSchedule" ,factSchedule);
+		
 		System.out.println(loginModel.getPk());
 		//如果有資料代表昨天不是休假  才去做判斷
 		if(factSchedule != null) {
