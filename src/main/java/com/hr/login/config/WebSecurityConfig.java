@@ -30,19 +30,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				//.and()
 		  	.authorizeRequests() // Setting authentic system              
 //			    .antMatchers("/login").permitAll() // Pages that allow user to access without authentication
-			    .antMatchers("/index").authenticated() // Except above pages, all pages should require basic authorization after authentication
+			    .antMatchers("/index", "/logout").authenticated() // Except above pages, all pages should require basic authorization after authentication
 			    .antMatchers("/checkInto").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
 			    .antMatchers("/").permitAll()
-			    .antMatchers("/editPersonalInfo", "/personnel", "/personalInformationUpdate", "/personalInformation").authenticated()
-			    .antMatchers( "/department", "/departmentDetail", "/departmentManagerIdUpdate", "/addNewDepartment", "/createNewDepartment").hasRole("HR_MANAGER")
+			    .antMatchers("/editPersonalInfo", "/personnel", "/personalInformationUpdate", "/personalInformation", "/personnelAuthorization").authenticated()
+			    .antMatchers( "/department", "/departmentDetail", "/departmentManagerNoUpdate", "/addNewDepartment", "/createNewDepartment").hasRole("HR_MANAGER")
 			    .antMatchers("/bulletinList","/bulletinDetail","/insertMessage","/bulletinGetMsg").authenticated()
 			    .antMatchers("/bulletinManage","/bulletinListMag","/bulletinEventInsert","/insertEventBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletin/getImage").hasRole("HR")
-          .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities").hasRole("HR_MANAGER")
+			    .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities", "/findNewAuthorities").hasRole("HR_MANAGER")
+			    .antMatchers("/addNewPersonnel","/createNewPersonnel","/modify","/findAuthorities", "/findNewAuthorities").hasRole("HR_MANAGER")
 			    .antMatchers("/css/**", "/vendor/**", "/img/**", "/js/**", "/scss/**").permitAll()
 			    .anyRequest().hasRole("ADMIN")
-			    .antMatchers("/Leave/LeaveResult").hasAnyRole("HR_MANAGER", "HR")
-			    .antMatchers("/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR")
-
 			    .and()
 		    .formLogin()
 			    .loginPage("/login").permitAll() // Rewrite the default login page
@@ -50,9 +48,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	            .failureUrl("/login") // Redirect to login page if authentication
 			    .and()
 //      "/authorization", "/authorizationSeaching", where is the controller
-//		    .logout()
-//		    	.logoutSuccessUrl("/login").permitAll()
-//		    	.and()
+		    .logout()
+		    	.logoutSuccessUrl("/login").permitAll()
+		    	.and()
 		  	.httpBasic();
 	}
 	

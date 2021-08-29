@@ -39,13 +39,14 @@ public class ModifyLoginModelServiceImpl implements ModifyLoginModelService {
 
 	@Override
 	public boolean updateLoginModel(Map<String, String> inputMap, LoginModel modifiedLoginModel) {
-		if(inputMap.get("role") != "") {
+
+		if(!inputMap.get("role").equals("")) {
 			modifiedLoginModel.setRole(inputMap.get("role"));
 		}
-		if(inputMap.get("name") != "") {
+		if(!inputMap.get("name").equals("")) {
 			modifiedLoginModel.setName(inputMap.get("name"));
 		}
-		if(inputMap.get("departmentDetail").toString() != "") {
+		if(!inputMap.get("departmentDetail").toString().equals("")) {
 			try {
 				DepartmentDetail departmentStatus = modifyLoginModelRepository.loadByDepartmentNumber(Integer.parseInt(inputMap.get("departmentDetail").toString()));
 				if(departmentStatus == null) {	
@@ -57,10 +58,9 @@ public class ModifyLoginModelServiceImpl implements ModifyLoginModelService {
 				return false;
 			}
 		}
-		if(inputMap.get("isEnable").toString() != "") {
-			modifiedLoginModel.setIsEnable(Boolean.parseBoolean(inputMap.get("IsEnable")));
+		if(!inputMap.get("isEnable").equals("")) {
+			modifiedLoginModel.setIsEnable(Boolean.parseBoolean(inputMap.get("isEnable")));
 		}
-		
 		LoginModel loginModel = modifyLoginModelRepository.updateModifiedLoginModel(modifiedLoginModel);
 		if(modifiedLoginModel.equals(loginModel)) {
 			return true;
@@ -151,5 +151,15 @@ public class ModifyLoginModelServiceImpl implements ModifyLoginModelService {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public List<String> findNewAuthorities(LoginModel modifiedLoginModel) {
+		List<Authorities> list = modifyLoginModelRepository.getAuthoritiesListByPk(modifiedLoginModel.getPk());
+		List<String> result = new ArrayList<String>();
+		for(int i = 0; i < list.size(); i++) {
+			result.add(list.get(i).getAuthorityName().substring(5).toLowerCase());
+		}
+		return result;
 	}
 }

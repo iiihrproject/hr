@@ -37,16 +37,6 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
 	}
 
 	@Override
-	public LoginModel findLoginModel(Integer managerEmpId) {
-		try {
-			return entityManager.find(LoginModel.class, managerEmpId);	
-		}
-		catch(Exception e) {
-			return null;
-		}
-	}
-
-	@Override
 	public DepartmentDetail updateDepartmentDetail(DepartmentDetail departmentDetail) {
 		try {	
 			return entityManager.merge(departmentDetail);		
@@ -67,8 +57,40 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
 	}
 
 	@Override
-	public void insertNewDepartments(DepartmentDetail departmentDetail) throws IllegalArgumentException {
-		entityManager.persist(departmentDetail);			
+	public boolean insertNewDepartments(DepartmentDetail departmentDetail) throws IllegalArgumentException {
+		try {
+			entityManager.persist(departmentDetail);	
+			return true;
+		}
+		catch(Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public LoginModel findLoginModelByEmpNo(String managerEmpNo) {
+		try {
+			return (LoginModel)entityManager.createQuery("from loginModel where empNo = :managerEmpNo", LoginModel.class).setParameter("managerEmpNo", managerEmpNo).getSingleResult();	
+		}
+		catch(NoResultException nre) {
+			return null;
+		}
+		catch(NonUniqueResultException nure) {
+			return null;
+		}
+		catch(Exception e) {
+			return null;
+		}
+	}
+
+	@Override
+	public LoginModel findLoginModel(Integer managerEmpId) {
+		try {	
+			return entityManager.find(LoginModel.class, managerEmpId);
+		}
+		catch(Exception e) {
+			return null;
+		}
 	}
 	
 }
