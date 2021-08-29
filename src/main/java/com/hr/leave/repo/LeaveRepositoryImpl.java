@@ -44,7 +44,7 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 	@Override
 	public List<LeaveBean> findAllLeave() {
 		List<LeaveBean> leaveB = null;
-		String hql = "FROM LeaveBean";
+		String hql = "FROM LeaveBean order by APPLICATIONNO desc";
 		leaveB = entityManager.createQuery(hql, LeaveBean.class).getResultList();
 		return leaveB;
 	}
@@ -57,7 +57,7 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 	@Override
 	public List<LeaveBean> findLeaveByEmpNo(String empNo) {
 		List<LeaveBean> leaveB = null;
-		String hql = "FROM LeaveBean l WHERE l.empNo =:empNo";
+		String hql = "FROM LeaveBean l WHERE l.empNo =:empNo order by APPLICATIONNO desc";
 		leaveB = entityManager.createQuery(hql, LeaveBean.class).setParameter("empNo", empNo).getResultList();
 		return leaveB;
 	}
@@ -65,8 +65,16 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 	@Override
 	public List<LeaveBean> findLeaveByDeptNo(Integer departmentNumber) {
 		List<LeaveBean> leaveB = null;
-		String hql = "FROM LeaveBean l WHERE l.dept.departmentNumber = :departmentNumber";
+		String hql = "FROM LeaveBean l WHERE l.dept.departmentNumber = :departmentNumber order by APPLICATIONNO desc";
 		leaveB = entityManager.createQuery(hql, LeaveBean.class).setParameter("departmentNumber", departmentNumber).getResultList();
+		return leaveB;
+	}
+
+	@Override
+	public List<LeaveBean> findLeaveByAppNo(String applicationNo) {
+		List<LeaveBean> leaveB = null;
+		String hql = "FROM LeaveBean l WHERE l.applicationNo =:applicationNo";
+		leaveB = entityManager.createQuery(hql, LeaveBean.class).setParameter("applicationNo", applicationNo).getResultList();
 		return leaveB;
 	}
 	

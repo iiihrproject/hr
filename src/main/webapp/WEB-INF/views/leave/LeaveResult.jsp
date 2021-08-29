@@ -45,30 +45,77 @@ function loadLeaveData() {
 						+ leave.startTime.slice(0, 5) + "~" + leave.endDate
 						+ " " + leave.endTime.slice(0, 5) + "</td>";
 				segment += "<td>" + leave.days + "</td>";
-				segment += "<td><a href='#"+ leave.applicationNo +"' data-toggle='collapse'>" + leave.applicationNo + "</a></td>";
-				segment += "<td><span class='btn-sm text-dark font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
-				segment +="<tr class='collapse' id='"+ leave.applicationNo +"'>";
-				segment +="<td colspan='2'>備註："+leave.comments+"</td>";
-				segment +="<td>代理人："+leave.handOff+"</td>";
-				segment +="<td colspan='2'>簽核："+leave.approval01Name+"</td>";
-				segment +="<td><a href='#' class='btn btn-sm btn-info btn-icon-split' data-toggle='modal' id='checkinsert' data-target='#detailModal'>";
-				segment +="<span class='icon text-white-50'><i class='fas fa-file-signature'></i></span>";
-				segment +="<span class='text'>查看詳情</span></a></td></tr>";
+				segment += "<td><a href='#Co"+ leave.applicationNo +"' data-toggle='collapse'>" + leave.applicationNo + "</a></td>";
+				segment += "<td><span class='btn-sm text-white font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
+				segment += "<tr class='collapse' id='Co"+ leave.applicationNo +"'>";
+				segment += "<td>代理人：<a title='發信給"+leave.handOffEmail+"' href='mailto:" + leave.handOffEmail + "'>"+leave.handOff+"</a></td>";
+				segment += "<td colspan='2'>備註：" + leave.comments + "</td>";
+				segment += "<td colspan='2'>簽核：" + leave.approval01Name + "</td>";
+				segment += "<td><button onclick='seeMore(\"" + leave.applicationNo + "\")' class='btn btn-sm btn-info btn-icon-split' type='button' data-toggle='modal' data-target='#detailModal'>";
+				segment += "<span class='icon text-white-50'><i class='fas fa-file-signature'></i></span>";
+				segment += "<span class='text'>查看詳情</span></button></td></tr>";
 			}
 				return segment
 			}
 		}
 	}
 }
+function findEmpByEmpNo (empNo){
+	$.get("<c:url value='/G/findEmpByEmpNo' />?empNo="+empNo,function(empData,status2){
+		if(status2 == "success"){
+			return empData;
+		}
+	});
+}
+
+// 查看詳情
+function seeMore(appNo){
+	$.get("<c:url value='/Leave/findLeaveByAppNo' />?applicationNo="+appNo,function(data,status){
+		if(status == "success"){
+					
+// 			$("#m_name").text(findEmpByEmpNo(data[0].empNo).name);
+			
+			$.get("<c:url value='/G/findEmpByEmpNo' />?empNo="+data[0].empNo,function(empData,status2){
+				if(status2 == "success"){
+					$("#m_name").text(empData.name);
+				}
+			});
+			
+			$.get("<c:url value='/G/findEmpByPk' />?empId="+data[0].handOff,function(empData2,status3){
+				if(status3 == "success"){
+					$("#m_handOff").text(empData2[0].loginModelInfo.name);
+// 					console.log(empData2);
+				}
+			});
+		$("#m_AppNo").text(data[0].applicationNo);
+		$("#m_requestDate").text(data[0].requestDate);
+		$("#m_dept").text("部門："+data[0].dept.name);
+		$("#m_empNo").text("工號："+data[0].empNo);
+		$("#m_reason").text(data[0].reasonList.desc_zh);
+		$("#m_start").html(data[0].startDate+"<br />"+data[0].startTime.slice(0,5));
+		$("#m_end").html(data[0].endDate+'<br>'+data[0].endTime.slice(0,5));
+		$("#m_days").text(data[0].days);
+		$("#m_comments").text(data[0].comments);
+		$("#m_supportingDoc").text(data[0].supportingDoc);
+		}
+	});
+
+}
 
 // 設定CSS
 function setCSS(){
-	console.log($("td span").$("this").text());
-	if($("td span").text() == "提出申請"){
-		$("td span").addClass("bg-warning");
-	} else {
-		$("td span").addClass("bg-danger");
-	}
+// 	狀態結果改變背景色
+	$("td span").each(function(index){
+		if($(this).text() == "提出申請"){
+			$(this).addClass("bg-warning text-dark");
+		} else if($(this).text() == "取消"){
+			$(this).addClass("bg-secondary").parent($(this)).addClass("text-right");
+		} else if($(this).text() == "通過"){
+			$(this).addClass("bg-success").parent($(this)).addClass("text-center");
+		} else if($(this).text() == "否決"){
+			$(this).addClass("bg-danger").parent($(this)).addClass("text-right");
+		}
+	});
 }
 // //DataTable setting
 // $(document).ready( function () {
@@ -196,7 +243,7 @@ function setCSS(){
 			<h6 class="m-0 font-weight-bold text-primary">
 				DataTables Example
 				<button class="btn btn-info btn-icon-split btn-sm"
-					data-toggle="modal" id="checkinsert" data-target="#detailModal">按我跳出</button>
+					data-toggle="modal" data-target="#detailModal">按我跳出</button>
 			</h6>
 		</div>
 		<div class="card-body">
@@ -215,19 +262,19 @@ function setCSS(){
 											aria-label="Name: activate to sort column descending">申請人</th>
 										<th class="sorting col-md-1" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
-											aria-label="Position: activate to sort column ascending">假別</th>
+											aria-label="Reason: activate to sort column ascending">假別</th>
 										<th class="sorting col-md-4" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
-											aria-label="Office: activate to sort column ascending">期間</th>
+											aria-label="Duration: activate to sort column ascending">期間</th>
 										<th class="sorting col-md-1" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
-											aria-label="Age: activate to sort column ascending">天數</th>
+											aria-label="Day: activate to sort column ascending">天數</th>
 										<th class="sorting col-md-1" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
-											aria-label="Start date: activate to sort column ascending">申請單號</th>
+											aria-label="AppNo: activate to sort column ascending">申請單號</th>
 										<th class="sorting col-md-2" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
-											aria-label="Start date: activate to sort column ascending">狀態</th>
+											aria-label="Status: activate to sort column ascending">狀態</th>
 									</tr>
 								</thead>
 								<tfoot class="thead-dark">
@@ -241,20 +288,7 @@ function setCSS(){
 									</tr>
 								</tfoot>
 								<tbody id="tbodycontent">
-									<tr class="odd">
-										<td class="sorting_1">Airi Satou</td>
-										<td>Accountant</td>
-										<td>Tokyo</td>
-										<td>33</td>
-										<td><a href="#demo" data-toggle="collapse">Click me to toggle next row</a></td>
-										<td>2008/11/28</td>
-									</tr>
-									<tr class="collapse" id="demo">
-										<td colspan="2">備註：</td>
-										<td>代理人：</td>
-										<td colspan="2">簽核：</td>
-										<td>查看詳情</td>
-									</tr>
+									
 								</tbody>
 							</table>
 						</div>
@@ -290,44 +324,47 @@ function setCSS(){
 									class="table table-bordered thead-dark"
 									id="modalTable">
 									<tr>
-										<td style="text-align: left; margin-right: 8px; border: none;">申請單號
-											<span></span>
+										<td class="col-auto" style="text-align: left; margin-right: 8px; border: none;">申請單號 
+											<span id="m_AppNo"></span>
 										</td>
-										<td
-											style="text-align: right; margin-right: 8px; border: none;">申請日
-											<span id="requestDate"></span>
+										<td class="col-auto" style="text-align: right; margin-right: 8px; border: none;">申請日
+											<span id="m_requestDate"></span>
 										</td>
 									</tr>
 									<tr>
 										<th>申請人</th>
-										<td>部門工號</td>
+										<td><div class="row align-items-center">
+												<div class="col" id="m_name"></div>
+												<div class="col" id="m_dept"></div>
+												<div class="col" id="m_empNo"></div>
+											</div></td>
 									</tr>
 									<tr>
 										<th>請假事由</th>
-										<td></td>
+										<td><span id="m_reason"></span></td>
 									</tr>
 									<tr>
 										<th>請假期間</th>
-										<td><div class="center"
-												style="display: flex; width: 60%; flex: 1;">
-												<span><br></span> <span style="margin: 10px;">~</span>
-												<span><br></span>
-											</div>
-											<div>
-												共計<span></span>天
+										<td><div class="row align-items-center">
+												<div class="col-auto text-center" id="m_start"></div>
+												<div class="col-auto text-center">~</div>
+												<div class="col-auto text-center" id="m_end"></div>
+												<div class="col-auto text-center">
+													共計<span id="m_days"></span>天
+												</div>
 											</div></td>
 									</tr>
 									<tr>
 										<th>備註</th>
-										<td></td>
+										<td><span id="m_comments"></span></td>
 									</tr>
 									<tr>
 										<th>職務代理人</th>
-										<td></td>
+										<td><span id="m_handOff"></span></td>
 									</tr>
 									<tr>
 										<th>相關檔案上傳</th>
-										<td></td>
+										<td><span id="m_supportingDoc"></span></td>
 									</tr>
 									<tr>
 										<th>主管簽核</th>

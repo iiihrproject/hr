@@ -21,6 +21,7 @@
 				document.getElementById("tbodycontent").innerHTML = processData(xhr.responseText);
 				// 				let leaveList = JSON.parse(xhr.responseText);
 				// 				console.log(leaveList);
+				setCSS();
 			}
 			function processData(jsonString) {
 				let leaveList = JSON.parse(jsonString);
@@ -37,12 +38,28 @@
 					segment += "<td>" + leave.startDate + " "
 							+ leave.startTime.slice(0, 5) + "~" + leave.endDate
 							+ " " + leave.endTime.slice(0, 5) + "</td>";
-					segment += "<td><span class='btn-sm text-dark bg-warning font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
+					segment += "<td><span class='btn-sm text-white font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
 				}
 					return segment
 				}
 			}
 		}
+	}
+
+	// 設定CSS
+	function setCSS(){
+//	 	狀態結果改變背景色
+		$("td span").each(function(index){
+			if($(this).text() == "提出申請"){
+				$(this).addClass("bg-warning text-dark");
+			} else if($(this).text() == "取消"){
+				$(this).addClass("bg-secondary").parent($(this)).addClass("text-right");
+			} else if($(this).text() == "通過"){
+				$(this).addClass("bg-success").parent($(this)).addClass("text-center");
+			} else if($(this).text() == "否決"){
+				$(this).addClass("bg-danger").parent($(this)).addClass("text-right");
+			}
+		});
 	}
 </script>
 </head>

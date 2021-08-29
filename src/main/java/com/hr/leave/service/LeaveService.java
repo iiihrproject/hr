@@ -23,5 +23,7 @@ public interface LeaveService {
 
 	List<LeaveBean> findLeaveByDeptNo(Integer departmentNumber);
 
+	List<LeaveBean> findLeaveByAppNo(String applicationNo);
+
 
 }

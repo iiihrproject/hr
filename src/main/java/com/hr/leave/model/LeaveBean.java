@@ -50,7 +50,7 @@ public class LeaveBean {
 	@Column(name = "ENDTIME")
 	private String endTime;
 	@Column(name = "DAYS")
-	private Float days;
+	private long days;
 	@Column(name = "COMMENTS")
 	private String comments;
 	@Column(name = "HANDOFF")
@@ -75,7 +75,7 @@ public class LeaveBean {
 	}
 
 	public LeaveBean(String applicationNo, String typeOfForm, String empNo, DepartmentDetail dept, String requestDate,
-			ListBean reasonList, String startDate, String startTime, String endDate, String endTime, Float days,
+			ListBean reasonList, String startDate, String startTime, String endDate, String endTime, long days,
 			String comments, String handOff, String handOffEmail, File supportingDoc, ListBean statusList,
 			String approval01Name, Blob approval01Signature, String approval01Date) {
 		super();
@@ -219,11 +219,11 @@ public class LeaveBean {
 		this.endTime = endTime;
 	}
 
-	public Float getDays() {
+	public long getDays() {
 		return days;
 	}
 
-	public void setDays(Float days) {
+	public void setDays(long days) {
 		this.days = days;
 	}
 

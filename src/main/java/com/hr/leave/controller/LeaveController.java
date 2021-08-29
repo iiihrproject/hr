@@ -17,11 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.hr.leave.model.LeaveBean;
-import com.hr.leave.model.ListBean;
 import com.hr.leave.service.LeaveService;
 import com.hr.login.model.LoginModel;
-import com.hr.login.service.LoginService;
-import com.hr.personnel.model.Personnel;
 
 @Controller
 @RequestMapping("/Leave")
@@ -83,14 +80,12 @@ public class LeaveController {
 		return map;
 	}
 
-//	@GetMapping("/Leave/GetOne")
-//	public String GetOne(@RequestParam("applicationNo") String applicationNo, Model m) {
-//		LeaveBean leave = service.select(applicationNo);
-//		m.addAttribute("reasonList", leaveBeanDao.getReasonList());
-//		m.addAttribute("leave", leave);
-//		return "LeaveApplication/EditLeaveForm";
-//	}
-//
+//	調出該申請單號資料
+	@GetMapping("/findLeaveByAppNo")
+	public @ResponseBody List<LeaveBean> findLeaveByAppNo(@RequestParam("applicationNo") String applicationNo) {
+		return service.findLeaveByAppNo(applicationNo);
+	}
+
 //	@PostMapping("/Insert")
 //	public String Insert(HttpServletRequest request, @RequestParam("reason") String reason_id,
 //			@RequestParam("startDate") String startDate, @RequestParam("startTime") String startTime,
