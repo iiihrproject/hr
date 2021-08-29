@@ -54,8 +54,9 @@
             let quotanValue = "";
         	if(quotaValue!=null){
         	quotanValue = document.getElementById("quotanid").value;
-        	}
         	let enddateValue = document.getElementById("enddate").value;
+        	}
+        	
             let postdateValue = document.getElementById("postdate").value;
             let expValue = document.getElementById("exp").value;
             let file = $('#file1')[0].files[0]
@@ -80,13 +81,13 @@
         	} else {
         	div1.innerHTML = "";
         	} 
-        	if (!postdateValue){
+        	/* if (!postdateValue){
         	setErrorFor(div2, "請輸入刊登日期");  
         	} else if (postdateValue<td) {
                 setErrorFor(div2, "刊登日期已過");
             } else {
         	div2.innerHTML = "";
-        	}
+        	} */
         	if (!expValue){
         	setErrorFor(div3, "請輸入刊登日期");  
         	} else if (expValue<postdateValue) {
@@ -94,11 +95,16 @@
             } else {
         	div3.innerHTML = "";
         	}
-        	if (quotaValue=="限制" && quotanValue==0){
-                setErrorFor(div4, "請輸入可報名額");  
-                } else {
-                div4.innerHTML = "";
-                }
+        	
+        	if(`${bulletin.type}` == '公告'){
+        		
+        	} else {
+        		
+        		if (quotaValue=="限制" && quotanValue==0){
+                	setErrorFor(div4, "請輸入可報名額");  
+                	} else {
+                	div4.innerHTML = "";
+                	}
             	if (!enddateValue){
                 	setErrorFor(div5, "請輸入報名截止日期");  
                 	} else if (enddateValue<postdateValue) {
@@ -108,6 +114,8 @@
                     } else {
                 	div5.innerHTML = "";
                 	}
+        	}
+            	
             if (hasError) {
                 return false;
             }
@@ -131,7 +139,11 @@
             }else{
             	formData.append("quota", quotanValue);
             }
+            if(`${bulletin.type}` == '公告'){
+            	
+            } else {
             formData.append("endDate", enddateValue);
+            }
             formData.append("postDate", postdateValue);
             formData.append("exp", expValue);
             
@@ -339,6 +351,11 @@
                                         </c:otherwise>
                                         </c:choose>
                                         
+                                        <c:choose>
+                                        <c:when test="${bulletin.quotatype==''||bulletin.type == '公告'}">
+                                        </c:when>
+                                        <c:otherwise>
+                                        
                                         <tr>
                                            <td style="text-align: right">
                                             	<label for="" class="col-form-label ">報名截止 :</label>
@@ -348,6 +365,9 @@
                     							<span id=result5c class="form-text"></span>
                                             </td>
                                         </tr>
+                                        
+                                        </c:otherwise>
+                                        </c:choose>
                                         
                                         <tr>
                                             <td style="text-align: right"><label for="" class="col-form-label ">貼文刊登 :</label></td>
@@ -370,7 +390,7 @@
                                         	<span class="text">取消／回前頁</span>
                                     		</a>
                                     		&nbsp;
-                                    		<a class="btn btn-info btn-icon-split btn-sm" href="#" data-toggle="modal" id="checkinsert" data-target="#checkModal">
+                                    		<a class="btn btn-info btn-icon-split btn-sm" href="#" data-toggle="modal" id="checkinsert" data-target="#checkModal" onclick="checkinsertbutton(`${bulletin.type}`)">
                                         	<span class="text">&nbsp;預覽&nbsp;</span>
                                     		</a>
                                     		&nbsp;
@@ -446,10 +466,10 @@
                                             <td>貼文刊登：<span id="chpd"></span></td>
                                         </tr>
                                         <tr  id="tdqu">
-                                            <td>已報名人數：  &nbsp／&nbsp可報名人數：<span id="chqu"></span></td>
+                                            <td>已報名人數：&nbsp;／&nbsp;可報名人數：<span id="chqu"></span></td>
                                         </tr>
-                                        <tr>
-                                            <td>報名截止：<span id="ched"></span></td>
+                                        <tr id="trenddate">
+                                            <td >報名截止：<span id="ched"></span></td>
                                         </tr>
                                         
                                     </tbody>

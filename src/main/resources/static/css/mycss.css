@@ -149,3 +149,17 @@
   	background-color: #fff;
   	border-color: #fff;
 }
+
+#datatableid tr {
+	height: 50px;
+
+}
+
+#datatableid td {
+	vertical-align: middle;
+}
+
+#datatableid th {
+	vertical-align: middle;
+}
+

@@ -61,8 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			    .antMatchers("/personnel").authenticated()
 			    .antMatchers("/authorization", "/authorizationSeaching", "/department", "/departmentDetail", "/departmentManagerIdUpdate").hasRole("ADMIN")
 			    .antMatchers("/test").permitAll()
-			    .antMatchers("/bulletinList","/bulletinDetail","/insertMessage","/bulletinGetMsg").authenticated()
-			    .antMatchers("/bulletinManage","/bulletinListMag","/bulletinEventInsert","/insertEventBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletin/getImage").hasRole("HR")
+			    .antMatchers("/bulletinList","/bulletinDetail","/myBulletin","/bulButton","/insertMessage","/bulletinGetMsg","/bulletinInsertEnroll","/bulletinFindEnroll","/myApplyList","/bulletinListUser","/insertMessage","/bulletinGetMsg","/bulletinDelMsg","/bulletinChangeLike","/bulletinFindLike","/findEnrollNumByNo").authenticated()
+			    .antMatchers("/applyList","/bulletin/getImage","/bulletinManage","/bulletinListMag","/bulletinEventInsert","/bulletinAnnoInsert","/insertEventBulletion","/insertAnnoBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletinEditEventPage").hasRole("HR")
 
 			    .and()
 		    .formLogin()

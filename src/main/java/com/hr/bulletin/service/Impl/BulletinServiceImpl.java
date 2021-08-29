@@ -2,6 +2,8 @@ package com.hr.bulletin.service.Impl;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.print.attribute.standard.Media;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hr.bulletin.model.BulEnroll;
 import com.hr.bulletin.model.BulLike;
 import com.hr.bulletin.model.BulMessage;
+import com.hr.bulletin.model.BulName;
 import com.hr.bulletin.model.Bulletin;
 import com.hr.bulletin.repository.BulletinRepo;
 import com.hr.bulletin.service.BulletinService;
+import com.hr.login.model.LoginModel;
+import com.hr.login.repository.LoginRepository;
+import com.hr.personnel.model.DepartmentDetail;
+import com.hr.personnel.repository.DepartmentRepository;
 
 @Service
 @Transactional
@@ -21,6 +28,12 @@ public class BulletinServiceImpl implements BulletinService {
 
 	@Autowired
 	BulletinRepo bulletinRepo;
+	
+	@Autowired
+	DepartmentRepository departmentRepository;
+	
+	@Autowired
+	LoginRepository loginRepository;
 
 	// 執行新增
 	@Override
@@ -48,7 +61,7 @@ public class BulletinServiceImpl implements BulletinService {
 	
 	// 執行查詢多筆
 	@Override
-	public List<List> findAll(){
+	public List<BulName> findAll(){
 		return bulletinRepo.findAll();
 	}
 
@@ -107,6 +120,35 @@ public class BulletinServiceImpl implements BulletinService {
 		
 	};
 	
+	//查詢未過期多筆
+	@Override
+	public List<BulEnroll> findEnrollListByNo(int postno) {
+		return bulletinRepo.findEnrollListByNo(postno);
+	}
 	
+	@Override
+	public DepartmentDetail findDepartment(Integer departmentNumber) {
+		return departmentRepository.findDepartment(departmentNumber);
+	}
+	
+	@Override
+	public LoginModel getLoginModelByEmpNo(String empNo) {
+		return loginRepository.getLoginModelByEmpNo(empNo);
+	}
+	
+	@Override
+	public List<BulName> userFindAll(){
+		return bulletinRepo.userFindAll();
+	}
+
+	@Override
+	public List<BulName> findMyEnrollByEmpNo(String empNo) {
+		return bulletinRepo.findMyEnrollByEmpNo(empNo);
+	}
+	
+	@Override
+	public List<BulEnroll> findEnrollNumByNo(int postno){
+		return bulletinRepo.findEnrollNumByNo(postno);
+	}
 	
 }

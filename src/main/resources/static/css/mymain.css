@@ -52,7 +52,7 @@ a{
 	color: #454545;
 }
 
-a:hover{
+#calendar a:hover{
 	color: #454545;
     text-decoration: none !important;
     font-size: 1.03em;
