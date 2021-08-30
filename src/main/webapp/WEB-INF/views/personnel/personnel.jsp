@@ -96,7 +96,7 @@
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">右上</div>
                                             <!-- 模板二：module-1(content全空白) -->
-                                            <a href="<c:url value='/###' />"  class="text-decoration-none">
+                                            <a href="<c:url value='/updatePassword' />"  class="text-decoration-none">
                                                 <div class="h4 mb-0 font-weight-bold text-center">密碼修改</div>
                                             </a>
                                         </div>
