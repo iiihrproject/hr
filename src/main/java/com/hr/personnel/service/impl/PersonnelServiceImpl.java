@@ -79,7 +79,7 @@ public class PersonnelServiceImpl implements PersonnelService {
 		    String s = iterator.next().getAuthorityName();
 		    setString.add(s);
 		}
-		Boolean check = setString.contains("ROLE_HR_MANAGER");
+		Boolean check = setString.contains("ROLE_HR");
 		return check;
 	}
 	

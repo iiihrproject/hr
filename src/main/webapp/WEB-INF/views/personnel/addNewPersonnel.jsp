@@ -121,6 +121,22 @@
         	}
 		});
 	}
+	function insertManager(){
+		let inputRole = $("#inputRole").val("CS");
+		let inputPersonalIdNumber = $("#inputPersonalIdNumber").val("G221364789");
+		let inputName = $("#inputName").val("驚奇隊長");
+		let inputGender = $("#inputGender").val("female");
+		let inputEmpNo = $("#inputEmpNo").val("csmanager");
+		let inputDepartmentNumber = $("#inputDepartmentNumber").val("4");
+	}
+	function insertAgent(){
+		let inputRole = $("#inputRole").val("CS");
+		let inputPersonalIdNumber = $("#inputPersonalIdNumber").val("K111369859");
+		let inputName = $("#inputName").val("奇異博士");
+		let inputGender = $("#inputGender").val("male");
+		let inputEmpNo = $("#inputEmpNo").val("cs1");
+		let inputDepartmentNumber = $("#inputDepartmentNumber").val("4");
+	}
 	</script>
 	<style>
 		.button{
@@ -158,7 +174,8 @@
 								<button id='production_manager' onclick="offOrOn(this)" class='button'>生產部門經理</button>
 								<button id='production' onclick="offOrOn(this)" class='button'>生產部門</button>
 							</div></td></tr>
-							<tr><td colspan='3'><button id='submit'>新增</button></td>
+							<tr><td colspan='23'><button id='submit'>新增</button></td></tr>
+							<tr><td><div><button onclick='insertManager()'>快速輸入主管</button><button onclick='insertAgent()'>快速輸入職員</button></div></td></tr>
 						</tbody>
 					</table>
 			</div>

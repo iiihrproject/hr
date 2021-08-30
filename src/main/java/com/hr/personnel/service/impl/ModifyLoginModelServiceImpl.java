@@ -110,6 +110,7 @@ public class ModifyLoginModelServiceImpl implements ModifyLoginModelService {
 		}
 		// Using iterator to get only authorities value by checking true or false
 		Map<String, Boolean> authoritiesBooleanMap = new HashMap<String, Boolean>();
+		inputMap.remove("isEnable");
 		Set<String> inputMapValue = inputMap.keySet();
 		Iterator<String> inputMapValueIterator = inputMapValue.iterator();
 		while(inputMapValueIterator.hasNext()) {

@@ -72,24 +72,20 @@
 			xhr.send("newPassword=" + newpwd);
 			
 			xhr.onreadystatechange = function(){
-				console.log(xhr.readyState);
-				console.log(xhr.status);
 				if (xhr.readyState == 4 && xhr.status == 200){
-					console.log("after");
 					let result = JSON.parse(xhr.responseText);
-					console.log(result);
-// 					if (result.success) {
-						div2.innerHTML = "<font color='GREEN'>" + result[result] + "</font>";
-// 			  		} else  if(result.fail){
-// 			  			div2.innerHTML = "<font color='red' >" + result.fail + "</font>";
-// 			  		} else {
-// 			  			div2.innerHTML = "<font color='red' >" + result.failnull + "</font>";
-// 			  		}
+					console.log(result.password);
+ 					 if (result.result == 'password update is successful') {
+						div2.innerHTML = "<font color='green'>" + result.result + "</font>"; 
+ 					 } else {
+			  			div2.innerHTML = "<font color='red' >" + result.result+ "</font>";
+			  		}
 				}
             
         	
     	}
 
+    }
     }
     
     function setErrorFor(input, message) {
@@ -124,13 +120,13 @@
                           <table class="table table-bordered" cellspacing="0">
                                     <tbody>
                                         <tr>
-                                            <td style="text-align: right;"><label for="" class="col-form-label">請輸入新密碼 :</label></td>
-                                            <td ><input type="password" id="newpwd" name="newpwd" class="form-control"  size="30" maxlength="20" required />
+                                            <td style="text-align: right"><label for="" class="col-form-label">請輸入新密碼 :</label></td>
+                                            <td ><input type="password" id="newpwd" name="newpwd" class="form-control"  size="20" maxlength="20" required />
                                             	<span id="result0c" class="form-text"></span></td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right;"><label for="" class="col-form-label">再次輸入新密碼  :</label></td>
-                                            <td><input type="password" id="newpwdcheck" name="newpwdcheck" class="form-control"  size="30" maxlength="20" required />
+                                            <td style="text-align: right"><label for="" class="col-form-label">再次輸入新密碼  :</label></td>
+                                            <td><input type="password" id="newpwdcheck" name="newpwdcheck" class="form-control"  size="20" maxlength="20" required />
                                             	<span id="result1c" class="form-text"></span></td>
                                         </tr>
                                         <tr>
@@ -140,8 +136,8 @@
                                     		</a>
                                     		&nbsp;
                                     		<button type="submit" class="btn btn-success btn-icon-split btn-sm" data-toggle="modal" id="sendData"  data-target="#resultModal">
-                                        	<span class="text">&nbsp;修改密碼&nbsp;</span><span id="result2c" class="form-text"></span>
-                                    		</button>
+                                        	<span class="text">&nbsp;修改密碼&nbsp;</span>
+                                    		</button><span id="result2c" class="form-text"></span>
                                     		</td>
                                     	</tr>
                                     	

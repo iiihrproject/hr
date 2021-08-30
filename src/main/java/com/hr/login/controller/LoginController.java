@@ -2,7 +2,6 @@ package com.hr.login.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,20 +20,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.hr.login.model.LoginModel;
 import com.hr.login.service.LoginService;
-import com.hr.overtime.model.OverTimeAuditted;
-import com.hr.overtime.service.OverTimeService;
 
 @Controller
-@SessionAttributes({"loginModel" ,"sumHours" ,"remainingHours"})
+@SessionAttributes("loginModel")
 public class LoginController {
 	
 	@Autowired
 	private LoginService loginService;
-	
-	@Autowired
-	private OverTimeService overTimeService;
-	
-	
 	
 	@GetMapping(path="/")
 	public String mainPagePath() {
@@ -51,15 +43,6 @@ public class LoginController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String empNo = authentication.getName();
 		LoginModel loginModel = loginService.getLoginModelByEmpNo(empNo);
-		
-		Double sumHours = overTimeService.sumOverTimeHours(empNo);
-		Double remainingHours = 46 - sumHours ;
-//		HttpSession session = request.getSession(true);
-//		
-//		session.setAttribute("sumHours", sumHours);
-//		session.setAttribute("remainingHours", remainingHours);
-		model.addAttribute("sumHours",sumHours);
-		model.addAttribute("remainingHours",remainingHours);
 		model.addAttribute("loginModel", loginModel);
 		return "/index";
 	}
@@ -73,13 +56,8 @@ public class LoginController {
 	    return "/login";
 	}
 	
-	@GetMapping(path="/pages")
-	public String loginPage() {
-		return "pages";
-	}	
-	
-//	@GetMapping(path="/test")
-//	public String test() {
-//		return "/test";
-//	}
+	@GetMapping(path="/test")
+	public String test() {
+		return "/test";
+	}
 }

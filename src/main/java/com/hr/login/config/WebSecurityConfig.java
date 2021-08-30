@@ -23,6 +23,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
+			.sessionManagement()
+				.invalidSessionUrl("/index")
+				.and()
 			.csrf()
 				//.ignoringAntMatchers("/contact")
 				//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -30,21 +33,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 				//.and()
 		  	.authorizeRequests() // Setting authentic system              
 //			    .antMatchers("/login").permitAll() // Pages that allow user to access without authentication
-			    .antMatchers("/index", "/logout").authenticated()
-			    .antMatchers("/checkInto","/saveCheckSystem").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
+			    .antMatchers("/index", "/logout").authenticated() // Except above pages, all pages should require basic authorization after authentication
+			    .antMatchers("/checkInto").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
 			    .antMatchers("/").permitAll()
-			    .antMatchers("/editPersonalInfo", "/personnel", "/personalInformationUpdate", "/personalInformation","/pages", "/personnelAuthorization").authenticated()
-			    .antMatchers( "/department", "/departmentDetail", "/departmentManagerNoUpdate", "/addNewDepartment", "/createNewDepartment").hasRole("HR_MANAGER")
-			    .antMatchers("/bulletinList","/bulletinDetail","/myBulletin","/bulButton","/insertMessage","/bulletinGetMsg","/bulletinInsertEnroll","/bulletinFindEnroll","/myApplyList","/bulletinListUser","/insertMessage","/bulletinGetMsg","/bulletinDelMsg","/bulletinChangeLike","/bulletinFindLike","/findEnrollNumByNo").authenticated()
-			    .antMatchers("/applyList","/bulletin/getImage","/bulletinManage","/bulletinListMag","/bulletinEventInsert","/bulletinAnnoInsert","/insertEventBulletion","/insertAnnoBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletinEditEventPage").hasRole("HR")
-			    .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities", "/findNewAuthorities").hasRole("HR_MANAGER")
-			    .antMatchers("/addNewPersonnel","/createNewPersonnel","/modify","/findAuthorities", "/findNewAuthorities").hasRole("HR_MANAGER")
+			    .antMatchers("/updatePassword", "/updateNewPassword").authenticated()
+			    .antMatchers("/editPersonalInfo", "/personnel", "/personalInformationUpdate", "/personalInformation", "/personnelAuthorization").authenticated()
+			    .antMatchers( "/department", "/departmentDetail", "/departmentManagerNoUpdate", "/addNewDepartment", "/createNewDepartment").hasAnyRole("HR_MANAGER", "HR")
+			    .antMatchers("/bulletinList","/bulletinDetail","/insertMessage","/bulletinGetMsg").authenticated()
+			    .antMatchers("/bulletinManage","/bulletinListMag","/bulletinEventInsert","/insertEventBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletin/getImage").hasAnyRole("HR_MANAGER", "HR")
+			    .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities", "/findNewAuthorities").hasAnyRole("HR_MANAGER", "HR")
+			    .antMatchers("/addNewPersonnel","/createNewPersonnel","/modify","/findAuthorities", "/findNewAuthorities").hasAnyRole("HR_MANAGER", "HR")
 			    .antMatchers("/css/**", "/vendor/**", "/img/**", "/js/**", "/scss/**").permitAll()
-			    .antMatchers("/Leave/LeaveResult","/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR","RD_MANAGER","SALES_MANAGER")
-			    .antMatchers("/G/**","/Leave/**","/schedule/**").authenticated()
-			    .antMatchers("/updatePassword").authenticated()
 			    .anyRequest().hasRole("ADMIN")
-      
 			    .and()
 		    .formLogin()
 			    .loginPage("/login").permitAll() // Rewrite the default login page
@@ -53,7 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			    .and()
 //      "/authorization", "/authorizationSeaching", where is the controller
 		    .logout()
-
 		    	.logoutSuccessUrl("/login").permitAll()
 		    	.and()
 		  	.httpBasic();
