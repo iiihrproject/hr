@@ -38,7 +38,7 @@ public class GlobalController {
 	
 //	找同事的email
 	@GetMapping(value="/findEmpByPk")
-	public @ResponseBody List<Personnel> findEmpByPk(@RequestParam("empId") Integer empId) {
+	public @ResponseBody Personnel findEmpByPk(@RequestParam("empId") Integer empId) {
 		return leaveService.findEmpByPk(empId);
 	}
 	

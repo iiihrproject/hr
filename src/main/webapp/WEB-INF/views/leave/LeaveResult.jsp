@@ -15,7 +15,7 @@
 <script>
 window.addEventListener("DOMContentLoaded", function() {
 	loadLeaveData()
-	
+
 });
 
 function loadLeaveData() {
@@ -39,11 +39,11 @@ function loadLeaveData() {
 			let segment = "";
 			for (let i = 0; i < leaveList.length; i++) {
 				let leave = leaveList[i];
-				$.get("<c:url value='/G/findEmpByEmpNo' />?empNo="+leave.empNo,function(empData,status2){
-					if (status2 == "success"){
-						callback(empData);
-					}
-				});
+// 				$.get("<c:url value='/G/findEmpByEmpNo' />?empNo="+leave.empNo,function(empData,status2){
+// 					if (status2 == "success"){
+// 						callback(empData);
+// 					}
+// 				});
 				segment += "<tr><td>" + leave.empNo + "</td>";
 				segment += "<td>" + leave.reasonList.desc_zh + "</td>";
 				segment += "<td>" + leave.startDate + " "
@@ -53,9 +53,9 @@ function loadLeaveData() {
 				segment += "<td><a href='#Co"+ leave.applicationNo +"' data-toggle='collapse'>" + leave.applicationNo + "</a></td>";
 				segment += "<td><span class='btn-sm text-white font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
 				segment += "<tr class='collapse' id='Co"+ leave.applicationNo +"'>";
-				segment += "<td>代理人：<a title='發信給"+leave.handOffEmail+"' href='mailto:" + leave.handOffEmail + "'>"+leave.handOff+"</a></td>";
+				segment += "<td class='pl-4'>代理人：<a title='發信給"+leave.handOffEmail+"' href='mailto:" + leave.handOffEmail + "'>"+leave.handOff+"</a></td>";
 				segment += "<td colspan='2'>備註：" + leave.comments + "</td>";
-				segment += "<td colspan='2'>簽核：" + leave.approval01Name + "</td>";
+				segment += "<td colspan='2'>簽核：" + leave.approval01MGR + "</td>";
 				segment += "<td><button onclick='seeMore(\"" + leave.applicationNo + "\")' class='btn btn-sm btn-info btn-icon-split' type='button' data-toggle='modal' data-target='#detailModal'>";
 				segment += "<span class='icon text-white-50'><i class='fas fa-file-signature'></i></span>";
 				segment += "<span class='text'>查看詳情</span></button></td></tr>";
@@ -77,46 +77,53 @@ function findEmpByEmpNo(empNo, callback){
 function seeMore(appNo){
 	$.get("<c:url value='/Leave/findLeaveByAppNo' />", {applicationNo:appNo},function(data,status){
 		if(status == "success"){
-					
-			findEmpByEmpNo(data[0].empNo, function(empData) {
+			findEmpByEmpNo(data.empNo, function(empData) {
 				$("#m_name").text(empData.name);
 			})
-			
-			$.get("<c:url value='/G/findEmpByPk' />,{empId=pk}?empId="+data[0].handOff,function(empData2,status3){
-				if(status3 == "success"){
-					$("#m_handOff").text(empData2[0].loginModelInfo.name);
-// 					console.log(empData2);
+			$.get("<c:url value='/G/findEmpByPk' />?empId="+data.handOff,function(empData2,status2){
+				if(status2 == "success"){
+					$("#m_handOff").text(empData2.loginModelInfo.name);
 				}
 			});
-		$("#m_AppNo").text(data[0].applicationNo);
-		$("#m_requestDate").text(data[0].requestDate);
-		$("#m_dept").text("部門："+data[0].dept.name);
-		$("#m_empNo").text("工號："+data[0].empNo);
-		$("#m_reason").text(data[0].reasonList.desc_zh);
-		$("#m_start").html(data[0].startDate+"<br />"+data[0].startTime.slice(0,5));
-		$("#m_end").html(data[0].endDate+'<br>'+data[0].endTime.slice(0,5));
-		$("#m_days").text(data[0].days);
-		$("#m_comments").text(data[0].comments);
-		$("#m_supportingDoc").text(data[0].supportingDoc);
-		
-		var sigCanvas = document.getElementById("sig-canvas");
-		var sigText = document.getElementById("sig-dataUrl");
-		var sigImage = document.getElementById("sig-image");
-		var clearBtn = document.getElementById("sig-clearBtn");
-		var submitBtn = document.getElementById("sig-submitBtn");
-		
-// 		sigText.innerHtml = data[0].approval01Signature;
-// 		sigImage.setAttribute("src", data[0].approval01Signature);
-// 		sigImage.style.display = "inline";
-// 		sigImage.setAttribute("src", "");
-// 		clearBtn.style.display = "inline";
-// 		submitBtn.style.display = "inline";
-// 		sigCanvas.style.display = "inline";
-// 		sigCanvas.width = sigCanvas.width;
-// 		sigText.innerHTML = "Data URL for your signature will go here!";
+			
+			var d = new Date(data.approval01Date);
+			$("#m_AppNo").text(data.applicationNo);
+			$("#m_requestDate").text(data.requestDate);
+			$("#m_dept").text("部門："+data.dept.name);
+			$("#m_empNo").text("工號："+data.empNo);
+			$("#m_reason").text(data.reasonList.desc_zh);
+			$("#m_start").html(data.startDate+"<br />"+data.startTime.slice(0,5));
+			$("#m_end").html(data.endDate+'<br>'+data.endTime.slice(0,5));
+			$("#m_days").text(data.days);
+			$("#m_comments").text(data.comments);
+			$("#m_supportingDoc").text(data.supportingDoc);
+			$("#m_date").text(d.toDateString().slice(4));
+			var sigCanvas = document.getElementById("sig-canvas");
+			var sigText = document.getElementById("sig-dataUrl");
+	// 		待審核就要清空資料 留按鈕 隱藏結果 
+			if(data.statusList.code==("S01")){
+				sigCanvas.width = sigCanvas.width;
+				$("#sig-canvas").css("display","inline");
+				$("#sig-dataUrl").text("");
+				$("#sig-image").attr("src","").css("display","inline");
+				$("#detailModal button").css("display","inline");
+				$("#m_MGR").css("visibility","hidden");
+				$("#m_date").css("visibility","hidden");
+			} else{
+				sigText.innerHTML = data.approval01Sig;
+				$("#sig-image").attr("src",data.approval01Sig).css("display","inline");
+				$("#sig-canvas").css("display","none");
+				$("#detailModal button").css("display","none");
+				$("#m_MGR").css("visibility","visible");
+				$("#m_date").css("visibility","visible");
+				$.get("<c:url value='/G/findEmpByPk' />?empId="+data.approval01MGR,function(empData3,status3){
+					if(status3 == "success"){
+						$("#m_MGR").text(empData3.loginModelInfo.name);
+					}
+				});
+			}
 		}
 	});
-
 }
 
 // 設定CSS
@@ -134,120 +141,7 @@ function setCSS(){
 		}
 	});
 }
-// //DataTable setting
-// $(document).ready( function () {
-//     $("#mainTable").DataTable({
-//   	    //屬性區塊:
-//   	    searching: true,
-//   	    sPaginationType: "full_numbers", 
-//   	    lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 
-//   	    processing: true, 
-//   	    serverSide: false, 
-//   	    stateSave: true,
-//   	    destroy: true, 
-//   	    info: true,
-//   	    autoWidth: true, 
-//   	    ordering: true, 
-//   	    scrollCollapse: false, 
-//   	    scrollX: "500px",
-//   	    scrollY: "200px",    
-//   	    paging: true, 
-//   	    dom: '<"top">rt<"bottom"><"clear">',
-//   	    //ajax區塊:
-// 		ajax : {
-// 			url : "<c:url value='/Leave/findAllLeave' />",
-// 			type : "POST",
-// 			},
-// 		//資料欄位區塊(columns):
-// 		columns : [ {
-// 			data : "empNo",		}, {
-// 			data : "startDate",		}, {
-// 			data : "startDate",		}, {
-// 			data : "days",		}, {
-// 			data : "applicationNo",		}, {
-// 			data : "startDate",	}, ],
-// 		//語言區塊(language):
-// 		 language: {
-// 		    lengthMenu: "顯示 _MENU_ 筆資料",
-// 		    sProcessing: "處理中...",
-// 		    sZeroRecords: "没有匹配结果",
-// 		    sInfo: "目前有 _MAX_ 筆資料",
-// 		    sInfoEmpty: "目前共有 0 筆紀錄",
-// 		    sInfoFiltered: " ",
-// 		    sInfoPostFix: "",
-// 		    sSearch: "尋找:",
-// 		    sUrl: "",
-// 		    sEmptyTable: "尚未有資料紀錄存在",
-// 		    sLoadingRecords: "載入資料中...",
-// 		    sInfoThousands: ",",
-// 		    oPaginate: {
-// 		      sFirst: "首頁",
-// 		      sPrevious: "上一頁",
-// 		      sNext: "下一頁",
-// 		      sLast: "末頁",
-// 	    },
-// 		    order: [[0, "desc"]],
-// 		    oAria: {
-// 		      sSortAscending: ": 以升序排列此列",
-// 		      sSortDescending: ": 以降序排列此列",
-// 		    },
-// 	  },
-// 		//欄位元素定義區塊(columnDefs):
-// 	  columnDefs: [
-// 	    {
-// 	      targets: [2, 3],
-// 	      render: function (data) {
-// 	        if (data != "無更新") {
-// 	          //https://momentjs.com/
-// 	          return moment(data).format("YYYY-MM-DD");
-// 	        } else {
-// 	          return data;
-// 	        }
-// 	      },
-// 	    },
-// 	    {
-// 	      className: "text-center",
-// 	      targets: [0, 1, 2, 3],
-// 	    },
-// 	    {
-// 	      targets: [0],
-// 	      createdCell: function (td, cellData, rowData, row, col) {
-// 	        $(td).css("word-break", "break-all");
-// 	        $(td).css("width", "0.5%");
-// 	      },
-// 	    },
-// 	    {
-// 	      targets: [1],
-// 	      createdCell: function (td, cellData, rowData, row, col) {
-// 	        $(td).css("word-break", "break-all", "text-center");
-// 	        $(td).css("width", "1%");
-// 	      },
-// 	    },
-// 	    {
-// 	      targets: [2],
-// 	      createdCell: function (td, cellData, rowData, row, col) {
-// 	        $(td).css("word-break", "break-all");
-// 	        $(td).css("width", "5%");
-// 	      },
-// 	    },
-// 	    {
-// 	      targets: [3],
-// 	      createdCell: function (td, cellData, rowData, row, col) {
-// 	        $(td).css("word-break", "break-all");
-// 	        $(td).css("width", "1%");
-// 	      },
-// 	    },
-// 	  ],
-// 		//列元素區塊(rowCallback):
-// 	  rowCallback: function (row, data) {
-// 		    if (data["Status"] == "未完成") {
-// 		      $(row).addClass("danger");
-// 		    } else {
-// 		      $(row).addClass("warning");
-// 		    }
-// 		  },
-// 		});
-// 	});//end of DataTable Setting
+
 </script>
 </head>
 <body>
@@ -329,12 +223,12 @@ function setCSS(){
 						class="icon"><i class="fas fa-print"></i></span> <span
 						class="text">按之前請想想「森林」</span>
 					</a>
-					<button class="close" type="button" data-dismiss="modal">&times;</button>
+					<a class="close" role="button" data-dismiss="modal">&times;</a>
 				</div>
 				<div class="modal-body">
-					<div class="card shadow mb-4">
+					<div class="card shadow">
 						<div class="card-body">
-							<div class="table-responsive" id="printArea">
+							<div id="printArea">
 								<h5 class="modal-title mx-auto text-center"
 									id="detailModalLabel">請假申請單</h5>
 								<table
@@ -387,16 +281,17 @@ function setCSS(){
 										<th>主管簽核</th>
 										<td>
 											<div class="row align-items-center">
-												<div>
-													<canvas id="sig-canvas" class="form-inline"
-														style="display: inline">Get a better browser, bro.</canvas>
-													<img id="sig-image" src="" style="display: none" />
+												<div class="col-auto">
+													<canvas id="sig-canvas" class="form-inline" style="display: inline">Get a better browser, bro.</canvas>
+													<img id="sig-image" src="" style="display: inline" />
 												</div>
 												<div>
-													<button class="btn btn-primary d-print-none d-block my-2"
-														id="sig-submitBtn">簽名完成</button>
-													<button class="btn btn-secondary d-print-none d-block"
-														id="sig-clearBtn">重簽</button>
+													<button class="btn btn-primary d-print-none my-2"
+														id="sig-submitBtn">簽名完成</button><br />
+													<button class="btn btn-secondary d-print-none"
+														id="sig-clearBtn">重簽</button><br />
+													<span id="m_MGR" style="visibility: hidden"></span><br />
+													<span id="m_date" style="visibility: hidden"></span>
 												</div>
 											</div> <textarea id="sig-dataUrl" style="display: none"
 												class="form-control" rows="5">Data URL will go here!</textarea>
@@ -409,8 +304,8 @@ function setCSS(){
 				</div>
 				<div class="modal-footer justify-content-center">
 					<div class="invalid-feedback">請記得簽名</div>
-					<button class="btn btn-success" id="approveBtn">核准</button>
-					<button class="btn btn-danger" id="rejectBtn">否決</button>
+					<button class="btn btn-success col-md-2 ml-md-auto" id="approveBtn">核准</button>
+					<button class="btn btn-danger col-md-2 mr-md-auto" id="rejectBtn">否決</button>
 
 				</div>
 			</div>
@@ -425,9 +320,6 @@ function setCSS(){
 
 // 		列印按鈕的功能
 		$("#printTable").click(function() {
-// 			document.getElementById("sig-clearBtn").style.display = "none";
-// 			document.getElementById("sig-submitBtn").style.display = "none";
-							
 			var body = $("#printArea").html();
  			var mywindow = window.open("", "", "left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0");
  			mywindow.document.write('<link href="<c:url value='/css/sb-admin-2.min.css' />" rel="stylesheet">');
@@ -437,8 +329,6 @@ function setCSS(){
  			mywindow.print();
 // 			mywindow.close();
 			
-// 			document.getElementById("sig-clearBtn").style.display = "inline";
-// 			document.getElementById("sig-submitBtn").style.display = "inline";
 			return true;
 		});
 		
@@ -561,45 +451,88 @@ function setCSS(){
 			}
 
 			// Set up the UI
-			var sigCanvas = document.getElementById("sig-canvas");
 			var sigText = document.getElementById("sig-dataUrl");
 			var sigImage = document.getElementById("sig-image");
 			var clearBtn = document.getElementById("sig-clearBtn");
 			var submitBtn = document.getElementById("sig-submitBtn");
 			clearBtn.addEventListener("click",function(e) {
 				clearCanvas();
-				sigText.innerHTML = "Data URL for your signature will go here!";
+				sigText.innerHTML = "Data URL will go here!";
 				sigImage.setAttribute("src", "");
-				sigCanvas.style.display = "inline";
-				sigImage.style.display = "none";
+				canvas.style.display = "inline";
 			}, false);
 			submitBtn.addEventListener("click", function(e) {
 				var dataUrl = canvas.toDataURL();
 				sigText.innerHTML = dataUrl;
 				sigImage.setAttribute("src", dataUrl);
-				sigCanvas.style.display = "none";
+				canvas.style.display = "none";
 				sigImage.style.display = "inline";
-				clearBtn.style.display = "none";
-				submitBtn.style.display = "none";
+				submitBtn.style.display = "inline";
+				clearBtn.style.display = "inline";
 			}, false);
 		})();
 
 //驗證的開始
-(function() {'use strict';window.addEventListener('load',function() {
-	var forms = document.getElementsByClassName('needs-validation');
-	// Loop over them and prevent submission
-	var validation = Array.prototype.filter.call(forms,
-			function(form) {form.addEventListener('submit', function(event) {
-				if (form.checkValidity() === false) {
-					event.preventDefault();
-					event.stopPropagation();
-				}
-					form.classList.add('was-validated');
-				}, false);
-	});
-	}, false);
-})();
+// (function() {'use strict';window.addEventListener('load',function() {
+// 	var forms = document.getElementsByClassName('needs-validation');
+// 	// Loop over them and prevent submission
+// 	var validation = Array.prototype.filter.call(forms,
+// 			function(form) {form.addEventListener('submit', function(event) {
+// 				if (form.checkValidity() === false) {
+// 					event.preventDefault();
+// 					event.stopPropagation();
+// 				}
+// 					form.classList.add('was-validated');
+// 				}, false);
+// 	});
+// 	}, false);
+// }));
 //驗證的結束
+
+//修改審核結果-通過
+$("#approveBtn").click(function(){
+	var sigCanvas = document.getElementById("sig-canvas");
+	var dataUrl = sigCanvas.toDataURL();
+	var appNo = $("#m_AppNo").text();
+	let obj={
+			"approval01MGR":${sessionScope.loginModel.pk},
+			"approval01Sig":dataUrl,
+			"statusList":{
+				"code": "S03"
+			}
+	};
+	var xhr2 = new XMLHttpRequest();
+	xhr2.open("PUT","<c:url value='/Leave/updateSupervisorComment/' />"+appNo,true);
+	xhr2.setRequestHeader("Content-Type","application/json");
+	xhr2.send(JSON.stringify(obj));
+	xhr2.onreadystatechange=function(){
+		if(xhr2.readyState == 4 && (xhr2.status == 200 || xhr2.status == 201)){
+			let result = JSON.parse(xhr2.responseText);
+			if(result.fail){
+				console.log("result.fail: " + result.fail);
+			} else if (result.success){
+// 				data-dismiss="modal";
+				console.log("簽核完成");
+				loadLeaveData();
+// 				$('#detailModal').modal('hide');
+			}
+		}
+	}
+});
+
+// $("#rejectBtn").click(function(){
+// 	var sigCanvas = document.getElementById("sig-canvas");
+// 	var dataUrl = sigCanvas.toDataURL();
+// 	var appNo = $("#m_AppNo").text();
+// 	let obj={
+// 			"approval01MGR":${sessionScope.loginModel.pk},
+// 			"approval01Sig":dataUrl,
+// 			"statusList":{
+// 				"code": "S04"
+// 			}
+// 	};
+// 	$.post("<c:url value='/Leave/updateSupervisorComment/' />"+appNo,obj);
+// });r
 	</script>
 </body>
 </html>

@@ -1,7 +1,6 @@
 package com.hr.leave.model;
 
 import java.io.File;
-import java.sql.Blob;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -15,7 +14,6 @@ import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hr.personnel.model.DepartmentDetail;
 
 @Entity
@@ -64,11 +62,11 @@ public class LeaveBean {
 	@OneToOne(targetEntity = ListBean.class, cascade = { CascadeType.DETACH })
 	@JoinColumn(name = "STATUS", referencedColumnName = "code")
 	private ListBean statusList;
-	@Column(name = "Approval01Name")
-	private String approval01Name;
+	@Column(name = "Approval01MGR")
+	private String approval01MGR;
 	
-	@Column(name = "Approval01Signature")
-	private String approval01Signature;
+	@Column(name = "Approval01Sig")
+	private String approval01Sig;
 	@Column(name = "Approval01Date")
 	private Date approval01Date;
 
@@ -111,10 +109,10 @@ public class LeaveBean {
 		builder.append(supportingDoc);
 		builder.append(", status=");
 		builder.append(statusList);
-		builder.append(", approval01Name=");
-		builder.append(approval01Name);
-		builder.append(", approval01Signature=");
-		builder.append(approval01Signature);
+		builder.append(", approval01MGR=");
+		builder.append(approval01MGR);
+		builder.append(", approval01Sig=");
+		builder.append(approval01Sig);
 		builder.append(", approval01Date=");
 		builder.append(approval01Date);
 		builder.append("]");
@@ -249,20 +247,20 @@ public class LeaveBean {
 		this.dept = dept;
 	}
 
-	public String getApproval01Name() {
-		return approval01Name;
+	public String getApproval01MGR() {
+		return approval01MGR;
 	}
 
-	public void setApproval01Name(String approval01Name) {
-		this.approval01Name = approval01Name;
+	public void setApproval01MGR(String approval01MGR) {
+		this.approval01MGR = approval01MGR;
 	}
 
-	public String getApproval01Signature() {
-		return approval01Signature;
+	public String getApproval01Sig() {
+		return approval01Sig;
 	}
 
-	public void setApproval01Signature(String approval01Signature) {
-		this.approval01Signature = approval01Signature;
+	public void setApproval01Sig(String approval01Sig) {
+		this.approval01Sig = approval01Sig;
 	}
 
 	public Date getApproval01Date() {

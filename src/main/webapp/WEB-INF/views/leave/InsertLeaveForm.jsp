@@ -51,7 +51,7 @@
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4 && xhr.status == 200) {
 					var emp = JSON.parse(xhr.responseText);
-					document.getElementById("handOffEmail").value = emp[0].email;
+					document.getElementById("handOffEmail").value = emp.email;
 				}
 			}
 		});

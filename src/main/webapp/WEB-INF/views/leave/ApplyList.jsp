@@ -20,7 +20,7 @@
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				document.getElementById("tbodycontent").innerHTML = processData(xhr.responseText);
 				// 				let leaveList = JSON.parse(xhr.responseText);
-				// 				console.log(leaveList);
+// 								console.log(leaveList);
 				setCSS();
 			}
 			function processData(jsonString) {
@@ -134,10 +134,9 @@
 		$("#comments").val("需要請假");
 		document.getElementById("handOffSelect").selectedIndex = getRandomNum(1,$("#handOffSelect option").length-1);
 		var handOff = document.getElementById("handOffSelect").value;
-		$.get("<c:url value='/G/findEmpByPk'/>?empId=" + handOff,function(data,status){
+		$.get("<c:url value='/G/findEmpByPk'/>?empId=" + handOff,function(emp,status){
 			if(status == "success"){
-				var emp = data;
-				$("#handOffEmail").val(emp[0].email);
+				$("#handOffEmail").val(emp.email);
 			}
 		});
 	});

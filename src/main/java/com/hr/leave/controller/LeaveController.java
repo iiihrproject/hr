@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -82,13 +84,13 @@ public class LeaveController {
 
 //	調出該申請單號資料
 	@GetMapping("/findLeaveByAppNo")
-	public @ResponseBody List<LeaveBean> findLeaveByAppNo(@RequestParam("applicationNo") String applicationNo) {
+	public @ResponseBody LeaveBean findLeaveByAppNo(@RequestParam("applicationNo") String applicationNo) {
 		return service.findLeaveByAppNo(applicationNo);
 	}
 	
-	@PostMapping("/updateSupervisorComment")
-	public void updateSupervisorComment(@RequestBody LeaveBean leaveBean) {
-		service.updateSupervisorComment(leaveBean.getApplicationNo(), leaveBean.getApproval01Signature());
+	@PutMapping(value="/updateSupervisorComment/{applicationNo}", consumes = { "application/json" }, produces = { "application/json" })
+	public void updateSupervisorComment(@RequestBody LeaveBean leaveBean, @PathVariable("applicationNo") String applicationNo) {
+		service.updateSupervisorComment(applicationNo, leaveBean.getApproval01Sig(), leaveBean.getApproval01MGR(), leaveBean.getStatusList().getCode());
 	}
 
 //	@PostMapping("/Insert")
