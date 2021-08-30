@@ -18,6 +18,20 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 	EntityManager entityManager;
 	
 	@Override
+	public void updateSupervisorComment(String applicationNo, String approval01Sig, String approval01MGR, String status) {
+		entityManager.createNativeQuery("update LeaveOfAbsense set Approval01Sig = ?1 "
+				+ ", Approval01Date = getDate() "
+				+ ", Approval01MGR = ?2 "
+				+ ", status = ?3 "
+				+ " where applicationNo = ?4")
+			.setParameter(1, approval01Sig)
+			.setParameter(2, approval01MGR)
+			.setParameter(3, status)
+			.setParameter(4, applicationNo)
+			.executeUpdate();
+	}
+	
+	@Override
 	public List<ListBean> findListByCategory(String category) {
 		List<ListBean> listB = null;
 		String hql = "FROM ListBean lb WHERE lb.category = :category";
@@ -34,10 +48,10 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 	}
 
 	@Override
-	public List<Personnel> findEmpByPk(Integer empId) {
-		List<Personnel> p = null;
+	public Personnel findEmpByPk(Integer empId) {
+		Personnel p = null;
 		String hql = "FROM personnel WHERE empId = :empId";
-		p = entityManager.createQuery(hql, Personnel.class).setParameter("empId", empId).getResultList();
+		p = entityManager.createQuery(hql, Personnel.class).setParameter("empId", empId).getSingleResult();
 		return p;
 	}
 
@@ -71,11 +85,13 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 	}
 
 	@Override
-	public List<LeaveBean> findLeaveByAppNo(String applicationNo) {
-		List<LeaveBean> leaveB = null;
+	public LeaveBean findLeaveByAppNo(String applicationNo) {
+		LeaveBean leaveB = null;
 		String hql = "FROM LeaveBean l WHERE l.applicationNo =:applicationNo";
-		leaveB = entityManager.createQuery(hql, LeaveBean.class).setParameter("applicationNo", applicationNo).getResultList();
+		leaveB = entityManager.createQuery(hql, LeaveBean.class)
+				.setParameter("applicationNo", applicationNo)
+				.getSingleResult();
 		return leaveB;
 	}
-	
+
 }

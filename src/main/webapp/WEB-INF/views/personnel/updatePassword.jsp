@@ -78,8 +78,9 @@
  					 if (result.result == 'password update is successful') {
 						div2.innerHTML = "<font color='green'>" + result.result + "</font>"; 
  					 } else {
-			  			div2.innerHTML = "<font color='red' >" + result.result+ "</font>";
-			  		}
+ 			  			div2.innerHTML = "<font color='red' >" + result.result+ "</font>";
+ 			  		}
+
 				}
             
         	

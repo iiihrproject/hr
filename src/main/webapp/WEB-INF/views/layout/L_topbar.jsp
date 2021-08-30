@@ -15,7 +15,7 @@
 	<!-- Topbar Search -->
 	<div class="narbar-brand">
 		<h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
-            <span class="text-dark">特休剩餘時數：【】小時&nbsp</span><span class="text-danger warning">(請於 【日期】 前使用完畢)</span><br/>
+            <span class="text-dark">特休剩餘時數：【】小時&nbsp</span><span class="text-danger warning">(請於 <strong id="anniDate"></strong> 前使用完畢)</span><br/>
             <span class="text-dark">加班總計時數：【${sessionScope.sumHours}】小時&nbsp</span><span class="text-danger warning">(請注意加班時數是否正確)</span><br/>
             <span class="text-dark">加班剩餘時數：【${sessionScope.remainingHours}】小時&nbsp</span><span class="text-danger warning">(請注意剩餘時數)</span>
 	</div>
@@ -67,3 +67,11 @@
 		</div>
 	</div>
 </div>
+<script>
+window.onload = function(){
+	let d = new Date("${sessionScope.loginModel.employedDate}");
+	d.setFullYear(new Date().getFullYear());
+	let due = d.toISOString().slice(0,10);
+	$("#anniDate").text(due);
+};
+</script>

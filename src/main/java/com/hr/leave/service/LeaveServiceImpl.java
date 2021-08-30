@@ -33,7 +33,7 @@ public class LeaveServiceImpl implements LeaveService {
 	}
 
 	@Override
-	public List<Personnel> findEmpByPk(Integer empId) {
+	public Personnel findEmpByPk(Integer empId) {
 		return leaveRepo.findEmpByPk(empId);
 	}
 	
@@ -51,21 +51,30 @@ public class LeaveServiceImpl implements LeaveService {
 	public List<LeaveBean> findLeaveByDeptNo(Integer departmentNumber) {
 		return leaveRepo.findLeaveByDeptNo(departmentNumber);
 	}
-
+	
+	@Override
+	public void updateSupervisorComment(String applicationNo, String approval01Sig, String approval01MGR, String status) {
+		leaveRepo.updateSupervisorComment(applicationNo, approval01Sig, approval01MGR, status);
+//		LeaveBean leaveBean = leaveRepo.findLeaveByAppNo(applicationNo).get(0);
+//		leaveBean.setApproval01Date(new Date());
+//		leaveBean.setApproval01Sig(approval01Signature);
+//		leaveRepo.save(leaveBean);
+	}
+	
 	@Override
 	public void save(LeaveBean leave, LoginModel loginModel) {
 		long hoursDiff = calTimeDifference(leave.getStartTime(),leave.getEndTime());
 		leave.setTypeOfForm("Leave");
-		leave.setApplicationNo("L"+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMHHmmss")));
+		leave.setApplicationNo("L"+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss")));
 		leave.setDept(loginModel.getDepartmentDetail());
-		leave.setApproval01Name("");
+		leave.setApproval01MGR("");
 		leave.setDays(hoursDiff);
 		leaveRepo.save(leave);
 		
 	}
 
 	@Override
-	public List<LeaveBean> findLeaveByAppNo(String applicationNo) {
+	public LeaveBean findLeaveByAppNo(String applicationNo) {
 		return leaveRepo.findLeaveByAppNo(applicationNo);
 	}
 	
@@ -75,8 +84,8 @@ public class LeaveServiceImpl implements LeaveService {
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 			Date startTime = sdf.parse(start);
 			Date endTime = sdf.parse(end);
-			long diffInMillies = Math.abs(endTime.getTime() - startTime.getTime());
-			diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+			long diffInMillies = Math.round(endTime.getTime() - startTime.getTime());
+			diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS)+1;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
