@@ -46,10 +46,15 @@
     
     <style type="text/css">
 		.currentPage{
-			background-color: green;
+			background-color: red;
 		}
 		table{
 			text-align: center;
+		}
+		.btn{
+			margin-right: 5px;
+			margin-top: 10px;
+			margin-bottom: 10px;
 		}
 
 	</style>
@@ -59,6 +64,8 @@
 	$(document).ready(function(){
 		
 		let managequery = $('#managequery');
+		let searchMonth =$('#date');
+		searchMonth.html(getYearMonth());
 		let xhr = new XMLHttpRequest();
 		xhr.open("GET","<c:url value='/manageQuery'/>");
 		xhr.send();
@@ -73,7 +80,7 @@
 			var depart = $("#depart").val();
 			var date = $("#date").val();
 			
-			callAjax(null,depart,date);
+			callAjax(null,null,date);
 				
 		});
 
@@ -145,7 +152,7 @@
 			
 			var id = 'page' + n;
 			
-			segment += "<button onclick='pageClick(this)' class='pageNo " + isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
+			segment += "<button onclick='pageClick(this)' class='pageNo " +'btn btn-outline-secondary '+ isCurrent +"'  id='" + id + "' " +">" + n + "</button>";
 			
 		}
 		
@@ -158,7 +165,7 @@
 		var depart = $("#depart").val();
 		var date = $("#date").val();
 		
-		callAjax(null,depart,date)
+		callAjax(null,null,date)
 		
 	}
 	
@@ -225,35 +232,20 @@
 		}
 	}
 	
-// 	function denyClick(e){
-// 		swal({
-// 	        title: "審核確定通過嗎?",
-// 	        html: "請再次確認!",
-// 	        type: "question",
-// 	        confirmButtonText: "確定",
-// 	      	cancelButtonText: "取消",
-// 	        showCancelButton: true//顯示取消按鈕
-// 	    }).then(function (result) {
-// 	        if (result.value) {
-// 	            //使用者按下「確定」要做的事
-
-// 	        	let managequerys2 = JSON.parse(jsonString);
-// 	        	let id2 = managequerys[n];
-// 	        	let type2 = $(this).val;
-// 	        	let xhr2 = new XMLHttpRequest();
-// 	        	xhr2.open("POST","<c:url value='/manageAudit'/>");
-// 	        	xhr2.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-// 	        	xhr2.send("id=" + id2.id & "type" + type2);
-// 	        	xhr2.onreadystatechange = function(){
-// 	        		if(xhr2.readyState == 4 && xhr2.status == 200){
-// 	        			swal("Thank!", "完成審核", "success");
-// 	        		}
-// 	        	}
-// 	     } else if (result.dismiss === "cancel"){
-// 	          //使用者按下「取消」要做的事
-// 	         swal("取消審核", "尚未審核該筆資料", "error");
-// 	     }//end else  
-// 	  });//end then 	
+	function getYearMonth(){
+    	var date = new Date();
+    	var year = date.getFullYear();
+    	let option = "<option value>請選擇</option>";
+    	for (let n = 1 ; n<=12 ;n++){
+    		if(n.toString().length == 1 ){
+    			option += "<option value='"+year + "-"+"0"+ n +"'>"+year + "-"+"0"+ n +"</option>";
+    		}else{
+    			option += "<option value='"+year + "-"+ n +"'>"+year + "-"+ n +"</option>"; 
+    		}
+    		
+    	}
+    	return option;
+    }
 	
 	
 	
@@ -279,23 +271,11 @@
                                 </div>
                                 
                                 <div>
-                                	<select  id="depart" >
-									    <option value>請選擇部門</option>
-									    <option value="行銷部門">行銷部門</option>
-									    <option value="行政部門">行政部門</option>
-									    <option value="業務部門">業務部門</option>
+									<select class="btn btn-outline-primary" id="date">
+										<option value>請選擇月份</option>
 									</select>
 									
-									<select  id="date">
-									    <option value>請選擇</option>
-									    <option value="2021-05">2021-05</option>
-									    <option value="2021-06">2021-06</option>
-									    <option value="2021-07">2021-07</option>
-									    <option value="2021-08">2021-08</option>
-									    <option value="2021-09">2021-09</option>
-									</select>
-									
-									<button id="search">搜尋</button>
+									<button id="search" class="btn btn-secondary">搜尋</button>
                                 
                                 </div>
                                 

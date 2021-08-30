@@ -27,6 +27,9 @@ public class Checksystem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(name = "DEPNAME")
+	private String depName;
+
 	@Column(name = "EMPNO")
 	private String empNo;
 
@@ -88,6 +91,14 @@ public class Checksystem {
 		this.empNo = empNo;
 	}
 
+	public String getDepName() {
+		return depName;
+	}
+
+	public void setDepName(String depName) {
+		this.depName = depName;
+	}
+
 	public Date getCheckInTime() {
 		return checkInTime;
 	}
@@ -143,7 +154,6 @@ public class Checksystem {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-
 
 //	public String getCheckInLate() {
 //		if("Y".equals(this.isLateCheckIn)) return "是";

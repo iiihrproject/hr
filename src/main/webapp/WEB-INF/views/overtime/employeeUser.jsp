@@ -297,9 +297,11 @@
                                 <!-- 展開 -->
                                 <div id="showFile" align='center'>
                                 <table class="table table-hover table-bordered">
+                                	<tr>
+                                		<th colspan='7' style= text-align:center>未審核</th>
+                                	</tr>
 									<tr>
 									<th>申請日期</th>
-<!-- 									<th>姓名</th> -->
 									<th>部門</th>
 									<th>職位</th>
 									<th>加班日期</th>
@@ -310,7 +312,6 @@
 										<c:forEach var='pending' items='${overtimePartPending}'>
 										  <tr>
 										  	 <td>${fn:substring(pending.dateOfApplication,0, 10)}</td>
-<%-- 										  	 <td>${pending.empName}</td>	 --%>
 										  	 <td>${pending.department}</td>
 										  	 <td>${pending.position}</td>			
 										  	 <td>${fn:substring(pending.overTimeDate,0, 10)}</td>		
@@ -319,6 +320,32 @@
 										     <td>${pending.result}</td>	
 										 </tr>    
 										</c:forEach>
+								  </table>
+								  
+								  <table class="table table-hover table-bordered">
+								  		<tr>
+                                			<th colspan='7' style= text-align:center>已審核</th>
+                                		</tr>
+										<tr>
+										<th>申請日期</th>
+										<th>部門</th>
+										<th>職位</th>
+										<th>加班日期</th>
+										<th>加班類型</th>
+										<th>加班時數</th>
+										<th>審核狀態</th>
+										</tr>
+											<c:forEach var='auditted' items='${overtimePartAuditted}'>
+											  <tr>
+											  	 <td>${fn:substring(auditted.dateOfApplication,0, 10)}</td>
+											  	 <td>${auditted.department}</td>
+											  	 <td>${auditted.position}</td>			
+											  	 <td>${fn:substring(auditted.overTimeDate,0, 10)}</td>		
+											  	 <td>${auditted.overtimeCategory}</td>
+											     <td>${auditted.overTimeHours}</td>	
+											     <td>${auditted.result}</td>	
+											 </tr>    
+											</c:forEach>
 								  </table>
 								  <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">
 		                            <button type="button" class="btn btn-outline-primary">查看完整資訊</button>

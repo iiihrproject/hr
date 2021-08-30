@@ -220,7 +220,7 @@
 
 <body id="page-top" onload="ShowTime() , ShowDate() " >
 
-    <jsp:include page="../header.jsp"></jsp:include>
+    <jsp:include page="../headerforMeUser.jsp"></jsp:include>
     
     <!-- header刪掉 start-->
 
@@ -228,7 +228,7 @@
 
                 <!-- header刪掉 End-->
                 
-             <div class="row pt-4" style="background-image: url('<c:url value="/img/pages.jpg" />');  background-size: cover;" >
+             <div class="row pt-4" style="background-image: url('<c:url value="/img/time.png" />');  background-size: cover;" >
                         <!-- First Column -->
                         <div class="col-lg-4 mycss">
 
@@ -240,15 +240,28 @@
 <!--                                  </a> -->
                                     <h2 class="m-0 font-weight-bold text-primary">員工打卡系統</h2>
                                 </div>
-                                <div class="card-body ">
+                                <div class="card-body "style="background-image: url('<c:url value="/img/clock.png" />');  background-size: cover;">
                                 
                                       <div class="gowork ">
-							            <h5 id="showdate"></h5>
-							            <h1 id="showbox"></h1>
-							            <br> <br> <br> <br> <br> <br> <br>
-							            <br> <br> <br>
-							            <h4 id="worktime"style="float:left; margin-left: 150px;"><nobr>上班時間:${fn:substring(factSchedule.start,11,16)}</nobr></h4><h4 id="offworktime" style="float:right; margin-right: 150px;"><nobr>下班時間:${fn:substring(factSchedule.end,11,16)}</nobr></h4>
-        							   </div>
+							            <h5 id="showdate" style="color:black;"></h5>
+							            <h1 id="showbox" style="color:black;font-size: 50px;"></h1>
+							            <br> <br> <br> <br> <br> <br> <br><br><br>
+							            
+							            
+							            <c:choose>
+							            	
+								            <c:when test="${factSchedule.start != null}" > 
+								            
+									            <h4 id="worktime"style="float:left; margin-left: 120px;font-weight: bold;font-size: 30px;"><nobr>上班時間:${fn:substring(factSchedule.start,11,16)}</nobr></h4>
+									            <h4 id="offworktime" style="float:right; margin-right: 120px; font-weight: bold;font-size: 30px;"><nobr>下班時間:${fn:substring(factSchedule.end,11,16)}</nobr></h4>
+								            
+								            </c:when>
+								            <c:when test="${factSchedule.start == null}">
+								            	<h2 style="color:red;font-weight: bold;">今日休假<img src='<c:url value="/img/sleep.png" />' width=25%></h2>
+								            </c:when>
+							            </c:choose>
+							            
+        							   </div>																	
                                 </div>
                             </div>
 

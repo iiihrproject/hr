@@ -40,9 +40,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.0/sweetalert2.all.js"></script>
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->
+    <style type="text/css">
+		.currentPage{
+			background-color: red;
+		}
+		table{
+			text-align: center;
+		}
+		.btn{
+			margin-right: 5px;
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+
+	</style>
 	<script type="text/javascript">
 	$(document).ready(function(){
 		let pending = $('#overtimepending');
+		let searchMonth =$('#date');
+		searchMonth.html(getYearMonth());
 		let xhr = new XMLHttpRequest();
 		xhr.open("GET","<c:url value='/empPendingQuery'/>");
 		xhr.send();
@@ -148,7 +164,7 @@
 				
 	 			var id = 'page' + n;
 				
-	 			segment += "<button onclick='pendPageClick(this)' class='pendPageNo " + isCurrent + "'  id='" + id + "' " + ">" + n + "</button>";
+	 			segment += "<button onclick='pendPageClick(this)' class='pendPageNo " + 'btn btn-outline-secondary '+ isCurrent + "'  id='" + id + "' " + ">" + n + "</button>";
 				
 	 		}
 		}
@@ -191,7 +207,7 @@
 				
 				var id = 'page' + n;
 				
-				segment += "<button onclick='audiPageClick(this)' class='audiPageNo " + isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
+				segment += "<button onclick='audiPageClick(this)' class='audiPageNo " + 'btn btn-outline-secondary '+ isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
 				
 			}
 			
@@ -215,6 +231,20 @@
 		callAutiditted(page.substring(4,(page.length)),date);
 	}
 	
+	 function getYearMonth(){
+	    	var date = new Date();
+	    	var year = date.getFullYear();
+	    	let option = "<option value>請選擇</option>";
+	    	for (let n = 1 ; n<=12 ;n++){
+	    		if(n.toString().length == 1 ){
+	    			option += "<option value='"+year + "-"+"0"+ n +"'>"+year + "-"+"0"+ n +"</option>";
+	    		}else{
+	    			option += "<option value='"+year + "-"+ n +"'>"+year + "-"+ n +"</option>"; 
+	    		}
+	    		
+	    	}
+	    	return option;
+	    }
 	
 	</script>
 
@@ -234,12 +264,12 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                第一行的1/3</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <a href="<c:url value='/EmpSignQuery' />" class="text-decoration-none">補簽查詢</a>##內容寫這裡</div>
+                                                Revisit query</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+                                            <a href="<c:url value='/EmpSignQuery' />" class="text-decoration-none">補簽查詢</a></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-calendar fa-2x text-primary"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -247,17 +277,17 @@
                         </div>
                        
                         <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card border-left-danger shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                第一行的2/3</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">加班查詢</a>##內容寫這裡</div>
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                Overtime query</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+                                            <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">加班查詢</a></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-business-time fa-3x text-danger"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -265,17 +295,17 @@
                         </div>
 
                         <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                第一行的3/3</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <a href="<c:url value='/checkInto' />" class="text-decoration-none">請假查詢</a>##內容寫這裡</div>
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Leave query</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+                                            <a href="<c:url value='/checkInto' />" class="text-decoration-none">請假查詢</a></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-power-off fa-3x text-warning"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -285,16 +315,11 @@
 				<div class="">
 					<div class="card shadow mb-4">
 						<div class="card-body">
-							<select  id="date">
-							    <option value>請選擇</option>
-							    <option value="2021-05">2021-05</option>
-							    <option value="2021-06">2021-06</option>
-							    <option value="2021-07">2021-07</option>
-							    <option value="2021-08">2021-08</option>
-							    <option value="2021-09">2021-09</option>
+							<select  id="date" class="btn btn-outline-primary">
+								<option value>請選擇月份</option>
 							</select>
 							
-							<button id="search">搜尋</button>
+							<button id="search" class="btn btn-secondary">搜尋</button>
 							
 							<div id="signpending" data-toggle='table' align=center ></div>
 							<br><br>

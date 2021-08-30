@@ -39,10 +39,15 @@
 <script src="js/jquery-3.6.0.min.js"></script>
 <style type="text/css">
 		.currentPage{
-			background-color: green;
+			background-color: red;
 		}
 		table{
 			text-align: center;
+		}
+		.btn{
+			margin-right: 5px;
+			margin-top: 10px;
+			margin-bottom: 10px;
 		}
 
 	</style>
@@ -51,6 +56,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	let managequery = $('#managerSignQuery');
+	let searchMonth =$('#date');
+	searchMonth.html(getYearMonth());
 	let xhr = new XMLHttpRequest();
 	xhr.open("GET","<c:url value='/ManagerSignQuery'/>");
 	xhr.send();
@@ -103,7 +110,7 @@ function manageQuerySign(jsonString){
 		
 		var id = 'page' + n;
 		
-		segment += "<button onclick='pageClick(this)' class='pageNo " + isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
+		segment += "<button onclick='pageClick(this)' class='pageNo " +'btn btn-outline-secondary '+ isCurrent +"'  id='" + id + "' " +">" + n + "</button>";
 		
 	}
 	
@@ -197,6 +204,21 @@ function callAjax(page,date){
 	}
 }
 
+function getYearMonth(){
+	var date = new Date();
+	var year = date.getFullYear();
+	let option = "<option value>請選擇</option>";
+	for (let n = 1 ; n<=12 ;n++){
+		if(n.toString().length == 1 ){
+			option += "<option value='"+year + "-"+"0"+ n +"'>"+year + "-"+"0"+ n +"</option>";
+		}else{
+			option += "<option value='"+year + "-"+ n +"'>"+year + "-"+ n +"</option>"; 
+		}
+		
+	}
+	return option;
+}
+
 
 </script>
 
@@ -219,16 +241,11 @@ function callAjax(page,date){
 							<h2 class="m-0 font-weight-bold text-primary">管理員查詢系統</h2>	
 							
 								<div>
-									<select  id="date">
-									    <option value>請選擇</option>
-									    <option value="2021-05">2021-05</option>
-									    <option value="2021-06">2021-06</option>
-									    <option value="2021-07">2021-07</option>
-									    <option value="2021-08">2021-08</option>
-									    <option value="2021-09">2021-09</option>
+									<select  id="date" class="btn btn-outline-primary">
+										<option value>請選擇月份</option>
 									</select>
 									
-									<button id="search">搜尋</button>
+									<button id="search" class="btn btn-secondary">搜尋</button>
                                 
                                 </div>
 							

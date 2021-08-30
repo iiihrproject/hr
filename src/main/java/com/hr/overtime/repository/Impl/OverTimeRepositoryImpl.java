@@ -24,6 +24,24 @@ public class OverTimeRepositoryImpl implements OverTimeRepository {
 	public void savePending(OverTimePending overTimePending) {
 		entityManager.persist(overTimePending);
 	}
+	
+	@Override
+	public List<OverTimePending> findPartByEmpnoPending(String empNo) {
+		String hql = " Select Top 3 * From overtimeapplicationpending where empNo = :empNo order by id desc  ";
+		Query query = entityManager.createNativeQuery(hql , OverTimePending.class);
+		query.setParameter("empNo", empNo);
+		List<OverTimePending> overtimePartPending = query.getResultList();
+		return overtimePartPending;
+	}
+	
+	@Override
+	public List<OverTimeAuditted> findPartByEmpnoAuditted(String empNo) {
+		String hql = " Select Top 3 * From overtimeapplicationauditted where empNo = :empNo  order by id desc ";
+		Query query = entityManager.createNativeQuery(hql , OverTimeAuditted.class);
+		query.setParameter("empNo", empNo);
+		List<OverTimeAuditted> overtimePartAuditted = query.getResultList();
+		return overtimePartAuditted;
+	}
 
 	@Override
 	public List<OverTimePending> findByEmpnoPending(String empNo) {
@@ -103,12 +121,5 @@ public class OverTimeRepositoryImpl implements OverTimeRepository {
 		}
 	}
 
-	@Override
-	public List<OverTimePending> findPartByEmpnoPending(String empNo) {
-		String hql = " Select Top 3 * From overtimeapplicationpending where empNo = :empNo   ";
-		Query query = entityManager.createNativeQuery(hql , OverTimePending.class);
-		query.setParameter("empNo", empNo);
-		List<OverTimePending> overtimePart = query.getResultList();
-		return overtimePart;
-	}
+	
 }
