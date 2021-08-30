@@ -52,19 +52,24 @@
 		
 	$(document).ready(function() {		
 	    $('#dataTable').DataTable( {
+	    	"searching": false,
+	    	"scrollCollapse": false, 
+	    	"ordering": false, 
+	    	/* "lengthMenu": [10, 20], */
+	    	"paging": false,
 	    	"bFilter": true,
-	    	"lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
 	        "ajax": {
 	        "url":'<c:url value='/bulletinListMag'/>',
 	        "dataSrc": "",
 	        },
 	        "order": [[ 0, "desc" ]],
 	        "columns": [
-	            { "data": "postno" },
+
 	            { "data": "type" },
 	            { "data": "title" },
 	            { "data": "desText" ,
 	            	"render": function (data, type, row) {
+	            		console.log(data);
 	            		let dText="";
 	            		if(data!=null){
 	            		if (data.length>8){
@@ -78,26 +83,14 @@
 	            		}
 	                }},
 	            { "data": "postDate" },
-	            { "data": "exp" },
-	            { "data": "quotatype" },
-	            { "data": "quota" ,
-	            	"render": function (data, type, row) {
-	            		if(row.quotatype=="不限"){
-	            		return "*";
-	            		}else{
-	            			return data;
-	            		}
-	                }},
-	            { "data": "quota" ,
+	            { "data": "enCount" ,
 		            	"render": function (data, type, row) {
-		            		if(row.quotatype=="不限"){
-		            		return "*";
+		            		if(row.type=="公告"){
+		            		return "-";
 		            		}else{
 		            			return data;
 		            		}
 		                }},
-		        { "data": "endDate" },
-	            { "data": "quota" },
 	            { "data": "postStatus",
 	            	"render": function (data, type, row, meta) {
 	            		let status="";
@@ -114,51 +107,11 @@
 	                }},
 	                
 	        ],
-	        
-	        initComplete: function () {
-				this.api().columns().every( function () {
-					let column = this;
-					let select = $('<select><option value="">全部</option></select>').appendTo( $("#statuschoose").empty() ).on( 'change', function () {
-						let val = $.fn.dataTable.util.escapeRegex(
-								$(this).val()
-							);
-							console.log(column);
-							column.search( val ? '^'+val+'$' : '', true, false ).draw();
-							console.log( val ? '^'+val+'$' : '')
-						} );
-
-					
-						select.append( '<option value="刊登中">刊登中</option><option value="未刊登">未刊登</option><option value="已過期">已過期</option>' );
-				} );	
-
-				this.api().columns([4]).every( function () {
-					let column2 = this;
-					let select2 = $('<select><option value="">全部</option></select>').appendTo( $("#pdchoose").empty() ).on( 'change', function () {
-						let val2 = $.fn.dataTable.util.escapeRegex(
-								$(this).val()
-						);
-							console.log(column2);
-							console.log(val2);
-							column2.search( val2 ? '^'+val2 : '', true, false ).draw();
-							console.log('val:'+ val2 ? '^'+val2+'$' : '')
-						} );
-
-					
-						select2.append( '<option value="2021-07">2021-07</option><option value="2021-08">2021-08</option><option value="2021-09">2021-09</option>' );
-					
-				} );
-			},  
-	        
-	    
-            createdRow: function (row, data, index) {
-                if (data.postDate<=td && data.exp>=td) {
-                   $('td', row).eq(11).css('color', 'green')
-                }
-            }, 
+	         
             
             rowCallback: function(row, data){
-            	console.log("連結：<c:url value='/bulletinDetailMsg'/>?postno=" + data.postno );
-            	$(row).attr("href","<c:url value='/bulletinDetailMsg'/>?postno=" + data.postno);
+            	console.log("連結：<c:url value='/bulletinDetail'/>?postno=" + data.postno );
+            	$(row).attr("href","<c:url value='/bulletinDetail'/>?postno=" + data.postno);
             },
             
             "language": {
@@ -190,79 +143,152 @@
 	
 	</script>
 	
+   <script>
+	window.onload = function() {
+
+// 		公佈欄
+		let bDataArea = document.getElementById("BulletinDataArea");
+		let xhr = new XMLHttpRequest();
+		xhr.open("GET", "<c:url value='/bulletinList'/>");
+		xhr.send();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				bDataArea.innerHTML = processBulletinData(xhr.responseText);
+			}
+		}
+		
+		
+	}
+    
+	function processBulletinData(jsonString) {		
+		$(document).ready(function(){
+		    $('#datatableid tr').click(function(){
+		        window.location = $(this).attr('href');
+		        return false;
+		    });
+		});
+				
+		console.log(td);
+		
+		let posts = JSON.parse(jsonString);
+		let segment = "";
+		let le=0;
+		if (posts.length>10) {
+			le = 10;}
+		else { le = posts.length;}
+		for (let n = 0; n < le; n++) {
+			let bulletin = posts[n];
+			let link = "href='<c:url value='/bulletinDetail' />?postno=" + bulletin.postno + "''>";
+			let flag = "<i class=' fas fa-info-circle' style='color: #f6c23e; border-color: #f6c23e;'></i>";
+			segment += "<tr "+link;
+			segment += "<td>" + bulletin.type + "</td>";
+			if(bulletin.postDate==td){
+			segment += "<td>" + bulletin.title +" "+flag+"</td>";}
+			else{segment += "<td>" + bulletin.title +"</td>"}
+			segment += "<td>" + "20/"+ bulletin.quota + "</td>";
+			segment += "<td>" + bulletin.postDate + "</td>";
+			segment += "</tr>";
+		}
+		return segment;
+		
+	}
 	
+	</script>
+
 </head>
 
 <body id="page-top">
 
 	<jsp:include page="../header.jsp"></jsp:include>
 
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">公佈欄管理</h1>
-                    <p class="mb-4">刊登貼文請依循公司規定</p>
-
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold">貼文列表</h6>
-                            <!--人資公布欄管理區-->
-                            <div class="dropdown no-arrow">
-                                <a href="#" class="btn btn-outline-primary btn-icon-split btn-sm" id="navbarDropdown" 
-                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="text">新增貼文</span>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="<c:url value='bulletinAnnoInsert' />">公告</a>
-                                    <a class="dropdown-item" href="<c:url value='bulletinEventInsert' />">活動</a>
-                                </div>
-                            </div>
-                             <!--人資公布欄管理區end-->
+		<!-- Begin Page Content -->
+		<div id="bgcolor" class="container-fluid">
+			<div class="row">
+                    
+				<!-- 左Area Chart -->
+				<div class="col-12 col-lg-6">
+					<div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+						<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+							<h6 class="m-0 font-weight-bold">公佈欄貼文</h6>
                         </div>
+                        
                         <!-- Card Body -->
                         <div class="card-body">
-
-							<div class="table ">
-							刊登時間：<span id="pdchoose"></span>&emsp;
-                        	刊登狀態：<span id="statuschoose"></span>
-                        	</div>
+                        	<div class="contents w-100">
+							<!-- <div class="table ">
+								刊登時間：<span id="pdchoose"></span>&emsp;
+                        		刊登狀態：<span id="statuschoose"></span>
+                        	</div> -->
                         	
-                            <div class="table-responsive">
-                            
-                                <table class="table table-bordered table-hover table-hover-color" id="dataTable" width="100%" cellspacing="0" style="color:#43454e">
+                            <div class="table-responsive"  style="height:100%">       
+                                <table class="table table-bordered table-hover table-hover-color " id="dataTable" width="100%" cellspacing="0" style="color:#43454e" >
                                     <thead>
                                         <tr>
-                                            <th width=5%>NO.</th>
-                                            <th width=7%>類型</th>
-                                            <th width=14%>主旨</th>
-                                            <th width=12%>內容</th>
-                                            <th width=9%>貼文刊登</th>
-                                            <th width=9%>貼文下架</th>
-                                            <th width=5%>名額</th>
-                                            <th width=8%>可報名額</th>  
-                                            <th width=8%>已報名額</th>
-                                            <th width=9%>報名截止</th>
-                                            <th width=8%>瀏覽人數</th>
-                                            <th width=7%>狀態</th>
-                                                                                         
+                                            <th width=10%>類型</th>
+                                            <th width=20%>主旨</th>
+                                            <th width=20%>內容</th>
+                                            <th width=20%>貼文刊登</th>
+                                            <th width=15%>報名人數</th> 
+                                            <th width=15%>報名狀態</th>                                        
                                         </tr>
                                     </thead>
-                                   <tbody id="BulletinMagList">
-                                       
-                                    </tbody>
-                                    
+									<tbody id="BulletinMagList">
+									</tbody>    
                                 </table>
                             </div>
                         </div>
+                        </div>
+                        <!-- End of Card Body -->
                     </div>
+				</div>
+				<!-- End of 左Area Chart -->
+				
+				<!-- 右Area Chart -->
+				<div class="col-12 col-lg-6">
+					<div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+						<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+							<h6 class="m-0 font-weight-bold">公佈欄貼文</h6>
+                        </div>
+                        
+                        <!-- Card Body -->
+                        <div class="card-body">
+                        	<div class="contents w-100">
+							<!-- <div class="table ">
+								刊登時間：<span id="pdchoose"></span>&emsp;
+                        		刊登狀態：<span id="statuschoose"></span>
+                        	</div> -->
+                        	
+                            <!-- DataTales Example -->
+								<div class="table-responsive"  style="height:100%">
+                                	<table class="table table-bordered table-hover table-hover-color " id="dataTable" width="100%" cellspacing="0" style="color:#43454e" >
+                                   		<thead>
+                                       		<tr>
+                                            	<th>類型</th>
+                                           		<th>主旨</th>
+                                            	<th>報名人數</th>
+                                            	<th>刊登日</th>
+                                        	</tr>
+                                    	</thead>
+                                    				
+                                    	<tbody id="BulletinDataArea" class="">
+                                    	</tbody>
+                                	</table> 
+                             	</div>   
+                              	<a href="<c:url value='myBulletin' />" style="color:gray">我的活動</a>   
+                                <!-- DataTales結束 -->
+                        	</div>
+                        </div>
+                        <!-- End of Card Body -->
+                    </div>
+				</div>
+					<!-- End of 右chart -->
 
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
+				</div>
+			</div>
+            
+            <!-- End of Main Content (Page Content) -->
             
             <jsp:include page="../footer.jsp"></jsp:include>
 

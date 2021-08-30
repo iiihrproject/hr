@@ -449,7 +449,7 @@ values(
 	'ROLE_RD');
 	
 create table personnel(
-	emp_id int not null primary key references loginModel(emp_id),
+	emp_id int not null foreign key references loginModel(emp_id),
 	phoneNumber nvarchar(20) null,
 	address nvarchar(max) null,
 	email nvarchar(max) null

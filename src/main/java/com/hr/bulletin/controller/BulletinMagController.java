@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hr.bulletin.model.BulName;
 import com.hr.bulletin.model.Bulletin;
 import com.hr.bulletin.service.BulletinService;
 
@@ -52,10 +53,18 @@ public class BulletinMagController implements Serializable {
 
 	// 人資管理貼文列表 //h
 	@GetMapping("/bulletinListMag")
-	public @ResponseBody List<List> findAll() {
+	public @ResponseBody List<BulName> findAll() {
 		log.info("findAll方法執行中...");
 		System.out.println("-------:"+bulletinService.findAll());
 		return bulletinService.findAll();
+	}
+	
+	// 使用者所有貼文列表 //all
+	@GetMapping("/bulletinListUser")
+	public @ResponseBody List<BulName> userFindAll() {
+		log.info("bulletinListUser方法執行中...");
+		System.out.println("-------:"+bulletinService.userFindAll());
+		return bulletinService.userFindAll();
 	}
 	
 //	@GetMapping("/bulletinListMag")
@@ -70,7 +79,7 @@ public class BulletinMagController implements Serializable {
 		return "/bulletin/eventInsert";
 	}
 	
-	// 新增公告貼文頁 
+	// 新增公告貼文頁 //h
 	@GetMapping("/bulletinAnnoInsert")
 	public String bai() {
 		return "/bulletin/annoInsert";
@@ -150,8 +159,8 @@ public class BulletinMagController implements Serializable {
 	}
 	
 	
-	// 把表單資料送到資料庫新增資料 
-	@PostMapping("/insertAnnoBulletion")
+	// 把表單資料送到資料庫新增資料  //h
+	@PostMapping("/insertAnnoBulletion") 
 	public @ResponseBody String saveAnno(@RequestParam("title") String title,
 			@RequestParam("description") String description, @RequestParam("desText") String desText,
 			@RequestParam(value ="file1", required=false) MultipartFile multipartFile, 

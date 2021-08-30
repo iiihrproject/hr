@@ -127,11 +127,23 @@
 // 		公佈欄
 		let bDataArea = document.getElementById("BulletinDataArea");
 		let xhr = new XMLHttpRequest();
-		xhr.open("GET", "<c:url value='/bulletinList'/>");
+		xhr.open("GET", "<c:url value='/bulletinListUser'/>");
 		xhr.send();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				bDataArea.innerHTML = processBulletinData(xhr.responseText);
+			}
+		}
+		
+		//hr權限判斷
+		let xhr2 = new XMLHttpRequest();
+		let empno = `${sessionScope.loginModel.getEmpNo()}`;
+		xhr2.open("GET", "<c:url value='/bulButton'/>?empno="+`${sessionScope.loginModel.getEmpNo()}`);
+		xhr2.send();
+		xhr2.onreadystatechange = function() {
+			if (xhr2.readyState == 4 && xhr2.status == 200) {
+				processBulButton(xhr2.responseText);
+				console.log("HR權限判斷:"+xhr2.responseText);
 			}
 		}
 		
@@ -157,19 +169,37 @@
 		for (let n = 0; n < le; n++) {
 			let bulletin = posts[n];
 			let link = "href='<c:url value='/bulletinDetail' />?postno=" + bulletin.postno + "''>";
-			let flag = "<i class=' fas fa-info-circle' style='color: #f6c23e; border-color: #f6c23e;'></i>";
-			segment += "<tr "+link;
-			segment += "<td>" + bulletin.type + "</td>";
+			/* let flag = "<i class=' fas fa-info-circle' style='color: #f6c23e; border-color: #f6c23e;'></i>"; */
+			let flag = "<img id='logo' src='img/new.png' style='height:16px'>";
+			segment += "<tr  "+link;
+			segment += "<td style='text-align:center;'>" + bulletin.type + "</td>";
 			if(bulletin.postDate==td){
 			segment += "<td>" + bulletin.title +" "+flag+"</td>";}
 			else{segment += "<td>" + bulletin.title +"</td>"}
-			segment += "<td>" + "20/"+ bulletin.quota + "</td>";
-			segment += "<td>" + bulletin.postDate + "</td>";
+			if(bulletin.type == '公告' ){
+				segment += "<td style='text-align:center'>-</td>";
+			} else if (bulletin.quotatype == '不限') {
+				segment += "<td>不限</td>";
+			} else {
+				segment += "<td style='text-align:center'>" + bulletin.enCount +"&nbsp;/&nbsp;"+ bulletin.quota + "</td>";
+			}
+			segment += "<td style='text-align:center;'>" + bulletin.postDate + "</td>";
 			segment += "</tr>";
 		}
 		return segment;
 		
 	}
+
+	
+function processBulButton(result) {
+	console.log("result:"+!result);
+	if (result=='true'){
+		console.log("執行true");
+	}else{
+		document.getElementById("bulbutton").innerHTML= "";
+		console.log("執行false");
+	}
+}
 	
 	</script>
 
@@ -253,7 +283,7 @@
                         <!-- 0419 分隔線分隔線 -->
 
                         <!-- Pie Chart -->
-                        <div class="col-12 col-lg-6">
+                        <div class="col-12 col-lg-6" id="bulletindiv">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -264,8 +294,10 @@
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">                                     
-                                            <a class="dropdown-item" href="<c:url value='/bulletinManage' />">管理公佈欄</a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                                        	<a class="dropdown-item" href="<c:url value='/myBulletin' />">我的公佈欄</a>
+                                        	<div id=bulbutton><div class="dropdown-divider"></div>                                     
+                                            <a class="dropdown-item" href="<c:url value='/bulletinManage' />">公佈欄管理</a></div>
                                         </div>
                                     </div>
                                    <!--人資公布欄管理區end-->
@@ -276,14 +308,14 @@
                                         <!-- 內容開始 -->
                                         
                                         <!-- DataTales Example -->
-											<div class="table-responsive">
-                                				<table class="table table-bordered table-hover" width="100%" cellspacing="0" id="datatableid">
+											<div class="table-responsive"  style="height:100%">
+                                				<table class="table table-bordered table-hover table-sm" width="100%" cellspacing="0" id="datatableid" style="color:#43454e;" >
                                    					 <thead>
-                                       					 <tr>
-                                            				<th>類型</th>
+                                       					 <tr style="background-color:#c0bde2">
+                                            				<th style='text-align:center'>類型</th>
                                             				<th>主旨</th>
-                                            				<th>報名人數</th>
-                                            				<th>刊登日</th>
+                                            				<th style='text-align:center'>報名人數</th>
+                                            				<th style='text-align:center'>刊登日</th>
                                         				</tr>
                                     				</thead>
                                     				
@@ -291,8 +323,8 @@
                                     				</tbody>
                                 				</table> 
                              				</div>   
-                              				<a href="#" style="color:gray">  more</a>   
-                                        <!-- 內容結束 -->
+									
+									<!-- 內容結束 -->
                                     </div>
                                 </div>
                             </div>

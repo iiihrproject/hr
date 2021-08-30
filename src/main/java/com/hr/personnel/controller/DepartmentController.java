@@ -44,14 +44,12 @@ public class DepartmentController {
 		return map;
 	}
 	
-	@PutMapping(path="/departmentManagerIdUpdate", produces="application/json", consumes="application/json")
+	@PutMapping(path="/departmentManagerNoUpdate", produces="application/json", consumes="application/json")
 	public @ResponseBody Map<Integer, Map<String, String>> departmentManagerIdUpdate(
-			@RequestBody DepartmentDetail departmentDetail
+			@RequestBody Map<String, String> inputMap
 			) {
-		
-		
 		Map<Integer, Map<String, String>> map = new HashMap<Integer, Map<String, String>>();
-		map = departmentService.findAllDepartmentDetailWithReplacementOfNewManager(departmentDetail);
+		map = departmentService.findAllDepartmentDetailWithReplacementOfNewManager(inputMap);
 		
 		return map;
 	}
@@ -64,10 +62,10 @@ public class DepartmentController {
 	
 	@PostMapping(path="/createNewDepartment", consumes="application/json", produces="application/json")
 	public @ResponseBody Map<String, String> createNewDepartment(
-			@RequestBody Map<Integer, DepartmentDetail> departments
+			@RequestBody Map<Integer, Map<String, String>> inputMap
 			) {
 		boolean flowCheck = false;
-		flowCheck = departmentService.insertNewDepartments(departments);
+		flowCheck = departmentService.insertNewDepartments(inputMap);
 		Map<String, String> map = new HashMap<String, String>();
 		if(flowCheck) {
 			map.put("result", "Update success");

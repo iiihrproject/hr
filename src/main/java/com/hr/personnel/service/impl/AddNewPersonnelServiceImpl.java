@@ -34,8 +34,9 @@ public class AddNewPersonnelServiceImpl implements AddNewPersonnelService{
 	@Override
 	public boolean createNewPersonnel(Map<String, String> inputMap) {
 		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd");
-		String employedDate = sdf.toString();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String employedDate = sdf.format(date);
 		
 		String empNo = inputMap.get("empNo");
 		CharSequence rawPassword = empNo.subSequence(0, empNo.length());
@@ -45,6 +46,7 @@ public class AddNewPersonnelServiceImpl implements AddNewPersonnelService{
 		
 		Set<Authorities> authorities = getInputAuthorities(inputMap);
 		
+		Personnel personnel = new Personnel();
 		LoginModel loginModel = new LoginModel(
 				null, 
 				null, 
@@ -55,7 +57,7 @@ public class AddNewPersonnelServiceImpl implements AddNewPersonnelService{
 				empNo, 
 				encryptedPassword, 
 				departmentDetail, 
-				authorities,
+				null,
 				employedDate, 
 				true, 
 				true,
@@ -63,6 +65,14 @@ public class AddNewPersonnelServiceImpl implements AddNewPersonnelService{
 				employedDate, 
 				true
 				);
+		personnel.setLoginModelInfo(loginModel);
+		loginModel.setPersonnel(personnel);
+		Iterator<Authorities> iterator = authorities.iterator();
+		while(iterator.hasNext()) {
+			Authorities authority = iterator.next();
+			authority.setLoginModel(loginModel);
+		}
+		loginModel.setAuthorities(authorities);
 		boolean flowCheck = addNewPersonnelRepository.createNewPersonnel(loginModel);
 		return flowCheck;
 	}

@@ -39,12 +39,14 @@
     <!-- 留言資料載入 -->
 	<script>
 	var hasError = false;
+	var enrollNum = 0;
 
 	
 	window.onload = function() {
  		msgData();
  		loadenrollment();
  		loadLike();
+ 		loadenrollnum();
  		
  		
  		var sendMsg = document.getElementById("sendMsg")
@@ -66,6 +68,7 @@
  			   "postno": ${bulletin.postno},
  			   "message": messageValue,
  			   "empNo": `${sessionScope.loginModel.getEmpNo()}`,
+ 			  "empName": `${sessionScope.loginModel.getName()}`,
  			   "messageDate": td,
  			};
  			
@@ -101,6 +104,7 @@
  			console.log("type:"+`${bulletin.type}`);
  		}
  		
+
 
 
 	} 
@@ -145,7 +149,7 @@
 				}else{
 					segment += "<td>"+ BulMessage.message +"</td>";
 			
-					segment += "<td>"+ BulMessage.empNo +"</td>";
+					segment += "<td>"+ BulMessage.empName +"</td>";
 					if(BulMessage.empNo==`${sessionScope.loginModel.getEmpNo()}`){
 						segment += "<td>"+ BulMessage.messageDate +"&emsp;";
 						segment += "<a onclick='delMsg("+BulMessage.id+")' style='color:#ac2c20' data-toggle='modal' data-target='#massgaeModal'>刪除</a></td>";
@@ -272,28 +276,51 @@ function loadenrollment (){
 				bulEnroll = JSON.parse(xhr6.responseText);
 				console.log("有回傳bulEnroll.enrollStatus:"+bulEnroll.enrollStatus);
 			}
+			loadenrollnum();
+			let num = $("#numspan").text();
+			console.log("----num:"+num);
 			
 			if (!bulEnroll){
+				if (enrollNum>=num) {
+					enrollS += '報名額滿';
+					$("#applyspan").html(enrollS);
+					$("#apply").removeAttr("data-toggle");
+					console.log("bulEnroll4:"+enrollS);	
+				} else {
 				enrollS += '報名';
 				$("#applyspan").html(enrollS);
 				$("#applyMsg").html("請確認是否<font color='red' >報名</font>這項活動");
 				$("#enStatus").html("");
 				console.log("bulEnroll1:"+enrollS);	
-			}
-			else if (bulEnroll.enrollStatus=='參加'){
+				}
+			} else if (bulEnroll.enrollStatus=='參加'){
 				enrollS += '取消報名';
 				$("#applyspan").html(enrollS);
 				$("#applyMsg").html("請確認是否<font color='red' >取消報名</font>這項活動");
 				$("#enStatus").html("<font color='green' ><i class='bi bi-check2-square'></i>&nbsp;已報名</font>");
 				console.log("bulEnroll2:"+enrollS);	
 				
-			} else{
+			} else if (enrollNum>=${bulletin.quota}) {
+				enrollS += '報名額滿';
+				$("#applyspan").html(enrollS);
+				$("#apply").removeAttr("data-toggle");
+				console.log("bulEnroll4:"+enrollS);	
+			}
+			else{
 				enrollS += '報名';
 				$("#applyspan").html(enrollS);
 				$("#applyMsg").html("請確認是否<font color='red' >報名</font>這項活動");
 				$("#enStatus").html("");
 				console.log("bulEnroll3:"+enrollS);	
 			}
+
+
+ 			if( `${bulletin.endDate}` <= td ){
+				enrollS = '報名截止';
+				$("#applyspan").html(enrollS);
+				$("#apply").removeAttr("data-toggle");
+				console.log("bulEnroll5:"+enrollS);	
+	 		}  
 			
 			console.log("bulEnroll:"+bulEnroll.enrollStatus);
 		}
@@ -310,7 +337,26 @@ function sendEnroll () {
 	xhr7.onreadystatechange = function(){
 		if (xhr7.readyState == 4 && xhr7.status == 200){
 		loadenrollment();
+		loadenrollnum()
 		}
+	}
+}
+
+
+function loadenrollnum(){
+	let numspan = document.getElementById("numspan");
+	let xhr8 = new XMLHttpRequest();
+
+	xhr8.open("GET", "<c:url value='/findEnrollNumByNo'/>?postno=" + ${bulletin.postno});
+	xhr8.send();
+	xhr8.onreadystatechange = function() {
+		if (xhr8.readyState == 4 && xhr8.status == 200) {
+			enrollNum = xhr8.responseText;
+			numspan.innerHTML = enrollNum;
+
+		}
+		
+
 	}
 }
 	
@@ -368,7 +414,7 @@ function sendEnroll () {
                                         </c:when>
                                         <c:otherwise>
                                         	<tr>
-                                            	<td>已報名人數：10&nbsp;／&nbsp;可報名人數：${bulletin.quota}</td>
+                                            	<td>已報名人數：<span id="numspan">0</span>&nbsp;／&nbsp;可報名人數：${bulletin.quota}</td>
                                         	</tr>
                                         </c:otherwise>
                                         </c:choose>

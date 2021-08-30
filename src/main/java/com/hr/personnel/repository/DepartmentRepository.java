@@ -9,13 +9,15 @@ public interface DepartmentRepository {
 
 	List<DepartmentDetail> findAllDepartments();
 
-	LoginModel findLoginModel(Integer managerEmpId);
+	LoginModel findLoginModelByEmpNo(String managerEmpNo);
 
 	DepartmentDetail updateDepartmentDetail(DepartmentDetail departmentDetail);
 
 	DepartmentDetail findDepartment(Integer departmentNumber);
 
-	void insertNewDepartments(DepartmentDetail departmentDetail) throws IllegalArgumentException;
+	boolean insertNewDepartments(DepartmentDetail departmentDetail) throws IllegalArgumentException;
+
+	LoginModel findLoginModel(Integer managerEmpId);
 
 
 }

@@ -36,18 +36,17 @@
 			xhr.open("GET", "<c:url value='/personnelAuthorization'/>", true);
 			xhr.send();
 			xhr.onreadystatechange = function() {
-			if (xhr2.readyState == 4 && xhr2.status == 200) {
-				let result = JSON.parse(xhr2.responseText);
-				if(result[result] === "false"){
-					$("#personnel").remove();
-					$("#department").remove();
+				if (xhr.readyState == 4 && xhr.status == 200) {
+					let result = JSON.parse(xhr.responseText);
+					if(result.result === "false"){
+						
+						$("#personnel").remove();
+						$("#department").remove();
+					}
 				}
-				
-			}
-			  
+			}	  
 		}
 	</script>
-
 </head>
 
 <body id="page-top">
@@ -97,7 +96,7 @@
                                         <div class="col mr-2">
                                             <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">右上</div>
                                             <!-- 模板二：module-1(content全空白) -->
-                                            <a href="<c:url value='/###' />"  class="text-decoration-none">
+                                            <a href="<c:url value='/updatePassword' />"  class="text-decoration-none">
                                                 <div class="h4 mb-0 font-weight-bold text-center">密碼修改</div>
                                             </a>
                                         </div>

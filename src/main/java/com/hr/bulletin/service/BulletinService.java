@@ -7,7 +7,10 @@ import javax.print.attribute.standard.Media;
 import com.hr.bulletin.model.BulEnroll;
 import com.hr.bulletin.model.BulLike;
 import com.hr.bulletin.model.BulMessage;
+import com.hr.bulletin.model.BulName;
 import com.hr.bulletin.model.Bulletin;
+import com.hr.login.model.LoginModel;
+import com.hr.personnel.model.DepartmentDetail;
 
 public interface BulletinService {
 
@@ -18,7 +21,7 @@ public interface BulletinService {
 	Bulletin findById(int postno);
 
 	// 執行查詢多筆
-	List<List> findAll();
+	List<BulName> findAll();
 	
 	// 執行查詢多筆
 //	List<Media> findAll();
@@ -50,5 +53,17 @@ public interface BulletinService {
 	BulEnroll findEnrollByno(String empNo, int postno);
 
 	void insertEnroll(BulEnroll bulEnroll);
+
+	List<BulEnroll> findEnrollListByNo(int postno);
+
+	DepartmentDetail findDepartment(Integer departmentNumber);
+
+	LoginModel getLoginModelByEmpNo(String empNo);
+
+	List<BulName> userFindAll();
+
+	List<BulName> findMyEnrollByEmpNo(String empNo);
+
+	List<BulEnroll> findEnrollNumByNo(int postno);
 
 }
