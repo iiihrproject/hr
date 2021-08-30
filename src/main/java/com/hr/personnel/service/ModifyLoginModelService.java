@@ -19,4 +19,6 @@ public interface ModifyLoginModelService {
 
 	List<String> findAuthorities(LoginModel modifiedLoginModel);
 
+	List<String> findNewAuthorities(LoginModel modifiedLoginModel);
+
 }

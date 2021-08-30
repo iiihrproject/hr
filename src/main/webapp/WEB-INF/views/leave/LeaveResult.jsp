@@ -15,7 +15,7 @@
 <script>
 window.addEventListener("DOMContentLoaded", function() {
 	loadLeaveData()
-	
+
 });
 
 function loadLeaveData() {
@@ -39,151 +39,109 @@ function loadLeaveData() {
 			let segment = "";
 			for (let i = 0; i < leaveList.length; i++) {
 				let leave = leaveList[i];
+// 				$.get("<c:url value='/G/findEmpByEmpNo' />?empNo="+leave.empNo,function(empData,status2){
+// 					if (status2 == "success"){
+// 						callback(empData);
+// 					}
+// 				});
 				segment += "<tr><td>" + leave.empNo + "</td>";
 				segment += "<td>" + leave.reasonList.desc_zh + "</td>";
 				segment += "<td>" + leave.startDate + " "
 						+ leave.startTime.slice(0, 5) + "~" + leave.endDate
 						+ " " + leave.endTime.slice(0, 5) + "</td>";
 				segment += "<td>" + leave.days + "</td>";
-				segment += "<td><a href='#"+ leave.applicationNo +"' data-toggle='collapse'>" + leave.applicationNo + "</a></td>";
-				segment += "<td><span class='btn-sm text-dark font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
-				segment +="<tr class='collapse' id='"+ leave.applicationNo +"'>";
-				segment +="<td colspan='2'>備註："+leave.comments+"</td>";
-				segment +="<td>代理人："+leave.handOff+"</td>";
-				segment +="<td colspan='2'>簽核："+leave.approval01Name+"</td>";
-				segment +="<td><a href='#' class='btn btn-sm btn-info btn-icon-split' data-toggle='modal' id='checkinsert' data-target='#detailModal'>";
-				segment +="<span class='icon text-white-50'><i class='fas fa-file-signature'></i></span>";
-				segment +="<span class='text'>查看詳情</span></a></td></tr>";
+				segment += "<td><a href='#Co"+ leave.applicationNo +"' data-toggle='collapse'>" + leave.applicationNo + "</a></td>";
+				segment += "<td><span class='btn-sm text-white font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
+				segment += "<tr class='collapse' id='Co"+ leave.applicationNo +"'>";
+				segment += "<td class='pl-4'>代理人：<a title='發信給"+leave.handOffEmail+"' href='mailto:" + leave.handOffEmail + "'>"+leave.handOff+"</a></td>";
+				segment += "<td colspan='2'>備註：" + leave.comments + "</td>";
+				segment += "<td colspan='2'>簽核：" + leave.approval01MGR + "</td>";
+				segment += "<td><button onclick='seeMore(\"" + leave.applicationNo + "\")' class='btn btn-sm btn-info btn-icon-split' type='button' data-toggle='modal' data-target='#detailModal'>";
+				segment += "<span class='icon text-white-50'><i class='fas fa-file-signature'></i></span>";
+				segment += "<span class='text'>查看詳情</span></button></td></tr>";
 			}
 				return segment
 			}
 		}
 	}
 }
+function findEmpByEmpNo(empNo, callback){
+	$.get("<c:url value='/G/findEmpByEmpNo' />", {empNo:empNo},function(empData,status2){
+		if (status2 == "success"){
+			callback(empData);
+		}
+	});
+}
+
+// 查看詳情
+function seeMore(appNo){
+	$.get("<c:url value='/Leave/findLeaveByAppNo' />", {applicationNo:appNo},function(data,status){
+		if(status == "success"){
+			findEmpByEmpNo(data.empNo, function(empData) {
+				$("#m_name").text(empData.name);
+			})
+			$.get("<c:url value='/G/findEmpByPk' />?empId="+data.handOff,function(empData2,status2){
+				if(status2 == "success"){
+					$("#m_handOff").text(empData2.loginModelInfo.name);
+				}
+			});
+			
+			var d = new Date(data.approval01Date);
+			$("#m_AppNo").text(data.applicationNo);
+			$("#m_requestDate").text(data.requestDate);
+			$("#m_dept").text("部門："+data.dept.name);
+			$("#m_empNo").text("工號："+data.empNo);
+			$("#m_reason").text(data.reasonList.desc_zh);
+			$("#m_start").html(data.startDate+"<br />"+data.startTime.slice(0,5));
+			$("#m_end").html(data.endDate+'<br>'+data.endTime.slice(0,5));
+			$("#m_days").text(data.days);
+			$("#m_comments").text(data.comments);
+			$("#m_supportingDoc").text(data.supportingDoc);
+			$("#m_date").text(d.toDateString().slice(4));
+			var sigCanvas = document.getElementById("sig-canvas");
+			var sigText = document.getElementById("sig-dataUrl");
+	// 		待審核就要清空資料 留按鈕 隱藏結果 
+			if(data.statusList.code==("S01")){
+				sigCanvas.width = sigCanvas.width;
+				$("#sig-canvas").css("display","inline");
+				$("#sig-dataUrl").text("");
+				$("#sig-image").attr("src","").css("display","inline");
+				$("#detailModal button").css("display","inline");
+				$("#m_MGR").css("visibility","hidden");
+				$("#m_date").css("visibility","hidden");
+			} else{
+				sigText.innerHTML = data.approval01Sig;
+				$("#sig-image").attr("src",data.approval01Sig).css("display","inline");
+				$("#sig-canvas").css("display","none");
+				$("#detailModal button").css("display","none");
+				$("#m_MGR").css("visibility","visible");
+				$("#m_date").css("visibility","visible");
+				$.get("<c:url value='/G/findEmpByPk' />?empId="+data.approval01MGR,function(empData3,status3){
+					if(status3 == "success"){
+						$("#m_MGR").text(empData3.loginModelInfo.name);
+					}
+				});
+			}
+		}
+	});
+}
 
 // 設定CSS
 function setCSS(){
-	console.log($("td span").$("this").text());
-	if($("td span").text() == "提出申請"){
-		$("td span").addClass("bg-warning");
-	} else {
-		$("td span").addClass("bg-danger");
-	}
+// 	狀態結果改變背景色
+	$("td span").each(function(index){
+		if($(this).text() == "提出申請"){
+			$(this).addClass("bg-warning text-dark");
+		} else if($(this).text() == "取消"){
+			$(this).addClass("bg-secondary").parent($(this)).addClass("text-right");
+		} else if($(this).text() == "通過"){
+			$(this).addClass("bg-success").parent($(this)).addClass("text-center");
+		} else if($(this).text() == "否決"){
+			$(this).addClass("bg-danger").parent($(this)).addClass("text-right");
+		}
+	});
 }
-// //DataTable setting
-// $(document).ready( function () {
-//     $("#mainTable").DataTable({
-//   	    //屬性區塊:
-//   	    searching: true,
-//   	    sPaginationType: "full_numbers", 
-//   	    lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]], 
-//   	    processing: true, 
-//   	    serverSide: false, 
-//   	    stateSave: true,
-//   	    destroy: true, 
-//   	    info: true,
-//   	    autoWidth: true, 
-//   	    ordering: true, 
-//   	    scrollCollapse: false, 
-//   	    scrollX: "500px",
-//   	    scrollY: "200px",    
-//   	    paging: true, 
-//   	    dom: '<"top">rt<"bottom"><"clear">',
-//   	    //ajax區塊:
-// 		ajax : {
-// 			url : "<c:url value='/Leave/findAllLeave' />",
-// 			type : "POST",
-// 			},
-// 		//資料欄位區塊(columns):
-// 		columns : [ {
-// 			data : "empNo",		}, {
-// 			data : "startDate",		}, {
-// 			data : "startDate",		}, {
-// 			data : "days",		}, {
-// 			data : "applicationNo",		}, {
-// 			data : "startDate",	}, ],
-// 		//語言區塊(language):
-// 		 language: {
-// 		    lengthMenu: "顯示 _MENU_ 筆資料",
-// 		    sProcessing: "處理中...",
-// 		    sZeroRecords: "没有匹配结果",
-// 		    sInfo: "目前有 _MAX_ 筆資料",
-// 		    sInfoEmpty: "目前共有 0 筆紀錄",
-// 		    sInfoFiltered: " ",
-// 		    sInfoPostFix: "",
-// 		    sSearch: "尋找:",
-// 		    sUrl: "",
-// 		    sEmptyTable: "尚未有資料紀錄存在",
-// 		    sLoadingRecords: "載入資料中...",
-// 		    sInfoThousands: ",",
-// 		    oPaginate: {
-// 		      sFirst: "首頁",
-// 		      sPrevious: "上一頁",
-// 		      sNext: "下一頁",
-// 		      sLast: "末頁",
-// 	    },
-// 		    order: [[0, "desc"]],
-// 		    oAria: {
-// 		      sSortAscending: ": 以升序排列此列",
-// 		      sSortDescending: ": 以降序排列此列",
-// 		    },
-// 	  },
-// 		//欄位元素定義區塊(columnDefs):
-// 	  columnDefs: [
-// 	    {
-// 	      targets: [2, 3],
-// 	      render: function (data) {
-// 	        if (data != "無更新") {
-// 	          //https://momentjs.com/
-// 	          return moment(data).format("YYYY-MM-DD");
-// 	        } else {
-// 	          return data;
-// 	        }
-// 	      },
-// 	    },
-// 	    {
-// 	      className: "text-center",
-// 	      targets: [0, 1, 2, 3],
-// 	    },
-// 	    {
-// 	      targets: [0],
-// 	      createdCell: function (td, cellData, rowData, row, col) {
-// 	        $(td).css("word-break", "break-all");
-// 	        $(td).css("width", "0.5%");
-// 	      },
-// 	    },
-// 	    {
-// 	      targets: [1],
-// 	      createdCell: function (td, cellData, rowData, row, col) {
-// 	        $(td).css("word-break", "break-all", "text-center");
-// 	        $(td).css("width", "1%");
-// 	      },
-// 	    },
-// 	    {
-// 	      targets: [2],
-// 	      createdCell: function (td, cellData, rowData, row, col) {
-// 	        $(td).css("word-break", "break-all");
-// 	        $(td).css("width", "5%");
-// 	      },
-// 	    },
-// 	    {
-// 	      targets: [3],
-// 	      createdCell: function (td, cellData, rowData, row, col) {
-// 	        $(td).css("word-break", "break-all");
-// 	        $(td).css("width", "1%");
-// 	      },
-// 	    },
-// 	  ],
-// 		//列元素區塊(rowCallback):
-// 	  rowCallback: function (row, data) {
-// 		    if (data["Status"] == "未完成") {
-// 		      $(row).addClass("danger");
-// 		    } else {
-// 		      $(row).addClass("warning");
-// 		    }
-// 		  },
-// 		});
-// 	});//end of DataTable Setting
+
 </script>
 </head>
 <body>
@@ -196,7 +154,7 @@ function setCSS(){
 			<h6 class="m-0 font-weight-bold text-primary">
 				DataTables Example
 				<button class="btn btn-info btn-icon-split btn-sm"
-					data-toggle="modal" id="checkinsert" data-target="#detailModal">按我跳出</button>
+					data-toggle="modal" data-target="#detailModal">按我跳出</button>
 			</h6>
 		</div>
 		<div class="card-body">
@@ -215,19 +173,19 @@ function setCSS(){
 											aria-label="Name: activate to sort column descending">申請人</th>
 										<th class="sorting col-md-1" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
-											aria-label="Position: activate to sort column ascending">假別</th>
+											aria-label="Reason: activate to sort column ascending">假別</th>
 										<th class="sorting col-md-4" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
-											aria-label="Office: activate to sort column ascending">期間</th>
+											aria-label="Duration: activate to sort column ascending">期間</th>
 										<th class="sorting col-md-1" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
-											aria-label="Age: activate to sort column ascending">天數</th>
+											aria-label="Day: activate to sort column ascending">天數</th>
 										<th class="sorting col-md-1" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
-											aria-label="Start date: activate to sort column ascending">申請單號</th>
+											aria-label="AppNo: activate to sort column ascending">申請單號</th>
 										<th class="sorting col-md-2" tabindex="0"
 											aria-controls="dataTable" rowspan="1" colspan="1"
-											aria-label="Start date: activate to sort column ascending">狀態</th>
+											aria-label="Status: activate to sort column ascending">狀態</th>
 									</tr>
 								</thead>
 								<tfoot class="thead-dark">
@@ -241,20 +199,7 @@ function setCSS(){
 									</tr>
 								</tfoot>
 								<tbody id="tbodycontent">
-									<tr class="odd">
-										<td class="sorting_1">Airi Satou</td>
-										<td>Accountant</td>
-										<td>Tokyo</td>
-										<td>33</td>
-										<td><a href="#demo" data-toggle="collapse">Click me to toggle next row</a></td>
-										<td>2008/11/28</td>
-									</tr>
-									<tr class="collapse" id="demo">
-										<td colspan="2">備註：</td>
-										<td>代理人：</td>
-										<td colspan="2">簽核：</td>
-										<td>查看詳情</td>
-									</tr>
+									
 								</tbody>
 							</table>
 						</div>
@@ -278,67 +223,77 @@ function setCSS(){
 						class="icon"><i class="fas fa-print"></i></span> <span
 						class="text">按之前請想想「森林」</span>
 					</a>
-					<button class="close" type="button" data-dismiss="modal">&times;</button>
+					<a class="close" role="button" data-dismiss="modal">&times;</a>
 				</div>
 				<div class="modal-body">
-					<div class="card shadow mb-4">
+					<div class="card shadow">
 						<div class="card-body">
-							<div class="table-responsive" id="printArea">
+							<div id="printArea">
 								<h5 class="modal-title mx-auto text-center"
 									id="detailModalLabel">請假申請單</h5>
 								<table
 									class="table table-bordered thead-dark"
 									id="modalTable">
 									<tr>
-										<td style="text-align: left; margin-right: 8px; border: none;">申請單號
-											<span></span>
+										<td class="col-auto" style="text-align: left; margin-right: 8px; border: none;">申請單號 
+											<span id="m_AppNo"></span>
 										</td>
-										<td
-											style="text-align: right; margin-right: 8px; border: none;">申請日
-											<span id="requestDate"></span>
+										<td class="col-auto" style="text-align: right; margin-right: 8px; border: none;">申請日
+											<span id="m_requestDate"></span>
 										</td>
 									</tr>
 									<tr>
 										<th>申請人</th>
-										<td>部門工號</td>
+										<td><div class="row align-items-center">
+												<div class="col" id="m_name"></div>
+												<div class="col" id="m_dept"></div>
+												<div class="col" id="m_empNo"></div>
+											</div></td>
 									</tr>
 									<tr>
 										<th>請假事由</th>
-										<td></td>
+										<td><span id="m_reason"></span></td>
 									</tr>
 									<tr>
 										<th>請假期間</th>
-										<td><div class="center"
-												style="display: flex; width: 60%; flex: 1;">
-												<span><br></span> <span style="margin: 10px;">~</span>
-												<span><br></span>
-											</div>
-											<div>
-												共計<span></span>天
+										<td><div class="row align-items-center">
+												<div class="col-auto text-center" id="m_start"></div>
+												<div class="col-auto text-center">~</div>
+												<div class="col-auto text-center" id="m_end"></div>
+												<div class="col-auto text-center">
+													共計<span id="m_days"></span>天
+												</div>
 											</div></td>
 									</tr>
 									<tr>
 										<th>備註</th>
-										<td></td>
+										<td><span id="m_comments"></span></td>
 									</tr>
 									<tr>
 										<th>職務代理人</th>
-										<td></td>
+										<td><span id="m_handOff"></span></td>
 									</tr>
 									<tr>
 										<th>相關檔案上傳</th>
-										<td></td>
+										<td><span id="m_supportingDoc"></span></td>
 									</tr>
 									<tr>
 										<th>主管簽核</th>
 										<td>
-											<canvas id="sig-canvas" class="form-inline"
-												style="display: inline">Get a better browser, bro.</canvas>
-											<img id="sig-image" src="" style="display: none" />
-											<button class="btn btn-primary d-print-none" id="sig-submitBtn">簽名完成</button>
-											<button class="btn btn-secondary d-print-none" id="sig-clearBtn">重簽</button>
-
-											<textarea id="sig-dataUrl" style="display: none"
+											<div class="row align-items-center">
+												<div class="col-auto">
+													<canvas id="sig-canvas" class="form-inline" style="display: inline">Get a better browser, bro.</canvas>
+													<img id="sig-image" src="" style="display: inline" />
+												</div>
+												<div>
+													<button class="btn btn-primary d-print-none my-2"
+														id="sig-submitBtn">簽名完成</button><br />
+													<button class="btn btn-secondary d-print-none"
+														id="sig-clearBtn">重簽</button><br />
+													<span id="m_MGR" style="visibility: hidden"></span><br />
+													<span id="m_date" style="visibility: hidden"></span>
+												</div>
+											</div> <textarea id="sig-dataUrl" style="display: none"
 												class="form-control" rows="5">Data URL will go here!</textarea>
 										</td>
 									</tr>
@@ -349,8 +304,8 @@ function setCSS(){
 				</div>
 				<div class="modal-footer justify-content-center">
 					<div class="invalid-feedback">請記得簽名</div>
-					<button class="btn btn-success" id="approveBtn">核准</button>
-					<button class="btn btn-danger" id="rejectBtn">否決</button>
+					<button class="btn btn-success col-md-2 ml-md-auto" id="approveBtn">核准</button>
+					<button class="btn btn-danger col-md-2 mr-md-auto" id="rejectBtn">否決</button>
 
 				</div>
 			</div>
@@ -365,9 +320,6 @@ function setCSS(){
 
 // 		列印按鈕的功能
 		$("#printTable").click(function() {
-// 			document.getElementById("sig-clearBtn").style.display = "none";
-// 			document.getElementById("sig-submitBtn").style.display = "none";
-							
 			var body = $("#printArea").html();
  			var mywindow = window.open("", "", "left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0");
  			mywindow.document.write('<link href="<c:url value='/css/sb-admin-2.min.css' />" rel="stylesheet">');
@@ -377,8 +329,6 @@ function setCSS(){
  			mywindow.print();
 // 			mywindow.close();
 			
-// 			document.getElementById("sig-clearBtn").style.display = "inline";
-// 			document.getElementById("sig-submitBtn").style.display = "inline";
 			return true;
 		});
 		
@@ -501,45 +451,88 @@ function setCSS(){
 			}
 
 			// Set up the UI
-			var sigCanvas = document.getElementById("sig-canvas");
 			var sigText = document.getElementById("sig-dataUrl");
 			var sigImage = document.getElementById("sig-image");
 			var clearBtn = document.getElementById("sig-clearBtn");
 			var submitBtn = document.getElementById("sig-submitBtn");
 			clearBtn.addEventListener("click",function(e) {
 				clearCanvas();
-				sigText.innerHTML = "Data URL for your signature will go here!";
+				sigText.innerHTML = "Data URL will go here!";
 				sigImage.setAttribute("src", "");
-				sigCanvas.style.display = "inline";
-				sigImage.style.display = "none";
+				canvas.style.display = "inline";
 			}, false);
 			submitBtn.addEventListener("click", function(e) {
 				var dataUrl = canvas.toDataURL();
 				sigText.innerHTML = dataUrl;
 				sigImage.setAttribute("src", dataUrl);
-				sigCanvas.style.display = "none";
+				canvas.style.display = "none";
 				sigImage.style.display = "inline";
-				clearBtn.style.display = "none";
-				submitBtn.style.display = "none";
+				submitBtn.style.display = "inline";
+				clearBtn.style.display = "inline";
 			}, false);
 		})();
 
 //驗證的開始
-(function() {'use strict';window.addEventListener('load',function() {
-	var forms = document.getElementsByClassName('needs-validation');
-	// Loop over them and prevent submission
-	var validation = Array.prototype.filter.call(forms,
-			function(form) {form.addEventListener('submit', function(event) {
-				if (form.checkValidity() === false) {
-					event.preventDefault();
-					event.stopPropagation();
-				}
-					form.classList.add('was-validated');
-				}, false);
-	});
-	}, false);
-})();
+// (function() {'use strict';window.addEventListener('load',function() {
+// 	var forms = document.getElementsByClassName('needs-validation');
+// 	// Loop over them and prevent submission
+// 	var validation = Array.prototype.filter.call(forms,
+// 			function(form) {form.addEventListener('submit', function(event) {
+// 				if (form.checkValidity() === false) {
+// 					event.preventDefault();
+// 					event.stopPropagation();
+// 				}
+// 					form.classList.add('was-validated');
+// 				}, false);
+// 	});
+// 	}, false);
+// }));
 //驗證的結束
+
+//修改審核結果-通過
+$("#approveBtn").click(function(){
+	var sigCanvas = document.getElementById("sig-canvas");
+	var dataUrl = sigCanvas.toDataURL();
+	var appNo = $("#m_AppNo").text();
+	let obj={
+			"approval01MGR":${sessionScope.loginModel.pk},
+			"approval01Sig":dataUrl,
+			"statusList":{
+				"code": "S03"
+			}
+	};
+	var xhr2 = new XMLHttpRequest();
+	xhr2.open("PUT","<c:url value='/Leave/updateSupervisorComment/' />"+appNo,true);
+	xhr2.setRequestHeader("Content-Type","application/json");
+	xhr2.send(JSON.stringify(obj));
+	xhr2.onreadystatechange=function(){
+		if(xhr2.readyState == 4 && (xhr2.status == 200 || xhr2.status == 201)){
+			let result = JSON.parse(xhr2.responseText);
+			if(result.fail){
+				console.log("result.fail: " + result.fail);
+			} else if (result.success){
+// 				data-dismiss="modal";
+				console.log("簽核完成");
+				loadLeaveData();
+// 				$('#detailModal').modal('hide');
+			}
+		}
+	}
+});
+
+// $("#rejectBtn").click(function(){
+// 	var sigCanvas = document.getElementById("sig-canvas");
+// 	var dataUrl = sigCanvas.toDataURL();
+// 	var appNo = $("#m_AppNo").text();
+// 	let obj={
+// 			"approval01MGR":${sessionScope.loginModel.pk},
+// 			"approval01Sig":dataUrl,
+// 			"statusList":{
+// 				"code": "S04"
+// 			}
+// 	};
+// 	$.post("<c:url value='/Leave/updateSupervisorComment/' />"+appNo,obj);
+// });r
 	</script>
 </body>
 </html>

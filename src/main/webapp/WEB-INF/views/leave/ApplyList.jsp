@@ -20,7 +20,8 @@
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				document.getElementById("tbodycontent").innerHTML = processData(xhr.responseText);
 				// 				let leaveList = JSON.parse(xhr.responseText);
-				// 				console.log(leaveList);
+// 								console.log(leaveList);
+				setCSS();
 			}
 			function processData(jsonString) {
 				let leaveList = JSON.parse(jsonString);
@@ -37,12 +38,28 @@
 					segment += "<td>" + leave.startDate + " "
 							+ leave.startTime.slice(0, 5) + "~" + leave.endDate
 							+ " " + leave.endTime.slice(0, 5) + "</td>";
-					segment += "<td><span class='btn-sm text-dark bg-warning font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
+					segment += "<td><span class='btn-sm text-white font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
 				}
 					return segment
 				}
 			}
 		}
+	}
+
+	// 設定CSS
+	function setCSS(){
+//	 	狀態結果改變背景色
+		$("td span").each(function(index){
+			if($(this).text() == "提出申請"){
+				$(this).addClass("bg-warning text-dark");
+			} else if($(this).text() == "取消"){
+				$(this).addClass("bg-secondary").parent($(this)).addClass("text-right");
+			} else if($(this).text() == "通過"){
+				$(this).addClass("bg-success").parent($(this)).addClass("text-center");
+			} else if($(this).text() == "否決"){
+				$(this).addClass("bg-danger").parent($(this)).addClass("text-right");
+			}
+		});
 	}
 </script>
 </head>
@@ -117,10 +134,9 @@
 		$("#comments").val("需要請假");
 		document.getElementById("handOffSelect").selectedIndex = getRandomNum(1,$("#handOffSelect option").length-1);
 		var handOff = document.getElementById("handOffSelect").value;
-		$.get("<c:url value='/G/findEmpByPk'/>?empId=" + handOff,function(data,status){
+		$.get("<c:url value='/G/findEmpByPk'/>?empId=" + handOff,function(emp,status){
 			if(status == "success"){
-				var emp = data;
-				$("#handOffEmail").val(emp[0].email);
+				$("#handOffEmail").val(emp.email);
 			}
 		});
 	});
@@ -145,6 +161,7 @@
 		var empPk = document.getElementById("empPk");
 		var requestDate = document.getElementById("requestDate").value;
 		var reasonList = document.getElementById("reasonSelect");
+		var days = document.getElementById("days").value;
 		var startDate = document.getElementById("startDate").value;
 		var startTime = document.getElementById("startTime").value;
 		var endDate = document.getElementById("endDate").value;
@@ -161,6 +178,11 @@
 			$("#startDate").addClass("is-invalid");
 			$("#endDate").addClass("is-invalid");
 			messageBox.innerHTML = "日期錯誤，結束早於開始";
+		} if(days != "NaN日") {
+		} else{	hasError = true;
+			$("#startDate").addClass("is-invalid");
+			$("#endDate").addClass("is-invalid");
+		messageBox.innerHTML = "你選到了不存在的日期";
 		} if(comments != ""){
 		}else {hasError = true;
 			$("#comments").addClass("is-invalid");

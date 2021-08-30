@@ -20,5 +20,7 @@ public interface ModifyLoginModelRepository {
 
 	boolean deleteAuthorities(Authorities authorities);
 
+	List<Authorities> getAuthoritiesListByPk(Integer pk);
+
 
 }

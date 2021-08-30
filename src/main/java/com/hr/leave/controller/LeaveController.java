@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,11 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.hr.leave.model.LeaveBean;
-import com.hr.leave.model.ListBean;
 import com.hr.leave.service.LeaveService;
 import com.hr.login.model.LoginModel;
-import com.hr.login.service.LoginService;
-import com.hr.personnel.model.Personnel;
 
 @Controller
 @RequestMapping("/Leave")
@@ -83,14 +82,17 @@ public class LeaveController {
 		return map;
 	}
 
-//	@GetMapping("/Leave/GetOne")
-//	public String GetOne(@RequestParam("applicationNo") String applicationNo, Model m) {
-//		LeaveBean leave = service.select(applicationNo);
-//		m.addAttribute("reasonList", leaveBeanDao.getReasonList());
-//		m.addAttribute("leave", leave);
-//		return "LeaveApplication/EditLeaveForm";
-//	}
-//
+//	調出該申請單號資料
+	@GetMapping("/findLeaveByAppNo")
+	public @ResponseBody LeaveBean findLeaveByAppNo(@RequestParam("applicationNo") String applicationNo) {
+		return service.findLeaveByAppNo(applicationNo);
+	}
+	
+	@PutMapping(value="/updateSupervisorComment/{applicationNo}", consumes = { "application/json" }, produces = { "application/json" })
+	public void updateSupervisorComment(@RequestBody LeaveBean leaveBean, @PathVariable("applicationNo") String applicationNo) {
+		service.updateSupervisorComment(applicationNo, leaveBean.getApproval01Sig(), leaveBean.getApproval01MGR(), leaveBean.getStatusList().getCode());
+	}
+
 //	@PostMapping("/Insert")
 //	public String Insert(HttpServletRequest request, @RequestParam("reason") String reason_id,
 //			@RequestParam("startDate") String startDate, @RequestParam("startTime") String startTime,

@@ -51,7 +51,7 @@
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4 && xhr.status == 200) {
 					var emp = JSON.parse(xhr.responseText);
-					document.getElementById("handOffEmail").value = emp[0].email;
+					document.getElementById("handOffEmail").value = emp.email;
 				}
 			}
 		});
@@ -149,7 +149,7 @@
 					<label for="reasonSelect">請假事由</label>
 					<select class="form-control form-select" autofocus id="reasonSelect" name="reason"></select>
 				</div>
-				<div class="form-group col-md-6">
+				<div class="form-group col-md-6 d-none">
 					<label for="days">請假天數</label>
 					<input type="text" class="form-control" id="days" name="days" readonly>
 				</div>
@@ -244,8 +244,28 @@
 			var handOffSelect = document.getElementById("handOffSelect");
 	 	});
 		//跳出計算天數
-		$("#handOffSelect").click(function(){
-			$("#days").parent("div").removeClass("d-none");
+		$("#endDate").blur(function(){
+			let startDate = new Date(document.getElementById("startDate").value);
+			let endDate = new Date(document.getElementById("endDate").value);
+			var dayDiff = Math.round((endDate.getTime() - startDate.getTime()) / 1000 /60/60/24)+1;
+			console.log(startDate,endDate,dayDiff);
+			if (dayDiff == 1){
+				let startTime = new Date(2000,00,01,document.getElementById("startTime").value.slice(0,2),document.getElementById("startTime").value.slice(3,5));
+				let endTime = new Date(2000,00,01,document.getElementById("endTime").value.slice(0,2),document.getElementById("endTime").value.slice(3,5));
+				var clockDiff  = Math.round((endTime.getTime() - startTime.getTime()) / 1000 /60/60);
+				let restH = 1;
+				let timeDiff = 0;
+				if(document.getElementById("endTime").value.slice(0,2)>13){
+					timeDiff = clockDiff- restH;
+				} else {timeDiff =clockDiff;
+				}	if(timeDiff < 8){
+					$("#days").val(timeDiff+"小時").parent("div").removeClass("d-none");
+				} else{
+					$("#days").val(dayDiff+"日").parent("div").removeClass("d-none");
+				}
+			} else{
+				$("#days").val(dayDiff+"日").parent("div").removeClass("d-none");
+			}
 		});
 		//驗證後修改恢復CSS
 		$("#reasonSelect").change(function(){

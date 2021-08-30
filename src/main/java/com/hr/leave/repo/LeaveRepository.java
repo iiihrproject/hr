@@ -13,7 +13,7 @@ public interface LeaveRepository {
 
 	List<LoginModel> findEmpsByDept(Integer departmentNumber);
 
-	List<Personnel> findEmpByPk(Integer empId);
+	Personnel findEmpByPk(Integer empId);
 
 	List<LeaveBean> findAllLeave();
 
@@ -23,4 +23,7 @@ public interface LeaveRepository {
 
 	List<LeaveBean> findLeaveByDeptNo(Integer departmentNumber);
 
+	LeaveBean findLeaveByAppNo(String applicationNo);
+	
+	public void updateSupervisorComment(String applicationNo, String approval01Sig, String approval01MGR, String status);
 }

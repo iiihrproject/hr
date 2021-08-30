@@ -55,7 +55,7 @@ public class LoginModel implements Serializable{
 	private DepartmentDetail departmentDetail;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="loginModel",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="loginModel",fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Set<Authorities> authorities;
 	
 	private String employedDate;

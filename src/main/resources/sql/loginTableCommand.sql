@@ -71,7 +71,7 @@ insert into loginModel(
 values(
 	'HR MANAGER',
 	'A222222222',
-	'Nick Fury',
+	'神盾局長',
 	'male',
 	'hrmanager',
 	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
@@ -115,7 +115,7 @@ insert into loginModel(
 values(
 	'HR',
 	'B222222222',
-	'Natasha Alianovna Romanoff',
+	'黑寡婦',
 	'female',
 	'hr1',
 	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
@@ -152,7 +152,7 @@ insert into loginModel(
 values(
 	'RD MANAGER',
 	'C222222222',
-	'Tony Stark',
+	'鋼鐵人',
 	'male',
 	'rdmanager',
 	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
@@ -197,7 +197,7 @@ insert into loginModel(
 values(
 	'RD',
 	'D111111111',
-	'Peter Benjamin Parker',
+	'蜘蛛人',
 	'male',
 	'rd1',
 	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
@@ -234,7 +234,7 @@ insert into loginModel(
 values(
 	'Sales MANAGER',
 	'E222222222',
-	'Steve Rogers',
+	'美國隊長',
 	'male',
 	'salesmanager',
 	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
@@ -279,7 +279,7 @@ insert into loginModel(
 values(
 	'Sales',
 	'E222222222',
-	'Wanda Maximoff',
+	'緋紅女巫',
 	'female',
 	'sales1',
 	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
@@ -317,7 +317,7 @@ insert into loginModel(
 values(
 	'RD',
 	'G111111111',
-	'Bruce Banner',
+	'浩克',
 	'male',
 	'rd2',
 	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
@@ -354,11 +354,11 @@ insert into loginModel(
 values(
 	'RD',
 	'H111333666',
-	'Hank Pym',
+	'鷹眼',
 	'male',
-	'rd3',
+	'sales2',
 	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
-	2,
+	3,
 	'2008-05-02',
 	1,
 	1,
@@ -372,7 +372,7 @@ insert into authorities (
 	authorityName)
 values(
 	8,
-	'ROLE_RD');
+	'ROLE_SALES');
 
 insert into loginModel( 
 	role,
@@ -391,7 +391,7 @@ insert into loginModel(
 values(
 	'RD',
 	'I222111111',
-	'Victor Shade',
+	'幻視',
 	'male',
 	'rd4',
 	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
@@ -427,9 +427,9 @@ insert into loginModel(
 	is_Enable)
 values(
 	'RD',
-	'J222555777',
-	'Brandt',
-	'female',
+	'J111222555777',
+	'雷神索爾',
+	'male',
 	'rd5',
 	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
 	2,
@@ -447,9 +447,45 @@ insert into authorities (
 values(
 	10,
 	'ROLE_RD');
-	
+
+	insert into loginModel( 
+	role,
+	personalIdNumber,
+	name,
+	gender,
+	empNo,
+	pwd,
+	dept_No,
+	employedDate,
+	non_Expired,
+	non_Locked,
+	credentials_Non_Expired,
+	last_Change,
+	is_Enable)
+values(
+	'RD',
+	'K111333666',
+	'洛基',
+	'male',
+	'sales3',
+	'$2a$12$sjCtNizDZiEeweYdVpfxGOmRCOyP4XSrVKXM6R812BUVeOEutKn7y',
+	3,
+	'2008-04-19',
+	1,
+	1,
+	1,
+	'2020-03-17',
+	1
+);
+
+insert into authorities (
+	emp_id,
+	authorityName)
+values(
+	11,
+	'ROLE_SALES');
 create table personnel(
-	emp_id int not null primary key references loginModel(emp_id),
+	emp_id int not null foreign key references loginModel(emp_id),
 	phoneNumber nvarchar(20) null,
 	address nvarchar(max) null,
 	email nvarchar(max) null

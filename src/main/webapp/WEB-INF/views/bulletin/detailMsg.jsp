@@ -116,6 +116,9 @@
  			$("#messageArea").html("");
  			console.log("type:"+`${bulletin.type}`)
  		}
+		
+		
+
 	
     } // end of window.onload = function
     
@@ -208,6 +211,62 @@ function setErrorFor(input, message){
     	}    	
     	})
     }
+    
+//		報名清單
+function loadEnrollList(){
+	let aListArea = document.getElementById("ApplyListArea");
+	let xhr4 = new XMLHttpRequest();
+	xhr4.open("GET", "<c:url value='/applyList'/>?postno=" + ${bulletin.postno});
+	xhr4.send();
+	xhr4.onreadystatechange = function() {
+		if (xhr4.readyState == 4 && xhr4.status == 200) {
+			aListArea.innerHTML = processListData(xhr4.responseText);
+			console.log("報名:"+xhr4.readyState);
+		}
+		else{
+			aListArea.innerHTML = "<tr colspan='6'>無人報名</tr>";
+		}
+		console.log("報名:"+xhr4.readyState);
+		console.log("報名:"+xhr4.status);
+		console.log("報名:"+xhr4.responseText);
+	}
+}
+
+    //報名清單
+	function processListData(jsonString) {		
+
+		let posts = JSON.parse(jsonString);
+		let segment = "";
+		let num = 0;
+		le = posts.length;
+		for (let n = 0; n < le; n++) {
+			let enroll = posts[n];
+			
+			if(enroll.enrollStatus=='取消參加'){
+				segment += "<tr style='color:#92949c'>";
+			}else{
+				segment += "<tr>";
+				}
+			segment += "<td>" + enroll.empDept + "</td>";
+			segment += "<td>" + enroll.empNo +"</td>";
+			segment += "<td>" + enroll.empName +"</td>"
+			segment += "<td>" + enroll.enrollStatus + "</td>";
+			stringObj = new String(enroll.updateTime);
+			segment += "<td>" + stringObj.substring(0,10) + "<br>"+ stringObj.substring(11,19) + "</td>";
+			if(enroll.enrollStatus=='參加'){
+				num +=1 ;
+				segment += "<td>" + num + "</td>";
+			} else{
+				segment += "<td></td>"
+			}
+			
+			segment += "</tr>";
+		}
+		return segment;
+		
+	}
+	
+	
 
 	</script>	
     
@@ -268,7 +327,7 @@ function setErrorFor(input, message){
                                         </c:choose>
                                         
                                         <c:choose>
-                                        	<c:when test="${bulletin.quotatype==null}">
+                                        	<c:when test="${bulletin.quotatype==null||bulletin.type=='公告'}">
                                         	</c:when>
                                         	<c:otherwise>
                                         	<tr>
@@ -284,11 +343,23 @@ function setErrorFor(input, message){
                                             <a href="#" class="btn btn-secondary btn-icon-split btn-sm" onclick="history.back()">
                                         	<span class="text">回前頁</span>
                                     		</a>
+                                    		
+                                    		<c:choose>
+                                        	<c:when test="${bulletin.type == '活動'}">
+                                        		&nbsp;
+                                        		<a href="#" class="btn btn-info btn-icon-split btn-sm" data-toggle="modal" id="findApply" data-target="#applyListModal" onclick="loadEnrollList()">
+                                        		<span class="text">報名名單</span>
+                                    			</a>
+                                        	</c:when>
+                                       	 	<c:otherwise>
+
+                                        	</c:otherwise>
+                                        	</c:choose>
                                     		&nbsp;
                                     		<%-- <c:choose>
                                         	<c:when test="${bulletin.type == '活動'}"> --%>
                                         	<a href="<c:url value='/bulletinEditEventPage?postno=${bulletin.postno}'/>" class="btn btn-warning btn-icon-split btn-sm" style="color:black">
-                                        	<span class="text">修改</span>
+                                        	<span class="text">修改貼文</span>
                                     		</a>
                                         	<%-- </c:when>
                                        	 	<c:otherwise>
@@ -298,7 +369,7 @@ function setErrorFor(input, message){
                                         	</c:otherwise>
                                         	</c:choose> --%>
                                     		&nbsp;
-                                    		<c:choose>
+                                    		<%-- <c:choose>
                                         	<c:when test="${bulletin.type == '活動'}">
                                         		<a href="#" class="btn btn-danger btn-icon-split btn-sm" data-toggle="modal" id="sendDel" data-target="#comfirmDelModal">
                                         		<span class="text">刪除</span>
@@ -309,8 +380,10 @@ function setErrorFor(input, message){
                                         		<span class="text">刪除</span>
                                     			</a>
                                         	</c:otherwise>
-                                        	</c:choose>
-                                    		
+                                        	</c:choose> --%>
+                                    		<a href="#" class="btn btn-danger btn-icon-split btn-sm" data-toggle="modal" id="sendDel" data-target="#comfirmDelModal">
+                                        		<span class="text">刪除貼文</span>
+                                    		</a>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -408,6 +481,44 @@ function setErrorFor(input, message){
 
     </div>
 	<!-- Result Modal End-->
+	
+	<!-- ApplyList Modal-->
+    <div class="modal fade text-center" id="applyListModal" tabindex="-1" role="dialog" aria-labelledby="applyListModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto" id="applyListModalLabel">報名人員名單</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- DataTales Example -->
+						<div class="table-responsive"  style="height:100%" id="enrolldiv">
+                        	<table class="table table-bordered table-hover table-hover-color table-sm" id="dataTable" width="100%" cellspacing="0" style="color:#43454e" >
+                            	<thead>
+                                	<tr style="background-color:#99dbe5">
+                                    	<th>部門</th>
+                                        <th>員編</th>
+                                    	<th>人員</th>
+                                        <th>狀態</th>
+                                        <th>報名時間</th>
+                                        <th>報名序號</th>
+                                    </tr>
+                                </thead>
+                                    				
+                                <tbody id="ApplyListArea" class="">
+                                </tbody>
+                          	</table> 
+                        </div>   
+
+                     <!-- DataTales結束 -->
+                </div>
+                <div class="modal-footer justify-content-center" id="applyListbutton">
+                <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal" id="cancelBut">返回貼文</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+	<!-- ApplyList Modal End-->
 
 
 

@@ -30,8 +30,8 @@ public class AddNewPersonnelController {
 	@PostMapping(path="/createNewPersonnel", produces="application/json", consumes="application/json")
 	public @ResponseBody Map<String, String> createNewPersonnel(
 			@RequestBody Map<String, String> inputMap,
-			Model model) {
-		
+			Model model
+			) {		
 		boolean flowCheck = addNewPersonnelService.createNewPersonnel(inputMap);
 		LoginModel loginModel = null;
 		Map<String, String> map = new HashMap<String, String>();;
@@ -44,6 +44,7 @@ public class AddNewPersonnelController {
 				map.put("gender", loginModel.getGender());
 				map.put("empNo", loginModel.getEmpNo());
 				map.put("departmentNumber", loginModel.getDepartmentDetail().getDepartmentNumber().toString());
+				model.addAttribute("modifiedLoginModel", loginModel);
 			}
 			else {
 				map.put("result", "Loading new personnel failed");

@@ -1,5 +1,7 @@
 package com.hr.personnel.repository.impl;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -86,6 +88,16 @@ public class ModifyLoginModelRepositoryImpl implements ModifyLoginModelRepositor
 		catch(Exception e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	@Override
+	public List<Authorities> getAuthoritiesListByPk(Integer pk) {
+		try {
+			return entityManager.createQuery("from authorities where emp_id = :pk", Authorities.class).setParameter("pk", pk).getResultList();
+		}
+		catch(Exception e) {
+			return null;
 		}
 	}
 }
