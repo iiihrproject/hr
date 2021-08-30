@@ -34,15 +34,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		  	.authorizeRequests() // Setting authentic system              
 //			    .antMatchers("/login").permitAll() // Pages that allow user to access without authentication
 			    .antMatchers("/index", "/logout").authenticated() // Except above pages, all pages should require basic authorization after authentication
-			    .antMatchers("/checkInto").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
+			    .antMatchers("/checkInto","/saveCheckSystem").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
 			    .antMatchers("/").permitAll()
 			    .antMatchers("/updatePassword", "/updateNewPassword").authenticated()
-			    .antMatchers("/editPersonalInfo", "/personnel", "/personalInformationUpdate", "/personalInformation", "/personnelAuthorization").authenticated()
+			    .antMatchers("/editPersonalInfo", "/personnel", "/personalInformationUpdate", "/personalInformation","/pages", "/personnelAuthorization").authenticated()
 			    .antMatchers( "/department", "/departmentDetail", "/departmentManagerNoUpdate", "/addNewDepartment", "/createNewDepartment").hasAnyRole("HR_MANAGER", "HR")
-			    .antMatchers("/bulletinList","/bulletinDetail","/insertMessage","/bulletinGetMsg").authenticated()
-			    .antMatchers("/bulletinManage","/bulletinListMag","/bulletinEventInsert","/insertEventBulletion","/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletin/getImage").hasAnyRole("HR_MANAGER", "HR")
-			    .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities", "/findNewAuthorities").hasAnyRole("HR_MANAGER", "HR")
-			    .antMatchers("/addNewPersonnel","/createNewPersonnel","/modify","/findAuthorities", "/findNewAuthorities").hasAnyRole("HR_MANAGER", "HR")
+			    .antMatchers("/bulletinList","/bulletinDetail","/myBulletin","/bulButton","/insertMessage","/bulletinGetMsg","/bulletinInsertEnroll","/bulletinFindEnroll").authenticated()
+			    .antMatchers("/myApplyList","/bulletinListUser","/insertMessage","/bulletinGetMsg","/bulletinDelMsg","/bulletinChangeLike","/bulletinFindLike","/findEnrollNumByNo").authenticated()
+ 			    .antMatchers("/applyList","/bulletin/getImage","/bulletinManage","/bulletinListMag","/bulletinEventInsert","/bulletinAnnoInsert","/insertEventBulletion","/insertAnnoBulletion").hasAnyRole("HR")
+ 			    .antMatchers("/bulletinDetailMsg","/bulletinEditEventPage","/bulletinEdiAnnoPage","/bulletin/EditEventop","/bulletin/EditEvent","/bulletin/DelEventPage","/bulletin/DelAnnoPage","/bulletinEditEventPage").hasAnyRole("HR")
+ 			    .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities", "/findNewAuthorities").hasAnyRole("HR_MANAGER")
+ 			    .antMatchers("/addNewPersonnel","/createNewPersonnel","/modify","/findAuthorities", "/findNewAuthorities").hasAnyRole("HR_MANAGER")
 			    .antMatchers("/css/**", "/vendor/**", "/img/**", "/js/**", "/scss/**").permitAll()
 			    .antMatchers("/Leave/LeaveResult","/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR","RD_MANAGER","SALES_MANAGER")
 			    .antMatchers("/G/**","/Leave/**","/schedule/**").authenticated()
