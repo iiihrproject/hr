@@ -63,34 +63,33 @@
             if (hasError) {
                 return false;
             }
-            console.log(hasError);
 
-            let obj = {
-     			   "newPassword": newpwd,
-     			};
-     			
-     		console.log(obj);
 
             let xhr = new XMLHttpRequest();
 			let url = "<c:url value='/updateNewPassword'  />";
-			console.log(url);
-			xhr.open("PUT", url);
-			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(obj));
+			xhr.open("PUT", url, true);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhr.send("newPassword=" + newpwd);
 			
 			xhr.onreadystatechange = function(){
+				console.log(xhr.readyState);
+				console.log(xhr.status);
 				if (xhr.readyState == 4 && xhr.status == 200){
-					if (result.success) {
-						div2.innerHTML = "<font color='GREEN'>" + result.success + "</font>";
-			  		} else  if(result.fail){
-			  			div2.innerHTML = "<font color='red' >" + result.fail + "</font>";
-			  		} else {
-			  			div2.innerHTML = "<font color='red' >" + result.failnull + "</font>";
-			  		}
+					console.log("after");
+					let result = JSON.parse(xhr.responseText);
+					console.log(result);
+// 					if (result.success) {
+						div2.innerHTML = "<font color='GREEN'>" + result[result] + "</font>";
+// 			  		} else  if(result.fail){
+// 			  			div2.innerHTML = "<font color='red' >" + result.fail + "</font>";
+// 			  		} else {
+// 			  			div2.innerHTML = "<font color='red' >" + result.failnull + "</font>";
+// 			  		}
 				}
             
-        }
-    }
+        	
+    	}
+
     }
     
     function setErrorFor(input, message) {
