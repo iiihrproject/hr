@@ -70,7 +70,10 @@
 			let inputRole = $("#inputRole").val();
 			let inputName = $("#inputName").val();
 			let inputDepartmentNumber = $("#inputDepartmentNumber").val();
-			let inputIsEnable = $("#inputIsEnable").val();
+			let inputIsEnable = $(".inputIsEnable:checked").val();
+			if(typeof inputIsEnable === "undefined"){
+				inputIsEnable = "";
+			}
 			let hr_manager = "";
 			let hr = "";
 			let rd_manager = "";
@@ -113,7 +116,7 @@
 			inputRole = $("#inputRole").val("");
 			inputName = $("#inputName").val("");
 			inputDepartmentNumber = $("#inputDepartmentNumber").val("");
-			inputIsEnable = $("#inputIsEnable").val("");
+			inputIsEnable = $(".inputIsEnable").prop('checked', false);
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState == 4 && xhr.status == 200) {	
 					let tableInfo = JSON.parse(xhr.responseText);
@@ -181,7 +184,12 @@
 							<tr><td>姓名</td><td id='name'></td><td><input type='text' id='inputName'/></td></tr>
 							<tr><td>部門編號</td><td id='departmentNumber'></td><td><input type='text' id='inputDepartmentNumber'/></td></tr>
 							<tr><td>部門名稱</td><td id='departmentName'></td><td>不可在此更動</td></tr>
-							<tr><td>在職狀態</td><td id='isEnable'></td><td><input type='text' id='inputIsEnable'/></td></tr>
+							<tr><td>在職狀態</td><td id='isEnable'></td><td>
+								<input type='radio' class='inputIsEnable' name='inputIsEnable' value='true' id='true'/>
+								<label for='true'>Yes</label>
+								<input type='radio' class='inputIsEnable' name='inputIsEnable' value='false' id='false'/>
+								<label for='false'>No</label>
+							</td></tr>
 							<tr><td colspan='3'><div id='authorityButton'>
 								<button id='hr_manager' onclick="offOrOn(this)" class='button'>人資主管</button>
 								<button id='hr' onclick="offOrOn(this)" class='button'>人資員工</button>
