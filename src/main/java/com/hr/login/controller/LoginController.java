@@ -22,6 +22,7 @@ public class LoginController {
 	
 	@Autowired
 	private LoginService loginService;
+<<<<<<< HEAD
 	
 	@Autowired
 	private OverTimeService overTimeService;
@@ -31,11 +32,19 @@ public class LoginController {
 		return "redirect:/index";
 	}
 	
+=======
+
+>>>>>>> 9a0481be4d56029af28dab3185acc1b3290b0f83
 	@GetMapping(path="/login")
 	public String loginPagePath() {
 		return "/login";
 	}
 	
+  @GetMapping(path="/")
+	public String mainPagePath() {
+		return "redirect:/index";
+	}
+  
 	@GetMapping(path="/index")
 	public String redirectToMainPage(Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -53,7 +62,7 @@ public class LoginController {
 		model.addAttribute("loginModel", loginModel);
 		return "/index";
 	}
-	
+
 	@GetMapping(path="/logout")
 	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -62,9 +71,11 @@ public class LoginController {
 	    }
 	    return "/login";
 	}
+<<<<<<< HEAD
 	
 	@GetMapping(path="/pages")
 	public String loginPage() {
 		return "pages";
+
 	}	
 }
