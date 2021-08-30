@@ -48,6 +48,11 @@ public class BulName {
 	private long enCount;
 	
 	private String likeStatus;
+	
+	private String empName;
+	
+	private String depName;
+	
 
 	public String getLikeStatus() {
 		return likeStatus;
@@ -218,6 +223,22 @@ public class BulName {
 
 	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getEmpName() {
+		return empName;
+	}
+
+	public void setEmpName(String empName) {
+		this.empName = empName;
+	}
+
+	public String getDepName() {
+		return depName;
+	}
+
+	public void setDepName(String depName) {
+		this.depName = depName;
 	}
 
 

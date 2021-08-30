@@ -34,18 +34,22 @@ $("#enddate").blur(function() {
 })
 
 //預覽載入
-let checkinsert = document.getElementById("checkinsert");
-checkinsert.onclick = function() {
+//let checkinsert = document.getElementById("checkinsert");
+//checkinsert.onclick = function() {
+	function checkinsertbutton (type){
+	console.log(type);
 	let titleValue = document.getElementById("title").value;
 	let descriptionValue = $(".ck-content").html();
 	let destextValue = $(".ck-content").text();
 	let file1Value = document.getElementById("file1").value;
 	let quotaValue = $("[name='quotatype']:checked").val();
 	let quotanValue = "";
+	let enddateValue = "";
 	if(quotaValue!=null){
 	quotanValue = document.getElementById("quotanid").value;
+	
+	enddateValue = document.getElementById("enddate").value;
 	}
-	let enddateValue = document.getElementById("enddate").value;
 	let postdateValue = document.getElementById("postdate").value;
 	let expValue = document.getElementById("exp").value;
 	let file = $('#file1')[0].files[0];
@@ -81,6 +85,10 @@ checkinsert.onclick = function() {
 	} else {
 		div3.innerHTML = "";
 	}
+	
+	if (type='公告') {
+	} else {
+	
 	if (quotaValue == "限制" && quotanValue == 0) {
 		setErrorFor(div4, "請輸入可報名額");
 	} else if (quotaValue==""||quotaValue==null){
@@ -88,6 +96,8 @@ checkinsert.onclick = function() {
 	else {
 		div4.innerHTML = "";
 	}
+	
+	
 	if (!enddateValue){
     	setErrorFor(div5, "請輸入報名截止日期");  
     } else if (enddateValue<postdateValue) {
@@ -96,6 +106,7 @@ checkinsert.onclick = function() {
         setErrorFor(div5, "報名截止日期不可大於貼文下架日期");
     } else {
     div5.innerHTML = "";
+    }
     }
 
 
@@ -110,13 +121,18 @@ checkinsert.onclick = function() {
 	} else {
 		selectImgFile2(document.getElementById('file1').files)
 	}
-	if (quotaValue == "不限"||quotaValue == '') {
+	if (type =='公告'){
 		document.getElementById("tdqu").innerHTML = "";
-	}
-	else {
-		document.getElementById("tdqu").innerHTML = "<td>已報名人數：&nbsp&nbsp／&nbsp可報名人數：" + quotanValue + "</td>";
-	}
+		document.getElementById("trenddate").innerHTML = "";
+	} else {
+		if (quotaValue == "不限"||quotaValue == '') {
+			document.getElementById("tdqu").innerHTML = "";
+		}
+		else {
+			document.getElementById("tdqu").innerHTML = "<td>已報名人數：&nbsp&nbsp／&nbsp可報名人數：" + quotanValue + "</td>";
+		}
 	document.getElementById("ched").innerHTML = enddateValue;
+	}
 	document.getElementById("chpd").innerHTML = postdateValue;
 	console.log("titleValue主旨:" + titleValue);
 	console.log("descriptionValue內容:" + descriptionValue);

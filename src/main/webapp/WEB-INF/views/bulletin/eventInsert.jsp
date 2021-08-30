@@ -76,13 +76,13 @@
         	} else {
         	div1.innerHTML = "";
         	} 
-        	if (!postdateValue){
+        	/* if (!postdateValue){
         	setErrorFor(div2, "請輸入刊登日期");  
         	} else if (postdateValue<td) {
                 setErrorFor(div2, "刊登日期已過");
             } else {
         	div2.innerHTML = "";
-        	}
+        	} */
         	if (!expValue){
         	setErrorFor(div3, "請輸入刊登日期");  
         	} else if (expValue<postdateValue) {

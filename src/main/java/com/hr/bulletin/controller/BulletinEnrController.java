@@ -1,7 +1,9 @@
 package com.hr.bulletin.controller;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +22,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.hr.bulletin.model.BulEnroll;
 import com.hr.bulletin.model.BulLike;
 import com.hr.bulletin.model.BulMessage;
+import com.hr.bulletin.model.BulName;
 import com.hr.bulletin.model.Bulletin;
 import com.hr.bulletin.service.BulletinService;
+import com.hr.login.model.LoginModel;
+import com.hr.personnel.model.DepartmentDetail;
+import com.hr.personnel.service.DepartmentService;
 
 @Controller
 @SessionAttributes("loginModel")
@@ -32,17 +38,21 @@ public class BulletinEnrController {
 	@Autowired
 	BulletinService bulletinService;
 	
-	@PostMapping("/bulletinInsertEnroll")
+	@PostMapping("/bulletinInsertEnroll") //all
 	public @ResponseBody void insertEnroll(String empNo, int postno) {
 		log.info("insertEnroll方法執行中...");
 		BulEnroll bulEN = new BulEnroll();
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
+		LoginModel loginM = bulletinService.getLoginModelByEmpNo(empNo);
 		try {
 			BulEnroll bulES = bulletinService.findEnrollByno(empNo, postno);
 			bulEN.setEnrollId(bulES.getEnrollId());
+			bulEN.setCreateTime(bulES.getCreateTime());
 			bulEN.setEmpNo(empNo);
 			bulEN.setPostno(postno);
 			bulEN.setUpdateTime(ts);
+			bulEN.setEmpName(loginM.getName());
+			bulEN.setEmpDept(loginM.getDepartmentDetail().getName());
 			if(bulES.getEnrollStatus().equals("參加")) {
 				bulEN.setEnrollStatus("取消參加");
 			}else {
@@ -52,7 +62,10 @@ public class BulletinEnrController {
 			bulEN.setEmpNo(empNo);
 			bulEN.setPostno(postno);
 			bulEN.setEnrollStatus("參加");
+			bulEN.setCreateTime(ts);
 			bulEN.setUpdateTime(ts);
+			bulEN.setEmpName(loginM.getName());
+			bulEN.setEmpDept(loginM.getDepartmentDetail().getName());
 		}
 		String result = "";
 		try {
@@ -68,7 +81,7 @@ public class BulletinEnrController {
 		System.out.println(result);
 	}
 	
-	@PostMapping("/bulletinFindEnroll")
+	@PostMapping("/bulletinFindEnroll") //all
 	public @ResponseBody BulEnroll findEnrollByno(@RequestParam String empNo, @RequestParam int postno) {
 		log.info("FindEnroll方法執行中...");
 		try {
@@ -78,6 +91,33 @@ public class BulletinEnrController {
 			return null;
 		}
 		
+	}
+	
+	
+	// 活動人員列表
+	@GetMapping("/applyList") //h
+	public @ResponseBody List<BulEnroll> findEnrollByNo(@RequestParam("postno") int postno) {
+		log.info("findEnrollByNo方法執行中...");
+		List<BulEnroll> bulEnroll = bulletinService.findEnrollListByNo(postno);
+		System.out.println("報名名單："+bulEnroll);
+		return bulEnroll;
+	}
+	
+	// 我參加的活動列表
+	@GetMapping("/myApplyList")  //all
+	public @ResponseBody List<BulName> findMyEnrollByEmpNo(@RequestParam("empNo") String empNo) {
+		log.info("findEnrollByNo方法執行中...");
+		List<BulName> bulName = bulletinService.findMyEnrollByEmpNo(empNo);
+		System.out.println("報名名單："+bulName);
+		return bulName;
+	}
+	
+	// 報名人數
+	@GetMapping("/findEnrollNumByNo")  //all
+	public @ResponseBody int findEnrollNumByNo(@RequestParam("postno") int postno) {
+		log.info("findEnrollNumByNo方法執行中...");
+		List<BulEnroll> BulEnroll = bulletinService.findEnrollNumByNo(postno);
+		return BulEnroll.size();
 	}
 	
 	

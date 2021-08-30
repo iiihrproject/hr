@@ -3,16 +3,19 @@ package com.hr.personnel.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+
 
 import com.hr.login.model.LoginModel;
 import com.hr.personnel.service.PersonnelService;
@@ -22,6 +25,7 @@ import com.hr.personnel.service.UpdatePasswordService;
 @SessionAttributes("loginModel")
 public class UpdatePasswordController {
 	
+
 	@Autowired
 	UpdatePasswordService updatePasswordService;
 	
@@ -29,7 +33,7 @@ public class UpdatePasswordController {
 	public String updatePassword() {
 		return "/personnel/updatePassword";
 	}
-	
+
 	@PutMapping(path="/updateNewPassword", produces="application/json")
 	public @ResponseBody Map<String, String>updateNewPassword(
 			@RequestParam("newPassword") String newPassword,
@@ -55,4 +59,5 @@ public class UpdatePasswordController {
 	    }
 	    return map;
 	}
+
 }

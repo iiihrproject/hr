@@ -50,8 +50,8 @@ public class BulletinRepoImpl implements BulletinRepo {
 
 //	查詢多筆(管理)
 	@Override
-	public List findAll() {
-		
+	public List<BulName> findAll() {
+
 		String hql = "SELECT b.postno, b.type, b.title, b.desText, b.postDate, b.exp, b.quotatype, b.quota, b.postStatus, b.endDate, "
 				+ "(SELECT count(e.enrollStatus) FROM BulEnroll e  WHERE e.enrollStatus = \'參加\' AND e.postno= b.postno GROUP BY e.postno),"
 				+ "(SELECT count(l.likeStatus) FROM BulLike l  WHERE l.likeStatus = \'喜歡\' AND l.postno= b.postno GROUP BY l.postno) "
@@ -61,65 +61,63 @@ public class BulletinRepoImpl implements BulletinRepo {
 //				+ "LEFT OUTER JOIN BulLike l "
 //				+ "with b.postno = l.postno "
 				+ "ORDER BY b.postno desc";
-		
+
 //		String hql = "SELECT b.postno, b.type, b.title, b.desText, b.postDate, b.exp, b.quotatype, b.quota, b.postStatus, b.endDate, "
 //				+ "(SELECT count(e.enrollStatus) FROM BulEnroll e  WHERE e.enrollStatus = \'參加\' AND e.postno= b.postno GROUP BY e.postno)"
 //				+ "FROM Bulletin b left outer join BulEnroll e "
 //				+ "with b.postno = e.postno "
 //				+ "ORDER BY b.postno desc";	
-		
+
 //		String hql = "SELECT b.postno, b.type, b.title, b.desText, b.postDate, b.exp, b.quotatype, b.quota, b.postStatus, count(e.enrollStatus )"
 //				+ "FROM Bulletin b left outer join BulEnroll e "
 //				+ "with b.postno = e.postno "
 //				+ "GROUP BY b.postno, b.type, b.title, b.desText, b.postDate, b.exp, b.quotatype, b.quota, b.postStatus "
 //				+ "ORDER BY b.postno desc";	
-		
-		List<Object[]> objects = entityManager.createQuery(hql).getResultList();
-		System.out.println("query.list().size()="+entityManager.createQuery(hql).getResultList().size());
-		List<BulName> mylist = new LinkedList<BulName>();
-		
-		BulName ab ;
-        for(Object[] object:objects){  
-        System.out.println("數量"+object.length);
-        ab = new BulName();
-        
-          ab.setPostno((int) object[0]);
-          ab.setType((String)object[1]);
-          ab.setTitle((String)object[2]);
-          ab.setDesText((String)object[3]);  
-          ab.setPostDate((Date)object[4]);
-          ab.setExp((Date)object[5]);
-          ab.setQuotatype((String)object[6]);
-          if(object[7]==null) {
-          } else {
-        	   ab.setQuota((int)object[7]);
-          }
-          ab.setPostStatus((String)object[8]);
-          ab.setEndDate((Date)object[9]);
-          if(object[10]==null) {
-          } else {
-        	  try {
-        	  ab.setEnCount((long)object[10]);
-        	  } catch (Exception e) {
-        		  
-        	  }
-          }
-          if(object[11]==null) {
-          } else {
-        	  try {
-        	  ab.setLikeCount((long)object[11]);
-        	  } catch (Exception e) {
-        		  
-        	  }
-          }
-          
-          mylist.add(ab); 
-          
-        }
-        System.out.println("表："+new Gson().toJson(mylist));
-//		return entityManager.createQuery(hql).getResultList();
-        return mylist;
 
+		List<Object[]> objects = entityManager.createQuery(hql).getResultList();
+		System.out.println("query.list().size()=" + entityManager.createQuery(hql).getResultList().size());
+		List<BulName> mylist = new LinkedList<BulName>();
+
+		BulName ab;
+		for (Object[] object : objects) {
+			ab = new BulName();
+
+			ab.setPostno((int) object[0]);
+			ab.setType((String) object[1]);
+			ab.setTitle((String) object[2]);
+			ab.setDesText((String) object[3]);
+			ab.setPostDate((Date) object[4]);
+			ab.setExp((Date) object[5]);
+			ab.setQuotatype((String) object[6]);
+			if (object[7] == null) {
+			} else {
+				ab.setQuota((int) object[7]);
+			}
+			ab.setPostStatus((String) object[8]);
+			ab.setEndDate((Date) object[9]);
+			if (object[10] == null) {
+			} else {
+				try {
+					ab.setEnCount((long) object[10]);
+				} catch (Exception e) {
+
+				}
+			}
+			if (object[11] == null) {
+			} else {
+				try {
+					ab.setLikeCount((long) object[11]);
+				} catch (Exception e) {
+
+				}
+			}
+
+			mylist.add(ab);
+
+		}
+		System.out.println("表：" + new Gson().toJson(mylist));
+//		return entityManager.createQuery(hql).getResultList();
+		return mylist;
 
 //		String hql = "SELECT count(e.enrollStatus)"
 //				+ "FROM Bulletin b join BulEnroll e  "
@@ -128,7 +126,7 @@ public class BulletinRepoImpl implements BulletinRepo {
 //				+ "ORDER BY b.postno desc";
 //		
 //		String hql = "SELECT count(e.enrollStatus) FROM BulEnroll e";
-		
+
 //		String sql = "select * from bulletin b join (select postno, count(enrollstatus) as enrollcount \n"
 //				+ "from bulenroll \n"
 //				+ "where enrollstatus='參加' \n"
@@ -137,14 +135,14 @@ public class BulletinRepoImpl implements BulletinRepo {
 
 //		return entityManager.createQuery(hql).getResultList();
 	}
-	
+
 //	查詢多筆(管理)
 //	@Override
 //	public List<Bulletin> findAll() {
 //		String hql = "FROM Bulletin b order by postno desc";
 //		return entityManager.createQuery(hql, Bulletin.class).getResultList();
 //	}
-	
+
 //	查詢多筆(管理)
 //	@Override
 //	public List<List> findAll() {
@@ -158,9 +156,109 @@ public class BulletinRepoImpl implements BulletinRepo {
 ////				+ "order by postno desc", Media.class);
 ////		return entityManager.createQuery(hql, Bulletin.class).getResultList();
 //	}
-	
 
+//	查詢多筆(使用者)
+	@Override
+	public List<BulName> userFindAll() {
+		Timestamp ts = new Timestamp(System.currentTimeMillis());
+		Date d = new Date();
 
+		String hql = "SELECT b.postno, b.type, b.title, b.desText, b.postDate, b.exp, b.quotatype, b.quota, b.postStatus, b.endDate, "
+				+ "(SELECT count(e.enrollStatus) FROM BulEnroll e  WHERE e.enrollStatus = \'參加\' AND e.postno= b.postno GROUP BY e.postno),"
+				+ "(SELECT count(l.likeStatus) FROM BulLike l  WHERE l.likeStatus = \'喜歡\' AND l.postno= b.postno GROUP BY l.postno) "
+				+ "FROM Bulletin b "
+				+ "WHERE b.exp>=:ts AND b.postDate<=:ts "
+				+ "ORDER BY b.postno desc";
+
+		List<Object[]> objects = entityManager.createQuery(hql).setParameter("ts", ts).getResultList();
+		List<BulName> mylist = new LinkedList<BulName>();
+
+		BulName ab;
+		for (Object[] object : objects) {
+			ab = new BulName();
+
+			ab.setPostno((int) object[0]);
+			ab.setType((String) object[1]);
+			ab.setTitle((String) object[2]);
+			ab.setDesText((String) object[3]);
+			ab.setPostDate((Date) object[4]);
+			ab.setExp((Date) object[5]);
+			ab.setQuotatype((String) object[6]);
+			if (object[7] == null) {
+			} else {
+				ab.setQuota((int) object[7]);
+			}
+			ab.setPostStatus((String) object[8]);
+			ab.setEndDate((Date) object[9]);
+			if (object[10] == null) {
+			} else {
+				try {
+					ab.setEnCount((long) object[10]);
+				} catch (Exception e) {
+
+				}
+			}
+
+			mylist.add(ab);
+
+		}
+		System.out.println("表：" + new Gson().toJson(mylist));
+		return mylist;
+
+	}
+
+//	查詢多筆(使用者)
+//	@Override
+//	public List<BulName> userFindAll() {
+//
+//		Date d = new Date();
+//
+//		String hql = "SELECT b.postno, b.type, b.title, b.desText, b.postDate, b.exp, b.quotatype, b.quota, b.postStatus, b.endDate, "
+//				+ "(SELECT count(e.enrollStatus) FROM BulEnroll e  WHERE e.enrollStatus = \'參加\' AND e.postno= b.postno GROUP BY e.postno)"
+//				+ "FROM Bulletin b left outer join BulEnroll e " + "with b.postno = e.postno "
+//				+ "ORDER BY b.postno desc";
+//
+//		List<Object[]> objects = entityManager.createQuery(hql).getResultList();
+////		System.out.println("query.list().size()=" + entityManager.createQuery(hql).setParameter("ts", ts).getResultList().size());
+//		List<BulName> userlist = new LinkedList<BulName>();
+//
+//		BulName ab;
+//		for (Object[] object : objects) {
+//			if (d.before((Date) object[4]) || d.after((Date) object[5])) {
+//				System.out.println("true:"+(Date) object[4]+"主旨:"+(String) object[2]+"exp:"+(Date) object[5]);
+//			} else {
+//			ab = new BulName();
+//
+//			ab.setPostno((int) object[0]);
+//			ab.setType((String) object[1]);
+//			ab.setTitle((String) object[2]);
+//			ab.setDesText((String) object[3]);
+//			ab.setPostDate((Date) object[4]);
+//			ab.setExp((Date) object[5]);
+//			ab.setQuotatype((String) object[6]);
+//			if (object[7] == null) {
+//			} else {
+//				ab.setQuota((int) object[7]);
+//			}
+//			ab.setPostStatus((String) object[8]);
+//			ab.setEndDate((Date) object[9]);
+//			if (object[10] == null) {
+//			} else {
+//				try {
+//					ab.setEnCount((long) object[10]);
+//				} catch (Exception e) {
+//
+//				}
+//			}
+//				System.out.println("false:"+(Date) object[4]+"主旨"+(String) object[2]+"exp:"+(Date) object[5]);
+//				userlist.add(ab);
+//				System.out.println("mylist:"+userlist);
+//			}
+//		}
+//		System.out.println("表：" + new Gson().toJson(userlist));
+//		return userlist;
+//
+//	}
 
 	// 查詢未過期多筆
 	@Override
@@ -272,7 +370,8 @@ public class BulletinRepoImpl implements BulletinRepo {
 	@Override
 	public BulEnroll findEnrollByno(String empNo, int postno) {
 		String hql = "FROM BulEnroll l WHERE l.empNo=:en AND l.postno=:pn";
-		return entityManager.createQuery(hql, BulEnroll.class).setParameter("en", empNo).setParameter("pn", postno).getSingleResult();
+		return entityManager.createQuery(hql, BulEnroll.class).setParameter("en", empNo).setParameter("pn", postno)
+				.getSingleResult();
 	}
 
 	// enroll
@@ -280,5 +379,51 @@ public class BulletinRepoImpl implements BulletinRepo {
 	public void insertEnroll(BulEnroll bulEnroll) {
 		entityManager.merge(bulEnroll);
 	}
+
+//	查詢多筆報名名單
+	@Override
+	public List<BulEnroll> findEnrollListByNo(int postno) {
+		String hql = "FROM BulEnroll e WHERE e.postno=:pn ORDER BY updateTime";
+		return entityManager.createQuery(hql, BulEnroll.class).setParameter("pn", postno).getResultList();
+	}
+
+	@Override
+	public List<BulName> findMyEnrollByEmpNo(String empNo) {
+		
+//		String hql = "SELECT e.postno, e.enrollStatus,  "
+//				+ "(SELECT b.title, b.postDate FROM Bulletin b  WHERE e.postno= b.postno ), "
+//				+ "FROM BulEnroll e "
+//				+ "WHERE e.empNo=:en AND e.enrollStatus=\'參加\' ORDER BY updateTime";
+		
+		String hql = "SELECT e.postno, e.enrollStatus, b.title, b.postDate  "
+				+ "FROM BulEnroll e LEFT OUTER JOIN Bulletin b on e.postno= b.postno "
+				+ "WHERE e.empNo=:en AND e.enrollStatus=\'參加\' ORDER BY updateTime";
+
+		List<Object[]> objects = entityManager.createQuery(hql).setParameter("en", empNo).getResultList();
+		List<BulName> mylist = new LinkedList<BulName>();
+
+		BulName ab;
+		for (Object[] object : objects) {
+			ab = new BulName();
+
+			ab.setPostno((int) object[0]);
+			ab.setEnrollStatus((String) object[1]);
+			ab.setTitle((String) object[2]);
+			ab.setPostDate((Date) object[3]);		
+
+			mylist.add(ab);
+
+		}
+		return mylist;
+
+	}
+	
+//	查詢多筆報名名單
+	@Override
+	public List<BulEnroll> findEnrollNumByNo(int postno) {
+		String hql = "FROM BulEnroll e WHERE e.postno=:pn AND e.enrollStatus=\'參加\' ORDER BY updateTime";
+		return entityManager.createQuery(hql, BulEnroll.class).setParameter("pn", postno).getResultList();
+	}
+	
 
 }

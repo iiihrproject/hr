@@ -64,6 +64,7 @@
                 return false;
             }
 
+
             let xhr = new XMLHttpRequest();
 			let url = "<c:url value='/updateNewPassword'  />";
 			xhr.open("PUT", url, true);
@@ -86,8 +87,9 @@
 // 			  		}
 				}
             
-        	}	
+        	
     	}
+
     }
     
     function setErrorFor(input, message) {

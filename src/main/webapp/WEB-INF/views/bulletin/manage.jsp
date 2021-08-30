@@ -80,24 +80,8 @@
 	                }},
 	            { "data": "postDate" },
 	            { "data": "exp" },
-	            { "data": "quotatype" ,
-	            	"render": function (data, type, row) {
-	            		if(row.type=="公告"){
-	            		return "-";
-	            		}else{
-	            			return data;
-	            		}
-	                }},
-	            { "data": "quota" ,
-	            	"render": function (data, type, row) {
-	            		if(row.type=="公告"){
-		            		return "-";
-	            		}else if(row.quotatype=="不限"){
-	            		return "*";
-	            		}else{
-	            			return data;
-	            		}
-	                }},
+	            
+	            
 	            { "data": "enCount" ,
 		            	"render": function (data, type, row) {
 		            		if(row.type=="公告"){
@@ -106,6 +90,18 @@
 		            			return data;
 		            		}
 		                }},
+		                
+		                { "data": "quota" ,
+			            	"render": function (data, type, row) {
+			            		if(row.type=="公告"){
+				            		return "-";
+			            		}else if(row.quotatype=="不限"){
+			            		return "*";
+			            		}else{
+			            			return data;
+			            		}
+			                }},
+			                
 		        { "data": "endDate" ,
 			            	"render": function (data, type, row) {
 			            		if(row.type=="公告"){
@@ -169,7 +165,7 @@
 	    
             createdRow: function (row, data, index) {
                 if (data.postDate<=td && data.exp>=td) {
-                   $('td', row).eq(11).css('color', 'green')
+                   $('td', row).eq(10).css('color', 'green')
                 }
             }, 
             
@@ -229,13 +225,15 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header d-flex flex-row align-items-center justify-content-between" style="padding-top: 8px;padding-bottom:8px">
-                            <h6 class="m-0 font-weight-bold">貼文列表</h6>
+                            <h6 class="m-0 font-weight-bold">公布欄貼文管理</h6>
                             <!--人資公布欄管理區-->
-                            <div class="dropdown no-arrow">
-                                <a href="#" class="btn btn-outline-primary btn-icon-split btn-sm" id="navbarDropdown" 
-                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="dropdown">
+                            	<a href="#" class="btn btn-outline-primary btn-sm dropdown-toggle" id="navbarDropdown" 
+                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+
                                     <span class="text">新增貼文</span>
                                 </a>
+                                
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" href="<c:url value='bulletinAnnoInsert' />">公告</a>
                                     <a class="dropdown-item" href="<c:url value='bulletinEventInsert' />">活動</a>
@@ -255,19 +253,19 @@
                             
                                 <table class="table table-bordered table-hover table-hover-color table-sm " id="dataTable" width="100%" cellspacing="0" style="color:#43454e" >
                                     <thead>
-                                        <tr>
+                                        <tr style="background-color:#f7ebce">
                                             
                                             <th width=5%>NO.</th>
-                                            <th width=7%>類型</th>
+                                            <th width=6%>類型</th>
                                             <th width=14%>主旨</th>
                                             <th width=12%>內容</th>
                                             <th width=9%>貼文刊登</th>
                                             <th width=9%>貼文下架</th>
-                                            <th width=5%>名額</th>
-                                            <th width=8%>可報名額</th>  
-                                            <th width=8%>已報名額</th>
+                                            <th width=7%>報名數</th>
+                                            <th width=6%>名額</th>
+                                            
                                             <th width=9%>報名截止</th>
-                                            <th width=8%>愛心數</th>
+                                            <th width=7%>愛心數</th>
                                             <th width=7%>狀態</th>
 
                                                                                          

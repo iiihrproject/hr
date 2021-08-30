@@ -45,7 +45,7 @@ public class BulletinUpdController implements Serializable {
 	ServletContext ctx;
 
 	// 修改活動貼文頁 //h
-	@GetMapping("/bulletinEditEventPage")
+	@GetMapping("/bulletinEditEventPage")  //h
 	public String findByIdEvent(@RequestParam("postno") int postno, Model model) {
 		Bulletin bulletin = bulletinService.findById(postno);
 		model.addAttribute("bulletin", bulletin);
