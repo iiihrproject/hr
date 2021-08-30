@@ -24,7 +24,7 @@ public interface CheckService {
 
 	Checksystem findYesterdayCheckSystemByEmpno(String empNo);
 
-	Checksystem getCheckSystemByTime(String dateString);
+	Checksystem getCheckSystemByTime(String dateString,String empNo);
 	
 	FactSchedule getFactSchedule(String date,int empID);
 }

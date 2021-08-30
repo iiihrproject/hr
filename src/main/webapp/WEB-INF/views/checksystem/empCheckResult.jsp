@@ -47,7 +47,7 @@
 			},
 			"columns":[
 				{ "data":"empNo"},
-				{ "data":"createTime"},
+				{ "data":"showTime"},
 				{ "data":"checkInTime"},
 				{ "data":"checkOutTime"},
 				{ "data":"isLateCheckIn"},
@@ -69,7 +69,7 @@
 		          render: function (data) {   
 		             // return moment(data).format('HH:mm:ss');
 		        	  if(data == null) return data;
-		        	  else return data.substring(11, 19);
+		        	  else return data.substring(11, 16);
 		          },
 		        },
 		        {
@@ -84,7 +84,8 @@
 		          targets: [7],
 		          render: function (data) {   
 		             // return moment(data).format('HH:mm:ss');
-		        	  if(data == "Y") return "<button>補簽到</button>";
+		        	  if(data == "Y") return "<a href='<c:url value='/EmpSignApply' />'"+
+							"class='text-decoration-none'>" +"<button class='btn btn-outline-danger'>補簽到</button>"+"</a>";
 		        	  else return "無需補簽到";
 		          },
 		        }

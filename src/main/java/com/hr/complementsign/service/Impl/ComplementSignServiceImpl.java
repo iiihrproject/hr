@@ -106,7 +106,7 @@ public class ComplementSignServiceImpl implements ComplementSignService {
 			String dateString = sdf.format(appliedDate);
 			
 			//新增方法
-			Checksystem checksystem = checkService.getCheckSystemByTime(dateString);
+			Checksystem checksystem = checkService.getCheckSystemByTime(dateString,empNo);
 			LoginModel loginModel = loginRepository.getLoginModelByEmpNo(empNo);
 			
 			int empID = loginModel.getPk();

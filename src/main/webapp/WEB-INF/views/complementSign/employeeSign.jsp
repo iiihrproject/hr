@@ -42,7 +42,7 @@
     <!-- .js請從此後寫 -->
     <style type="text/css">
 		.currentPage{
-			background-color: red;
+			background-color: #008F8F;
 		}
 		table{
 			text-align: center;

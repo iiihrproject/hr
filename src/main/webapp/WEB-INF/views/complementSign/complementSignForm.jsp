@@ -100,14 +100,14 @@
 		 			xhr.send(JSON.stringify(jsonPendingComplementSign));
 		 	  		xhr.onreadystatechange = function() {
 		 	  			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201) ) {
-		 		  			window.location.href = "<c:url value='/xxx'/>";
+		 	  				
 				  			
 		 	  			}
 		 			}
 		             
 		         swal("新增成功!", "請等待主管簽核", "success");
 // 		         window.location.href = "<c:url value='/checkInto'/>";
-		         //location.reload();
+		         setTimeout('refresh()', 2000);
 		     } else if (result.dismiss === "cancel"){
 		          //使用者按下「取消」要做的事
 		         swal("取消申請", "請再次確認", "error");
@@ -167,7 +167,9 @@
 		hasError = true;
 	}
 	
-	
+	function refresh(){
+		window.location.href = "<c:url value='/EmpSignApply'/>";
+	}
 	</script>
 	
 </head>
@@ -246,7 +248,7 @@
                                     <h2 class="m-0 font-weight-bold text-primary">補簽申請紀錄</h2>
                                 </div>
                                 <div class="card-body">
-                                    <div class="slide_toggle" id="showCheck">展開近三筆</div>
+                                    <div class="slide_toggle" id="showCheck">顯示近三筆</div>
                                 <!-- 展開 -->
                                 <div id="showFile" align='center'>
                                 <table class="table table-hover table-bordered" >

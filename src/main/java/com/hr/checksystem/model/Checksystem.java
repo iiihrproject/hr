@@ -62,7 +62,9 @@ public class Checksystem {
 
 	@Transient
 	private String isNeedRepair = "N";
-
+	
+	@Transient
+	private Date showTime = null;
 //	private String checkInLate = null;
 //	
 //	private String checkOutOnTime = null;
@@ -155,6 +157,16 @@ public class Checksystem {
 		this.createTime = createTime;
 	}
 
+	public void setShowTime() {
+		if(checkInTime != null && checkOutTime != null) showTime = checkInTime;
+		else if(checkInTime == null) showTime = checkOutTime;
+		else showTime = checkInTime;
+	}
+	
+	public Date getShowTime() {
+		return showTime;
+	}
+	
 //	public String getCheckInLate() {
 //		if("Y".equals(this.isLateCheckIn)) return "是";
 //		else return "否";

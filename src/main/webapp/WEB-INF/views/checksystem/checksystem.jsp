@@ -84,7 +84,7 @@
 		             
 		         swal("打卡成功!", "今日工作加油", "success");
 // 		         window.location.href = "<c:url value='/checkInto'/>";
-		         //location.reload();
+		         setTimeout('refresh()', 1500);
 		     } else if (result.dismiss === "cancel"){
 		          //使用者按下「取消」要做的事
 		         swal("取消打卡", "尚未打卡上班", "error");
@@ -319,7 +319,7 @@
                                     </h2>
                                 </div>
                                 <div class="card-body">
-                                    <div class="slide_toggle" id="showCheck">展開近五筆</div>
+                                    <div class="slide_toggle" id="showCheck">顯示近五天記錄</div>
                                 <!-- 展開 -->
                                 <div id="showFile" align='center'>
                                 <table class="table table-hover table-bordered">
@@ -349,7 +349,7 @@
 						       				 <td>
 						       				 <c:choose>
 										     	  <c:when test="${checksystem.isNeedRepair == 'Y'}" ><a href="<c:url value='/EmpSignApply' />"
-													class="text-decoration-none"><button>補簽到</button></a></c:when>
+													class="text-decoration-none"><button class='btn btn-outline-danger'>補簽到</button></a></c:when>
 										     	  <c:when test="${checksystem.isNeedRepair == 'N'}" >無須補簽到</c:when>
 						       				</c:choose>
 						       				 </td>

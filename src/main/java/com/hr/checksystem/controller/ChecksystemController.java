@@ -82,7 +82,7 @@ public class ChecksystemController {
 			
 		}
 		
-		List<Checksystem> checksystem = checkService.findPartCheckSystem(empNo,4);
+		List<Checksystem> checksystem = checkService.findPartCheckSystem(empNo,5);
 		System.out.println("size = " + checksystem.size());
 		
 		model.addAttribute("Checksystem",checksystem);

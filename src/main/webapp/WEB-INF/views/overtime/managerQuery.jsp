@@ -46,7 +46,7 @@
     
     <style type="text/css">
 		.currentPage{
-			background-color: red;
+			background-color: #008F8F;
 		}
 		table{
 			text-align: center;
@@ -92,7 +92,7 @@
 		var date = $("#date").val();
 		var page = e.getAttribute("id");
 		
-		callAjax(page.substring(4,(page.length)),depart,date);
+		callAjax(page.substring(4,(page.length)),null,date);
 	}
 	
 	function callAjax(page,depart,date){
@@ -119,7 +119,6 @@
 		let managequerys = result.result;
 		
 		let segment ="<table border='1' align='center' class='table table-bordered'>";
-		segment += "<tr><th colspan='12'>管理員審核系統</th></tr>";
 		segment += "<tr><th>申請日期</th><th>姓名</th><th>部門</th><th>職位</th><th>加班類型</th><th>加班日期</th><th>開始時間</th><th>結束時間</th><th>加班時數</th><th>加班原因</th><th>審核狀態</th>";
 		for(let n = 0 ; n< managequerys.length; n++){
 			let managequery = managequerys[n];
@@ -185,7 +184,6 @@
 		        if (result.value) {
 		            //使用者按下「確定」要做的事
 		        	
-		        	alert(type)
 		        	let xhr1 = new XMLHttpRequest();
 		        	xhr1.open("POST","<c:url value='/manageAudit'/>");
 		        	xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
@@ -193,7 +191,7 @@
 		        	xhr1.onreadystatechange = function(){
 		        		if(xhr1.readyState == 4 && xhr1.status == 200){
 		        			swal("Thank!", "完成審核", "success");
-		        			refresh();
+		        			setTimeout('refresh()', 2000);
 		        		}
 		        	}
 		     } else if (result.dismiss === "cancel"){
@@ -267,7 +265,7 @@
                             <!-- Custom Text Color Utilities -->
                             <div class="card shadow mb-4" >
                                 <div class="card-header py-3">
-                                    <h2 class="m-0 font-weight-bold text-primary">管理員查詢系統</h2>
+                                    <h2 class="m-0 font-weight-bold text-primary">加班簽核查詢系統</h2>
                                 </div>
                                 
                                 <div>

@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
     <style type="text/css">
 		.currentPage{
-			background-color: red;
+			background-color: #008F8F;
 		}
 		table{
 			text-align: center;
