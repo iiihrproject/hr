@@ -87,7 +87,6 @@ public class BulletinController implements Serializable {
 		boolean check = false;
 		while(iterator.hasNext()){
 		    String s = iterator.next().getAuthorityName();
-		    System.out.println(s);
 		    if(s.equals("ROLE_HR")) {
 		    	check = true;
 		    }

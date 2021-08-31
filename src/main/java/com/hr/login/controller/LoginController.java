@@ -43,11 +43,7 @@ public class LoginController {
 		LoginModel loginModel = loginService.getLoginModelByEmpNo(empNo);
 		Double sumHours = overTimeService.sumOverTimeHours(empNo);
 		Double remainingHours = 46 - sumHours ;
-		System.out.println(sumHours);
-//		HttpSession session = request.getSession(true);
-//		
-//		session.setAttribute("sumHours", sumHours);
-//		session.setAttribute("remainingHours", remainingHours);
+
 		model.addAttribute("sumHours",sumHours);
 		model.addAttribute("remainingHours",remainingHours);
 		model.addAttribute("loginModel", loginModel);

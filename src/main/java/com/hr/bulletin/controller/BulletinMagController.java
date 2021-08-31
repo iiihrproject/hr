@@ -55,7 +55,6 @@ public class BulletinMagController implements Serializable {
 	@GetMapping("/bulletinListMag")
 	public @ResponseBody List<BulName> findAll() {
 		log.info("findAll方法執行中...");
-		System.out.println("-------:"+bulletinService.findAll());
 		return bulletinService.findAll();
 	}
 	
@@ -63,7 +62,6 @@ public class BulletinMagController implements Serializable {
 	@GetMapping("/bulletinListUser")
 	public @ResponseBody List<BulName> userFindAll() {
 		log.info("bulletinListUser方法執行中...");
-		System.out.println("-------:"+bulletinService.userFindAll());
 		return bulletinService.userFindAll();
 	}
 	
@@ -105,7 +103,6 @@ public class BulletinMagController implements Serializable {
 		if (multipartFile == null) {
 		} else {
 			String fileName = multipartFile.getOriginalFilename();
-			System.out.println("fileName:" + fileName);
 
 			String saveDirPath = request.getSession().getServletContext().getRealPath("/") + "uploadTempDir//"; // 取得??路徑＋資料夾
 			File savefileDir = new File(saveDirPath);
@@ -113,7 +110,6 @@ public class BulletinMagController implements Serializable {
 
 			File saveFilePath = new File(savefileDir, fileName); 
 			multipartFile.transferTo(saveFilePath);
-			System.out.println("saveFilePath:" + saveFilePath);
 
 			// 存到資料庫
 			if (fileName != null && fileName.length() != 0) {
@@ -144,7 +140,6 @@ public class BulletinMagController implements Serializable {
 		bulletin.setQuotatype(quotatype);
 		bulletin.setQuota(quota);
 
-		System.out.println("bulletin=" + bulletin);
 		String result = "";
 		try {
 			bulletinService.insert(bulletin);
@@ -177,7 +172,6 @@ public class BulletinMagController implements Serializable {
 		if (multipartFile == null) {
 		} else {
 			String fileName = multipartFile.getOriginalFilename();
-			System.out.println("fileName:" + fileName);
 
 			String saveDirPath = request.getSession().getServletContext().getRealPath("/") + "uploadTempDir//"; // 取得??路徑＋資料夾
 			File savefileDir = new File(saveDirPath);
@@ -185,7 +179,6 @@ public class BulletinMagController implements Serializable {
 
 			File saveFilePath = new File(savefileDir, fileName); 
 			multipartFile.transferTo(saveFilePath);
-			System.out.println("saveFilePath:" + saveFilePath);
 
 			// 存到資料庫
 			if (fileName != null && fileName.length() != 0) {
@@ -214,7 +207,6 @@ public class BulletinMagController implements Serializable {
 		bulletin.setPostStatus("normal");
 		bulletin.setQuotatype(quotatype);
 
-		System.out.println("bulletin=" + bulletin);
 		String result = "";
 		try {
 			bulletinService.insert(bulletin);

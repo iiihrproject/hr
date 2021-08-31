@@ -42,9 +42,7 @@ public class BulletinMsgController {
 		
 		Map<String, String> map = new HashMap<>();
 		String result = "";
-		System.out.println("messgae:"+bulMessage.getMessage());
-		System.out.println(bulMessage.getMessage()!=null);
-		System.out.println(bulMessage.getMessage()!="");
+
 		try {
 			if(bulMessage.getMessage()!=null && bulMessage.getMessage()!="") {
 			bulletinService.insertMsg(bulMessage);
@@ -103,11 +101,7 @@ public class BulletinMsgController {
 		}
 		String result = "";
 		try {
-			System.out.println("co_id:"+bulLN.getId());
-			System.out.println("co_no:"+bulLN.getEmpNo());
-			System.out.println("co_status:"+bulLN.getLikeStatus());
-			System.out.println("co_postno:"+bulLN.getPostno());
-			bulletinService.changeLike(bulLN);
+
 			result = "喜歡改變";
 		} catch (Exception e) {
 			result = "喜歡未改變";
