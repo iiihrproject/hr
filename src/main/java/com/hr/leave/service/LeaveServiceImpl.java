@@ -67,7 +67,7 @@ public class LeaveServiceImpl implements LeaveService {
 		leave.setTypeOfForm("Leave");
 		leave.setApplicationNo("L"+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmss")));
 		leave.setDept(loginModel.getDepartmentDetail());
-		leave.setApproval01MGR("");
+		leave.setApproval01MGR("待處理...");
 		leave.setDays(hoursDiff);
 		leaveRepo.save(leave);
 		

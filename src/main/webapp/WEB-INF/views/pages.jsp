@@ -107,7 +107,7 @@
 
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-calendar-check fa-4x text-danger"></i>
+											<i class="fas fa-exclamation-triangle fa-4x text-danger"></i>
 										</div>
 									</div>
 								</div>

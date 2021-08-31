@@ -82,7 +82,7 @@
                                             </a>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-id-card fa-4x"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +101,7 @@
                                             </a>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-user-lock fa-4x"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -122,7 +122,7 @@
                                             </a>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-sitemap fa-4x"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -140,7 +140,7 @@
                                             </a>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-plus-square fa-4x"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -161,7 +161,7 @@
                                             </a>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-user-edit fa-4x"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -179,7 +179,7 @@
                                             </a>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-user-plus fa-4x"></i>
                                         </div>
                                     </div>
                                 </div>
