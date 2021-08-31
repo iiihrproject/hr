@@ -107,7 +107,7 @@
 
 	<jsp:include page="../header.jsp"></jsp:include>
 
-	<div id="bgcolor" class="container-fluid">
+	<div id="bgcolor" class="container-fluid h-75">
 		<div class="row">
 			<div class="col-12">
 			<!-- form start -->        
@@ -134,10 +134,8 @@
 
 		</div>
 
-	</div>
 	<!-- /.container-fluid -->
 
-	</div>
 	<!-- End of Main Content -->
 
 

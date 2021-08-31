@@ -104,7 +104,7 @@
 	<jsp:include page="../header.jsp"></jsp:include>
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid h-75">
 
                     <!-- Page Heading -->
 

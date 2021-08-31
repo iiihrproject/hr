@@ -6,6 +6,6 @@ public interface PersonnelRepository {
 
 	Personnel loadPersonalInfoByPk(Integer pk);
 
-	void personalInformationUpdate(Personnel personnel);
+	Personnel personalInformationUpdate(Personnel personnel);
 
 }

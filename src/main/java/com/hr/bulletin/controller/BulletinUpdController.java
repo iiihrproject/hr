@@ -64,8 +64,6 @@ public class BulletinUpdController implements Serializable {
 	@PostMapping("/bulletin/EditEventop")
 	public @ResponseBody String updateEventOp(Bulletin bulletin) {
 		log.info("updateop方法執行中...");
-		System.out.println("bulletin=" + bulletin);
-		System.out.println("postdate:" + bulletin.getPostDate());
 		String result = "";
 		try {
 			bulletinService.updateop(bulletin);
@@ -95,8 +93,6 @@ public class BulletinUpdController implements Serializable {
 		Bulletin bulletin = new Bulletin();
 		log.info("update方法執行中...");
 
-		System.out.println("file1:" + multipartFile);
-		System.out.println("postdate:" + postdate);
 
 		if (multipartFile == null) {
 		} else {
@@ -135,7 +131,6 @@ public class BulletinUpdController implements Serializable {
 		bulletin.setQuotatype(quotatype);
 		bulletin.setQuota(quota);
 
-		System.out.println("bulletin=" + bulletin);
 		String result = "";
 		try {
 			bulletinService.update(bulletin);

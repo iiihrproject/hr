@@ -86,16 +86,5 @@ public class Personnel {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	public boolean equals(Personnel personnel) {
-		if(
-				this.getEmpId().equals(personnel.getEmpId()) &&
-				this.getPhoneNumber().equals(personnel.getPhoneNumber()) &&
-				this.getAddress().equals(personnel.getAddress()) &&
-				this.getEmail().equals(personnel.getEmail())
-				) {
-			return true;
-		}
-		return false;
-	}
+
 }

@@ -220,7 +220,7 @@
 
 <body id="page-top" onload="ShowTime() , ShowDate() " >
 
-    <jsp:include page="../headerforMeUser.jsp"></jsp:include>
+    <jsp:include page="../header.jsp"></jsp:include>
     
     <!-- header刪掉 start-->
 
@@ -228,7 +228,7 @@
 
                 <!-- header刪掉 End-->
                 
-             <div class="row pt-4" style="background-image: url('<c:url value="/img/time.png" />');  background-size: cover;" >
+             <div class="row pt-4"  >
                         <!-- First Column -->
                         <div class="col-lg-4 mycss">
 

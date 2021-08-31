@@ -56,17 +56,11 @@ public class PersonnelServiceImpl implements PersonnelService {
 		/**
 		 * Update the personnel info and double check if it's updated
 		 */
-		personnelRepository.personalInformationUpdate(personnel);
-		try {
-			Personnel newPersonnel = personnelRepository.loadPersonalInfoByPk(personnel.getEmpId());
-			if(currentPersonnel.equals(newPersonnel)) {
-				return true;
-			}
-		}
-		catch(TransactionRequiredException tre) {
-			tre.printStackTrace();
+		Personnel newPersonnel = personnelRepository.personalInformationUpdate(personnel);
+		if(newPersonnel == null) {
 			return false;
 		}
+		
 		return true;
 	}
 
