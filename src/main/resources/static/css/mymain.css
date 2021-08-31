@@ -2,13 +2,13 @@
     display: inline;
 }
 
-.fc-dayGridMonth-button, .fc-listWeek-button, .fc-prevYear-button, .fc-nextYear-button, .fc-today-button{
+.fc-dayGridMonth-button, .fc-listWeek-button, .fc-prevYear-button, .fc-nextYear-button, .fc-today-button, .fc-custom-button{
     background: #7973AE !important;
     border: transparent !important;
     opacity: 0.9;
 }
 
-.fc-dayGridMonth-button:hover, .fc-listWeek-button:hover, .fc-prevYear-button:hover, .fc-nextYear-button:hover{
+.fc-dayGridMonth-button:hover, .fc-listWeek-button:hover, .fc-prevYear-button:hover, .fc-nextYear-button:hover, .fc-custom-button:hover, .shift-btn-hover{
     opacity: 1;
 }
 
@@ -55,7 +55,7 @@ a{
 #calendar a:hover{
 	color: #454545;
     text-decoration: none !important;
-    font-size: 1.03em;
+    font-size: 1.01em;
 }
 
 @media only screen and (max-width: 1315px){
@@ -105,17 +105,33 @@ a{
     margin-left: 40%;
 }
 
-.modal-footer #add_{
+
+.modal-footer #taskSumbit_, #deleteCheckBtn_, #taskAlertBtn_{
     background: #7973AE;
     border: #7973AE;
     opacity: 0.9;
 }
 
-.modal-footer #add_:hover{
+.modal-footer #taskSumbit_:hover, #deleteCheckBtn_:hover, #taskAlertBtn_:hover{
     background: #7973AE;
     border: #7973AE;
     opacity: 1;
 }
+
+/* .bs-tooltip-auto[x-placement^=top] .arrow::before, .bs-tooltip-top .arrow::before, */
+/* .bs-tooltip-auto[x-placement^=bottom] .arrow::before, .bs-tooltip-bottom .arrow::before, */
+/* .bs-tooltip-auto[x-placement^=left] .arrow::before, .bs-tooltip-left .arrow::before, */
+/* .bs-tooltip-auto[x-placement^=right] .arrow::before, .bs-tooltip-right .arrow::before { */
+/* 	background: "pink" !important; */
+/* } */
+
+/* .tooltip-inner { */
+/* 	background: "pink" !important; */
+/* } */
+
+
+
+
 
 
 

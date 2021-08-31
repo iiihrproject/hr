@@ -8,21 +8,26 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "calendartask")
+//@Component
 public class CalendarTask {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer no;
 	private String empNo;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Taipei")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Taipei")
+	@JsonFormat(timezone = "Asia/Taipei")
 	@JsonProperty("start")
 	private Timestamp startTime;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Taipei")
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Taipei")
+	@JsonFormat(timezone = "Asia/Taipei")
 	@JsonProperty("end")
 	private Timestamp endTime;
 	@JsonProperty("color")
@@ -38,15 +43,20 @@ public class CalendarTask {
 	public CalendarTask() {
 
 	}
+	
 
-	public CalendarTask(Timestamp startTime, Timestamp endTime, String colorTag, String taskTitle, String taskText,
-			Boolean taskStatus) {
+	public CalendarTask(Integer no, String empNo, Timestamp startTime, Timestamp endTime, String colorTag,
+			String taskTitle, String taskText, String createTime, String editTime, Boolean taskStatus) {
 		super();
+		this.no = no;
+		this.empNo = empNo;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.colorTag = colorTag;
 		this.taskTitle = taskTitle;
 		this.taskText = taskText;
+		this.createTime = createTime;
+		this.editTime = editTime;
 		this.taskStatus = taskStatus;
 	}
 
@@ -133,7 +143,11 @@ public class CalendarTask {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("CalendarTask [startTime=");
+		builder.append("CalendarTask [no=");
+		builder.append(no);
+		builder.append(", empNo=");
+		builder.append(empNo);
+		builder.append(", startTime=");
 		builder.append(startTime);
 		builder.append(", endTime=");
 		builder.append(endTime);
@@ -143,11 +157,16 @@ public class CalendarTask {
 		builder.append(taskTitle);
 		builder.append(", taskText=");
 		builder.append(taskText);
+		builder.append(", createTime=");
+		builder.append(createTime);
+		builder.append(", editTime=");
+		builder.append(editTime);
 		builder.append(", taskStatus=");
 		builder.append(taskStatus);
 		builder.append("]");
 		return builder.toString();
 	}	
+	
 	
 
 }
