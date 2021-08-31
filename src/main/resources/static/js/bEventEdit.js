@@ -172,11 +172,11 @@ function selectImgFile2(files) {
 }
 
 //載入今天日期
-$(document).ready( 
+/*$(document).ready( 
 function() {
 	$('#postdate').val(td);
 }
-);
+);*/
 
 
 //ckeditor
