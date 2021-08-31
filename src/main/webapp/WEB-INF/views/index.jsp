@@ -98,7 +98,7 @@
 				 							shiftsAryObj["start"] = userShifts[n].start;
 				 							shiftsAryObj["end"] = userShifts[n].end;
 				 							shiftsAryObj["title"] = userShifts[n].title;	
-				 							shiftsAryObj["color"] = "#FF8000";
+				 							shiftsAryObj["color"] = "#7973AE";
 				 							shiftsAryObj["description"] = userShifts[n].title;
 				 	 						
 				 	 						shiftsAry.push(shiftsAryObj);
