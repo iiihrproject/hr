@@ -88,9 +88,22 @@ public class LeaveController {
 		return service.findLeaveByAppNo(applicationNo);
 	}
 	
-	@PutMapping(value="/updateSupervisorComment/{applicationNo}", consumes = { "application/json" }, produces = { "application/json" })
-	public void updateSupervisorComment(@RequestBody LeaveBean leaveBean, @PathVariable("applicationNo") String applicationNo) {
-		service.updateSupervisorComment(applicationNo, leaveBean.getApproval01Sig(), leaveBean.getApproval01MGR(), leaveBean.getStatusList().getCode());
+	@PutMapping("/updateSupervisorComment/{applicationNo}")
+	public @ResponseBody Map<String, String> updateSupervisorComment(@RequestBody LeaveBean leaveBean,
+			@PathVariable("applicationNo") String applicationNo) {
+		Map<String, String> map = new HashMap<>();
+		String result = "";
+		try {
+			service.updateSupervisorComment(applicationNo, leaveBean.getApproval01Sig(), leaveBean.getApproval01MGR(),
+					leaveBean.getStatusList().getCode());
+			result = "簽核完成";
+			map.put("success", result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result = e.getMessage();
+			map.put("fail", result);
+		}
+		return map;
 	}
 
 //	@PostMapping("/Insert")

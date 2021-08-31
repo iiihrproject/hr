@@ -34,12 +34,12 @@
                 <a class="nav-link" href="<c:url value='/index' />">
 
                     <i class='fas fa-home' style='font-size:22px'></i>
-                    <span style='font-size:18px'>主頁</span></a>
+                    <span>主頁</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="<c:url value='/pages' />">
                     <i class='fas fa-clock' style='font-size:22px'></i>
-                    <span id="listname" style='font-size:18px'>出勤管理</span>
+                    <span id="listname">出勤管理</span>
                 </a>
             </li>
             <li class="nav-item">            
@@ -47,7 +47,7 @@
                 <a class="nav-link collapsed" href="<c:url value='/personnel' />">
 
                     <i class='fas fa-user-tie' style='font-size:22px'></i>
-                    <span id="listname" style='font-size:18px'>人員管理</span>
+                    <span id="listname">人員管理</span>
                 </a>
             </li>
         </ul>
@@ -60,7 +60,7 @@
             <!-- Main Content -->
             <div id="content">
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow">
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
@@ -68,7 +68,7 @@
                     <!-- Topbar Search -->                    
                         <div class="narbar-brand">
                             <h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
-                            <span class="text-dark">特休剩餘：<strong id="annivLDay"></strong>日</span><span class="text-danger warning"> (請於 <strong id="anniDate"></strong> 前使用完畢)</span><br/>
+                            <span class="text-dark">特休剩餘時數：【】小時&nbsp</span><span class="text-danger warning">(請於 【日期】 前使用完畢)</span><br/>
                             <span class="text-dark">加班總計時數：【${sessionScope.sumHours}】小時&nbsp</span><span class="text-danger warning">(請注意加班時數是否正確)</span><br/>
                             <span class="text-dark">加班剩餘時數：【${sessionScope.remainingHours}】小時&nbsp</span><span class="text-danger warning">(請注意剩餘時數)</span>
                         </div>  
@@ -96,21 +96,3 @@
                     </ul>
                 </nav>
                 <!-- End of Topbar -->                
-<script>
-	let recruitD = new Date("${sessionScope.loginModel.employedDate}");
-	let todayD = new Date();
-	let annivD = new Date("${sessionScope.loginModel.employedDate}");
-	annivD.setFullYear(new Date().getFullYear());
-	
-	diff = (annivD.setTime(annivD.getTime())-recruitD.setTime(recruitD.getTime()))/1000/60/60/24/365;
-	annivLDay = Math.ceil(Math.round(diff))*7;
-	$("#annivLDay").text(annivLDay);
-	if(new Date > annivD){
-		console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 已過去, 今年特休總額："+annivLDay+"天");
-		annivD.setFullYear(annivD.getFullYear()+1);
-	} else{
-		console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 還沒到, 今年特休總額："+annivLDay+"天");
-	}
-	let due = annivD.toISOString().slice(0,10);
-	$("#anniDate").text(due);
-</script>

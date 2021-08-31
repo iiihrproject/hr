@@ -11,11 +11,15 @@
 <script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<!-- 引用SweetAlert2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.4/sweetalert2.all.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.4/sweetalert2.min.css" />
+
 <title>Preview</title>
 <script>
 window.addEventListener("DOMContentLoaded", function() {
 	loadLeaveData()
-
+	
 });
 
 function loadLeaveData() {
@@ -37,14 +41,11 @@ function loadLeaveData() {
 				return "<tr><td colspan=6 style='text-align:center'>目前尚無任何申請資料</td></tr>";
 			} else {
 			let segment = "";
+			
 			for (let i = 0; i < leaveList.length; i++) {
 				let leave = leaveList[i];
-// 				$.get("<c:url value='/G/findEmpByEmpNo' />?empNo="+leave.empNo,function(empData,status2){
-// 					if (status2 == "success"){
-// 						callback(empData);
-// 					}
-// 				});
-				segment += "<tr><td>" + leave.empNo + "</td>";
+				
+				segment += `<tr><td><span _empName="${"${leave.empNo}"}"></span><span class="invisible">"${"${leave.empNo}"}"</span></td>`;
 				segment += "<td>" + leave.reasonList.desc_zh + "</td>";
 				segment += "<td>" + leave.startDate + " "
 						+ leave.startTime.slice(0, 5) + "~" + leave.endDate
@@ -53,14 +54,41 @@ function loadLeaveData() {
 				segment += "<td><a href='#Co"+ leave.applicationNo +"' data-toggle='collapse'>" + leave.applicationNo + "</a></td>";
 				segment += "<td><span class='btn-sm text-white font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
 				segment += "<tr class='collapse' id='Co"+ leave.applicationNo +"'>";
-				segment += "<td class='pl-4'>代理人：<a title='發信給"+leave.handOffEmail+"' href='mailto:" + leave.handOffEmail + "'>"+leave.handOff+"</a></td>";
+				segment += `<td class="pl-4">代理人：<a title="發信給"${"${leave.handOffEmail}"}"" href="mailto:"${"${leave.handOffEmail}"}""><span _pk="${"${leave.handOff}"}"><span class="invisible">"${"${leave.handOff}"}"</span></span></a></td>`;
 				segment += "<td colspan='2'>備註：" + leave.comments + "</td>";
-				segment += "<td colspan='2'>簽核：" + leave.approval01MGR + "</td>";
+				segment += `<td colspan="2">簽核：<span _pk="${"${leave.approval01MGR}"}"></span><span class="invisible">"${"${leave.approval01MGR}"}"</span></td>`;
 				segment += "<td><button onclick='seeMore(\"" + leave.applicationNo + "\")' class='btn btn-sm btn-info btn-icon-split' type='button' data-toggle='modal' data-target='#detailModal'>";
 				segment += "<span class='icon text-white-50'><i class='fas fa-file-signature'></i></span>";
 				segment += "<span class='text'>查看詳情</span></button></td></tr>";
 			}
-				return segment
+			
+			const empNoSet = new Set(leaveList.map(s => s.empNo));
+			
+			empNoSet.forEach(s => {
+				$.get("<c:url value='/G/findEmpByEmpNo' />?empNo="+s,function(empData2,status2){
+					if (status2 == "success"){
+						$("span[_empName='" +　s + "']").html(empData2.name);
+					}
+				});
+			});
+			
+			let empPkSet = new Set();
+			
+			leaveList.forEach(l => {
+				empPkSet.add(l.handOff);
+				if (l.approval01MGR != '') {
+					empPkSet.add(l.approval01MGR)
+				}
+			});
+			console.log(empPkSet);
+			empPkSet.forEach(l => {
+				$.get("<c:url value='/G/findEmpByPk' />?empId="+l,function(empData3,status3){
+					if(status3 == "success"){
+						$("span[_pk='" +　l + "']").html(empData3.loginModelInfo.name);
+					}
+				});
+			});
+				return segment;
 			}
 		}
 	}
@@ -85,7 +113,6 @@ function seeMore(appNo){
 					$("#m_handOff").text(empData2.loginModelInfo.name);
 				}
 			});
-			
 			var d = new Date(data.approval01Date);
 			$("#m_AppNo").text(data.applicationNo);
 			$("#m_requestDate").text(data.requestDate);
@@ -141,6 +168,7 @@ function setCSS(){
 		}
 	});
 }
+
 
 </script>
 </head>
@@ -221,7 +249,7 @@ function setCSS(){
 					<a href="javascript:"
 						class="btn btn-light btn-icon-split" id="printTable"> <span
 						class="icon"><i class="fas fa-print"></i></span> <span
-						class="text">按之前請想想「森林」</span>
+						class="text">按之前請想想「<i class="fas fa-tree text-success"></i>」</span>
 					</a>
 					<a class="close" role="button" data-dismiss="modal">&times;</a>
 				</div>
@@ -304,8 +332,8 @@ function setCSS(){
 				</div>
 				<div class="modal-footer justify-content-center">
 					<div class="invalid-feedback">請記得簽名</div>
-					<button class="btn btn-success col-md-2 ml-md-auto" id="approveBtn">核准</button>
-					<button class="btn btn-danger col-md-2 mr-md-auto" id="rejectBtn">否決</button>
+					<button type="button" class="btn btn-success col-md-2 ml-md-auto" id="approveBtn" data-dismiss="modal">核准</button>
+					<button type="button" class="btn btn-danger col-md-2 mr-md-auto" id="rejectBtn" data-dismiss="modal">否決</button>
 
 				</div>
 			</div>
@@ -491,6 +519,26 @@ function setCSS(){
 
 //修改審核結果-通過
 $("#approveBtn").click(function(){
+// 	Swal.fire({
+// 		  title: '確定通過此申請?',
+// 		  text: "在關掉視窗前還可以修改!",
+// 		  icon: 'warning',
+// 		  showCancelButton: true,
+// 		  confirmButtonColor: '#3085d6',
+// 		  cancelButtonColor: '#d33',
+// 		  confirmButtonText: '是，通過'
+// 		}).then((result) => {
+// 		  if (!result.isConfirmed) {
+// 		    Swal.fire(
+// 		      '審核完成!',
+// 		      '請假簽核完成',
+// 		      'success',
+// 		    )
+// 		  }
+// 		})
+	if (!confirm("確定批准?")) {
+		return false;
+	}
 	var sigCanvas = document.getElementById("sig-canvas");
 	var dataUrl = sigCanvas.toDataURL();
 	var appNo = $("#m_AppNo").text();
@@ -511,28 +559,40 @@ $("#approveBtn").click(function(){
 			if(result.fail){
 				console.log("result.fail: " + result.fail);
 			} else if (result.success){
-// 				data-dismiss="modal";
 				console.log("簽核完成");
 				loadLeaveData();
-// 				$('#detailModal').modal('hide');
 			}
 		}
 	}
 });
 
-// $("#rejectBtn").click(function(){
-// 	var sigCanvas = document.getElementById("sig-canvas");
-// 	var dataUrl = sigCanvas.toDataURL();
-// 	var appNo = $("#m_AppNo").text();
-// 	let obj={
-// 			"approval01MGR":${sessionScope.loginModel.pk},
-// 			"approval01Sig":dataUrl,
-// 			"statusList":{
-// 				"code": "S04"
-// 			}
-// 	};
-// 	$.post("<c:url value='/Leave/updateSupervisorComment/' />"+appNo,obj);
-// });r
+$("#rejectBtn").click(function(){
+	
+	if (!confirm("確定退件?")) {
+		return false;
+	}
+	var sigCanvas = document.getElementById("sig-canvas");
+	var dataUrl = sigCanvas.toDataURL();
+	var appNo = $("#m_AppNo").text();
+	let obj={
+			"approval01MGR":${sessionScope.loginModel.pk},
+			"approval01Sig":dataUrl,
+			"statusList":{
+				"code": "S04"
+			}
+	};
+	$.ajax({
+		url:"<c:url value='/Leave/updateSupervisorComment/' />"+appNo,
+		dataType:'json',
+		contentType:"application/json",
+		data:JSON.stringify(obj),
+		type:"PUT",
+		success:function(data, status) {
+			loadLeaveData();
+		}
+	});
+});
+
 	</script>
 </body>
 </html>

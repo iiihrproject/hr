@@ -15,7 +15,7 @@
 	<!-- Topbar Search -->
 	<div class="narbar-brand">
 		<h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
-            <span class="text-dark">特休剩餘時數：【】小時&nbsp</span><span class="text-danger warning">(請於 <strong id="anniDate"></strong> 前使用完畢)</span><br/>
+            <span class="text-dark">特休剩餘：<strong id="annivLDay"></strong>日</span><span class="text-danger warning"> (請於 <strong id="anniDate"></strong> 前使用完畢)</span><br/>
             <span class="text-dark">加班總計時數：【${sessionScope.sumHours}】小時&nbsp</span><span class="text-danger warning">(請注意加班時數是否正確)</span><br/>
             <span class="text-dark">加班剩餘時數：【${sessionScope.remainingHours}】小時&nbsp</span><span class="text-danger warning">(請注意剩餘時數)</span>
 	</div>
@@ -67,11 +67,22 @@
 		</div>
 	</div>
 </div>
+<script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
 <script>
-window.onload = function(){
-	let d = new Date("${sessionScope.loginModel.employedDate}");
-	d.setFullYear(new Date().getFullYear());
-	let due = d.toISOString().slice(0,10);
+	let recruitD = new Date("${sessionScope.loginModel.employedDate}");
+	let todayD = new Date();
+	let annivD = new Date("${sessionScope.loginModel.employedDate}");
+	annivD.setFullYear(new Date().getFullYear());
+	
+	diff = (annivD.setTime(annivD.getTime())-recruitD.setTime(recruitD.getTime()))/1000/60/60/24/365;
+	annivLDay = Math.ceil(Math.round(diff))*7;
+	$("#annivLDay").text(annivLDay);
+	if(new Date > annivD){
+		console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 已過去, 今年特休總額："+annivLDay+"天");
+		annivD.setFullYear(annivD.getFullYear()+1);
+	} else{
+		console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 還沒到, 今年特休總額："+annivLDay+"天");
+	}
+	let due = annivD.toISOString().slice(0,10);
 	$("#anniDate").text(due);
-};
 </script>

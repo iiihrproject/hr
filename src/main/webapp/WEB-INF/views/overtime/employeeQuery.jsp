@@ -29,12 +29,17 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
     <style type="text/css">
-	.currentPage{
-		background-color: green;
-	}
-	table{
-		text-align: center;
-	}
+		.currentPage{
+			background-color: #008F8F;
+		}
+		table{
+			text-align: center;
+		}
+		.btn{
+			margin-right: 5px;
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
 
 	</style>
     
@@ -43,8 +48,10 @@
 <script>
     $(document).ready(function(){
 	let pending = $('#overtimepending');
+	let searchMonth =$('#date');
+	searchMonth.html(getYearMonth());
 	let xhr = new XMLHttpRequest();
-	xhr.open("GET","<c:url value='/findEmpOvertime'/>");
+	xhr.open("GET","<c:url value='/findEmpOvertimepending'/>");
 	xhr.send();
 	xhr.onreadystatechange = function(){
 		if(xhr.readyState == 4 && xhr.status == 200){
@@ -54,7 +61,7 @@
 	
 	let auditted = $('#overtimeauditted');
 	let xhr1 = new XMLHttpRequest();
-	xhr1.open("GET","<c:url value='/findEmpOvertime2'/>");
+	xhr1.open("GET","<c:url value='/findEmpOvertimeauditing'/>");
 	xhr1.send();
 	xhr1.onreadystatechange = function(){
 		if(xhr1.readyState == 4 && xhr1.status == 200){
@@ -67,8 +74,8 @@
 		var depart = $("#depart").val();
 		var date = $("#date").val();
 		
-		callPending(null,depart,date);
-		callAutiditted(null,depart,date);
+		callPending(null,null,date);
+		callAutiditted(null,null,date);
 			
 	});
 	
@@ -76,14 +83,12 @@
 });
 	function callPending(page,depart,date){
 		
-		var url = "<c:url value='/findEmpOvertime'/>";
-		
 		depart = depart == '' ? null : depart;
 		date = date == '' ? null : date;
 		page = page == '' ? 1 : page;
 		
 		let xhr = new XMLHttpRequest();
-		xhr.open("GET","<c:url value='/findEmpOvertime'/>?depart=" + depart + "&date=" + date + "&pageNo=" + page);
+		xhr.open("GET","<c:url value='/findEmpOvertimepending'/>?depart=" + depart + "&date=" + date + "&pageNo=" + page);
 		xhr.send();
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState == 4 && xhr.status == 200){
@@ -97,14 +102,12 @@
 	
 	function callAutiditted(page,depart,date){
 		
-		var url = "<c:url value='/findEmpOvertime'/>";
-		
 		depart = depart == '' ? null : depart;
 		date = date == '' ? null : date;
 		page = page == '' ? 1 : page;
 		
 		let xhr1 = new XMLHttpRequest();
-		xhr1.open("GET","<c:url value='/findEmpOvertime2'/>?depart=" + depart + "&date=" + date + "&pageNo=" + page);
+		xhr1.open("GET","<c:url value='/findEmpOvertimeauditing'/>?depart=" + depart + "&date=" + date + "&pageNo=" + page);
 		xhr1.send();
 		xhr1.onreadystatechange = function(){
 			if(xhr1.readyState == 4 && xhr1.status == 200){
@@ -123,7 +126,7 @@
 		let segment ="<table border='1'class='table table-bordered' >";
 		
 		if(overtimependings != null){
-			segment += "<tr><th colspan='10'>員工加班查詢系統</th></tr>";
+			segment += "<tr><th colspan='10'>員工加班查詢系統(待審核)</th></tr>";
 			segment += "<tr><th>申請日期</th><th>姓名</th><th>部門</th><th>職位</th><th>加班類型</th><th>加班日期</th><th>開始時間</th><th>結束時間</th><th>加班時數</th><th>審核狀態</th>";
 			
 			for(let n = 0 ; n< overtimependings.length; n++){
@@ -153,7 +156,7 @@
 				
 				var id = 'page' + n;
 				
-				segment += "<button onclick='pendPageClick(this)' class='pendPageNo " + isCurrent + "'  id='" + id + "' " + ">" + n + "</button>";
+				segment += "<button onclick='pendPageClick(this)' class='pageNo " +'btn btn-outline-secondary '+ isCurrent +"'  id='" + id + "' " +">" + n + "</button>";
 				
 			}
 		}
@@ -171,7 +174,7 @@
 		let overtimeauditteds = result.result;
 		let segment ="<table border='1'class='table table-bordered' >";
 		if(overtimeauditteds !== null){
-			segment += "<tr><th colspan='10'>員工加班查詢系統</th></tr>";
+			segment += "<tr><th colspan='10'>員工加班查詢系統(已審核)</th></tr>";
 			segment += "<tr><th>申請日期</th><th>姓名</th><th>部門</th><th>職位</th><th>加班類型</th><th>加班日期</th><th>開始時間</th><th>結束時間</th><th>加班時數</th><th>審核狀態</th>";
 			for(let n = 0 ; n< overtimeauditteds.length; n++){
 				let overtimeauditted = overtimeauditteds[n];
@@ -200,7 +203,7 @@
 				
 				var id = 'page' + n;
 				
-				segment += "<button onclick='audiPageClick(this)' class='audiPageNo " + isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
+				segment += "<button onclick='audiPageClick(this)' class='pageNo " +'btn btn-outline-secondary '+ isCurrent +"'  id='" + id + "' " +">" + n + "</button>";
 				
 			}
 		}
@@ -214,7 +217,7 @@
 		var date = $("#date").val();
 		var page = e.getAttribute("id");//page1
 		
-		callPending(page.substring(4,(page.length)),depart,date);
+		callPending(page.substring(4,(page.length)),null,date);
 	}
 	
 	function audiPageClick(e){
@@ -222,8 +225,23 @@
 		var date = $("#date").val();
 		var page = e.getAttribute("id");
 		
-		callAutiditted(page.substring(4,(page.length)),depart,date);
+		callAutiditted(page.substring(4,(page.length)),null,date);
 	}
+	
+	 function getYearMonth(){
+	    	var date = new Date();
+	    	var year = date.getFullYear();
+	    	let option = "<option value>請選擇</option>";
+	    	for (let n = 1 ; n<=12 ;n++){
+	    		if(n.toString().length == 1 ){
+	    			option += "<option value='"+year + "-"+"0"+ n +"'>"+year + "-"+"0"+ n +"</option>";
+	    		}else{
+	    			option += "<option value='"+year + "-"+ n +"'>"+year + "-"+ n +"</option>"; 
+	    		}
+	    		
+	    	}
+	    	return option;
+	    }
 	
 
 </script>
@@ -245,12 +263,12 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                第一行的1/3</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <a href="<c:url value='/EmpSignQuery' />" class="text-decoration-none">補簽查詢</a>##內容寫這裡</div>
+                                                Revisit query</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+                                            <a href="<c:url value='/EmpSignQuery' />" class="text-decoration-none">補簽查詢</a></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-calendar fa-2x text-primary"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -258,17 +276,17 @@
                         </div>
                        
                         <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card border-left-danger shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                第一行的2/3</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">加班查詢</a>##內容寫這裡</div>
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                Overtime query</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+                                            <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">加班查詢</a></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-business-time fa-3x text-danger"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -276,17 +294,17 @@
                         </div>
 
                         <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                第一行的3/3</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <a href="<c:url value='/checkInto' />" class="text-decoration-none">請假查詢</a>##內容寫這裡</div>
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Leave query</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+                                            <a href="<c:url value='/checkInto' />" class="text-decoration-none">請假查詢</a></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-power-off fa-3x text-warning"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -297,23 +315,11 @@
 			<div class="card shadow mb-4">
 				<div class="card-body">
 					
-						<select  id="depart" >
-						    <option value>請選擇部門</option>
-						    <option value="行銷部門">行銷部門</option>
-						    <option value="行政部門">行政部門</option>
-						    <option value="業務部門">業務部門</option>
+						<select class="btn btn-outline-primary" id="date">
+							<option value>請選擇月份</option>
 						</select>
 						
-						<select  id="date">
-						    <option value>請選擇</option>
-						    <option value="2021-05">2021-05</option>
-						    <option value="2021-06">2021-06</option>
-						    <option value="2021-07">2021-07</option>
-						    <option value="2021-08">2021-08</option>
-						    <option value="2021-09">2021-09</option>
-						</select>
-						
-						<button id="search">搜尋</button>
+						<button id="search" class="btn btn-secondary">搜尋</button>
 						
 							<div id="overtimepending" data-toggle='table' align=center ></div>
 							<br><br>

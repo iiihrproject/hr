@@ -53,14 +53,27 @@
 			var today = new Date();
 			let span0 = $('#result0c');
 			let span1 = $('#result1c');
+			let span2 = $('#result2c');
 			
 			var date = Date.parse(dateValue);
 			
 			if(date > today){
-				setErrorFor(span0 ,"輸入日期不可大於當日");
-				return false;
+				setErrorFor(span0 ,"輸入錯誤:填寫日期不可大於當日");
 			}else{
 				span0.html("");
+			}
+			if(!dateValue){
+				setErrorFor(span2, "補簽日期不可為空白");
+			}else{
+				span2.html("");
+			}
+			if(!reasonValue){
+				setErrorFor(span1, "請填寫補簽事由");
+			}else{
+				span1.html("");
+			}
+			if(hasError){
+				return false;
 			}
 	
 			swal({
@@ -87,14 +100,14 @@
 		 			xhr.send(JSON.stringify(jsonPendingComplementSign));
 		 	  		xhr.onreadystatechange = function() {
 		 	  			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201) ) {
-		 		  			window.location.href = "<c:url value='/xxx'/>";
+		 	  				
 				  			
 		 	  			}
 		 			}
 		             
 		         swal("新增成功!", "請等待主管簽核", "success");
 // 		         window.location.href = "<c:url value='/checkInto'/>";
-		         //location.reload();
+		         setTimeout('refresh()', 2000);
 		     } else if (result.dismiss === "cancel"){
 		          //使用者按下「取消」要做的事
 		         swal("取消申請", "請再次確認", "error");
@@ -154,7 +167,9 @@
 		hasError = true;
 	}
 	
-	
+	function refresh(){
+		window.location.href = "<c:url value='/EmpSignApply'/>";
+	}
 	</script>
 	
 </head>
@@ -184,14 +199,15 @@
 								                        <td style="text-align: right"><label for="pos" class="col-form-label">申請補簽日期 :</label></td>
 								                        <td><input type="datetime-local" id="date" name="appliedDate" class="form-control" size="30" maxlength="30"
 								                                style="width:200px;" required />
-								                            <span id="result0c" class="form-text"></span>
+								                            <span id="result0c" class="form-text" style="text-align: right;"></span>
+								                            <span id="result2c" class="form-text" style="text-align: right;"></span>
 								                        </td>
 								                    </tr>
 								                  
 								                    <tr>
 								                        <td style="text-align: right"><label for="type" class="col-form-label">補簽類型 :</label></td>
 								                        <td style="text-align: left">
-								                        	<select name = "Type" id = type class="selectpicker show-menu-arrow" >
+								                        	<select name = "Type" id = type class="btn btn-outline-primary" >
 								                            <option value= "CheckIn">上班
 								                            </option>  
 								                            <option value= "CheckOut">下班
@@ -203,7 +219,7 @@
 								                        <td style="text-align: right"><label for="reason" class="col-form-label ">補簽事由 :</label></td>
 								                        <td>
 								                            <input type="text"class="form-control" id="reason" name="reason" style="width:300px;" >
-								                            <span id="result1c" class="form-text"></span>
+								                            <span id="result1c" class="form-text" style="text-align: right;"></span>
 								                        </td>
 								                    </tr>
 								                    <tr>
@@ -232,7 +248,7 @@
                                     <h2 class="m-0 font-weight-bold text-primary">補簽申請紀錄</h2>
                                 </div>
                                 <div class="card-body">
-                                    <div class="slide_toggle" id="showCheck">展開近三筆</div>
+                                    <div class="slide_toggle" id="showCheck">顯示近三筆</div>
                                 <!-- 展開 -->
                                 <div id="showFile" align='center'>
                                 <table class="table table-hover table-bordered" >

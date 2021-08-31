@@ -62,12 +62,12 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                第一行的1/3</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <a href="<c:url value='/EmpSignQuery' />" class="text-decoration-none">補簽查詢</a>##內容寫這裡</div>
+                                                Revisit query</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+                                            <a href="<c:url value='/EmpSignQuery' />" class="text-decoration-none">補簽查詢</a></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-history fa-3x text-primary"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -75,17 +75,17 @@
                         </div>
                        
                         <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card border-left-danger shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                第一行的2/3</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">加班查詢</a>##內容寫這裡</div>
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                                Overtime query</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+                                            <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">加班查詢</a></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-business-time fa-3x text-danger"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -93,17 +93,17 @@
                         </div>
 
                         <div class="col-xl-4 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
+                            <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                第一行的3/3</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            <a href="<c:url value='/checkInto' />" class="text-decoration-none">請假查詢</a>##內容寫這裡</div>
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Leave query</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+                                            <a href="<c:url value='/checkInto' />" class="text-decoration-none">請假查詢</a></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                            <i class="fas fa-power-off fa-3x text-warning"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +113,6 @@
                     <div class="row">
                     <div class="col-12">
                         <div>
-                            ##這個div開始寫自定義內容
                         </div>
                     </div>
       

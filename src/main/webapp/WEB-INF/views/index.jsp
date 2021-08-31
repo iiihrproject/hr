@@ -36,47 +36,197 @@
     <script src="<c:url value='js/locales-all.js' />"></script>
 
 	<script>
-	function newCalendar(eventDatas) {
+	var calendar
+	
+	var shifeCheck = true;
+	var shiftsAry = [];
+	var eventsAry = [];
+		
+	function modalInit(){
+		startInput = document.getElementById("start_");
+		endInput = document.getElementById("end_");
+		colorInput = document.getElementById("color_");
+		titleInput = document.getElementById("title_");
+		textInput = document.getElementById("message_");
+		startArea = document.getElementById("startArea_");
+		endArea = document.getElementById("endArea_");
+		titleArea = document.getElementById("titleArea_");
+		textArea = document.getElementById("messageArea_");
+		startArea.innerHTML = "";
+		endArea.innerHTML = "";
+		titleArea.innerHTML = "";
+		textArea.innerHTML = "";
+		
+	}
+	
+	function newCalendar(eventDatas, eventDatas2) {
 		var calendarEl = document.getElementById('calendar');
-		var calendar = new FullCalendar.Calendar(calendarEl, {
+		 	calendar = new FullCalendar.Calendar(calendarEl, {
 			themeSystem : "bootstrap4",
 			initialView : 'dayGridMonth',
 			locale : "zh-tw",
 			height : "100%",
 			headerToolbar : {
 				start : "prevYear,today,nextYear",
-					center : "prev,title,next",
-				end : "dayGridMonth,listWeek",
+				center : "prev,title,next",
+				end : "dayGridMonth,custom,listWeek",
 			},
-			buttonText : {
-				list : "項目清單",
-			},
+// 			讀取user班表
+			customButtons: {
+				custom: {
+			      click: function initCalendar(){		    	  
+			    	  	console.log("--*");
+			    	  	if(shifeCheck){
+				    	 	let xhrLoad = new XMLHttpRequest();
+							xhrLoad.open("GET", "<c:url value='/shiftsforcalendar' />");
+							xhrLoad.send();
+							xhrLoad.onreadystatechange = function(){
+								if(xhrLoad.readyState == 4 && xhrLoad.status == 200){
+// 				 					console.log(xhrLoad.responseText);    //original table
+				 					let userShifts = JSON.parse(xhrLoad.responseText);
+// 				 					console.log(userShifts);    //parse_shiftData
+				 					if(userShifts.length == 0){
+				 						document.getElementById("taskAlertTitle").innerHTML = "班表查詢";
+				 	 					document.getElementById("alertBox_").innerHTML = "【通知】：班表資料查詢結果0筆<br/>如有疑問，請與班表維護人員聯絡";
+				 	 					$("#taskAlert").modal("show");
+				 					}else{
+				 						shiftsAry = [];
+				 						for(let n = 0; n < userShifts.length; n++){
+				 							let shiftsAryObj = {};	
+				 							shiftsAryObj["no"] = "shift";
+				 							shiftsAryObj["start"] = userShifts[n].start;
+				 							shiftsAryObj["end"] = userShifts[n].end;
+				 							shiftsAryObj["title"] = userShifts[n].title;	
+				 							shiftsAryObj["color"] = "#FF8000";
+				 							shiftsAryObj["description"] = userShifts[n].title;
+				 	 						
+				 	 						shiftsAry.push(shiftsAryObj);
+				 						}
+// 				 						console.log(shiftsAry);
+				 						calendar.addEventSource(shiftsAry);				 			
+				 						document.getElementsByClassName("fc-custom-button")[0].innerHTML = "隱藏班表";
+				 						$(".fc-custom-button").css("opacity","0.5");
+				 						$(".fc-custom-button").mouseenter(function(){
+				 							$(this).addClass("shift-btn-hover")
+				 						})
+				 						shifeCheck = false;
+				 						console.log(shifeCheck);
+				 					}
+	
+								}
+							}
+						}else{
+							calendar.removeAllEvents();
+							calendar.addEventSource(eventsAry);							
+							document.getElementsByClassName("fc-custom-button")[0].innerHTML = "顯示班表";
+							$(".fc-custom-button").css("opacity","0.9");
+							shifeCheck = true;	
+							console.log(shifeCheck);
+						}
+			    	  	
+					}		//end of click						
+			    }
+			  },
+
 			views : {
 				dayGridMonth : {
 					dayMaxEventRows : 3,
-				},
-			},		
+				}
+			},
 			
-// 				click for modal
+// 				click for new
 				dateClick : function(info) {
-					console.log("add");
-					$("#AddEvent").modal();
-					console.log(info);
+					$("#taskSumbit_").css("display","block");
+					document.getElementById("backSumbit_").innerHTML = "送出";
+					$("#backSumbit_").css("background","#858796");
+					document.getElementById("backSumbit_").innerHTML = "取消";
+					document.getElementById("AddEventTitle").innerHTML = "編輯行程";
+					
+					modalInit();	
+					$("#deleteSumbit_").css("display","none");
+					startInput.value = ((info.dateStr).toString().substr(0, 10) + "T00:00");
+					endInput.value = ((info.dateStr).toString().substr(0, 10) + "T23:59");
+					colorInput.value = "#7973ae";
+					titleInput.value = "";
+					textInput.value = "";
+					document.getElementById("taskNo_").value = "";
+
+					console.log("sumbit");
+					$("#AddEvent").modal("show");				
+					
 				},	
 				
-// 				click for update
+// 				click for existEvent
 				eventClick : function(info) {
-					console.log("edit");
-					$("#AddEvent").modal();
+					modalInit();					
 					console.log(info);
-				},				
+					
+					let monthStr = "00,01,02,03,04,05,06,07,08,09,10,11,12".split(",");
+					let realStMon = monthStr[(info.event.start).toLocaleDateString().split("/")[1]]
+					let realEdMon = monthStr[(info.event.end).toLocaleDateString().split("/")[1]]
+					let dayStr = "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31".split(",");
+					let realStDay = dayStr[(info.event.start).toLocaleDateString().split("/")[2]]
+					let realEdDay = dayStr[(info.event.end).toLocaleDateString().split("/")[2]]
+					let sDateStr = (info.event.start).toLocaleDateString().split("/");
+					let sTimeStr = (info.event.start).toTimeString();
+					let sTime1 = sDateStr[0] + "-" + realStMon + "-" + realStDay + "T" + sTimeStr.substr(0,8);
+
+					let eDateStr = (info.event.end).toLocaleDateString().split("/");
+					let eTimeStr = (info.event.end).toTimeString();
+					let eTime1 = eDateStr[0] + "-" + realEdMon + "-" + realEdDay + "T" + eTimeStr.substr(0,8);
+
+					
+					
+					startInput.value = sTime1;
+					endInput.value = eTime1;
+// 					startInput.value = "2021-08-26T13:27";    //test_format
+					colorInput.value = info.event.backgroundColor;
+					titleInput.value = info.event.title;
+					textInput.value = info.event.extendedProps.description;
+					let taskNo = document.getElementById("taskNo_");
+					taskNo.value = info.event.extendedProps.no;
+					console.log(taskNo.value);
+
+					console.log("edit");
+					$("#AddEvent").modal("show");
+					
+					if(taskNo.value == "shift"){
+						document.getElementById("AddEventTitle").innerHTML = "班別查詢";
+						$("#deleteSumbit_").css("display","none");
+						$("#taskSumbit_").css("display","none");
+						$("#backSumbit_").css("background","#7973AE");
+						document.getElementById("backSumbit_").innerHTML = "知道了";
+					}else{
+						document.getElementById("AddEventTitle").innerHTML = "編輯行程";
+						$("#deleteSumbit_").css("display","block");
+						$("#taskSumbit_").css("display","block");
+						$("#backSumbit_").css("background","#858796");
+						document.getElementById("backSumbit_").innerHTML = "取消";
+					}
+					
+				},	
 				
-// 				event			
-		eventSources : [ eventDatas 
-			],			
+				
+				
+			//事件			
+		eventSources : [ 
+			eventDatas ,
+			eventDatas2
+			],		
+			
+			eventDidMount: function(info) {
+					$(info.el).tooltip({
+			        title: info.event.extendedProps.description,
+			        placement: 'top',
+			        trigger: 'hover',
+			        container: 'body'
+			      });
+			    },
 
 			});
+
 			calendar.render();
+			document.getElementsByClassName("fc-custom-button")[0].innerHTML = "顯示班表";
 		};
 	</script>
 
@@ -84,42 +234,192 @@
 <!-- 使用today.js -->
     <script src="<c:url value='/js/today.js' />"></script>
     
-<!--     公布欄資料載入 -->
+<!-- 資料載入 -->
     <script>
 	window.onload = function() {
-// 		載入行事曆
-// 		newCalendar();
 		
 // 		讀取user項目清單
-		let xhrLoad = new XMLHttpRequest();
-		xhrLoad.open("GET", "<c:url value='/calendartasks' />");
-		xhrLoad.send();
-		xhrLoad.onreadystatechange = function(){
-			if(xhrLoad.readyState == 4 && xhrLoad.status == 200){
-				console.log(xhrLoad.responseText);
-				processLoadTaskList(xhrLoad.responseText);
+		function initCalendar(){
+			let xhrLoad = new XMLHttpRequest();
+			xhrLoad.open("GET", "<c:url value='/calendartasks' />");
+			xhrLoad.send();
+			xhrLoad.onreadystatechange = function(){
+				if(xhrLoad.readyState == 4 && xhrLoad.status == 200){
+// 				console.log(xhrLoad.responseText);    //original table
+					processLoadTaskList(xhrLoad.responseText);
+				}
 			}
 		}
 		
 		function processLoadTaskList(jsonString){
 			let calendarTasks = JSON.parse(jsonString);
-			console.log(calendarTasks);
+// 			console.log(calendarTasks);    //original
 
-			let eventsAry = [];					
+			eventsAry = [];		
 			for(let n = 0; n < calendarTasks.length; n++){	
 				let eventsAryObj = {};
 				eventsAryObj["no"] = calendarTasks[n].no;	
 				eventsAryObj["start"] = calendarTasks[n].start;
 				eventsAryObj["end"] = calendarTasks[n].end;
 				eventsAryObj["title"] = calendarTasks[n].title;	
-				eventsAryObj["description"] = calendarTasks[n].description;
 				eventsAryObj["color"] = calendarTasks[n].color;
+// 				eventsAryObj["textColor"] = calendarTasks[n].color;
+				eventsAryObj["description"] = calendarTasks[n].description;
+				
 			
 				eventsAry.push(eventsAryObj);
+			}
+			if(shifeCheck){
+				console.log(shifeCheck);
+				console.log(eventsAry);    //format for fullcalendar
+				newCalendar(eventsAry);
+			}else{
+				newCalendar(eventsAry, shiftsAry);
+			}
+			
+		}
+		
+// 		載入行事曆
+		initCalendar();		
+		
+		
+		
+// 		新增&修改項目
+		let taskSumbitBtn = document.getElementById("taskSumbit_");
+		taskSumbit_.onclick = function(){
+			let taskNoVal = document.getElementById("taskNo_").value;
+			let startVal = document.getElementById("start_").value;
+			let endVal = document.getElementById("end_").value;
+			let colorVal = document.getElementById("color_").value;
+			let titleVal = document.getElementById("title_").value;
+			let textVal = document.getElementById("message_").value;
+			let startArea = document.getElementById("startArea_");
+			let endArea = document.getElementById("endArea_");
+			let titleArea = document.getElementById("titleArea_");
+			let textArea = document.getElementById("messageArea_");
+			let inpuCheck = true;
+			if(!startVal){
+				alertWords(startArea, "※請選擇時間");
+				inpuCheck = false;
+			}else{
+				startArea.innerHTML = "";
+			}
+			console.log(startVal + " + " + endVal);
+			if(!endVal){
+				alertWords(endArea, "※請選擇時間");
+				inpuCheck = false;			
+			}else if(endVal < startVal){
+				alertWords(endArea, "※請檢查：結束時間須晚於開始時間");
+				inpuCheck = false;
+			}else if(endVal == startVal){
+				alertWords(endArea, "※請檢查：結束時間不得與開始時間相同");
+				inpuCheck = false;
+			}else{
+				endArea.innerHTML = "";
+			}
+			if(!titleVal){
+				alertWords(titleArea, "※請輸入主旨");
+				inpuCheck = false;
+			}else if(titleVal.length > 15){
+				alertWords(titleArea, "※主旨字數過長，請勿超過15字");
+				inpuCheck = false;
+			}else{
+				titleArea.innerHTML = "";
+			}
+			if(!textVal){
+				alertWords(textArea, "※請輸入內容");
+				inpuCheck = false;
+			}else if(textVal.length > 60){
+				alertWords(textArea, "※內容字數過長，請勿超過60字");
+				inpuCheck = false;				
+			}else{
+				textArea.innerHTML = "";
+			}
+			if(!inpuCheck){
+				return;
 			}			
 			
-// 			console.log(eventsAry);
-			newCalendar(eventsAry);
+			let jsonTask ={
+				"start": startVal,
+				"end": endVal,
+				"color": colorVal,
+				"title": titleVal,
+				"description": textVal,
+				"no": taskNoVal,
+			};
+			console.log(jsonTask);
+			console.log("here=" + jsonTask.no);
+			console.log("here=" + jsonTask.title);
+						
+			
+			let xhrNew = new XMLHttpRequest();
+			xhrNew.open("POST", "<c:url value='/calendarTaskUpdate' />", true);
+			xhrNew.setRequestHeader("Content-Type", "application/json");
+			
+			
+			let taskContent = JSON.stringify(jsonTask);		
+			xhrNew.send(taskContent);
+			console.log(taskContent);	
+				
+
+			xhrNew.onreadystatechange = function(){
+				if(xhrNew.readyState == 4){
+					if(xhrNew.status == 200 || xhrNew.status == 201){
+						console.log(xhrNew.responseText);
+						taskResult = JSON.parse(xhrNew.responseText);
+						initCalendar();
+						$("#AddEvent").modal("hide");
+					}else{
+						document.getElementById("taskAlertTitle").innerHTML = "新增行程";
+						document.getElementById("alertBox_").innerHTML = "【通知】：更新行程失敗";
+						$("#taskAlert").modal("show");
+					}
+				}					
+			}
+			
+
+		
+		}				
+		
+		
+		
+		function alertWords(input, alertmsg){
+			input.innerHTML = "<font color='red' size='0.9rem'>" + alertmsg + "</font>";
+		}
+				
+
+// 		刪除項目
+		deleteSumbit_.onclick = function(){
+			$("#deleteAlert").modal("show");
+		}
+
+		deleteCheckBtn_.onclick = function(){
+			let jsonTask ={
+					"no": document.getElementById("taskNo_").value,
+				};
+			console.log(jsonTask);
+			
+			let xhrDelete = new XMLHttpRequest();
+			xhrDelete.open("POST", "<c:url value='/calendarTaskDelete' />", true);
+			xhrDelete.setRequestHeader("Content-Type", "application/json");
+			
+			let taskContent = JSON.stringify(jsonTask);
+			xhrDelete.send(taskContent);
+			console.log(taskContent);
+			xhrDelete.onreadystatechange = function(){
+				if(xhrDelete.readyState == 4){
+					if(xhrDelete.status == 200 || xhrDelete.status == 201){
+						console.log(xhrDelete.responseText);
+						taskResult = xhrDelete.responseText;						
+						initCalendar();
+						$("#deleteAlert").modal("hide");
+						$("#AddEvent").modal("hide");
+					}else{
+						$("#taskAlert").modal("show");
+					}
+				}
+				
+			}
 		}
 
 		
@@ -229,56 +529,91 @@ function processBulButton(result) {
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalCenterTitle">新增項目</h5>
+                                                        <h5 class="modal-title" id="AddEventTitle">編輯行程</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <!-- 最後+required -->
                                                         <form action="calendarTaskUpdate" method="POST">
-                                                            <!-- <div class="form-group">
-                                                              <label for="date_" class="col-form-label">日期</label>
-                                                              <input type="date" class="form-control" id="date_">
-                                                             </div>
+                                                          
                                                             <div class="form-group">
-                                                              <label for="time_" class="col-form-label">時間</label>
-                                                             <input type="time" class="form-control" id="time_">
-                                                           </div> -->
-                                                            <div class="form-group">
-                                                                <label for="" class="col-form-label">起始時間</label>
+                                                            	<input type="hidden" class="form-control" name="taskNo_" id="taskNo_">
+                                                                <label for="" class="col-form-label">起始時間</label><span id="startArea_"></span>
                                                                 <input type="datetime-local" class="form-control" name="start_" id="start_">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="" class="col-form-label">結束時間</label>
+                                                                <label for="" class="col-form-label">結束時間</label><span id="endArea_"></span>
                                                                 <input type="datetime-local" class="form-control" name="end_" id="end_">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="color_" class="col-form-label">顏色標籤</label>
+                                                                <label for="color_" class="col-form-label">顏色標籤</label><span id="colorArea_"></span>
                                                                 <input type="color" class="form-control" id="color_" value="#7973AE">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="title_" class="col-form-label">主旨</label>
-                                                                <input type="text" class="form-control" id="title_" autocomplete>
+                                                                <label for="title_" class="col-form-label">主旨</label><span id="titleArea_"></span>
+                                                                <input type="text" class="form-control" id="title_" autocomplete="on">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="message_" class="col-form-label">內容</label>
+                                                                <label for="message_" class="col-form-label">內容</label><span id="messageArea_"></span>
                                                                 <textarea class="form-control" id="message_"></textarea>
                                                             </div>
                                                         </form>
                                                     </div>
                                                     <div class="modal-footer justify-content-center">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                                                            <button type="submit" class="btn btn-primary" id="add_" onclick="insertMessage();">新增</button>
-                                                            <!-- sumit+click(ajax) -->
-                                                    </div>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="backSumbit_">取消</button>
+                                                            <button type="submit" class="btn btn-danger" id="deleteSumbit_">刪除</button>
+                                                            <button type="submit" class="btn btn-primary" id="taskSumbit_" >送出</button>
+                                                            <!-- sumit+click(ajax)     //onclick="insertMessage();"      maxlength="20"-->
+                                                    </div>                                                   
+													                                                   
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>							
+
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+			<div class="modal fade" id="deleteAlert" tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="deleteAlertTitle">刪除行程</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body text-center"><span class="text-danger">【通知】：確定要刪除此項行程嗎？</span></div>
+						<div class="modal-footer justify-content-center">
+							<button type="button" class="btn btn-secondary"	data-dismiss="modal">取消</button>
+							<button type="button" class="btn btn-primary" id="deleteCheckBtn_">確定</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal fade" id="taskAlert" tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="taskAlertTitle">刪除行程</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body text-center"><span class="text-danger" id="alertBox_">【通知】：刪除行程失敗</span></div>
+						<div class="modal-footer justify-content-center">
+							<button type="button" class="btn btn-secondary"	data-dismiss="modal" id="taskAlertBtn_">知道了</button>
+						</div>
+					</div>
+				</div>
+			</div>
 
                         <!-- 0419 分隔線分隔線 -->
 

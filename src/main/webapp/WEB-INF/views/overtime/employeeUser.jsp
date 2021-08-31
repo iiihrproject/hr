@@ -145,7 +145,7 @@
 		             
 		         swal("新增成功!", "請等待主管簽核", "success");
 // 		         window.location.href = "<c:url value='/checkInto'/>";
-		         //location.reload();
+		         setTimeout('refresh()', 1500);
 		     } else if (result.dismiss === "cancel"){
 		          //使用者按下「取消」要做的事
 		         swal("取消申請", "請再次確認", "error");
@@ -167,6 +167,10 @@
 	function setErrorFor(input, message) {
 		input.html("<font color='red' size='-2'>" + message + "</font>");
 		hasError = true;
+	}
+	
+	function refresh(){
+		window.location.href = "<c:url value='/employeeOvertime'/>";
 	}
 	
 	
@@ -293,13 +297,15 @@
                                     <h2 class="m-0 font-weight-bold text-primary">加班申請紀錄</h2>
                                 </div>
                                 <div class="card-body">
-                                    <div class="slide_toggle" id="showCheck">展開近五筆</div>
+                                    <div class="slide_toggle" id="showCheck">顯示近三筆</div>
                                 <!-- 展開 -->
                                 <div id="showFile" align='center'>
                                 <table class="table table-hover table-bordered">
+                                	<tr>
+                                		<th colspan='7' style= text-align:center>未審核</th>
+                                	</tr>
 									<tr>
 									<th>申請日期</th>
-<!-- 									<th>姓名</th> -->
 									<th>部門</th>
 									<th>職位</th>
 									<th>加班日期</th>
@@ -310,7 +316,6 @@
 										<c:forEach var='pending' items='${overtimePartPending}'>
 										  <tr>
 										  	 <td>${fn:substring(pending.dateOfApplication,0, 10)}</td>
-<%-- 										  	 <td>${pending.empName}</td>	 --%>
 										  	 <td>${pending.department}</td>
 										  	 <td>${pending.position}</td>			
 										  	 <td>${fn:substring(pending.overTimeDate,0, 10)}</td>		
@@ -319,6 +324,32 @@
 										     <td>${pending.result}</td>	
 										 </tr>    
 										</c:forEach>
+								  </table>
+								  
+								  <table class="table table-hover table-bordered">
+								  		<tr>
+                                			<th colspan='7' style= text-align:center>已審核</th>
+                                		</tr>
+										<tr>
+										<th>申請日期</th>
+										<th>部門</th>
+										<th>職位</th>
+										<th>加班日期</th>
+										<th>加班類型</th>
+										<th>加班時數</th>
+										<th>審核狀態</th>
+										</tr>
+											<c:forEach var='auditted' items='${overtimePartAuditted}'>
+											  <tr>
+											  	 <td>${fn:substring(auditted.dateOfApplication,0, 10)}</td>
+											  	 <td>${auditted.department}</td>
+											  	 <td>${auditted.position}</td>			
+											  	 <td>${fn:substring(auditted.overTimeDate,0, 10)}</td>		
+											  	 <td>${auditted.overtimeCategory}</td>
+											     <td>${auditted.overTimeHours}</td>	
+											     <td>${auditted.result}</td>	
+											 </tr>    
+											</c:forEach>
 								  </table>
 								  <a href="<c:url value='/employeeQuery' />" class="text-decoration-none">
 		                            <button type="button" class="btn btn-outline-primary">查看完整資訊</button>
