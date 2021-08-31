@@ -44,9 +44,10 @@
 	
 	window.onload = function() {
  		msgData();
+ 		loadenrollnum();
  		loadenrollment();
  		loadLike();
- 		loadenrollnum();
+ 		
  		
  		
  		var sendMsg = document.getElementById("sendMsg")
@@ -276,12 +277,14 @@ function loadenrollment (){
 				bulEnroll = JSON.parse(xhr6.responseText);
 				console.log("有回傳bulEnroll.enrollStatus:"+bulEnroll.enrollStatus);
 			}
-			loadenrollnum();
-			let num = $("#numspan").text();
-			console.log("----num:"+num);
-			
+
+ 			let num = $("#numspan").text();
+			console.log("----num:"+num); 
+			console.log("--enrollNum:"+enrollNum);
+			console.log("--${bulletin.quota}:"+${bulletin.quota});
 			if (!bulEnroll){
-				if (enrollNum>=num) {
+				if (enrollNum>=${bulletin.quota}) {
+					
 					enrollS += '報名額滿';
 					$("#applyspan").html(enrollS);
 					$("#apply").removeAttr("data-toggle");
@@ -353,6 +356,7 @@ function loadenrollnum(){
 		if (xhr8.readyState == 4 && xhr8.status == 200) {
 			enrollNum = xhr8.responseText;
 			numspan.innerHTML = enrollNum;
+			console.log("執行完enrollNum:"+enrollNum)
 
 		}
 		
@@ -443,7 +447,7 @@ function loadenrollnum(){
                                         	</c:when>
                                         	<c:otherwise>
                                         		
-                                        		<a href="#" class="btn btn-info btn-icon-split btn-sm" id="apply" data-toggle="modal" data-target="#applyModal">
+                                        		<a  class="btn btn-info btn-icon-split btn-sm" id="apply" data-toggle="modal" data-target="#applyModal">
                                         		<span class="text" id="applyspan" >報名</span>
                                     			</a>
                                         	</c:otherwise>
