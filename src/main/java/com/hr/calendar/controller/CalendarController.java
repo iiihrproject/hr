@@ -37,7 +37,6 @@ public class CalendarController {
 			String userEmpNo = loginModel.getEmpNo();
 			calLog.info("載入 " + userEmpNo + " 的項目清單");	
 			List<CalendarTask> userTasks = calendarService.showTasksByEmpNo(userEmpNo);
-			System.out.println("***載入成功 " + userTasks);
 			return userTasks;			
 	}
 	
@@ -49,7 +48,6 @@ public class CalendarController {
 			String userEmpNo = loginModel.getEmpNo();
 			calLog.info("載入 " + userEmpNo + " 的班表");	
 			List<FactSchedule> userShifts = calendarService.showShiftByEmpNo(userEmpNo);
-			System.out.println("*** " + userShifts);
 			return userShifts;			
 	}
 	
@@ -64,9 +62,7 @@ public class CalendarController {
 			@RequestBody CalendarTask theTask
 			) {
 		String result = "";   //to-do
-		System.out.println("********* " + theTask.getNo());
-		System.out.println("********* " + theTask.getStartTime());
-		System.out.println("********* " + theTask.getTaskTitle());
+
 		if(theTask.getNo() == null) {			
 			calLog.info("新增項目");
 			CalendarTask newTask = new CalendarTask();
@@ -92,10 +88,7 @@ public class CalendarController {
 		}else {
 			calLog.info("修改項目");
 			CalendarTask exTask = calendarService.findTheTask(theTask.getNo());
-			System.out.println("****** " + exTask);
-			System.out.println("****** " + exTask.getCreateTime());
-			System.out.println("****** " + exTask.getEmpNo());
-			System.out.println("****** " + exTask.getNo());
+
 			try {
 				exTask.setStartTime(theTask.getStartTime());
 				exTask.setEndTime(theTask.getEndTime());
