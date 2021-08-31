@@ -26,6 +26,7 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+    <link rel="stylesheet" href="<c:url value='css/bulcss.css' />">
     
     
     <!-- Custom styles for this page -->

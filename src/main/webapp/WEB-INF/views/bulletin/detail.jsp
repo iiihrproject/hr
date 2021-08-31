@@ -26,6 +26,7 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+    <link rel="stylesheet" href="<c:url value='css/bulcss.css' />">
     
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->
@@ -44,8 +45,11 @@
 	
 	window.onload = function() {
  		msgData();
- 		loadenrollnum();
- 		loadenrollment();
+ 		if(`${bulletin.type}` =='公告'){
+ 		} else {
+ 			loadenrollnum();
+ 	 		loadenrollment();
+ 		}
  		loadLike();
  		
  		
@@ -262,6 +266,7 @@ function changelike() {
 
 
 function loadenrollment (){
+	
 	let xhr6 = new XMLHttpRequest();
 	let url = "<c:url value='/bulletinFindEnroll' />";
 	let empnoo = `${sessionScope.loginModel.getEmpNo()}`;
@@ -280,11 +285,9 @@ function loadenrollment (){
 
  			let num = $("#numspan").text();
 			console.log("----num:"+num); 
-			console.log("--enrollNum:"+enrollNum);
-			console.log("--${bulletin.quota}:"+${bulletin.quota});
+			console.log("--bulletin.quota:"+`${bulletin.quota}`);
 			if (!bulEnroll){
 				if (enrollNum>=${bulletin.quota}) {
-					
 					enrollS += '報名額滿';
 					$("#applyspan").html(enrollS);
 					$("#apply").removeAttr("data-toggle");
