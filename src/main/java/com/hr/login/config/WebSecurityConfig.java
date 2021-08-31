@@ -44,6 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			    .antMatchers("/Leave/LeaveResult","/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR","RD_MANAGER","SALES_MANAGER")
 			    .antMatchers("/G/**","/Leave/**","/schedule/**").authenticated()
 			    .antMatchers("/updatePassword","/updateNewPassword").authenticated()
+			    .antMatchers("/calendartasks", "/calendarTaskUpdate", "/calendarTaskDelete", "/shiftsforcalendar").authenticated()
 			    .anyRequest().hasRole("ADMIN")
       
 			    .and()

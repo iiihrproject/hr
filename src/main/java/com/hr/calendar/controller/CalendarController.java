@@ -1,13 +1,16 @@
 package com.hr.calendar.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import com.hr.calendar.model.CalendarTask;
 import com.hr.calendar.service.CalendarService;
 import com.hr.login.model.LoginModel;
+import com.hr.schedule.model.FactSchedule;
 
 
 @Controller
@@ -33,65 +37,102 @@ public class CalendarController {
 			String userEmpNo = loginModel.getEmpNo();
 			calLog.info("載入 " + userEmpNo + " 的項目清單");	
 			List<CalendarTask> userTasks = calendarService.showTasksByEmpNo(userEmpNo);
-			System.out.println("*** " + userTasks);
+			System.out.println("***載入成功 " + userTasks);
 			return userTasks;			
 	}
+	
+	//載入各人班表
+	@GetMapping("/shiftsforcalendar")
+	public @ResponseBody List<FactSchedule> showShiftByEmpNo(
+			@SessionAttribute LoginModel loginModel			
+			){
+			String userEmpNo = loginModel.getEmpNo();
+			calLog.info("載入 " + userEmpNo + " 的班表");	
+			List<FactSchedule> userShifts = calendarService.showShiftByEmpNo(userEmpNo);
+			System.out.println("*** " + userShifts);
+			return userShifts;			
+	}
+	
 
 	
 	//新增項目&//修改項目
-	@PostMapping("calendarTaskUpdate")
-	public @ResponseBody CalendarTask updateTask(
+	@PostMapping("/calendarTaskUpdate")
+	public @ResponseBody CalendarTask updatCeTask(
+//			@ModelAttribute LoginModel loginModel,
 			@SessionAttribute LoginModel loginModel,
-			@RequestParam("task") CalendarTask theTask
+//			@RequestParam("task") CalendarTask theTask
+			@RequestBody CalendarTask theTask
 			) {
 		String result = "";   //to-do
+		System.out.println("********* " + theTask.getNo());
+		System.out.println("********* " + theTask.getStartTime());
+		System.out.println("********* " + theTask.getTaskTitle());
 		if(theTask.getNo() == null) {			
 			calLog.info("新增項目");
 			CalendarTask newTask = new CalendarTask();
 			try {
-				newTask.setEmpNo(loginModel.getEmpNo());
-				newTask.setTaskStatus(false);
+				newTask.setEmpNo(loginModel.getEmpNo());    //empNo:hidden
+				newTask.setStartTime(theTask.getStartTime());
+				newTask.setEndTime(theTask.getEndTime());
+				newTask.setColorTag(theTask.getColorTag());
+				newTask.setTaskTitle(theTask.getTaskTitle());
+				newTask.setTaskText(theTask.getTaskText());
+				newTask.setTaskStatus(false);    //Status:hidden
 				calendarService.newTask(newTask);
 				result = "新增成功";
+				calLog.info(result);
+				return newTask;
 			}catch(Exception e) {
 				result = "新增失敗";
-				calLog.info(e.getMessage());
+				calLog.info(result + e.getMessage());
+				throw e;
 			}
-			return newTask;
+			
 		
 		}else {
 			calLog.info("修改項目");
 			CalendarTask exTask = calendarService.findTheTask(theTask.getNo());
+			System.out.println("****** " + exTask);
+			System.out.println("****** " + exTask.getCreateTime());
+			System.out.println("****** " + exTask.getEmpNo());
+			System.out.println("****** " + exTask.getNo());
 			try {
 				exTask.setStartTime(theTask.getStartTime());
 				exTask.setEndTime(theTask.getEndTime());
 				exTask.setColorTag(theTask.getColorTag());
 				exTask.setTaskTitle(theTask.getTaskTitle());
 				exTask.setTaskText(theTask.getTaskText());
-				calendarService.edit(theTask);
+				calendarService.edit(exTask);
 				result = "修改成功";
+				calLog.info(result);
+				return theTask;
 			}catch(Exception e) {
 				result = "修改失敗";
-				calLog.info(e.getMessage());
+				calLog.info(result + e.getMessage());
+				throw e;
 			}		
 		}
-		return theTask;
+		
 	}
 	
 	
 	
 	//刪除項目
-	@GetMapping("/calendarTaskDelete")
-	public @ResponseBody String delete(@RequestParam("taskNo") Integer no) {
+	@PostMapping("/calendarTaskDelete")
+	public @ResponseBody String delete(@RequestBody CalendarTask taskNo) {
+		System.out.println("** " + taskNo.getNo());
 		calLog.info("刪除選取項目");
 		String result = "";
 		try {
-			calendarService.delete(no);
+			calendarService.delete(taskNo.getNo());
 			result = "刪除成功";
+			calLog.info(result);
+			return result;
 		}catch(Exception e) {
 			result = "刪除失敗";
+			calLog.info(result + e.getMessage());
+			throw e;
 		}
-		return result;
 	}
 	
 	
