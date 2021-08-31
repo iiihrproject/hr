@@ -115,7 +115,6 @@ public class BulletinRepoImpl implements BulletinRepo {
 			mylist.add(ab);
 
 		}
-		System.out.println("表：" + new Gson().toJson(mylist));
 //		return entityManager.createQuery(hql).getResultList();
 		return mylist;
 
