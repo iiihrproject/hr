@@ -22,8 +22,13 @@ public class PersonnelRepositoryImpl implements PersonnelRepository {
 	}
 
 	@Override
-	public void personalInformationUpdate(Personnel personnel) throws TransactionRequiredException{
-		entityManager.merge(personnel);		
+	public Personnel personalInformationUpdate(Personnel personnel) throws TransactionRequiredException{
+		try {
+			return entityManager.merge(personnel);		
+		}
+		catch(Exception e) {
+			return null;
+		}
 	}
 
 }

@@ -69,16 +69,11 @@ public class BulletinEnrController {
 		}
 		String result = "";
 		try {
-			System.out.println("co_id:"+bulEN.getEnrollId());
-			System.out.println("co_no:"+bulEN.getEmpNo());
-			System.out.println("co_status:"+bulEN.getEnrollStatus());
-			System.out.println("co_postno:"+bulEN.getPostno());
 			bulletinService.insertEnroll(bulEN);
 			result = "報名改變";
 		} catch (Exception e) {
 			result = "報名未改變";
 		}
-		System.out.println(result);
 	}
 	
 	@PostMapping("/bulletinFindEnroll") //all
@@ -99,7 +94,6 @@ public class BulletinEnrController {
 	public @ResponseBody List<BulEnroll> findEnrollByNo(@RequestParam("postno") int postno) {
 		log.info("findEnrollByNo方法執行中...");
 		List<BulEnroll> bulEnroll = bulletinService.findEnrollListByNo(postno);
-		System.out.println("報名名單："+bulEnroll);
 		return bulEnroll;
 	}
 	
@@ -108,7 +102,6 @@ public class BulletinEnrController {
 	public @ResponseBody List<BulName> findMyEnrollByEmpNo(@RequestParam("empNo") String empNo) {
 		log.info("findEnrollByNo方法執行中...");
 		List<BulName> bulName = bulletinService.findMyEnrollByEmpNo(empNo);
-		System.out.println("報名名單："+bulName);
 		return bulName;
 	}
 	
@@ -119,7 +112,4 @@ public class BulletinEnrController {
 		List<BulEnroll> BulEnroll = bulletinService.findEnrollNumByNo(postno);
 		return BulEnroll.size();
 	}
-	
-	
-
 }

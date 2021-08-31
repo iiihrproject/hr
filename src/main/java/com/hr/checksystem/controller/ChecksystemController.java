@@ -42,7 +42,6 @@ public class ChecksystemController {
 	public String checkInto(Model model ,LoginModel loginModel) {
 //		HttpSession httpSession = request.getSession(true);
 		String empNo = loginModel.getEmpNo();
-		System.out.println(empNo);
 //		String empNo = (String)httpSession.getAttribute("empNo");
 //		empNo = "123";
 		
