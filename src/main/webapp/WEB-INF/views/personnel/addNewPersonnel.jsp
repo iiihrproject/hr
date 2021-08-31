@@ -43,7 +43,10 @@
 			let inputRole = $("#inputRole").val();
 			let inputPersonalIdNumber = $("#inputPersonalIdNumber").val();
 			let inputName = $("#inputName").val();
-			let inputGender = $("#inputGender").val();
+			let inputGender = $(".inputGender:checked").val();
+			if(typeof inputGender === "undefined"){
+				inputGender = "";
+			}
 			let inputEmpNo = $("#inputEmpNo").val();
 			let inputDepartmentNumber = $("#inputDepartmentNumber").val();
 			let hr_manager = "";
@@ -92,7 +95,7 @@
 					let inputRole = $("#inputRole").val("");
 					let inputPersonalIdNumber = $("#inputPersonalIdNumber").val("");
 					let inputName = $("#inputName").val("");
-					let inputGender = $("#inputGender").val("");
+					let inputGender = $(".inputGender").prop('checked', false);
 					let inputEmpNo = $("#inputEmpNo").val("");
 					let inputDepartmentNumber = $("#inputDepartmentNumber").val("");
 					let tableInfo = JSON.parse(xhr.responseText);
@@ -122,19 +125,19 @@
 		});
 	}
 	function insertManager(){
-		let inputRole = $("#inputRole").val("CS");
+		let inputRole = $("#inputRole").val("PU MANAGER");
 		let inputPersonalIdNumber = $("#inputPersonalIdNumber").val("G221364789");
 		let inputName = $("#inputName").val("驚奇隊長");
-		let inputGender = $("#inputGender").val("female");
-		let inputEmpNo = $("#inputEmpNo").val("csmanager");
+		let inputGender = $("#female").prop('checked', true);
+		let inputEmpNo = $("#inputEmpNo").val("pumanager");
 		let inputDepartmentNumber = $("#inputDepartmentNumber").val("4");
 	}
 	function insertAgent(){
-		let inputRole = $("#inputRole").val("CS");
+		let inputRole = $("#inputRole").val("PU");
 		let inputPersonalIdNumber = $("#inputPersonalIdNumber").val("K111369859");
 		let inputName = $("#inputName").val("奇異博士");
-		let inputGender = $("#inputGender").val("male");
-		let inputEmpNo = $("#inputEmpNo").val("cs1");
+		let inputGender = $("#male").prop('checked', true);
+		let inputEmpNo = $("#inputEmpNo").val("pu1");
 		let inputDepartmentNumber = $("#inputDepartmentNumber").val("4");
 	}
 	</script>
@@ -161,7 +164,12 @@
 							<tr><td>職位</td><td id='role'></td><td><input type='text' id='inputRole'/></td></tr>
 							<tr><td>身分證字號</td><td id='personalIdNumber'></td><td><input type='text' id='inputPersonalIdNumber'/></td></tr>
 							<tr><td>姓名</td><td id='name'></td><td><input type='text' id='inputName'/></td></tr>
-							<tr><td>性別</td><td id='gender'></td><td><input type='text' id='inputGender'/></td></tr>
+							<tr><td>性別</td><td id='gender'></td><td>
+								<input type='radio' class='inputGender' name='gender' value='male' id='male'/>
+								<label for='true'>男性</label>
+								<input type='radio' class='inputGender' name='gender' value='female' id='female'/>
+								<label for='false'>女性</label>
+							</td></tr>
 							<tr><td>員工編號</td><td id='empNo'></td><td><input type='text' id='inputEmpNo'/></td></tr>
 							<tr><td>部門編號</td><td id='departmentNumber'></td><td><input type='text' id='inputDepartmentNumber'/></td></tr>
 							<tr><td colspan='3'><div id='authorityButton'>
