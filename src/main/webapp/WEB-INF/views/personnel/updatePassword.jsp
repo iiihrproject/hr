@@ -72,17 +72,15 @@
 			xhr.send("newPassword=" + newpwd);
 			
 			xhr.onreadystatechange = function(){
-				console.log(xhr.readyState);
-				console.log(xhr.status);
 				if (xhr.readyState == 4 && xhr.status == 200){
-					console.log("after");
 					let result = JSON.parse(xhr.responseText);
-					console.log(result);
+					console.log(result.password);
  					 if (result.result == 'password update is successful') {
 						div2.innerHTML = "<font color='green'>" + result.result + "</font>"; 
  					 } else {
  			  			div2.innerHTML = "<font color='red' >" + result.result+ "</font>";
  			  		}
+
 				}
             
         	

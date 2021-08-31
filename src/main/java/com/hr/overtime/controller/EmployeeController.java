@@ -69,7 +69,7 @@ public class EmployeeController {
 	@Autowired
 	OverTimeAuditingRepository overTimeAuditingRepository;
 	
-	@GetMapping(path="/findEmpOvertime")
+	@GetMapping(path="/findEmpOvertimepending")
 	@ResponseBody
 	public PublicReponse findEmpOvertimeBypending(@RequestParam(value="pageNo",required = false)String pageNo,
 			@RequestParam(value="depart",required = false)String depart,
@@ -98,7 +98,7 @@ public class EmployeeController {
 		return response ;
 	}
 	
-	@GetMapping(path="/findEmpOvertime2")
+	@GetMapping(path="/findEmpOvertimeauditing")
 	@ResponseBody
 	public PublicReponse findEmpOvertimeByauditted(@RequestParam(value="pageNo",required = false)String pageNo,
 			@RequestParam(value="depart",required = false)String depart,
@@ -142,8 +142,10 @@ public class EmployeeController {
 		System.out.println(empNo);
 		
 		List<OverTimePending> overtimePartPending = overTimeService.findPartByEmpnoPending(empNo);
+		List<OverTimeAuditted> overtimePartAuditted = overTimeService.findPartByEmpnoAuditted(empNo);
 		System.out.println(overtimePartPending.size());
 		model.addAttribute("overtimePartPending" , overtimePartPending );
+		model.addAttribute("overtimePartAuditted",overtimePartAuditted);
 		return "overtime/employeeUser";
 	}
 }

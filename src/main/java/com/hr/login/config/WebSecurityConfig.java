@@ -31,7 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		  	.authorizeRequests() // Setting authentic system              
 //			    .antMatchers("/login").permitAll() // Pages that allow user to access without authentication
 			    .antMatchers("/index", "/logout").authenticated()
-			    .antMatchers("/checkInto","/saveCheckSystem").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
+			    .antMatchers("/testInsert/*","/intoQuery","/checkInto","/saveCheckSystem","/findCheckByEmpno","/empCheck","/employeeQuery","/employeeOvertime","/saveOvertime","/findEmpOvertime","/findEmpOvertimepending","/findEmpOvertimeauditing","/EmpSignApply","/saveEmpComplementSign","/EmpSignQuery","/empPendingQuery","/empAudittedQuery").authenticated() // == .antMatchers("/personnel").hasAnyRole("GENERAL", "HR", "ADMIN, "MANAGER)
+			    .antMatchers("/mangerCheckQuery","/findAllCheck","/ManagersystemOvertime","/manageQuery","/manageAudit","/ManagerSignAllQuery","/ManagerSignQuery","/ManagerSignAudit").hasAnyRole("HR_MANAGER", "HR","RD_MANAGER","SALES_MANAGER")
 			    .antMatchers("/").permitAll()
 			    .antMatchers("/editPersonalInfo", "/personnel", "/personalInformationUpdate", "/personalInformation","/pages", "/personnelAuthorization").authenticated()
 			    .antMatchers( "/department", "/departmentDetail", "/departmentManagerNoUpdate", "/addNewDepartment", "/createNewDepartment").hasRole("HR_MANAGER")

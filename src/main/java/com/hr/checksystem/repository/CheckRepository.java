@@ -19,7 +19,7 @@ public interface CheckRepository {
 
 	Checksystem findYesterdayCheckSystemByEmpno(String empNo);
 
-	Checksystem getCheckSystemByTime(String dateString);
+	Checksystem getCheckSystemByTime(String dateString ,String empNo);
 
 	public FactSchedule findWorkTimeByEmpNo(int empID , String date);
 	

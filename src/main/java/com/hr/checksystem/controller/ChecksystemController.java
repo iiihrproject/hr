@@ -25,6 +25,7 @@ import com.hr.checksystem.model.Checksystem;
 import com.hr.checksystem.repository.Impl.CheckSystemRepository;
 import com.hr.checksystem.service.CheckService;
 import com.hr.login.model.LoginModel;
+import com.hr.overtime.service.bean.PublicReponse;
 import com.hr.schedule.model.FactSchedule;
 
 @Controller
@@ -45,13 +46,15 @@ public class ChecksystemController {
 //		String empNo = (String)httpSession.getAttribute("empNo");
 //		empNo = "123";
 		
-		
+		Date time = new Date();
+		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+		String today = sdfDate.format(time).toString();
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE,   -1);
 		String yesterday = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 		FactSchedule factSchedule = checkService.getFactSchedule(yesterday, loginModel.getPk());
-		
-		model.addAttribute("factSchedule" ,factSchedule);
+		FactSchedule factScheduleToday = checkService.getFactSchedule(today, loginModel.getPk());
+		model.addAttribute("factSchedule" ,factScheduleToday);
 		
 		System.out.println(loginModel.getPk());
 		//如果有資料代表昨天不是休假  才去做判斷
@@ -79,7 +82,7 @@ public class ChecksystemController {
 			
 		}
 		
-		List<Checksystem> checksystem = checkService.findPartCheckSystem(empNo,4);
+		List<Checksystem> checksystem = checkService.findPartCheckSystem(empNo,5);
 		System.out.println("size = " + checksystem.size());
 		
 		model.addAttribute("Checksystem",checksystem);
@@ -94,6 +97,7 @@ public class ChecksystemController {
 //		String empNo = (String)httpSession.getAttribute("empNo");
 		String empNo = loginModel.getEmpNo();
 		Date time = new Date();
+		String depName = loginModel.getDepartmentDetail().getName();
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
 		String sDAte = sdfDate.format(time).toString();
@@ -136,6 +140,7 @@ public class ChecksystemController {
 			
 			checksystem = new Checksystem();
 			checksystem.setEmpNo(empNo);
+			checksystem.setDepName(depName);
 			
 			if("checkIn".equals(type)) {
 				checksystem.setCheckInTime(time);
@@ -221,17 +226,30 @@ public class ChecksystemController {
 	}
 //	<-------------------------------------------------管理員----------------------------------------------------->
 	
-	@GetMapping(path = "/MangerQuery")
+	@GetMapping(path = "/mangerCheckQuery")
 	public String managerCheckSystem() {
 		return "checksystem/managerCheck";
 	}
 	
 	
 	@GetMapping(path = "/findAllCheck")
-	public @ResponseBody List<Checksystem> findCheckSystem() {
-		List<Checksystem> checksystem = checkService.findAllCheckSystem();
+	public @ResponseBody PublicReponse findCheckSystem(@RequestParam(value="pageNo",required = false)String pageNo,
+			@RequestParam(value="depName",required = false)String depName,@RequestParam(value="date",required = false)String date,
+			LoginModel loginModel) {
 		
-		return checksystem ;
+		System.out.println("date = " + date);
+		 
+		int pageNumber = pageNo == null || "null".equals(pageNo) ? 0 : Integer.parseInt(pageNo) -1;
+		Pageable page = PageRequest.of(pageNumber, 5);
+		Page<Checksystem> CheckResult = checkSystemRepository.findAllCheck(page, date, depName);
+		List<Checksystem> managerCheckQuery = CheckResult.getContent();
+		
+		PublicReponse response = new PublicReponse();
+		response.setResult(managerCheckQuery);
+		response.setTotalPage(CheckResult.getTotalPages());
+		response.setCurrentPage(pageNumber + 1);
+		
+		return response ;
 	}
 //	<-------------------------------------------------員工查詢----------------------------------------------------->	
 	@GetMapping(path = "/empCheck")

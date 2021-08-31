@@ -27,6 +27,8 @@ public interface OverTimeRepository {
 
 	Double sumOverTimeHours(String empNo);
 
+	List<OverTimeAuditted> findPartByEmpnoAuditted(String empNo);
+
 //	DepartmentDetail queryManagerId(int dept_no);
 
 }

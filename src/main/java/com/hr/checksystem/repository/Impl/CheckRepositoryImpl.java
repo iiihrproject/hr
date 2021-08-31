@@ -105,11 +105,12 @@ public class CheckRepositoryImpl implements CheckRepository {
 	}
 
 	@Override
-	public Checksystem getCheckSystemByTime(String dateString) {
+	public Checksystem getCheckSystemByTime(String dateString , String empNo) {
 		String hql = "select * from checksystem \r\n"
-				+ "  where (CONVERT(varchar(100), checkInTime, 23) = :dateString or CONVERT(varchar(100), checkOutTime, 23) = :dateString) ";
+				+ "  where (CONVERT(varchar(100), checkInTime, 23) = :dateString or CONVERT(varchar(100), checkOutTime, 23) = :dateString) and empNo = :empNo ";
 		Query query = entityManager.createNativeQuery(hql,Checksystem.class);
 		
+		query.setParameter("empNo", empNo);
 		query.setParameter("dateString", dateString);
 		
 		if(query.getResultList().size() != 0) {

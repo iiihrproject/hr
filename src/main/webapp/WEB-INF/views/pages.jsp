@@ -206,7 +206,7 @@
 													class="dropdown-menu dropdown-menu-right"
 													aria-labelledby="ApplicationReview">
 													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/Leave/LeaveResult' />">請假</a>
-													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/MangerQuery' />">打卡紀錄</a>
+													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/mangerCheckQuery' />">打卡紀錄</a>
 													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/ManagersystemOvertime' />">加班</a>
 													<a class="dropdown-item h5 mb-0 text-gray-800" href="<c:url value='/ManagerSignAllQuery' />">補簽</a>
 												</div>

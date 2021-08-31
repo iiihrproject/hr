@@ -95,6 +95,8 @@ public class CheckServiceImpl implements CheckService {
 		
 		for(Checksystem checksystem : checkSystemList) {
 			
+			checksystem.setShowTime();
+			
 			Date checkTime = transferDate(checksystem.getCreateTime());
 			
 			//判斷小於今天的資料作處理
@@ -203,8 +205,8 @@ public class CheckServiceImpl implements CheckService {
 	}
 
 	@Override
-	public Checksystem getCheckSystemByTime(String dateString) {
-		return checkRepository.getCheckSystemByTime(dateString);
+	public Checksystem getCheckSystemByTime(String dateString,String empNo) {
+		return checkRepository.getCheckSystemByTime(dateString, empNo);
 	}
 
 	@Override //用日期取得 排班資料

@@ -39,10 +39,15 @@
 <script src="js/jquery-3.6.0.min.js"></script>
 <style type="text/css">
 		.currentPage{
-			background-color: green;
+			background-color: #008F8F;
 		}
 		table{
 			text-align: center;
+		}
+		.btn{
+			margin-right: 5px;
+			margin-top: 10px;
+			margin-bottom: 10px;
 		}
 
 	</style>
@@ -51,6 +56,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	let managequery = $('#managerSignQuery');
+	let searchMonth =$('#date');
+	searchMonth.html(getYearMonth());
 	let xhr = new XMLHttpRequest();
 	xhr.open("GET","<c:url value='/ManagerSignQuery'/>");
 	xhr.send();
@@ -75,7 +82,7 @@ function manageQuerySign(jsonString){
 	let managesignresult = JSON.parse(jsonString);
 	let managequerysigns = managesignresult.result;
 	let segment ="<table border='1' align='center' class='table table-bordered'>";
-	segment += "<tr><th colspan='7'>管理員審核系統</th></tr>";
+// 	segment += "<tr><th colspan='7'>管理員審核系統</th></tr>";
 	segment += "<tr><th>申請日期</th><th>姓名</th><th>補簽日期</th><th>補簽時間</th><th>審核狀態</th><th>原由</th></tr>";
 	for(let n = 0 ; n< managequerysigns.length; n++){
 		let managequerysign = managequerysigns[n];
@@ -103,7 +110,7 @@ function manageQuerySign(jsonString){
 		
 		var id = 'page' + n;
 		
-		segment += "<button onclick='pageClick(this)' class='pageNo " + isCurrent + "'  id='" + id + "' " +">" + n + "</button>";
+		segment += "<button onclick='pageClick(this)' class='pageNo " +'btn btn-outline-secondary '+ isCurrent +"'  id='" + id + "' " +">" + n + "</button>";
 		
 	}
 	
@@ -134,9 +141,10 @@ function passAnDdenyClick(e){
 	        	xhr1.onreadystatechange = function(){
 	        		if(xhr1.readyState == 4 && xhr1.status == 200){
 	        			swal("Thank!", "完成審核", "success");
-	        			refresh();
+	        			
 	        		}
 	        	}
+	        	setTimeout('refresh()', 2000);
 	     } else if (result.dismiss === "cancel"){
 	          //使用者按下「取消」要做的事
 	         swal("取消審核", "尚未審核該筆資料", "error");
@@ -162,9 +170,10 @@ function passAnDdenyClick(e){
         	xhr1.onreadystatechange = function(){
         		if(xhr1.readyState == 4 && xhr1.status == 200){
         			swal("Thank!", "完成審核", "success");
-        			refresh();
+        			
         		}
         	}
+        	setTimeout('refresh()', 2000);
      } else if (result.dismiss === "cancel"){
           //使用者按下「取消」要做的事
          swal("取消審核", "尚未審核該筆資料", "error");
@@ -197,6 +206,25 @@ function callAjax(page,date){
 	}
 }
 
+function getYearMonth(){
+	var date = new Date();
+	var year = date.getFullYear();
+	let option = "<option value>請選擇</option>";
+	for (let n = 1 ; n<=12 ;n++){
+		if(n.toString().length == 1 ){
+			option += "<option value='"+year + "-"+"0"+ n +"'>"+year + "-"+"0"+ n +"</option>";
+		}else{
+			option += "<option value='"+year + "-"+ n +"'>"+year + "-"+ n +"</option>"; 
+		}
+		
+	}
+	return option;
+}
+
+function refresh(){
+	window.location.href = "<c:url value='/ManagerSignAllQuery'/>";
+}
+
 
 </script>
 
@@ -216,19 +244,14 @@ function callAjax(page,date){
 				<div class="">
 					<div class="card shadow mb-4">
 						<div class="card-body">
-							<h2 class="m-0 font-weight-bold text-primary">管理員查詢系統</h2>	
+							<h2 class="m-0 font-weight-bold text-primary">補簽簽核查詢系統</h2>	
 							
 								<div>
-									<select  id="date">
-									    <option value>請選擇</option>
-									    <option value="2021-05">2021-05</option>
-									    <option value="2021-06">2021-06</option>
-									    <option value="2021-07">2021-07</option>
-									    <option value="2021-08">2021-08</option>
-									    <option value="2021-09">2021-09</option>
+									<select  id="date" class="btn btn-outline-primary">
+										<option value>請選擇月份</option>
 									</select>
 									
-									<button id="search">搜尋</button>
+									<button id="search" class="btn btn-secondary">搜尋</button>
                                 
                                 </div>
 							
