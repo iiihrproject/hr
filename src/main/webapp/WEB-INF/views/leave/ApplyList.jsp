@@ -7,6 +7,13 @@
 <meta charset="UTF-8">
 <script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
 <title>Application List</title>
+<style>
+.table .thead-HR th {
+  color: #fff;
+  background-color: #7973AE;
+  border-color: #c0bde2;
+}
+</style>
 <script>
 	window.addEventListener("DOMContentLoaded", function() {
 		loadLeaveData()
@@ -14,53 +21,82 @@
 	
 	function loadLeaveData() {
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "<c:url value='/Leave/findLeaveByEmpNo' />?EmpNo=${sessionScope.loginModel.getEmpNo()}", true);
+		xhr.open("GET","<c:url value='/Leave/findLeaveByEmpNo' />?EmpNo=${sessionScope.loginModel.getEmpNo()}",true);
 		xhr.send();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				document.getElementById("tbodycontent").innerHTML = processData(xhr.responseText);
-				// 				let leaveList = JSON.parse(xhr.responseText);
-// 								console.log(leaveList);
+// 					let leaveList = JSON.parse(xhr.responseText);
+//					console.log(leaveList);
 				setCSS();
 			}
 			function processData(jsonString) {
 				let leaveList = JSON.parse(jsonString);
+				console.log(leaveList.length);
 				if (leaveList.length == 0) {
 					return "<tr><td colspan=5 style='text-align:center'>目前尚無任何申請資料</td></tr>";
+				} if (leaveList.length <= 10) {
+					let segment = "";
+					for (let i = 0; i < leaveList.length; i++) {
+						let leave = leaveList[i];
+						segment += "<tr>";
+						segment += "<td>" + leave.requestDate + "</td>";
+						segment += "<td>" + leave.applicationNo + "</td>";
+						segment += "<td>" + leave.reasonList.desc_zh + "</td>";
+						segment += "<td>" + leave.startDate + " "
+								+ leave.startTime.slice(0, 5) + "~"
+								+ leave.endDate + " "
+								+ leave.endTime.slice(0, 5) + "</td>";
+						segment += "<td><span class='btn-sm text-white font-weight-bold'>"
+								+ leave.statusList.desc_zh
+								+ "</span></td></tr>";
+					} return segment;
 				} else {
-				let segment = "";
-				for (let i = 0; i < leaveList.length; i++) {
-					let leave = leaveList[i];
-					segment += "<tr>";
-					segment += "<td>" + leave.requestDate + "</td>";
-					segment += "<td>" + leave.applicationNo + "</td>";
-					segment += "<td>" + leave.reasonList.desc_zh + "</td>";
-					segment += "<td>" + leave.startDate + " "
-							+ leave.startTime.slice(0, 5) + "~" + leave.endDate
-							+ " " + leave.endTime.slice(0, 5) + "</td>";
-					segment += "<td><span class='btn-sm text-white font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
-				}
-					return segment
+					let segment = "";
+					for (let i = 0; i < 10; i++) {
+						let leave = leaveList[i];
+						segment += "<tr>";
+						segment += "<td>" + leave.requestDate + "</td>";
+						segment += "<td>" + leave.applicationNo + "</td>";
+						segment += "<td>" + leave.reasonList.desc_zh + "</td>";
+						segment += "<td>" + leave.startDate + " "
+								+ leave.startTime.slice(0, 5) + "~"
+								+ leave.endDate + " "
+								+ leave.endTime.slice(0, 5) + "</td>";
+						segment += "<td><span class='btn-sm text-white font-weight-bold'>"
+								+ leave.statusList.desc_zh
+								+ "</span></td></tr>";
+					}
+					return segment;
 				}
 			}
 		}
 	}
 
 	// 設定CSS
-	function setCSS(){
-//	 	狀態結果改變背景色
-		$("td span").each(function(index){
-			if($(this).text() == "提出申請"){
-				$(this).addClass("bg-warning text-dark");
-			} else if($(this).text() == "取消"){
-				$(this).addClass("bg-secondary").parent($(this)).addClass("text-right");
-			} else if($(this).text() == "通過"){
-				$(this).addClass("bg-success").parent($(this)).addClass("text-center");
-			} else if($(this).text() == "否決"){
-				$(this).addClass("bg-danger").parent($(this)).addClass("text-right");
-			}
-		});
+	function setCSS() {
+		//	 	狀態結果改變背景色
+		$("td span").each(
+				function(index) {
+					if ($(this).text() == "提出申請") {
+						$(this).addClass("bg-warning text-dark");
+					} else if ($(this).text() == "取消") {
+						$(this).addClass("bg-secondary").parent($(this))
+								.addClass("text-right");
+					} else if ($(this).text() == "通過") {
+						$(this).addClass("bg-success").parent($(this))
+								.addClass("text-center");
+					} else if ($(this).text() == "否決") {
+						$(this).addClass("bg-danger").parent($(this)).addClass(
+								"text-right");
+					}
+				});
 	}
+	//固定高度
+	$(window).resize(function() {
+		var winH = $(this).height();
+		$("#cardBody").height(winH * 0.6);
+	}).resize();
 </script>
 </head>
 <body>
@@ -96,13 +132,13 @@
 					<a href="#collapseCardExample" class="d-block card-header py-3"
 						data-toggle="collapse" role="button" aria-expanded="true"
 						aria-controls="collapseCardExample">
-						${sessionScope.loginModel.getEmpNo()}的請假申請紀錄
+						${sessionScope.loginModel.getEmpNo()}近10筆的請假申請紀錄
 					</a></h6>
 					<!-- Card Content - Collapse (表格內容)-->
 					<div class="collapse show" id="collapseCardExample" style="">
 						<div class="card-body">
-							<table style="width: 100%" class="table table-hover center">
-								<thead>
+							<table style="width: 100%" class="table table-hover center text-dark">
+								<thead class="thead-HR">
 									<tr>
 										<th>申請日</th>
 										<th>申請單號</th>
@@ -115,7 +151,9 @@
 								</tbody>
 								<tfoot>
 									<tr>
-										<td colspan=5></td>
+										<td colspan=5 class="text-center">
+										<a href="<c:url value='/Leave/MyLeaveApply' />" class="text-decoration-none btn btn-outline-info">想再回味更多筆
+										</a></td>
 									</tr>
 								</tfoot>
 							</table>
