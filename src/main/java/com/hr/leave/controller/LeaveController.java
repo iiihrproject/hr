@@ -47,6 +47,14 @@ public class LeaveController {
 		model.addAttribute("body", "leave/LeaveResult.jsp");
 		return "layout/Template";
 	}
+	
+//	頁面到個人查詢詳情
+	@GetMapping("/MyLeaveApply")
+	public String MyLeaveApply(Model model) {
+		model.addAttribute("body", "leave/MyLeaveApply.jsp");
+		return "layout/Template";
+	}
+	
 //	查詢所有請假紀錄
 	@GetMapping("/findAllLeave")
 	public @ResponseBody List<LeaveBean> findAllLeave() {
