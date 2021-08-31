@@ -54,6 +54,15 @@
     	document.getElementById('password').value = 'password';
     }
     
+    function puButton () {
+    	document.getElementById('username').value = 'pu1';
+    	document.getElementById('password').value = 'password';
+    }
+    
+    function pumanagerButton () {
+    	document.getElementById('username').value = 'pumanager';
+    	document.getElementById('password').value = 'password';
+    }
     </script>
   </head>
   <body>
@@ -78,6 +87,8 @@
             <button type="button" class="buttonst" onclick="managerButton()">RDManager</button>
             <button type="button" class="buttonst" onclick="hrButton()">HR</button>
             <button type="button" class="buttonst" onclick="hrmanagerButton()">HR Manager</button>
+            <button type="button" class="buttonst" onclick="pumanagerButton()">PU Manager</button>
+            <button type="button" class="buttonst" onclick="puButton()">PU1</button>
             </span>
             <br/>
           </form>
