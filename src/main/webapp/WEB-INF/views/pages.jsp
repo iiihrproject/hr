@@ -37,7 +37,7 @@
 	function isAuthMoreThanGEN() {
 		var isAuthMoreThanGEN = false;
 		$.get("<c:url value='/G/findAUTHByEmpNo' />", function(isAuthMoreThanGEN, status) {
-			console.log("isAuthMoreThanGen = " + isAuthMoreThanGEN);
+// 			console.log("isAuthMoreThanGen = " + isAuthMoreThanGEN);
 			if (isAuthMoreThanGEN) {
 				$("#managerCard").removeClass("invisible");
 			}

@@ -24,10 +24,9 @@
 <title>Preview</title>
 <script>
 window.addEventListener("DOMContentLoaded", function() {
-	loadLeaveData()
-	
+	loadLeaveData();
 });
-
+//找出部門假單申請，排除自己
 function loadLeaveData() {
 	var xhr = new XMLHttpRequest();
 	var myDeptNo = ${sessionScope.loginModel.departmentDetail.departmentNumber};
@@ -49,6 +48,10 @@ function loadLeaveData() {
 			let segment = "";
 			for (let i = 0; i < leaveList.length; i++) {
 				let leave = leaveList[i];
+				//排除自己
+				if(leave.empNo == "${sessionScope.loginModel.empNo}"){
+					continue;
+					}
 				segment += `<tr><td><span _empName="${"${leave.empNo}"}"></span><span class="invisible">"${"${leave.empNo}"}"</span></td>`;
 				segment += "<td>" + leave.reasonList.desc_zh + "</td>";
 				segment += "<td>" + leave.startDate + " "
@@ -58,7 +61,7 @@ function loadLeaveData() {
 				segment += "<td><a href='#Co"+ leave.applicationNo +"' data-toggle='collapse'>" + leave.applicationNo + "</a></td>";
 				segment += "<td><span class='btn-sm text-white font-weight-bold'>" + leave.statusList.desc_zh + "</span></td></tr>";
 				segment += "<tr class='collapse' id='Co"+ leave.applicationNo +"'>";
-				segment +=  `<td class="pl-4">代理人：<a title="發信給${"${leave.handOffEmail}"}" href="mailto:${"${leave.handOffEmail}"}"><span _pk="${"${leave.handOff}"}"><span class="invisible">"${"${leave.handOff}"}"</span></span></a></td>`;
+				segment += `<td class="pl-4">代理人：<a title="發信給${"${leave.handOffEmail}"}" href="mailto:${"${leave.handOffEmail}"}"><span _pk="${"${leave.handOff}"}"><span class="invisible">"${"${leave.handOff}"}"</span></span></a></td>`;
 				segment += "<td colspan='2'>備註：" + leave.comments + "</td>";
 				segment += `<td colspan="2">簽核：<span _pk="${"${leave.approval01MGR}"}"></span><span class="invisible">"${"${leave.approval01MGR}"}"</span></td>`;
 				segment += "<td><button onclick='seeMore(\"" + leave.applicationNo + "\")' class='btn btn-sm btn-info btn-icon-split' type='button' data-toggle='modal' data-target='#detailModal'>";
@@ -78,7 +81,7 @@ function loadLeaveData() {
 			
 			leaveList.forEach(l => {
 				empPkSet.add(l.handOff);
-				if (l.approval01MGR != '') {
+				if (l.approval01MGR != '待處理...') {
 					empPkSet.add(l.approval01MGR)
 				}
 			});
@@ -515,7 +518,6 @@ $("#printTable").click(function() {
 
 //審核結果-通過
 $("#approveBtn").click(function(){
-	console.log($("#sig-dataUrl").attr("src"));
 	if($("#sig-image").attr("src") == ""){
 		Swal.fire('忘了按「簽名完成」?','','warning',);
 		return false;

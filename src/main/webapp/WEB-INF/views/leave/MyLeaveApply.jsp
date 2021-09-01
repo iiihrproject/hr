@@ -25,7 +25,7 @@ function loadLeaveData() {
 		}
 		function processData(jsonString) {
 			let leaveList = JSON.parse(jsonString);
-							console.log(leaveList);
+// 							console.log(leaveList);
 			if (leaveList.length == 0) {
 				return "<tr><td colspan=6 style='text-align:center'>目前尚無任何申請資料</td></tr>";
 			} else {
