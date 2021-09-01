@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import = "com.hr.login.model.LoginModel"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -505,7 +506,8 @@ function processBulButton(result) {
 		console.log("執行false");
 	}
 }
-	
+	let ped = `${sessionScope.loginModel.getEmployeePassword()}`;
+	console.log(ped);
 	</script>
 
 </head>

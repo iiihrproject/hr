@@ -33,6 +33,11 @@ public class AddNewPersonnelServiceImpl implements AddNewPersonnelService{
 	
 	@Override
 	public boolean createNewPersonnel(Map<String, String> inputMap) {
+		LoginModel checkLoginModel = addNewPersonnelRepository.getLoginModelByEmpNo(inputMap.get("empNo"));
+		if(checkLoginModel != null) {
+			return false;
+		}
+		
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
