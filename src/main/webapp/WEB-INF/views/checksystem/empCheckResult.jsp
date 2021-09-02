@@ -131,6 +131,68 @@
             <div id="bgcolor" class="container-fluid h-75" >    
 	            
             	 <div class="row">
+            	 		<div class="col-xl-4 col-md-6 mb-4">
+							<div class="card border-left-primary shadow h-100 py-2">
+								<div class="card-body">
+									<div class="row no-gutters align-items-center">
+										<div class="col mr-2">
+											<div
+												class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+												Revisit query</div>
+											<div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+												<a href="<c:url value='/EmpSignQuery' />"
+													class="text-decoration-none stretched-link">補簽查詢</a>
+											</div>
+										</div>
+										<div class="col-auto">
+											<i class="fas fa-history fa-3x text-primary"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+			
+						<div class="col-xl-4 col-md-6 mb-4">
+							<div class="card border-left-danger shadow h-100 py-2">
+								<div class="card-body">
+									<div class="row no-gutters align-items-center">
+										<div class="col mr-2">
+											<div
+												class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+												Overtime query</div>
+											<div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+												<a href="<c:url value='/employeeQuery' />"
+													class="text-decoration-none stretched-link">加班查詢</a>
+											</div>
+										</div>
+										<div class="col-auto">
+											<i class="fas fa-business-time fa-3x text-danger"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+			
+						<div class="col-xl-4 col-md-6 mb-4">
+							<div class="card border-left-warning shadow h-100 py-2">
+								<div class="card-body">
+									<div class="row no-gutters align-items-center">
+										<div class="col mr-2">
+											<div
+												class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+												Leave query</div>
+											<div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
+												<a href="<c:url value='/Leave/MyLeaveApply' />"
+													class="text-decoration-none stretched-link">請假查詢</a>
+											</div>
+										</div>
+										<div class="col-auto">
+											<i class="fas fa-power-off fa-3x text-warning"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 								<!-- 員工查詢  -->
                         <div class="col-lg-4  mycss">
 

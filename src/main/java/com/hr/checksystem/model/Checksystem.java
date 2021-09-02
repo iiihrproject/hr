@@ -27,6 +27,9 @@ public class Checksystem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(name = "EMPNAME")
+	private String empName;
+
 	@Column(name = "DEPNAME")
 	private String depName;
 
@@ -62,7 +65,7 @@ public class Checksystem {
 
 	@Transient
 	private String isNeedRepair = "N";
-	
+
 	@Transient
 	private Date showTime = null;
 //	private String checkInLate = null;
@@ -158,15 +161,26 @@ public class Checksystem {
 	}
 
 	public void setShowTime() {
-		if(checkInTime != null && checkOutTime != null) showTime = checkInTime;
-		else if(checkInTime == null) showTime = checkOutTime;
-		else showTime = checkInTime;
+		if (checkInTime != null && checkOutTime != null)
+			showTime = checkInTime;
+		else if (checkInTime == null)
+			showTime = checkOutTime;
+		else
+			showTime = checkInTime;
 	}
-	
+
 	public Date getShowTime() {
 		return showTime;
 	}
-	
+
+	public String getEmpName() {
+		return empName;
+	}
+
+	public void setEmpName(String empName) {
+		this.empName = empName;
+	}
+
 //	public String getCheckInLate() {
 //		if("Y".equals(this.isLateCheckIn)) return "是";
 //		else return "否";

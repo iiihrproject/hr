@@ -54,6 +54,7 @@ public class ComplementSignController {
 	}
 	
 	@PostMapping(path = "/saveEmpComplementSign")
+	@ResponseBody
 	public void savePendingComplementSign(@RequestBody PendingComplementSign pendingComplementSign,LoginModel loginModel) throws ParseException {
 		String empName = loginModel.getName();
 		String empNo = loginModel.getEmpNo();

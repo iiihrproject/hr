@@ -95,6 +95,7 @@ public class ChecksystemController {
 //		HttpSession httpSession = request.getSession(true);
 //		String empNo = (String)httpSession.getAttribute("empNo");
 		String empNo = loginModel.getEmpNo();
+		String empName = loginModel.getName();
 		Date time = new Date();
 		String depName = loginModel.getDepartmentDetail().getName();
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -138,6 +139,7 @@ public class ChecksystemController {
 			String isLate = isNotOnTime ? "Y" : "N";
 			
 			checksystem = new Checksystem();
+			checksystem.setEmpName(empName);
 			checksystem.setEmpNo(empNo);
 			checksystem.setDepName(depName);
 			

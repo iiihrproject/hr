@@ -33,10 +33,10 @@
     <!-- checksystem css -->
     <link rel='stylesheet' href="<c:url value='/css/checksystem.css' />" type="text/css" />
     
-    <!--引用SweetAlert2.css-->
+<!--     引用SweetAlert2.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css" />
     
-    <!--引用SweetAlert2.js-->
+<!--     引用SweetAlert2.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.0/sweetalert2.all.js"></script>
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->

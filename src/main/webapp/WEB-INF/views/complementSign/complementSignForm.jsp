@@ -54,7 +54,6 @@
 			let span0 = $('#result0c');
 			let span1 = $('#result1c');
 			let span2 = $('#result2c');
-			
 			var date = Date.parse(dateValue);
 			
 			if(date > today){
@@ -86,26 +85,27 @@
 		    }).then(function (result) {
 		        if (result.value) {
 		            //使用者按下「確定」要做的事
-// 		            var dateValue = $('#date').val();
-// 					var typeValue = $("select[name='Type']").val();
-// 					var reasonValue = $('#reason').val();
+		            var dateValue = $('#date').val();
+					var typeValue = $("select[name='Type']").val();
+					var reasonValue = $('#reason').val();
 					var xhr = new XMLHttpRequest();
 		 			xhr.open("POST","<c:url value='/saveEmpComplementSign' />", true);
-		 			var jsonPendingComplementSign={
+		 			var jsonPendingComplementSign = {
 		 				"appliedDate" : dateValue,
 		 				"type" : typeValue,
 		 				"reason" : reasonValue
 		 			}
 		 			xhr.setRequestHeader("Content-Type", "application/json");
 		 			xhr.send(JSON.stringify(jsonPendingComplementSign));
+		 			console.log(JSON.stringify(jsonPendingComplementSign));
 		 	  		xhr.onreadystatechange = function() {
 		 	  			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201) ) {
 		 	  				
-				  			
+		 	  				swal("新增成功!", "請等待主管簽核", "success");
 		 	  			}
 		 			}
 		             
-		         swal("新增成功!", "請等待主管簽核", "success");
+// 		         swal("新增成功!", "請等待主管簽核", "success");
 // 		         window.location.href = "<c:url value='/checkInto'/>";
 		         setTimeout('refresh()', 2000);
 		     } else if (result.dismiss === "cancel"){
@@ -117,29 +117,6 @@
 		    
 		})
 		
-// 		var sendData = document.getElementById("sendData");
-// 		sendData.onclick = function(){
-			
-// 			var dateValue = $('#date').val();
-// 			var typeValue = $("select[name='Type']").val();
-// 			var reasonValue = $('#reason').val();
-			
-// 			var xhr = new XMLHttpRequest();
-// 			xhr.open("POST","<c:url value='/saveEmpComplementSign' />", true);
-// 			var jsonPendingComplementSign={
-// 				"appliedDate" : dateValue,
-// 				"type" : typeValue,
-// 				"reason" : reasonValue
-// 			}
-// 			xhr.setRequestHeader("Content-Type", "application/json");
-// 			xhr.send(JSON.stringify(jsonPendingComplementSign));
-// 	  		xhr.onreadystatechange = function() {
-// 	  			if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201) ) {
-// 		  			window.location.href = "<c:url value='/xxx'/>";
-		  			
-// 	  			}
-// 			}
-// 		}	
 		
 		$(".slide_toggle").click(function () {
 		    $(this).next().slideToggle();
@@ -156,7 +133,19 @@
 			} else {
 				span0.innerHTML = "";
 			}
-	})
+		})
+		
+		$("#fast1").click(function(){
+			$("#date").val("2021-09-09T09:00");
+			$(".selector").find("option:contains('上班')").attr("selected",true);
+			$("#reason").val("早上忘記打卡");
+		})
+		
+		$("#fast2").click(function(){
+			$("#date").val("2021-09-10T18:00");
+			$(".selector").find("option:contains('下班')").attr("selected",true);
+			$("#reason").val("忙到忘記打卡");
+		})
 	})
 	
 	
@@ -186,7 +175,7 @@
                             <!-- Custom Text Color Utilities -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h2 class="m-0 font-weight-bold text-primary">員工補簽系統</h2>
+                                    <h2 class="m-0 font-weight-bold text-primary" style="float:right;" >員工補簽系統<button id="fast1" class="btn btn-danger" style="float:right;">快速產生</button><button id="fast2" class="btn btn-success" style="float:right; margin-right:10px;margin-left: 60px;">快速產生</button></h2> 
                                 </div>
                                 <div class="card-body ">
                                 
@@ -198,7 +187,7 @@
 								                    <tr>
 								                        <td style="text-align: right"><label for="pos" class="col-form-label">申請補簽日期 :</label></td>
 								                        <td><input type="datetime-local" id="date" name="appliedDate" class="form-control" size="30" maxlength="30"
-								                                style="width:200px;" required />
+								                                style="width:300px;" required />
 								                            <span id="result0c" class="form-text" style="text-align: right;"></span>
 								                            <span id="result2c" class="form-text" style="text-align: right;"></span>
 								                        </td>
@@ -207,7 +196,7 @@
 								                    <tr>
 								                        <td style="text-align: right"><label for="type" class="col-form-label">補簽類型 :</label></td>
 								                        <td style="text-align: left">
-								                        	<select name = "Type" id = type class="btn btn-outline-primary" >
+								                        	<select name = "Type" id = type class="btn btn-outline-primary selector" >
 								                            <option value= "CheckIn">上班
 								                            </option>  
 								                            <option value= "CheckOut">下班
@@ -265,8 +254,11 @@
 										  <tr>
 										  	 <td>${fn:substring(pending.date,0, 10)}</td>
 										  	 <td>${fn:substring(pending.appliedDate,0, 10)}</td>		
-										  	 <td>${fn:substring(pending.appliedDate,11, 16)}</td>		
-										  	 <td>${pending.status}</td>
+										  	 <td>${fn:substring(pending.appliedDate,11, 16)}</td>
+										  	 <td><c:choose>
+										     	  <c:when test="${pending.status == 'pending'}" >待審核</c:when>
+						       					</c:choose>
+						       				 </td>		
 										 </tr>    
 										</c:forEach>
 								  </table>
@@ -285,8 +277,12 @@
 										  <tr>
 										  	 <td>${fn:substring(auditted.date,0, 10)}</td>
 										  	 <td>${fn:substring(auditted.appliedDate,0, 10)}</td>		
-										  	 <td>${fn:substring(auditted.appliedDate,11, 16)}</td>		
-										  	 <td>${auditted.status}</td>
+										  	 <td>${fn:substring(auditted.appliedDate,11, 16)}</td>
+										  	 <td><c:choose>
+										     	  <c:when test="${auditted.status == 'Pass'}" >通過</c:when>
+										     	  <c:when test="${auditted.status == 'Deny'}" >退件</c:when>
+						       					</c:choose>
+						       				 </td>				
 										 </tr>    
 										</c:forEach>
 								  </table>

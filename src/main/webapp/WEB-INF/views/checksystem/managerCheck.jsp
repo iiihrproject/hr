@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
     <style type="text/css">
 		.currentPage{
-			background-color: #008F8F;
+			background-color: lavender;
 		}
 		table{
 			text-align: center;
@@ -75,15 +75,25 @@
     	let checksystemresult = JSON.parse(jsonString);
 		let checksystems = checksystemresult.result;
 		let segment = "<table border='1' class='table table-bordered' width='100%'>";
-		segment += "<tr><th colspan='6'>員工打卡清單</th></tr>";
-		segment += "<tr><th>員工編號</th><th>員工部門</th><th>上班打卡</th><th>下班打卡</th><th>是否遲到</th><th>是否準時</th><th>出勤時數</th>";
+// 		segment += "<tr><th colspan='6'>員工打卡清單</th></tr>";
+		segment += "<tr><th>員工編號</th><th>姓名</th><th>員工部門</th><th>上班打卡</th><th>下班打卡</th><th>是否遲到</th><th>是否準時</th><th>出勤時數</th></tr>";
 		for(let n = 0 ; n< checksystems.length; n++){
 			let checksystem = checksystems[n];
 			segment += "<tr>";
 			segment += "<td>" + checksystem.empNo +"</td>";
+			segment += "<td>" + checksystem.empName +"</td>";
 			segment += "<td>" + checksystem.depName +"</td>";
-			segment += "<td>" + checksystem.checkInTime +"</td>";
-			segment += "<td>" + checksystem.checkOutTime +"</td>";
+			
+			var checkInTime = checksystem.checkInTime
+			var checkOutTime = checksystem.checkOutTime
+			
+			if(checkInTime == null)checkInTime = '未刷上班卡';
+			else checkInTime;
+			
+			if(checkOutTime == null)checkOutTime = '未刷下班卡';
+			else checkOutTime;
+			segment += "<td>" + checkInTime +"</td>";
+			segment += "<td>" + checkOutTime +"</td>";
 			
 			var isLateCheckIn = checksystem.isLateCheckIn;
 			var isOnTimeCheckOut = checksystem.isOnTimeCheckOut;
@@ -150,7 +160,7 @@
     function getYearMonth(){
     	var date = new Date();
     	var year = date.getFullYear();
-    	let option = "<option value>請選擇</option>";
+    	let option = "<option value>請選擇月份</option>";
     	for (let n = 1 ; n<=12 ;n++){
     		if(n.toString().length == 1 ){
     			option += "<option value='"+year + "-"+"0"+ n +"'>"+year + "-"+"0"+ n +"</option>";
@@ -187,7 +197,7 @@
 						</select>
 						
 						<button id="search" class="btn btn-secondary">搜尋</button>
-                             
+                         <h1 style="float: right;margin-right: 550px;">員工打卡紀錄查詢系統</h1>    
                     </div>
 				
 					<div id='managerCheck' align='center' data-toggle="table" ></div>

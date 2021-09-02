@@ -24,8 +24,8 @@ public class TestController {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
-		String checkInString = "2021-07-15 09:00:00";
-		String checkOutString = "2021-07-15 18:00:00";
+		String checkInString = "2021-07-20 09:00:00";
+		String checkOutString = "2021-07-20 18:00:00";
 		Date date = new Date();
 		Date checkIn = sdf.parse(checkInString);
 		Date checkOut = sdf.parse(checkOutString);
@@ -33,12 +33,12 @@ public class TestController {
 		for(int i = 0 ; i < 47 ; i++) {
 			
 			Checksystem checkSystem = new Checksystem();
-			
-			checkSystem.setEmpNo("hr1");
-			checkSystem.setDepName("HR");
+			checkSystem.setEmpName("蜘蛛人");
+			checkSystem.setEmpNo("rd1");
+			checkSystem.setDepName("RD");
 			checkSystem.setCheckInTime(checkIn);
 			checkSystem.setCheckOutTime(checkOut);
-			checkSystem.setIsLateCheckIn("Y");
+			checkSystem.setIsLateCheckIn("N");
 			checkSystem.setIsOnTimeCheckOut("Y");
 			checkSystem.setWorkingHours(checkService.judgmentDate(checkIn, checkOut) / 60);
 			checkSystem.setUpdateTime(checkOut);

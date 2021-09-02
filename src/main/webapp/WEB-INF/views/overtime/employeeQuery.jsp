@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
     <style type="text/css">
 		.currentPage{
-			background-color: #008F8F;
+			background-color: lavender;
 		}
 		table{
 			text-align: center;
@@ -131,6 +131,8 @@
 			
 			for(let n = 0 ; n< overtimependings.length; n++){
 				let overtimepending = overtimependings[n];
+				var status = overtimepending.result;
+				if(status =='pending') status ='待審核'
 				segment += "<tr>";
 				segment += "<td>"+ overtimepending.dateOfApplication + "</td>";
 				segment += "<td>"+ overtimepending.empName + "</td>";
@@ -141,7 +143,7 @@
 				segment += "<td>"+ overtimepending.startingTime + "</td>";
 				segment += "<td>"+ overtimepending.endingTime + "</td>";
 				segment += "<td>"+ overtimepending.overTimeHours + "</td>";
-				segment += "<td>"+ overtimepending.result + "</td>";
+				segment += "<td>"+ status + "</td>";
 			}
 			segment += "</table>";
 			
@@ -178,6 +180,9 @@
 			segment += "<tr><th>申請日期</th><th>姓名</th><th>部門</th><th>職位</th><th>加班類型</th><th>加班日期</th><th>開始時間</th><th>結束時間</th><th>加班時數</th><th>審核狀態</th>";
 			for(let n = 0 ; n< overtimeauditteds.length; n++){
 				let overtimeauditted = overtimeauditteds[n];
+				var status = overtimeauditted.result
+				if(status =='Pass') status ='通過'
+				else status = '退件';
 				segment += "<tr>";
 				segment += "<td>"+ overtimeauditted.dateOfApplication + "</td>";
 				segment += "<td>"+ overtimeauditted.empName + "</td>";
@@ -188,7 +193,7 @@
 				segment += "<td>"+ overtimeauditted.startingTime + "</td>";
 				segment += "<td>"+ overtimeauditted.endingTime + "</td>";
 				segment += "<td>"+ overtimeauditted.overTimeHours + "</td>";
-				segment += "<td>"+ overtimeauditted.result + "</td>";
+				segment += "<td>"+ status + "</td>";
 			}
 			segment += "</table>";
 			
@@ -255,7 +260,7 @@
 
 	<jsp:include page="../header.jsp"></jsp:include>
 <!-- header刪掉 End-->
-	<div id="bgcolor" class="container-fluid h-75">
+	<div id="bgcolor" class="container-fluid h-80">
 		<div class="row">
                         <div class="col-xl-4 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
@@ -301,7 +306,7 @@
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Leave query</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
-                                            <a href="<c:url value='/checkInto' />" class="text-decoration-none">請假查詢</a></div>
+                                            <a href="<c:url value='/Leave/MyLeaveApply' />" class="text-decoration-none">請假查詢</a></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-power-off fa-3x text-warning"></i>

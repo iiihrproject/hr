@@ -31,6 +31,9 @@
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
 
+<!-- complementSign css -->
+<link rel='stylesheet' href="<c:url value='/css/signMange.css' />" type="text/css" />
+
 <!--引用SweetAlert2.css-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css" />
 
@@ -39,7 +42,7 @@
 <script src="js/jquery-3.6.0.min.js"></script>
 <style type="text/css">
 		.currentPage{
-			background-color: #008F8F;
+			background-color: lavender;
 		}
 		table{
 			text-align: center;
@@ -83,19 +86,25 @@ function manageQuerySign(jsonString){
 	let managequerysigns = managesignresult.result;
 	let segment ="<table border='1' align='center' class='table table-bordered'>";
 // 	segment += "<tr><th colspan='7'>管理員審核系統</th></tr>";
-	segment += "<tr><th>申請日期</th><th>姓名</th><th>補簽日期</th><th>補簽時間</th><th>審核狀態</th><th>原由</th></tr>";
+	segment += "<tr><th>申請日期</th><th>姓名</th><th>補簽日期</th><th>補簽時間</th><th>補簽類型</th><th>審核狀態</th><th>原由</th><th>主管簽核</th></tr>";
 	for(let n = 0 ; n< managequerysigns.length; n++){
 		let managequerysign = managequerysigns[n];
 		var passid = 'pass' + managequerysign.serialNumber;
+		var type = managequerysign.type;
+		if(type =='CheckIn') type ='上班'
+		else type = '下班';
+		var status = managequerysign.status;
+		if(status =='pending') status ='待審核'
 		segment += "<tr>";
 		segment += "<td>"+ (managequerysign.date).substring(0,10) + "</td>";
 		segment += "<td>"+ managequerysign.empName + "</td>";
 		segment += "<td>"+ (managequerysign.appliedDate).substring(0,10) + "</td>";
 		segment += "<td>"+ (managequerysign.appliedDate).substring(11,16) + "</td>";
-		segment += "<td>"+ managequerysign.status + "</td>";
+		segment += "<td>"+ type + "</td>";
+		segment += "<td>"+ status + "</td>";
 		segment += "<td>"+ managequerysign.reason + "</td>";
-		segment += "<td>"+"<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-primary btn-lg b1' value='Pass'>"+"Pass"+"</button>"+"&emsp;&ensp;";
-		segment += "<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-primary btn-lg b2' value='Deny'>"+"Deny"+"</button>"+"</td>";
+		segment += "<td>"+"<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-primary btn-lg b1' value='Pass'>"+"核准"+"</button>"+"&emsp;&ensp;";
+		segment += "<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-danger btn-lg b2' value='Deny'>"+"否決"+"</button>"+"</td>";
 	}
 	segment += "</table>";
 	
@@ -132,8 +141,6 @@ function passAnDdenyClick(e){
 	    }).then(function (result) {
 	        if (result.value) {
 	            //使用者按下「確定」要做的事
-	        	
-	        	alert(type)
 	        	let xhr1 = new XMLHttpRequest();
 	        	xhr1.open("POST","<c:url value='/ManagerSignAudit'/>");
 	        	xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
@@ -162,7 +169,6 @@ function passAnDdenyClick(e){
         if (result.value) {
             //使用者按下「確定」要做的事
         	
-        	alert(type)
         	let xhr1 = new XMLHttpRequest();
         	xhr1.open("POST","<c:url value='/ManagerSignAudit'/>");
         	xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
@@ -241,11 +247,12 @@ function refresh(){
                 <!-- header刪掉 End-->
                 
              <div id="bgcolor" class="container-fluid h-75">
-				<div class="">
-					<div class="card shadow mb-4">
-						<div class="card-body">
-							<h2 class="m-0 font-weight-bold text-primary">補簽簽核查詢系統</h2>	
-							
+				<div class="row">
+					<div class="col-lg-4 signMange">
+						<div class="card shadow mb-4">
+							<div class="card-header py-3">
+								<h2 class="m-0 font-weight-bold text-primary">補簽簽核查詢系統</h2>	
+							</div>
 								<div>
 									<select  id="date" class="btn btn-outline-primary">
 										<option value>請選擇月份</option>
@@ -255,10 +262,10 @@ function refresh(){
                                 
                                 </div>
 							
-							<div id="managerSignQuery" data-toggle='table' align=center ></div>
+							<div class="card-body" id="managerSignQuery" data-toggle='table' align=center ></div>
 								
-						</div>
-					 </div>
+						 </div>
+					</div>
 				</div>
 
 			</div>

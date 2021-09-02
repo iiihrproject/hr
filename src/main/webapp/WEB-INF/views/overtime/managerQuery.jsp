@@ -31,7 +31,7 @@
 	<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
 	
-    <!-- checksystem css -->
+    <!-- overtime css -->
     <link rel='stylesheet' href="<c:url value='/css/overtimeMange.css' />" type="text/css" />
     
     <!--引用SweetAlert2.css-->
@@ -46,7 +46,7 @@
     
     <style type="text/css">
 		.currentPage{
-			background-color: #008F8F;
+			background-color: lavender;
 		}
 		table{
 			text-align: center;
@@ -119,7 +119,7 @@
 		let managequerys = result.result;
 		
 		let segment ="<table border='1' align='center' class='table table-bordered'>";
-		segment += "<tr><th>申請日期</th><th>姓名</th><th>部門</th><th>職位</th><th>加班類型</th><th>加班日期</th><th>開始時間</th><th>結束時間</th><th>加班時數</th><th>加班原因</th><th>審核狀態</th>";
+		segment += "<tr><th>申請日期</th><th>姓名</th><th>部門</th><th>職位</th><th>加班類型</th><th>加班日期</th><th>開始時間</th><th>結束時間</th><th>加班時數</th><th>加班原因</th><th>審核狀態</th><th>主管簽核</th></tr>";
 		for(let n = 0 ; n< managequerys.length; n++){
 			let managequery = managequerys[n];
 			var passid = 'pass' + managequery.id;
@@ -135,8 +135,8 @@
 			segment += "<td>"+ managequery.overTimeHours + "</td>";
 			segment += "<td>"+ managequery.reason + "</td>";
 			segment += "<td>"+ managequery.result + "</td>";
-			segment += "<td>"+"<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-primary btn-lg b1' value='Pass'>"+"Pass"+"</button>"+" ";
-			segment += "<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-primary btn-lg b2' value='Deny'>"+"Deny"+"</button>"+"</td>";
+			segment += "<td>"+"<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-primary btn-lg b1' value='Pass'>"+"核准"+"</button>"+" ";
+			segment += "<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-danger btn-lg b2' value='Deny'>"+"否決"+"</button>"+"</td>";
 		}
 		segment += "</table>";
 		
@@ -233,7 +233,7 @@
 	function getYearMonth(){
     	var date = new Date();
     	var year = date.getFullYear();
-    	let option = "<option value>請選擇</option>";
+    	let option = "<option value>請選擇月份</option>";
     	for (let n = 1 ; n<=12 ;n++){
     		if(n.toString().length == 1 ){
     			option += "<option value='"+year + "-"+"0"+ n +"'>"+year + "-"+"0"+ n +"</option>";
@@ -270,91 +270,20 @@
                                 
                                 <div>
 									<select class="btn btn-outline-primary" id="date">
-										<option value>請選擇月份</option>
+									
 									</select>
 									
 									<button id="search" class="btn btn-secondary">搜尋</button>
                                 
                                 </div>
                                 
-                                <div class="card-body " id="managequery" data-toggle='table' align=center>
-                                
-                                      
-                                </div>
+                                <div class="card-body " id="managequery" data-toggle='table' align=center></div>
                             </div>
 
                             <!-- Custom Font Size Utilities -->
                             
 
                         </div>
-
-                        <!-- Second Column -->
-<!--                         <div class="col-lg-4"> -->
-
-<!--                             Background Gradient Utilities -->
-<!--                             <div class="card shadow mb-4"> -->
-<!--                                 <div class="card-header py-3"> -->
-<!--                                     <h6 class="m-0 font-weight-bold text-primary">Custom Background Gradient Utilities -->
-<!--                                     </h6> -->
-<!--                                 </div> -->
-<!--                                 <div class="card-body"> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-primary text-white">.bg-gradient-primary</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-secondary text-white">.bg-gradient-secondary</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-success text-white">.bg-gradient-success</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-info text-white">.bg-gradient-info</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-warning text-white">.bg-gradient-warning</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-danger text-white">.bg-gradient-danger</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-light text-white">.bg-gradient-light</div> -->
-<!--                                     <div class="px-3 py-5 bg-gradient-dark text-white">.bg-gradient-dark</div> -->
-<!--                                 </div> -->
-<!--                             </div> -->
-
-<!--                         </div> -->
-
-                        <!-- Third Column -->
-<!--                         <div class="col-lg-4 mycss "> -->
-
-<!--                             Grayscale Utilities -->
-<!--                             <div class="card shadow mb-4"> -->
-<!--                                 <div class="card-header py-3"> -->
-<!--                                     <h2 class="m-0 font-weight-bold text-primary">我的出勤紀錄 -->
-<!--                                     </h2> -->
-<!--                                 </div> -->
-<!--                                 <div class="card-body"> -->
-<!--                                     <div class="slide_toggle" id="showCheck">展開近五筆</div> -->
-<!--                                 展開 -->
-<!--                                 <div id="showFile" align='center'> -->
-<!--                                 <table class="table table-hover table-bordered"> -->
-<!-- 									<tr><th>日期</th><th>上班時間</th><th>下班時間</th><th>上班是否遲到</th><th>下班是否準時</th></tr> -->
-<%-- 										<c:forEach var='checksystem' items='${Checksystem}'> --%>
-<!-- 										  <tr> -->
-<%-- 										  	 <td>${fn:substring(checksystem.createTime,0, 10)}</td> --%>
-<%-- 										     <td>${fn:substring(checksystem.checkInTime,11,19)}</td> --%>
-<%-- 										     <td>${fn:substring(checksystem.checkOutTime,11,19)}</td> --%>
-<!-- 										     <td> -->
-<%-- 										     	<c:choose> --%>
-<%-- 										     	  <c:when test="${checksystem.isLateCheckIn == 'Y'}" > 是</c:when> --%>
-<%-- 										     	  <c:when test="${checksystem.isLateCheckIn == 'N'}" > 否</c:when> --%>
-<%-- 						       					</c:choose> --%>
-<!-- 										     </td> -->
-<!-- 										     <td>  -->
-<%-- 										     	<c:choose> --%>
-<%-- 										     	  <c:when test="${checksystem.isOnTimeCheckOut == 'Y'}" > 是</c:when> --%>
-<%-- 										     	  <c:when test="${checksystem.isOnTimeCheckOut == 'N'}" > 否</c:when> --%>
-<%-- 						       					</c:choose> --%>
-<!-- 						       				 </td> -->
-										     
-<!-- 										 </tr>     -->
-<%-- 										</c:forEach> --%>
-<!-- 								  </table> -->
-<%-- 								  <a href="<c:url value='/empCheck' />" class="text-decoration-none"> --%>
-<!-- 		                            <button type="button" class="btn btn-outline-primary">查看完整資訊</button> -->
-<!-- 		                          </a> -->
-<!-- 								  </div> -->
-<!--                                 </div> -->
-<!--                             </div> -->
-<!--                         </div> -->
-
                     </div>
                   </div>
                     

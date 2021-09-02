@@ -34,7 +34,7 @@ public class AudittedComplementSign {
 //	private Date time;
 
 	@Column(name = "Type")
-	private String Type;
+	private String type;
 
 	@Column(name = "empName")
 	private String empName;
@@ -102,11 +102,11 @@ public class AudittedComplementSign {
 //		this.time = time;
 //	}
 	public String getType() {
-		return Type;
+		return type;
 	}
 
 	public void setType(String type) {
-		Type = type;
+		this.type = type;
 	}
 
 	public Integer getManagerNo() {

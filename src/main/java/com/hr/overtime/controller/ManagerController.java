@@ -65,7 +65,9 @@ public class ManagerController {
 		
 		int managerEmpId = loginModel.getDepartmentDetail().getManagerEmpId();
 		
-		Page<OverTimePending> result = overTimePendingRepository.findByEmpNo(page, null, date, depart,managerEmpId);
+		String empNo = loginModel.getEmpNo();
+		
+		Page<OverTimePending> result = overTimePendingRepository.findAlldelEmpNo(page, empNo, date, depart,managerEmpId);
 		
 		List<OverTimePending> overtimepending = result.getContent();
 		

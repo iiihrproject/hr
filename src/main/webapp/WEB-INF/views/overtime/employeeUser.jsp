@@ -139,7 +139,6 @@
 		 	  		xhr1.onreadystatechange = function() {
 		 				// 伺服器請求完成
 		 				if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201) ) {
-		 		  			window.location.href = "<c:url value='/xxx'/>";
 		 				}
 		 	  		}
 		             
@@ -160,7 +159,25 @@
 		    $(this).next().slideToggle();
 		});
 		
-
+		$("#fast1").click(function(){
+			$('#pos').attr("value","RD");
+			$('#nday').attr("checked",true);
+			$("#OvertimeDate").val("2021-09-10");
+			$('#stime').val("18:00"); 
+			$('#endtime').val("20:00");
+			$('#Cause').attr("value","研發新型鋼鐵零件");
+			$('#Remarks').html("完成度80%");
+		})
+		
+		$("#fast2").click(function(){
+			$('#pos').attr("value","RD");
+			$('#break').attr("checked",true);
+			$("#OvertimeDate").val("2021-09-09");
+			$('#stime').val("18:00"); 
+			$('#endtime').val("20:30");
+			$('#Cause').attr("value","研發新型蜘蛛絲發射器");
+			$('#Remarks').html("完成度70%");
+		})
 	});
 	
 	
@@ -204,7 +221,7 @@
                             <!-- Custom Text Color Utilities -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h2 class="m-0 font-weight-bold text-primary">員工請假系統</h2>
+                                    <h2 class="m-0 font-weight-bold text-primary" style="float:right;" >員工加班系統<button id="fast1" class="btn btn-danger" style="float:right;">快速產生</button><button id="fast2" class="btn btn-success" style="float:right; margin-right:10px;margin-left: 60px;">快速產生</button></h2> 
                                 </div>
                                 <div class="card-body ">
                                 
@@ -321,7 +338,11 @@
 										  	 <td>${fn:substring(pending.overTimeDate,0, 10)}</td>		
 										  	 <td>${pending.overtimeCategory}</td>
 										     <td>${pending.overTimeHours}</td>	
-										     <td>${pending.result}</td>	
+										     <td>
+										     	 <c:choose>
+										     	   <c:when test="${pending.result == 'pending'}" >待審核</c:when>
+						       					  </c:choose>
+						       				 </td>		
 										 </tr>    
 										</c:forEach>
 								  </table>
@@ -347,7 +368,12 @@
 											  	 <td>${fn:substring(auditted.overTimeDate,0, 10)}</td>		
 											  	 <td>${auditted.overtimeCategory}</td>
 											     <td>${auditted.overTimeHours}</td>	
-											     <td>${auditted.result}</td>	
+											     <td>
+											     	 <c:choose>
+											     	  <c:when test="${auditted.result == 'Pass'}" >通過</c:when>
+											     	  <c:when test="${auditted.result == 'Deny'}" >退件</c:when>
+						       					  	 </c:choose>
+						       					 </td>			
 											 </tr>    
 											</c:forEach>
 								  </table>

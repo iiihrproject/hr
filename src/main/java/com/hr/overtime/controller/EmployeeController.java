@@ -41,6 +41,7 @@ public class EmployeeController {
 	HttpServletRequest request;
 	
 	@PostMapping(path = "/saveOvertime")
+	@ResponseBody
 	private void saveOvertimePending(@RequestBody OverTimePending overTimePending,LoginModel loginModel) throws ParseException {
 		Date date = new Date();
 		SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
