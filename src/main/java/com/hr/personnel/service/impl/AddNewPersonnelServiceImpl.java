@@ -44,7 +44,7 @@ public class AddNewPersonnelServiceImpl implements AddNewPersonnelService{
 		String employedDate = sdf.format(date);
 		
 		String empNo = inputMap.get("empNo");
-		CharSequence rawPassword = empNo.subSequence(0, empNo.length());
+		CharSequence rawPassword = "password";
 		String encryptedPassword = passwordEncoder.encode(rawPassword);
 		
 		DepartmentDetail departmentDetail = addNewPersonnelRepository.findDepartment(Integer.parseInt(inputMap.get("departmentDetail")));
