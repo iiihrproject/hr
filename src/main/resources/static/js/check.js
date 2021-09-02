@@ -12,7 +12,9 @@ $("#postdate").blur(function() {
 	let div5 = document.getElementById('result5c');
 	if (enddateValue < postdateValue) {
         setErrorFor(div5, "報名截止日期不可小於貼文刊登日期");
-    }  else {
+    } else if (enddateValue > expValue) {
+        setErrorFor(div5, "報名截止日期不可大於貼文下架日期");
+    } else {
     div5.innerHTML = "";
     }
 })
@@ -21,7 +23,7 @@ $("#exp").blur(function() {
 	let expValue = document.getElementById("exp").value;
 	let div3 = document.getElementById('result3c');
 	if (expValue < postdateValue) {
-		setErrorFor(div3, "有效日期不可小於刊登日期");
+		setErrorFor(div3, "貼文下架日期不可小於貼文刊登日期");
 	} else {
 		div3.innerHTML = "";
 	}
@@ -33,7 +35,7 @@ $("#exp").blur(function() {
     div5.innerHTML = "";
     }
 })
-$("#enddate").blur(function() {
+/*$("#enddate").blur(function() {
 	let enddateValue = document.getElementById("enddate").value;
 	let postdateValue = document.getElementById("postdate").value;
 	let expValue = document.getElementById("exp").value;
@@ -45,7 +47,7 @@ $("#enddate").blur(function() {
     } else {
     div5.innerHTML = "";
     }
-})
+})*/
 
 //預覽載入
 let checkinsert = document.getElementById("checkinsert");

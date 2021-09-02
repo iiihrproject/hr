@@ -305,8 +305,7 @@ public class BulletinRepoImpl implements BulletinRepo {
 		bulletin.setPostStatus(bul.getPostStatus());
 		bulletin.setCreateTime(bul.getCreateTime());
 
-		System.out.println("----:" + bulletin.getFile1().equals("undefined"));
-		if (bulletin.getFile1().equals("undefined")) {
+		if (bulletin.getFile1()=="undefined"||bulletin.getFile1()=="null") {
 			System.out.println("----filename:" + bulletin.getFile1());
 			bul.setFile1(null);
 		}

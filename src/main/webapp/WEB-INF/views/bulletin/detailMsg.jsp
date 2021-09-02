@@ -36,6 +36,7 @@
     
     <script>
     window.onload = function () {
+    	loadenrollnum();
     
 	$("#delclick").click(function(){
 
@@ -155,16 +156,16 @@
 			for (let n = 0; n < le; n++) {
 				let BulMessage = posts[n];
 			
-				segment += "<tr>";
+				segment += "<tr style=' color:#484a55'>";
 				if(BulMessage.msgStatus=="已刪除"){
 					segment += "<td style='font-style:italic; color:#BEBEBE'>"+ BulMessage.message +"</td>";
-					segment += "<td style='font-style:italic; color:#BEBEBE'>"+ BulMessage.empNo +"</td>";
+					segment += "<td style='font-style:italic; color:#BEBEBE'>"+ BulMessage.empName +"</td>";
 					segment += "<td style='font-style:italic; color:#BEBEBE'>"+ BulMessage.messageDate +"</td>";
 					segment += "<td style='font-style:italic; color:#BEBEBE'>（此筆留言已刪除）</td>";
 					
 				}else{
 					segment += "<td>"+ BulMessage.message +"</td>";
-					segment += "<td>"+ BulMessage.empNo +"</td>";
+					segment += "<td>"+ BulMessage.empName +"</td>";
 					segment += "<td>"+ BulMessage.messageDate +"</td>";
 					segment += "<td><a onclick='delMsg("+BulMessage.id+")' style='color:#ac2c20' data-toggle='modal' data-target='#massgaeModal'>刪除</a></td>";
 					
@@ -192,7 +193,7 @@ function setErrorFor(input, message){
     	$("#delCheck").click(function(){
 
     	let xhr3 = new XMLHttpRequest();
-    	xhr3.open("GET", "<c:url value='/bulletinDelMsg' />/?id=" + id);
+    	xhr3.open("GET", "<c:url value='/bulletinDelMsg' />?id=" + id);
     	xhr3.send();
     	xhr3.onreadystatechange = function() {
     		if (xhr3.readyState == 4 && xhr3.status == 200){
@@ -222,34 +223,38 @@ function loadEnrollList(){
 	xhr4.onreadystatechange = function() {
 		if (xhr4.readyState == 4 && xhr4.status == 200) {
 			aListArea.innerHTML = processListData(xhr4.responseText);
-			console.log("報名:"+xhr4.readyState);
 		}
 		else{
-			aListArea.innerHTML = "<tr colspan='6'>無人報名</tr>";
+			aListArea.innerHTML = "<tr><td colspan='6'>無人報名</td></tr>";
 		}
-		console.log("報名:"+xhr4.readyState);
-		console.log("報名:"+xhr4.status);
-		console.log("報名:"+xhr4.responseText);
 	}
 }
 
     //報名清單
 	function processListData(jsonString) {		
 
-		let posts = JSON.parse(jsonString);
+		let enrollments = JSON.parse(jsonString);
 		let segment = "";
 		let num = 0;
-		le = posts.length;
-		for (let n = 0; n < le; n++) {
-			let enroll = posts[n];
+		let enrollnums = enrollments.length;
+		console.log("報名數:"+enrollnums);
+		console.log("報名posts:"+enrollments);
+		if(enrollments==0){
+			segment += "<tr><td colspan='6'>無人報名</td></tr>";
+			console.log("報名1");
+		} else{
+			console.log("報名3");
+		for (let n = 0; n < enrollnums; n++) {
+			let enroll = enrollments[n];
 			
 			if(enroll.enrollStatus=='取消參加'){
 				segment += "<tr style='color:#92949c'>";
+				console.log("報名2");
 			}else{
+				
 				segment += "<tr>";
 				}
-			segment += "<td>" + enroll.empDept + "</td>";
-			segment += "<td>" + enroll.empNo +"</td>";
+			segment += "<td>" + enroll.empDept + "</td>"; 
 			segment += "<td>" + enroll.empName +"</td>"
 			segment += "<td>" + enroll.enrollStatus + "</td>";
 			stringObj = new String(enroll.updateTime);
@@ -262,9 +267,28 @@ function loadEnrollList(){
 			}
 			
 			segment += "</tr>";
-		}
+		}}
 		return segment;
 		
+		
+	}
+    
+	function loadenrollnum(){
+		let numspan = document.getElementById("numspan");
+		let xhr8 = new XMLHttpRequest();
+
+		xhr8.open("GET", "<c:url value='/findEnrollNumByNo'/>?postno=" + ${bulletin.postno});
+		xhr8.send();
+		xhr8.onreadystatechange = function() {
+			if (xhr8.readyState == 4 && xhr8.status == 200) {
+				enrollNum = xhr8.responseText;
+				numspan.innerHTML = enrollNum;
+				console.log("執行完enrollNum:"+enrollNum)
+
+			}
+			
+
+		}
 	}
 	
 	
@@ -322,7 +346,7 @@ function loadEnrollList(){
                                         </c:when>
                                         <c:otherwise>
                                         <tr>
-                                            <td>已報名人數：10&nbsp;／&nbsp;可報名人數：${bulletin.quota}</td>
+                                            <td style=' color:#5a5c69'>已報名人數：<span id="numspan">0</span>&nbsp;／&nbsp;可報名人數：${bulletin.quota}</td>
                                         </tr>
                                         </c:otherwise>
                                         </c:choose>
@@ -357,31 +381,13 @@ function loadEnrollList(){
                                         	</c:otherwise>
                                         	</c:choose>
                                     		&nbsp;
-                                    		<%-- <c:choose>
-                                        	<c:when test="${bulletin.type == '活動'}"> --%>
+                                    		
                                         	<a href="<c:url value='/bulletinEditEventPage?postno=${bulletin.postno}'/>" class="btn btn-warning btn-icon-split btn-sm" style="color:black">
                                         	<span class="text">修改貼文</span>
                                     		</a>
-                                        	<%-- </c:when>
-                                       	 	<c:otherwise>
-                                        	<a href="#" class="btn btn-warning btn-icon-split btn-sm" style="color:black">
-                                        	<span class="text">修改</span>
-                                    		</a>
-                                        	</c:otherwise>
-                                        	</c:choose> --%>
+                                        	
                                     		&nbsp;
-                                    		<%-- <c:choose>
-                                        	<c:when test="${bulletin.type == '活動'}">
-                                        		<a href="#" class="btn btn-danger btn-icon-split btn-sm" data-toggle="modal" id="sendDel" data-target="#comfirmDelModal">
-                                        		<span class="text">刪除</span>
-                                    			</a>
-                                        	</c:when>
-                                       	 	<c:otherwise>
-                                        		<a href="#" class="btn btn-danger btn-icon-split btn-sm">
-                                        		<span class="text">刪除</span>
-                                    			</a>
-                                        	</c:otherwise>
-                                        	</c:choose> --%>
+                                    		
                                     		<a href="#" class="btn btn-danger btn-icon-split btn-sm" data-toggle="modal" id="sendDel" data-target="#comfirmDelModal">
                                         		<span class="text">刪除貼文</span>
                                     		</a>
@@ -497,10 +503,9 @@ function loadEnrollList(){
                             	<thead>
                                 	<tr style="background-color:#99dbe5">
                                     	<th>部門</th>
-                                        <th>員編</th>
                                     	<th>人員</th>
                                         <th>狀態</th>
-                                        <th>報名時間</th>
+                                        <th>更新時間</th>
                                         <th>報名序號</th>
                                     </tr>
                                 </thead>
@@ -520,6 +525,27 @@ function loadEnrollList(){
 
     </div>
 	<!-- ApplyList Modal End-->
+	
+	<!-- 刪除留言 Modal-->
+    <div class="modal fade text-center" id="massgaeModal" tabindex="-1" role="dialog" aria-labelledby="massgaeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto" id="resultModalLabel">刪除留言</h5>
+                </div>
+                <div class="modal-body">
+                    <span id="resultMsg" style="margin:3px auto"><font color='red' >請確認是否刪除留言</font></span><br/>
+                </div>
+                <div class="modal-footer justify-content-center" id="resultbutton">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal" id="delCal" onclick="history.back()">取消</button>
+                <button class="btn btn-danger" type="button" data-dismiss="modal" id="delCheck">確認</button>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+	<!-- 刪除留言 Modal End-->
 
 
 

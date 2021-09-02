@@ -91,9 +91,9 @@ public class BulletinEnrController {
 	
 	// 活動人員列表
 	@GetMapping("/applyList") //h
-	public @ResponseBody List<BulEnroll> findEnrollByNo(@RequestParam("postno") int postno) {
-		log.info("findEnrollByNo方法執行中...");
-		List<BulEnroll> bulEnroll = bulletinService.findEnrollListByNo(postno);
+	public @ResponseBody List<BulEnroll> findEnrollListByNo(@RequestParam("postno") int postno) {
+		log.info("findEnrollListByNo方法執行中...");
+		List<BulEnroll> bulEnroll = bulletinService.findEnrollListByNo(postno);		
 		return bulEnroll;
 	}
 	

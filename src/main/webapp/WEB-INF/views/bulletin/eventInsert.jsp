@@ -136,11 +136,11 @@
                 contentType: false,
             	success: function (data) { 
             		printresult(data);
-                	console.log("新增成功");
+                	console.log("新增成功:"+data);
             	},
                 fail: function (data) { 
-                	printresult("新增失敗");
-                    console.log("新增失敗");
+                	printresult("新增失敗:"+data);
+                    console.log("新增失敗:"+data);
                 }
             });
             
@@ -176,6 +176,18 @@
     	$("#showImg").attr("src","");
     	
     }
+    
+    function titleEnter() {
+  	 document.getElementById('title').value = '年度員工旅遊 (10/25-10/31)'; 
+    }
+    
+    function textEnter() {
+     	$(".ck-content p").html('今年員工旅遊在關島舉辦！！趕快準備好護照和防曬乳！！&#13;名額有限只有50位，快點點選下方的報名按鈕&#13;錯過這次就要等明年啦&#13;員工旅遊時間：10/25-10/31，共7天&#13;報名截止時間：9/30');
+     	
+       }
+    function quotaEnter() {
+    	document.getElementById('quotanid').value = 50; 
+       }
 
     
 	</script>
@@ -210,15 +222,14 @@
                                     <tbody>
                                     <form enctype="multipart/form-data" id="inserForm">
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">主&emsp;&emsp;旨 :</label></td>
+                                            <td style="text-align: right" onclick="titleEnter()"><label for="" class="col-form-label">主&emsp;&emsp;旨 :</label></td>
                                             <td><input type="text" id="title" name="title" class="form-control"  size="30" maxlength="30" style="width:600px;" required />
                                             	<span id="result0c" class="form-text"></span></td>
                                         </tr>
                                         <tr>
-                                        	<td style="text-align: right"><label for="" class="col-form-label">內&emsp;&emsp;容 :</label></td>
+                                        	<td style="text-align: right" onclick="textEnter()"><label for="" class="col-form-label">內&emsp;&emsp;容 :</label></td>
                     						<td style="color:black">
-                    						<textarea class="editor" name="description"></textarea>
-                    						<!-- <textarea id="description" id="description" class="form-control" cols="50" rows="6" required style="width:600px;" ></textarea> -->
+                    						<textarea class="editor" name="description" id="description"></textarea>
                     						<span id=result1c class="form-text"></span>
                     						</td>
                                         </tr>
@@ -233,7 +244,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">名&emsp;&emsp;額 :</label></td>
+                                            <td style="text-align: right" onclick="quotaEnter()"><label for="" class="col-form-label">名&emsp;&emsp;額 :</label></td>
                                             <td><input type="radio" name="quotatype" id="notlimitid" value="不限"/><label for="">不限</label>&emsp;
                     							<input type="radio" name="quotatype" id="limitid" value="限制" checked/>限制
                                             	<input type="number" name="quota" id="quotanid" min="0" max="1000"/>人
