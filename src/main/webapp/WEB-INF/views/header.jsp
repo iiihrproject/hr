@@ -4,6 +4,8 @@
 <!-- 引用SweetAlert2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.4/sweetalert2.all.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.4/sweetalert2.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.0/sweetalert2.all.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css" />
 
 <!--     引用SweetAlert2.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css" />
@@ -106,7 +108,7 @@
                 <!-- End of Topbar -->                
 <script>
 	let recruitD = new Date("${sessionScope.loginModel.employedDate}");
-	let todayD = new Date();
+	var todayD = new Date().toISOString().slice(0,10);
 	let annivD = new Date("${sessionScope.loginModel.employedDate}");
 	annivD.setFullYear(new Date().getFullYear());
 	//無條件進位年差
@@ -114,20 +116,20 @@
 	annivLDay = diff*7;
 	$("#annivLDay").text(annivLDay);
 	if(new Date > annivD){
-		console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 已過去, 今年特休總額："+annivLDay+"天");
+// 		console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 已過去, 今年特休總額："+annivLDay+"天");
 		annivD.setFullYear(annivD.getFullYear()+1);
 	} else{
-		console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 還沒到, 今年特休總額："+annivLDay+"天");
+// 		console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 還沒到, 今年特休總額："+annivLDay+"天");
 	}
 	var due = annivD.toISOString().slice(0,10);
 	$("#anniDate").text(due);
 	$("#annivCD").click(function(){
-		let sD = new Date(td);
+		let sD = new Date(todayD);
 		let eD = new Date(due);
 		let dD = Math.ceil(Math.round((eD.getTime()-sD.getTime())/1000/60/60/24));
 		Swal.fire({
 			  title: '再'+dD+'天!',
-			  html: '就是第'+diff+'個里程碑了! 想想年假~~',
+			  html: '就是第'+diff+'個里程碑了! 想想年假怎麼安排好~~',
 			  imageUrl: '<c:url value="/img/work-anniversary.png" />',
 			  imageWidth: 400,
 			  imageHeight: 300,

@@ -17,16 +17,12 @@
 		<i class="fa fa-bars"></i>
 	</button>
 	<!-- Topbar Search -->
-	<div class="narbar-brand">
-		<h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
-		<span class="text-dark">特休剩餘：<strong id="annivLDay"></strong>日
-		</span><span class="text-danger warning"> (請於 <strong id="anniDate"></strong>
-			前使用完畢)
-		</span><br /> <span class="text-dark">加班總計時數：【${sessionScope.sumHours}】小時&nbsp</span><span
-			class="text-danger warning">(請注意加班時數是否正確)</span><br /> <span
-			class="text-dark">加班剩餘時數：【${sessionScope.remainingHours}】小時&nbsp</span><span
-			class="text-danger warning">(請注意剩餘時數)</span>
-	</div>
+	    <div class="narbar-brand">
+	        <h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
+	        <span class="text-dark">特休剩餘：<strong id="annivLDay"></strong>日</span><a href="#" id="annivCD" class="text-danger warning"> (請於 <strong id="anniDate"></strong> 前使用完畢)</a><br/>
+	        <span class="text-dark">加班總計時數：【${sessionScope.sumHours}】小時&nbsp</span><span class="text-danger warning">(請注意加班時數是否正確)</span><br/>
+	        <span class="text-dark">加班剩餘時數：【${sessionScope.remainingHours}】小時&nbsp</span><span class="text-danger warning">(請注意剩餘時數)</span>
+	    </div> 
 
 	<!-- 0419 alert to do -->
 
@@ -78,7 +74,7 @@
 <script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
 <script>
 let recruitD = new Date("${sessionScope.loginModel.employedDate}");
-let todayD = new Date();
+var todayD = new Date().toISOString().slice(0,10);
 let annivD = new Date("${sessionScope.loginModel.employedDate}");
 annivD.setFullYear(new Date().getFullYear());
 //無條件進位年差
@@ -86,22 +82,22 @@ var diff = Math.ceil(Math.round((annivD.setTime(annivD.getTime())-recruitD.setTi
 annivLDay = diff*7;
 $("#annivLDay").text(annivLDay);
 if(new Date > annivD){
-	console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 已過去, 今年特休總額："+annivLDay+"天");
+// 	console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 已過去, 今年特休總額："+annivLDay+"天");
 	annivD.setFullYear(annivD.getFullYear()+1);
 } else{
-	console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 還沒到, 今年特休總額："+annivLDay+"天");
+// 	console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 還沒到, 今年特休總額："+annivLDay+"天");
 }
 var due = annivD.toISOString().slice(0,10);
 $("#anniDate").text(due);
 $("#annivCD").click(function(){
-	let sD = new Date(td);
+	let sD = new Date(todayD);
 	let eD = new Date(due);
 	let dD = Math.ceil(Math.round((eD.getTime()-sD.getTime())/1000/60/60/24));
 // 	var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
 // 	var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
 	Swal.fire({
 		  title: '再'+dD+'天!',
-		  html: '就是第'+diff+'個里程碑了! 想想年假~~',
+		  html: '就是第'+diff+'個里程碑了! 想想年假怎麼安排好~~',
 		  imageUrl: '<c:url value="/img/work-anniversary.png" />',
 		  imageWidth: 400,
 		  imageHeight: 300,
