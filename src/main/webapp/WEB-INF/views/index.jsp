@@ -485,7 +485,7 @@
 			if(bulletin.type == '公告' ){
 				segment += "<td style='text-align:center'>-</td>";
 			} else if (bulletin.quotatype == '不限') {
-				segment += "<td>不限</td>";
+				segment += "<td style='text-align:center'>不限</td>";
 			} else {
 				segment += "<td style='text-align:center'>" + bulletin.enCount +"&nbsp;/&nbsp;"+ bulletin.quota + "</td>";
 			}

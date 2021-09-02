@@ -84,8 +84,8 @@ public class BulletinUpdController implements Serializable {
 			@RequestParam(value = "file1", required = false) MultipartFile multipartFile,
 			@RequestParam("quotatype") String quotatype,
 			@RequestParam(value = "quota", defaultValue = "0") Integer quota, 
-			@RequestParam("enddate") Date endDate,
-			@RequestParam("postdate") Date postdate,
+			@RequestParam("endDate") Date endDate,
+			@RequestParam("postDate") Date postdate,
 			@RequestParam("exp") Date exp, 
 			HttpServletRequest request)
 			throws IllegalStateException, IOException, SerialException, SQLException {
@@ -135,9 +135,11 @@ public class BulletinUpdController implements Serializable {
 		try {
 			bulletinService.update(bulletin);
 			result = "修改成功";
+			System.out.println("result1:"+result);
 
 		} catch (Exception e) {
-			result = "修改失敗";
+			result = e.getMessage();
+			System.out.println("result2:"+result);
 
 		}
 		return result;

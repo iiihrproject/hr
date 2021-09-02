@@ -19,6 +19,8 @@ import javax.sql.rowset.serial.SerialException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,13 +28,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hr.bulletin.model.BulName;
 import com.hr.bulletin.model.Bulletin;
 import com.hr.bulletin.service.BulletinService;
+import com.hr.login.model.LoginModel;
+import com.hr.login.service.LoginService;
+import com.hr.overtime.service.OverTimeService;
 
 @Controller
+@SessionAttributes({"loginModel" ,"sumHours" ,"remainingHours"})
 public class BulletinMagController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -44,10 +51,25 @@ public class BulletinMagController implements Serializable {
 
 	@Autowired
 	ServletContext ctx;
+	
+	@Autowired
+	private LoginService loginService;
+	
+	@Autowired
+	private OverTimeService overTimeService;
 
 	// 貼文管理頁 //h
 	@GetMapping("/bulletinManage")
-	public String bulletinMag() {
+	public String bulletinMag(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String empNo = authentication.getName();
+		LoginModel loginModel = loginService.getLoginModelByEmpNo(empNo);
+		Double sumHours = overTimeService.sumOverTimeHours(empNo);
+		Double remainingHours = 46 - sumHours ;
+
+		model.addAttribute("sumHours",sumHours);
+		model.addAttribute("remainingHours",remainingHours);
+		model.addAttribute("loginModel", loginModel);
 		return "/bulletin/manage";
 	}
 
@@ -144,9 +166,11 @@ public class BulletinMagController implements Serializable {
 		try {
 			bulletinService.insert(bulletin);
 			result = "新增成功";
+			
 
 		} catch (Exception e) {
 			result = e.getMessage();
+
 
 		}
 		return result;

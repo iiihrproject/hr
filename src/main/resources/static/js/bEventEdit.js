@@ -85,8 +85,8 @@ $("#enddate").blur(function() {
 	} else {
 		div3.innerHTML = "";
 	}
-	
-	if (type='公告') {
+	console.log(type);
+	if (type=='公告') {
 	} else {
 	
 	if (quotaValue == "限制" && quotanValue == 0) {
@@ -124,6 +124,8 @@ $("#enddate").blur(function() {
 	if (type =='公告'){
 		document.getElementById("tdqu").innerHTML = "";
 		document.getElementById("trenddate").innerHTML = "";
+		console.log('公告');
+		console.log(type);
 	} else {
 		if (quotaValue == "不限"||quotaValue == '') {
 			document.getElementById("tdqu").innerHTML = "";
@@ -132,6 +134,7 @@ $("#enddate").blur(function() {
 			document.getElementById("tdqu").innerHTML = "<td>已報名人數：&nbsp&nbsp／&nbsp可報名人數：" + quotanValue + "</td>";
 		}
 	document.getElementById("ched").innerHTML = enddateValue;
+	console.log('不是公告');
 	}
 	document.getElementById("chpd").innerHTML = postdateValue;
 	console.log("titleValue主旨:" + titleValue);
@@ -160,7 +163,7 @@ function selectImgFile2(files) {
 	if (!files.length) {
 		return false;
 	}
-
+	console.log("載入圖片");
 	let file = files[0];
 	let reader = new FileReader();
 	reader.onload = function() {
@@ -170,13 +173,6 @@ function selectImgFile2(files) {
 
 	reader.readAsDataURL(file);
 }
-
-//載入今天日期
-/*$(document).ready( 
-function() {
-	$('#postdate').val(td);
-}
-);*/
 
 
 //ckeditor

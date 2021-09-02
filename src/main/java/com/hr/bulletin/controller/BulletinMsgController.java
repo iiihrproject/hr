@@ -101,7 +101,7 @@ public class BulletinMsgController {
 		}
 		String result = "";
 		try {
-
+			bulletinService.changeLike(bulLN);
 			result = "喜歡改變";
 		} catch (Exception e) {
 			result = "喜歡未改變";

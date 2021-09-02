@@ -66,10 +66,9 @@
 	            { "data": "title" },
 	            { "data": "desText" ,
 	            	"render": function (data, type, row) {
-	            		console.log(data);
 	            		let dText="";
 	            		if(data!=null){
-	            		if (data.length>8){
+	            		if (data.length>=8){
 	            			dText = data.substr(0,7)+"...";
 	            		} else {
 	            			dText = data;
@@ -158,7 +157,7 @@
 						} );
 
 					
-						select2.append( '<option value="2021-07">2021-07</option><option value="2021-08">2021-08</option><option value="2021-09">2021-09</option>' );
+						select2.append( '<option value="2021-06">2021-06</option><option value="2021-07">2021-07</option><option value="2021-08">2021-08</option><option value="2021-09">2021-09</option>' );
 					
 				} );
 			},  
