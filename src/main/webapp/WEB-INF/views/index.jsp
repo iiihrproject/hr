@@ -148,6 +148,7 @@
 					modalInit();	
 					$("#deleteSumbit_").css("display","none");
 					startInput.value = ((info.dateStr).toString().substr(0, 10) + "T00:00");
+					console.log("+++"+startInput.value);
 					endInput.value = ((info.dateStr).toString().substr(0, 10) + "T23:59");
 					colorInput.value = "#7973ae";
 					titleInput.value = "";
@@ -163,16 +164,16 @@
 				eventClick : function(info) {
 					modalInit();					
 					console.log(info);
-			
+
 
 					let monthStr = "00,01,02,03,04,05,06,07,08,09,10,11,12".split(",");
-					let realStMon = monthStr[(info.event.start).toLocaleDateString().split("/")[1]]
-					let realEdMon = monthStr[(info.event.end).toLocaleDateString().split("/")[1]]
+					let realStMon = monthStr[(info.event.start).toLocaleDateString().split("/")[1]];
+					let realEdMon = monthStr[(info.event.end).toLocaleDateString().split("/")[1]];
+					console.log("realEdMon: " + realEdMon);
 // 					console.log("realMon: " + realMon);
 					let dayStr = "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31".split(",");
-					let realStDay = dayStr[(info.event.start).toLocaleDateString().split("/")[2]]
-					let realEdDay = dayStr[(info.event.end).toLocaleDateString().split("/")[2]]
-
+					let realStDay = dayStr[(info.event.start).toLocaleDateString().split("/")[2]];
+					let realEdDay = dayStr[(info.event.end).toLocaleDateString().split("/")[2]];
 					let sDateStr = (info.event.start).toLocaleDateString().split("/");
 					let sTimeStr = (info.event.start).toTimeString();
 					let sTime1 = sDateStr[0] + "-" + realStMon + "-" + realStDay + "T" + sTimeStr.substr(0,8);

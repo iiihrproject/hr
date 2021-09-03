@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.hr.login.model.LoginModel;
+import com.hr.login.service.LoginService;
+import com.hr.overtime.service.OverTimeService;
 import com.hr.personnel.model.Personnel;
 import com.hr.personnel.service.PersonnelService;
 
@@ -22,6 +27,12 @@ public class PersonnelController {
 	
 	@Autowired
 	PersonnelService personnelService;
+	
+	@Autowired
+	LoginService loginService;
+	
+	@Autowired
+	OverTimeService overTimeService;
 
 	@GetMapping(path="/editPersonalInfo")
 	public String editPersonalInfo() {
@@ -29,7 +40,16 @@ public class PersonnelController {
 	}
 	
 	@GetMapping(path="/personnel")
-	public String personnel() {
+	public String personnel(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String empNo = authentication.getName();
+		LoginModel loginModel = loginService.getLoginModelByEmpNo(empNo);
+		Double sumHours = overTimeService.sumOverTimeHours(empNo);
+		Double remainingHours = 46 - sumHours ;
+
+		model.addAttribute("sumHours",sumHours);
+		model.addAttribute("remainingHours",remainingHours);
+		model.addAttribute("loginModel", loginModel);
 		return "/personnel/personnel";
 	}
 	
