@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			    .antMatchers("/modifyLoginModel","/searchLoginModel","/modify","/findAuthorities", "/findNewAuthorities").hasAnyRole("HR_MANAGER", "HR")
 			    .antMatchers("/addNewPersonnel","/createNewPersonnel").hasAnyRole("HR_MANAGER", "HR")
 			    .antMatchers("/css/**", "/vendor/**", "/img/**", "/js/**", "/scss/**","/build/**").permitAll()
-			    .antMatchers("/Leave/LeaveResult","/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR","RD_MANAGER","SALES_MANAGER")
+			    .antMatchers("/Leave/LeaveResult","/schedule/TableScheduling").hasAnyRole("HR_MANAGER", "HR","RD_MANAGER","SALES_MANAGER","PRODUCTION_MANAGER")
 			    .antMatchers("/G/**","/Leave/**","/schedule/**").authenticated()
 			    .antMatchers("/updatePassword","/updateNewPassword").authenticated()
 			    .antMatchers("/calendartasks", "/calendarTaskUpdate", "/calendarTaskDelete", "/shiftsforcalendar").authenticated()
