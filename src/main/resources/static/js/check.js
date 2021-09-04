@@ -35,7 +35,7 @@ $("#exp").blur(function() {
     div5.innerHTML = "";
     }
 })
-/*$("#enddate").blur(function() {
+$("#enddate").blur(function() {
 	let enddateValue = document.getElementById("enddate").value;
 	let postdateValue = document.getElementById("postdate").value;
 	let expValue = document.getElementById("exp").value;
@@ -47,7 +47,7 @@ $("#exp").blur(function() {
     } else {
     div5.innerHTML = "";
     }
-})*/
+})
 
 //預覽載入
 let checkinsert = document.getElementById("checkinsert");
