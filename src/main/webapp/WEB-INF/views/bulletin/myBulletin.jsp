@@ -38,7 +38,7 @@
     <!-- 使用today.js -->
     <script src="<c:url value='/js/today.js' />"></script>
     
-	<!-- 公布欄資料載入 -->
+
 	<script>
 	window.onload = function() {
 	
@@ -49,7 +49,7 @@
 		
 		
 
-// 		公佈欄
+
 		let bDataArea = document.getElementById("BulletinDataArea");
 		let xhr = new XMLHttpRequest();
 		xhr.open("GET", "<c:url value='/myApplyList'/>?empNo="+`${sessionScope.loginModel.getEmpNo()}`);

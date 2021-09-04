@@ -69,7 +69,7 @@ public class BulletinUpdController implements Serializable {
 			bulletinService.updateop(bulletin);
 			result = "修改成功";
 		} catch (Exception e) {
-			result = "修改失敗";
+			result = "修改失敗，請再確認";
 		}
 		return result;
 	}
@@ -138,7 +138,7 @@ public class BulletinUpdController implements Serializable {
 			System.out.println("result1:"+result);
 
 		} catch (Exception e) {
-			result = e.getMessage();
+			result = "修改失敗，請再確認";
 			System.out.println("result2:"+result);
 
 		}
@@ -155,7 +155,7 @@ public class BulletinUpdController implements Serializable {
 			bulletinService.delete(postno);
 			result = "刪除成功";
 		} catch (Exception e) {
-			result = "刪除失敗";
+			result = "刪除失敗，請再確認";
 		}
 		return result;
 	}
@@ -170,7 +170,7 @@ public class BulletinUpdController implements Serializable {
 			bulletinService.updateop(bulletin);
 			result = "刪除成功";
 		} catch (Exception e) {
-			result = "刪除失敗";
+			result = "刪除失敗，請再確認";
 		}
 		return result;
 	}
