@@ -41,7 +41,7 @@
     var hasError = false;
     
     window.onload = function () {
-    	
+
     	//送出新增
         let sendData = document.getElementById("sendData");
         sendData.onclick = function () {
@@ -106,7 +106,9 @@
             	div5.innerHTML = "";
             	}
             if (hasError) {
-                return false;
+            	let divResult = document.getElementById('resultMsg');
+            	divResult.innerHTML = "<font color='red' >新增失敗，請再確認</font>";
+                return false;     
             }
             console.log(hasError);
 
@@ -139,7 +141,7 @@
                 	console.log("新增成功:"+data);
             	},
                 fail: function (data) { 
-                	printresult("新增失敗:"+data);
+                	printresult("新增失敗");
                     console.log("新增失敗:"+data);
                 }
             });
@@ -150,7 +152,7 @@
     }
     
     function printresult(data){
-    var divResult = document.getElementById('resultMsg');
+    	let divResult = document.getElementById('resultMsg');
         if (data=="新增失敗") {
             divResult.innerHTML = "<font color='red' >" + data + "</font>";
         } else if (data=="新增成功") {
@@ -182,9 +184,9 @@
     }
     
     function textEnter() {
-     	$(".ck-content p").html('今年員工旅遊在關島舉辦！！趕快準備好護照和防曬乳！！&#13;名額有限只有50位，快點點選下方的報名按鈕&#13;錯過這次就要等明年啦&#13;員工旅遊時間：10/25-10/31，共7天&#13;報名截止時間：9/30');
-     	
+    	$(".ck-content p").html('今年員工旅遊在關島舉辦！！趕快準備好護照和防曬乳！！&#13;名額有限只有50位，快點點選下方的報名按鈕。&#13;員工旅遊時間：10/25-10/31，共7天。&#13;報名截止時間：9/30');
        }
+    
     function quotaEnter() {
     	document.getElementById('quotanid').value = 50; 
        }
@@ -227,7 +229,8 @@
                                             	<span id="result0c" class="form-text"></span></td>
                                         </tr>
                                         <tr>
-                                        	<td style="text-align: right" onclick="textEnter()"><label for="" class="col-form-label">內&emsp;&emsp;容 :</label></td>
+                                        	<td style="text-align: right" ><label for="" class="col-form-label" onclick="textEnter()">內&emsp;&emsp;容 :</label>
+                                        	</td>
                     						<td style="color:black">
                     						<textarea class="editor" name="description" id="description"></textarea>
                     						<span id=result1c class="form-text"></span>
