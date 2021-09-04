@@ -24,6 +24,14 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 		String hql = "FROM FactSchedule ORDER by keySchedule desc";
 		return entityManager.createQuery(hql, FactSchedule.class).getResultList();
 	}
+	
+	@Override
+	public List<FactSchedule> findScheduleByDeptNo(Integer deptNo) {
+		String sql = "SELECT KeySchedule,empID,HoursOfWork,Start,EndOfShift,Title,KeyAvailability,IsHoliday,Date,ShiftId FROM factSchedule f "
+				+ "INNER JOIN loginModel l "
+				+ "ON f.empID = l.emp_id WHERE l.dept_No = :departmentNumber ";
+		return entityManager.createNativeQuery(sql, FactSchedule.class).setParameter("departmentNumber", deptNo).getResultList();
+	}
 
 	@Override
 	public List<EmpBean> findAllEmps() {

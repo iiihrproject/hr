@@ -8,14 +8,15 @@
 <title>Scheduling</title>
 <script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
 <script>
-	window.onload = function() {
+	$(function() {
 		loadData();
-	}
+	})
 	function loadData() {
 		var empName = [];
 		let dataArea = document.getElementById("dataArea");
 		let xhr = new XMLHttpRequest();
-		xhr.open("GET", "<c:url value='/schedule/findAllScheduleAjax'/>");
+		let query="?deptNo="+${sessionScope.loginModel.departmentDetail.departmentNumber};
+		xhr.open("GET", "<c:url value='/schedule/findScheduleByDeptNo'/>"+query);
 		xhr.send();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -28,7 +29,7 @@ public class ScheduleController {
 	
 	@Autowired
 	private ScheduleService service;
-	
+	//去我的班表頁面
 	@GetMapping(value="/schedule/MySchedule")
 	public String queryAllSchedule(Model model, @ModelAttribute("loginModel") LoginModel loginModel) {
 //		List<FactSchedule> schedule = service.findAllSchedule();
@@ -38,11 +39,20 @@ public class ScheduleController {
 		model.addAttribute("body", "schedule/MySchedule.jsp");
 		return "layout/Template";
 	}
+	
+	//看全部班表
 	@GetMapping(value="/schedule/findAllScheduleAjax")
 	public @ResponseBody List<FactSchedule> findAllSchedule(){
 		return service.findAllSchedule();
 	}
 	
+//	看該部門班表
+	@GetMapping("/schedule/findScheduleByDeptNo")
+	public @ResponseBody List<FactSchedule> findScheduleByDeptNo(@RequestParam("deptNo") Integer deptNo){
+		return service.findScheduleByDeptNo(deptNo);
+	}
+	
+	//去fullCalendar排班頁面，似乎沒用到
 	@GetMapping("/schedule/getEmp")
 	public String queryAllEmp(Model model) {
 		List<EmpBean> Emps = service.findAllEmps();
@@ -50,11 +60,13 @@ public class ScheduleController {
 		return "schedule/TimelineScheduling";
 	}
 	
+	//找所有員工，似乎沒用到
 	@GetMapping("/schedule/findAllEmps")
 	public @ResponseBody List<EmpBean> findAll(){
 		return service.findAllEmps();
 	}
 	
+//	新增單筆
 	@PostMapping("/schedule/addSchedule")
 	public @ResponseBody Map<String, String> saveSchedule(@RequestBody FactSchedule schedule) {
 		Map<String, String> map = new HashMap<>();
@@ -73,6 +85,7 @@ public class ScheduleController {
 		return map;
 	}
 	
+//	刪除單筆
 	@DeleteMapping("/schedule/{keySchedule}")
 	public @ResponseBody Map<String, String> deleteScheduleByKey(@PathVariable(required = true) Integer keySchedule) {
 		Map<String, String> map = new HashMap<>();
@@ -121,12 +134,13 @@ public class ScheduleController {
 		return map;
 	}
 	
-	
+	//去fullCalendar排班頁面
 	@GetMapping("/schedule/TimelineScheduling")
 	public String toSchedule(Model model) {
 		model.addAttribute("body", "schedule/TimelineScheduling.jsp");
 		return "layout/Template";
 	}
+	//去表格排班葉面
 	@GetMapping("/schedule/TableScheduling")
 	public String TableScheduling(Model model) {
 		model.addAttribute("body", "schedule/TableScheduling.jsp");

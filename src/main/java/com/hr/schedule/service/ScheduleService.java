@@ -7,6 +7,8 @@ import com.hr.schedule.model.FactSchedule;
 public interface ScheduleService {
 
 	List<FactSchedule> findAllSchedule();
+	
+	List<FactSchedule> findScheduleByDeptNo(Integer deptNo);
 
 	List<EmpBean> findAllEmps();
 
