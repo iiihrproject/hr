@@ -12,6 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hr.checksystem.model.Checksystem;
 import com.hr.checksystem.repository.CheckRepository;
 import com.hr.checksystem.service.CheckService;
+import com.hr.login.model.LoginModel;
+import com.hr.login.repository.LoginRepository;
+import com.hr.overtime.model.OverTimeAuditted;
+import com.hr.overtime.repository.OverTimeRepository;
 import com.hr.schedule.model.FactSchedule;
 
 @Service
@@ -20,7 +24,13 @@ public class CheckServiceImpl implements CheckService {
 
 	@Autowired
 	CheckRepository checkRepository;
-
+	
+	@Autowired
+	LoginRepository loginRepository;
+	
+	@Autowired
+	OverTimeRepository overtimeRepostory;
+	
 	@Override
 	public void saveChecksystem(Checksystem checksystem) {
 		if(checksystem.getCheckInTime() != null && checksystem.getCheckOutTime() != null) {
@@ -88,15 +98,13 @@ public class CheckServiceImpl implements CheckService {
 
 	}
 	
-	//判斷是否補簽到
+	//判斷是否補簽到 補加班
 	public void filterIsNeedRepair(List<Checksystem> checkSystemList) {
 		
 		Date today = transferDate(new Date());
-		
 		for(Checksystem checksystem : checkSystemList) {
 			
 			checksystem.setShowTime();
-			
 			Date checkTime = transferDate(checksystem.getCreateTime());
 			
 			//判斷小於今天的資料作處理
@@ -106,6 +114,34 @@ public class CheckServiceImpl implements CheckService {
 					checksystem.setIsNeedRepair("Y");
 				}
 				
+				if(checksystem.getCheckOutTime() != null) {
+					
+					String empNo = checksystem.getEmpNo();
+					LoginModel loginModel = loginRepository.getLoginModelByEmpNo(empNo);
+					SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");
+					Date offdate = checksystem.getCheckOutTime();
+					String stroffdate = sdfDate.format(offdate);
+					OverTimeAuditted overtimeautidded = overtimeRepostory.findAudittedBydate(empNo, stroffdate);
+					System.out.println("time = " + stroffdate );
+					System.out.println("overtimeautidded = " + overtimeautidded);
+					FactSchedule factSchedule = getFactSchedule(stroffdate, loginModel.getPk());
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+					Date rosterdate = null;
+					if(factSchedule != null) {
+						try {
+							rosterdate = sdf.parse(factSchedule.getEnd());
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						if( rosterdate.before(checksystem.getCheckOutTime()) && overtimeautidded == null ) {
+							checksystem.setIsNeedOvertime("Y");
+						}else checksystem.setIsNeedOvertime("N");
+					}
+					
+				}
+			
 			}
 			
 		}

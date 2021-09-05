@@ -123,6 +123,8 @@
 		for(let n = 0 ; n< managequerys.length; n++){
 			let managequery = managequerys[n];
 			var passid = 'pass' + managequery.id;
+			var status = managequery.result;
+			if(status =='pending') status ='待審核';
 			segment += "<tr>";
 			segment += "<td>"+ managequery.dateOfApplication + "</td>";
 			segment += "<td>"+ managequery.empName + "</td>";
@@ -134,7 +136,7 @@
 			segment += "<td>"+ managequery.endingTime + "</td>";
 			segment += "<td>"+ managequery.overTimeHours + "</td>";
 			segment += "<td>"+ managequery.reason + "</td>";
-			segment += "<td>"+ managequery.result + "</td>";
+			segment += "<td>"+ status + "</td>";
 			segment += "<td>"+"<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-primary btn-lg b1' value='Pass'>"+"核准"+"</button>"+" ";
 			segment += "<button type='button' onclick='passAnDdenyClick(this)' id='" + passid + "' class='btn btn-danger btn-lg b2' value='Deny'>"+"否決"+"</button>"+"</td>";
 		}

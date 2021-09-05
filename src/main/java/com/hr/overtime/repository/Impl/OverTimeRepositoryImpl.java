@@ -1,6 +1,7 @@
 package com.hr.overtime.repository.Impl;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -69,18 +70,35 @@ public class OverTimeRepositoryImpl implements OverTimeRepository {
 	
 	@Override
 	public Double sumOverTimeHours(String empNo) {
-		String hql = "SELECT SUM (convert(decimal,OverTimeHours)) FROM overtimeapplicationauditted where empNo= :empNo";
+		String hql = "SELECT SUM (convert(float,OverTimeHours)) FROM overtimeapplicationauditted where empNo= :empNo";
 		
 		Query query = entityManager.createNativeQuery(hql);
 		query.setParameter("empNo", empNo);
 		
 		if(query.getResultList().size()>0) {
 			
-			BigDecimal val = (BigDecimal)query.getSingleResult();
+			Double val = (Double)query.getSingleResult();
 			return val != null ? val.doubleValue() : 0;
 		}
 		return null;
 	}
+	
+	//-----------------------------抓符合當下日期的加班資料----------------------------------------------
+	
+	@Override
+	public OverTimeAuditted findAudittedBydate(String empNo,String date) {
+		String hql = " select * from overtimeapplicationauditted where CONVERT(char(10), OverTimeDate, 120) = :date AND empNo = :empNo and result ='Pass'";
+		 Query query = entityManager.createNativeQuery(hql,OverTimeAuditted.class);
+		query.setParameter("empNo", empNo);
+		query.setParameter("date", date);
+		
+		if(query.getResultList().size() > 0) {
+			return (OverTimeAuditted) query.getResultList().get(0);
+		}
+		
+		return null;
+	}
+	
 	//--------------------------------------管理員----------------------------------------------//
 	@Override
 	public List<OverTimePending> findByResult() {

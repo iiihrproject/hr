@@ -65,14 +65,14 @@ public class ChecksystemController {
 			
 			if(checksystem1 == null) {
 				//沒打卡
-				errorMsg = "昨天沒打卡 扣1000";
+				errorMsg = "親愛員工!!提醒您~昨日有未打卡紀錄";
 				
 			}else {
 				
 				System.out.println(checksystem1.getCheckInTime());
 				
 				if(checksystem1.getCheckInTime() == null || checksystem1.getCheckOutTime() == null) {
-					errorMsg = "昨天沒打卡 扣1000";
+					errorMsg = "親愛員工!!提醒您~昨日有未打卡紀錄";
 				}
 				
 			}
@@ -82,8 +82,6 @@ public class ChecksystemController {
 		}
 		
 		List<Checksystem> checksystem = checkService.findPartCheckSystem(empNo,5);
-		System.out.println("size = " + checksystem.size());
-		
 		model.addAttribute("Checksystem",checksystem);
 		
 		return "checksystem/checksystem";
@@ -111,7 +109,7 @@ public class ChecksystemController {
 		System.out.println("checkTime = " + checkTime);
 		
 		//如果沒有資料代表今天是休假
-		if(checkTime == null) return "今天不可以打卡唷～";
+		if(checkTime == null) return "今日是您的休假日～請好好放鬆一下!";
 		
 		
 		double times = checkService.judgmentDate(checkTime, time);
@@ -134,7 +132,7 @@ public class ChecksystemController {
 			if("checkIn".equals(type)) {
 				isNotOnTime = times > 0;
 			}else {
-				isNotOnTime = times > 0;
+				isNotOnTime = times >= 0;
 			}
 			String isLate = isNotOnTime ? "Y" : "N";
 			
@@ -180,7 +178,7 @@ public class ChecksystemController {
 			}else {
 				
 				checksystem.setCheckOutTime(time);
-				checksystem.setIsOnTimeCheckOut(times > 0 ? "Y" : "N");
+				checksystem.setIsOnTimeCheckOut(times >= 0 ? "Y" : "N");
 				checkService.saveChecksystem(checksystem);
 				System.out.println(times);
 			}

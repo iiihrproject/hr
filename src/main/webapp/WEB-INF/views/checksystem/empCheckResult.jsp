@@ -53,7 +53,8 @@
 				{ "data":"isLateCheckIn"},
 				{ "data":"isOnTimeCheckOut"},
 				{ "data":"workingHours"},
-				{ "data":"isNeedRepair"}
+				{ "data":"isNeedRepair"},
+				{ "data":"isNeedOvertime"}
 			],
 			
 			columnDefs:[
@@ -88,7 +89,20 @@
 							"class='text-decoration-none'>" +"<button class='btn btn-outline-danger'>補簽到</button>"+"</a>";
 		        	  else return "無需補簽到";
 		          },
-		        }
+		        },
+		        {
+			          targets: [8],
+			          render: function (data) {   
+			             // return moment(data).format('HH:mm:ss');
+			             if(data != null){
+				            	 if(data == "Y") return "<a href='<c:url value='/employeeOvertime' />'"+
+									"class='text-decoration-none'>" +"<button class='btn btn-outline-info'>補加班</button>"+"</a>";
+				        	  	 else return "無需加班";
+				          		} return "無須加班";
+			             },
+			             
+			        	 
+			        }
 		    ],
 			
 			"language": {
@@ -215,6 +229,7 @@
 		                                            <th>是否準時</th>
 		                                            <th>出勤時數</th>
 		                                            <th>是否需補簽到</th>
+		                                            <th>是否需補加班</th>
 		                                        </tr>
 		                                    </thead>
 		                                   <tbody id="BulletinMagList">

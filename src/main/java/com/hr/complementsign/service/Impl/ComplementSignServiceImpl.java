@@ -126,7 +126,7 @@ public class ComplementSignServiceImpl implements ComplementSignService {
 				if("CheckIn".equals(type)) {
 					isNotOnTime = times > 0;
 				}else {
-					isNotOnTime = times > 0;
+					isNotOnTime = times >= 0;
 				}
 				String isLate = isNotOnTime ? "Y" : "N";
 				
@@ -145,7 +145,7 @@ public class ComplementSignServiceImpl implements ComplementSignService {
 				if("CheckIn".equals(type)) {
 					isNotOnTime = times > 0;
 				}else {
-					isNotOnTime = times > 0;
+					isNotOnTime = times >= 0;
 				}
 				String isLate = isNotOnTime ? "Y" : "N";
 				
