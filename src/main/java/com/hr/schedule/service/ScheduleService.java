@@ -11,6 +11,8 @@ public interface ScheduleService {
 	List<FactSchedule> findScheduleByDeptNo(Integer deptNo);
 
 	List<EmpBean> findAllEmps();
+	
+	int addScheduleMonthly(FactSchedule schedule);
 
 	int saveSchedule(FactSchedule schedule);
 

@@ -30,6 +30,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<EmpBean> findAllEmps() {
 		return scheduleRepo.findAllEmps();
 	}
+	
+	@Override
+	public int addScheduleMonthly(FactSchedule schedule) {
+		int n = scheduleRepo.addScheduleMonthly(schedule);
+		return n;
+	}
 
 	@Override
 	public int saveSchedule(FactSchedule schedule) {

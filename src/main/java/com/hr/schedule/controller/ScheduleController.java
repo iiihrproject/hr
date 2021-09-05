@@ -66,6 +66,25 @@ public class ScheduleController {
 		return service.findAllEmps();
 	}
 	
+//	新增一個月
+	@PostMapping("/schedule/addScheduleMonthly")
+	public @ResponseBody Map<String, String> addScheduleMonthly(@RequestBody FactSchedule schedule) {
+		Map<String, String> map = new HashMap<>();
+		int n = 0;
+		try {
+			n = service.addScheduleMonthly(schedule);
+			if (n == 1) {
+				map.put("success", "新增多筆成功");
+			} else if (n == -1) {
+				map.put("fail", "新增多筆失敗");
+			}
+		} catch (Exception e) {
+			map.put("fail", e.getMessage());
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
 //	新增單筆
 	@PostMapping("/schedule/addSchedule")
 	public @ResponseBody Map<String, String> saveSchedule(@RequestBody FactSchedule schedule) {
@@ -74,7 +93,7 @@ public class ScheduleController {
 		try {
 			n = service.saveSchedule(schedule);
 			if (n == 1) {
-				map.put("success", "新增成功");
+				map.put("success", "新增1筆成功");
 			} else if (n == -1) {
 				map.put("fail", "新增失敗");
 			}
