@@ -91,4 +91,9 @@ public class LeaveServiceImpl implements LeaveService {
 		}
 		return diff;
 	}
+
+	@Override
+	public float findAnnualLTook(String empNo, String preAnnivD) {
+		return leaveRepo.findAnnualLTook(empNo,preAnnivD);
+	}
 }

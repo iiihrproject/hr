@@ -169,7 +169,7 @@ public class BulletinMagController implements Serializable {
 			
 
 		} catch (Exception e) {
-			result = e.getMessage();
+			result =  "新增失敗請再確認";
 
 
 		}
@@ -237,7 +237,7 @@ public class BulletinMagController implements Serializable {
 			result = "新增成功";
 
 		} catch (Exception e) {
-			result = e.getMessage();
+			result = "新增失敗，請再確認";
 
 		}
 		return result;

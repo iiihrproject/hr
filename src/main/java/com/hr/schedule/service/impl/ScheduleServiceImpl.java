@@ -20,10 +20,21 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public List<FactSchedule> findAllSchedule() {
 		return scheduleRepo.findAllSchedule();
 	}
+	
+	@Override
+	public List<FactSchedule> findScheduleByDeptNo(Integer deptNo) {
+		return scheduleRepo.findScheduleByDeptNo(deptNo);
+	}
 
 	@Override
 	public List<EmpBean> findAllEmps() {
 		return scheduleRepo.findAllEmps();
+	}
+	
+	@Override
+	public int addScheduleMonthly(FactSchedule schedule) {
+		int n = scheduleRepo.addScheduleMonthly(schedule);
+		return n;
 	}
 
 	@Override

@@ -404,10 +404,10 @@ public class BulletinRepoImpl implements BulletinRepo {
 		for (Object[] object : objects) {
 			ab = new BulName();
 
-			ab.setPostno((int) object[0]);
-			ab.setEnrollStatus((String) object[1]);
-			ab.setTitle((String) object[2]);
-			ab.setPostDate((Date) object[3]);		
+			ab.setPostno((int)object[0]);
+			ab.setEnrollStatus((String)object[1]);
+			ab.setTitle((String)object[2]);
+			ab.setPostDate((Date)object[3]);		
 
 			mylist.add(ab);
 

@@ -1,8 +1,9 @@
 package com.hr.leave.repo;
 
+import java.math.BigDecimal;
 import java.util.List;
-
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,9 +22,9 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 	public void updateSupervisorComment(String applicationNo, String approval01Sig, String approval01MGR, String status) {
 		entityManager.createNativeQuery("update LeaveOfAbsense set Approval01Sig = ?1 "
 				+ ", Approval01Date = getDate() "
-				+ ", Approval01MGR = ?2 "
-				+ ", status = ?3 "
-				+ " where applicationNo = ?4")
+				+ ", Approval01MGR =?2 "
+				+ ", status =?3 "
+				+ " where applicationNo =?4")
 			.setParameter(1, approval01Sig)
 			.setParameter(2, approval01MGR)
 			.setParameter(3, status)
@@ -92,6 +93,23 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 				.setParameter("applicationNo", applicationNo)
 				.getSingleResult();
 		return leaveB;
+	}
+
+	@Override
+	public float findAnnualLTook(String empNo, String preAnnivD) {
+		Query query = entityManager.createNativeQuery("select SUM (convert(decimal,days)) as total_annualLTook "
+				+ "from LeaveofAbsense "
+				+ "where empNo=? and status = 'S03' and "
+				+ "reason_id= 'R03' and STARTDATE > ? "
+				+ "group by empno")
+			.setParameter(1, empNo)
+			.setParameter(2, preAnnivD)
+			;
+		if(query.getResultList().size()>0) {
+		BigDecimal r = (BigDecimal) query.getSingleResult();
+		return r != null ? r.floatValue() : 0;
+		}
+		return 0;
 	}
 
 }
