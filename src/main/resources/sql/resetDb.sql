@@ -520,6 +520,12 @@ INSERT [dbo].[personnel] ([emp_id], [phoneNumber], [address], [email]) VALUES (1
 INSERT [dbo].[personnel] ([emp_id], [phoneNumber], [address], [email]) VALUES (11, N'0945678123', N'Asgard', N'loki@hr.com')
 GO
 
+USE HRDB;
+
+DROP TABLE IF EXISTS [dbo].[calendartask];
+
+USE HRDB;
+
 CREATE TABLE calendartask(
 	no int not null primary key IDENTITY,
 	empNO nvarchar(max) not null,
@@ -595,22 +601,22 @@ VALUES('rd1', '2021-09-05 08:00', '2021-09-05 09:48', '#ff0d00', '盤點', '8點
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
 VALUES('rd1', '2021-09-07 13:00', '2021-09-07 18:59', '#0048e8', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd1', '2021-09-14 13:00', '2021-09-07 18:59', '#ff0d00', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd1', '2021-09-14 13:00', '2021-09-14 18:59', '#ff0d00', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd1', '2021-09-21 13:00', '2021-09-07 18:59', '#0048e8', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd1', '2021-09-21 13:00', '2021-09-21 18:59', '#0048e8', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd1', '2021-09-28 13:00', '2021-09-07 18:59', '#ff0d00', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd1', '2021-09-28 13:00', '2021-09-28 18:59', '#ff0d00', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
 VALUES('rd2', '2021-09-03 09:00', '2021-09-03 21:56', '#327a3d', '開會', '開會', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
 VALUES('rd2', '2021-09-07 13:00', '2021-09-07 18:59', '#187031', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd2', '2021-09-14 13:00', '2021-09-07 18:59', '#14a346', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd2', '2021-09-14 13:00', '2021-09-14 18:59', '#14a346', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd2', '2021-09-21 13:00', '2021-09-07 18:59', '#2e522b', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd2', '2021-09-21 13:00', '2021-09-21 18:59', '#2e522b', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd2', '2021-09-28 13:00', '2021-09-07 18:59', '#1f2e07', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd2', '2021-09-28 13:00', '2021-09-28 18:59', '#1f2e07', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
 VALUES('rd2', '2021-10-07 08:00', '2021-10-07 19:30', '#2e522b', '盤點', '盤點', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 
