@@ -30,11 +30,11 @@ public class TestController {
 		Date checkIn = sdf.parse(checkInString);
 		Date checkOut = sdf.parse(checkOutString);
 		
-		for(int i = 0 ; i < 47 ; i++) {
+		for(int i = 0 ; i < 52 ; i++) {
 			
 			Checksystem checkSystem = new Checksystem();
-			checkSystem.setEmpName("蜘蛛人");
-			checkSystem.setEmpNo("rd1");
+			checkSystem.setEmpName("黑寡婦");
+			checkSystem.setEmpNo("rd2");
 			checkSystem.setDepName("RD");
 			checkSystem.setCheckInTime(checkIn);
 			checkSystem.setCheckOutTime(checkOut);

@@ -65,7 +65,7 @@ function loadLeaveData() {
 			
 			leaveList.forEach(l => {
 				empPkSet.add(l.handOff);
-				if (l.approval01MGR != '') {
+				if (l.approval01MGR != '待處理...') {
 					empPkSet.add(l.approval01MGR)
 				}
 			});

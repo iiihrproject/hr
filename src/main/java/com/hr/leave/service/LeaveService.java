@@ -27,5 +27,5 @@ public interface LeaveService {
 
 	public void updateSupervisorComment(String applicationNo, String approval01Sig, String approval01MGR, String status);
 
-
+	float findAnnualLTook(String empNo, String preAnnivD);
 }

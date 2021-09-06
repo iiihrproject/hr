@@ -1,5 +1,6 @@
 package com.hr.overtime.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import com.hr.overtime.model.OverTimeAuditted;
@@ -28,6 +29,8 @@ public interface OverTimeRepository {
 	Double sumOverTimeHours(String empNo);
 
 	List<OverTimeAuditted> findPartByEmpnoAuditted(String empNo);
+
+	OverTimeAuditted findAudittedBydate(String empNo, String date);
 
 //	DepartmentDetail queryManagerId(int dept_no);
 
