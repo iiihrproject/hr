@@ -230,6 +230,8 @@
 			calendar.render();
 			document.getElementsByClassName("fc-custom-button")[0].innerHTML = "顯示班表";
 		};
+		
+		
 	</script>
 
 
@@ -421,6 +423,29 @@
 				
 			}
 		}
+		
+// 		一鍵輸入行程
+		$("#AddEventTitle").click(function(){
+			startInput.value = "2021-09-20T11:30";
+			endInput.value = "2021-09-23T15:30";
+			colorInput.value = "#FF8040";
+			titleInput.value = "例行會議";
+			textInput.value = "分部巡視";
+		});
+		$("#titleTest_").click(function(){
+			startInput.value = "2021-09-20T11:30";
+			endInput.value = "2021-09-23T15:30";
+			colorInput.value = "#FF8040";
+			titleInput.value = "例行會議議議議議議議議議議議議議議議議議議議議議";
+			textInput.value = "分部巡視";
+		});
+		$("#textTest_").click(function(){
+			startInput.value = "2021-09-20T11:30";
+			endInput.value = "2021-09-23T15:30";
+			colorInput.value = "#FF8040";
+			titleInput.value = "例行會議";
+			textInput.value = "分部巡視 局長也要出席，早上11點就要提醒他，記得要帶公事包還有行李出門，不然又要幫他找便利商店(野外真的很難找，不要忘記提醒他!!!!!!!!!)";
+		});
 
 		
 		
@@ -552,11 +577,11 @@ function processBulButton(result) {
                                                                 <input type="color" class="form-control" id="color_" value="#7973AE">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="title_" class="col-form-label">主旨</label><span id="titleArea_"></span>
+                                                                <label for="title_" class="col-form-label" id="titleTest_">主旨</label><span id="titleArea_"></span>
                                                                 <input type="text" class="form-control" id="title_" autocomplete="on">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="message_" class="col-form-label">內容</label><span id="messageArea_"></span>
+                                                                <label for="message_" class="col-form-label" id="textTest_">內容</label><span id="messageArea_"></span>
                                                                 <textarea class="form-control" id="message_"></textarea>
                                                             </div>
                                                         </form>
@@ -564,8 +589,7 @@ function processBulButton(result) {
                                                     <div class="modal-footer justify-content-center">
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="backSumbit_">取消</button>
                                                             <button type="submit" class="btn btn-danger" id="deleteSumbit_">刪除</button>
-                                                            <button type="submit" class="btn btn-primary" id="taskSumbit_" >送出</button>
-                                                            <!-- sumit+click(ajax)     //onclick="insertMessage();"      maxlength="20"-->
+                                                            <button type="submit" class="btn btn-primary" id="taskSumbit_" >送出</button>                                                            
                                                     </div>                                                   
 													                                                   
                                                 </div>
