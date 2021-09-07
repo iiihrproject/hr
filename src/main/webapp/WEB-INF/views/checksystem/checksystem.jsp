@@ -77,7 +77,7 @@
 		                    if ('Success' == response) {
 		//                         window.location.href = "<c:url value='/findCheck'/>?type=" + type;
 		                    } else {
-		                    	swal(response);
+		                    	swal("貼心提醒",response,"info");
 		                    }
 		                }
 		            }
@@ -121,7 +121,7 @@
 		                   if ('Success' == response) {
 		               		
   		                    } else {
-  		                    	swal(response);
+  		                    	swal("貼心提醒",response,"info");
   		                    }
 		               }
 		
@@ -243,7 +243,7 @@
                                 <div class="card-body "style="background-image: url('<c:url value="/img/clock.png" />');  background-size: cover;">
                                 
                                       <div class="gowork ">
-							            <h5 id="showdate" style="color:black;"></h5>
+							            <h4 id="showdate" style="color:black;"></h4>
 							            <h1 id="showbox" style="color:black;font-size: 50px;"></h1>
 							            <br> <br> <br> <br> <br> <br> <br><br><br>
 							            
@@ -252,12 +252,12 @@
 							            	
 								            <c:when test="${factSchedule.start != null}" > 
 								            
-									            <h4 id="worktime"style="float:left; margin-left: 120px;font-weight: bold;font-size: 30px;"><nobr>上班時間:${fn:substring(factSchedule.start,11,16)}</nobr></h4>
-									            <h4 id="offworktime" style="float:right; margin-right: 120px; font-weight: bold;font-size: 30px;"><nobr>下班時間:${fn:substring(factSchedule.end,11,16)}</nobr></h4>
+									            <h4 id="worktime"style="float:left; margin-left: 120px;font-weight: bold;font-size: 30px; color:navy;"><nobr>上班時間:${fn:substring(factSchedule.start,11,16)}</nobr></h4>
+									            <h4 id="offworktime" style="float:right; margin-right: 120px; font-weight: bold;font-size: 30px; color:navy;"><nobr>下班時間:${fn:substring(factSchedule.end,11,16)}</nobr></h4>
 								            
 								            </c:when>
 								            <c:when test="${factSchedule.start == null}">
-								            	<h2 style="color:red;font-weight: bold;">今日休假<img src='<c:url value="/img/sleep.png" />' width=25%></h2>
+								            	<h2 style="color:red;font-weight: bold;font-size: 45px;">今日<img src='<c:url value="/img/sleep.png" />' width=25%>休假</h2>
 								            </c:when>
 							            </c:choose>
 							            
@@ -277,7 +277,7 @@
         								                        
                                      <div class="switch">
 							            <input class="switch-checkbox" id="switchID1" type="checkbox" name="switch-checkbox"> 
-							            <label class="switch-label" for="switchID1"> <span class="switch-txt" turnOn="下班" turnOff="上班"></span>
+							            <label class="switch-label" for="switchID1"> <span class="switch-txt" turnOff="上班" turnOn="下班了喔"></span>
 							            <span class="switch-Round-btn"></span>
 							            </label>
         							</div>
@@ -323,7 +323,7 @@
                                 <!-- 展開 -->
                                 <div id="showFile" align='center'>
                                 <table class="table table-hover table-bordered">
-									<tr><th>日期</th><th>上班時間</th><th>下班時間</th><th>上班是否遲到</th><th>下班是否準時</th><th>是否需補簽到</th></tr>
+									<tr><th>日期</th><th>上班時間</th><th>下班時間</th><th>上班是否遲到</th><th>下班是否準時</th><th>是否有異常</th></tr>
 										<c:forEach var='checksystem' items='${Checksystem}'>
 										  <tr>
 										  	 <td>
@@ -350,8 +350,10 @@
 						       				 <c:choose>
 										     	  <c:when test="${checksystem.isNeedRepair == 'Y'}" ><a href="<c:url value='/EmpSignApply' />"
 													class="text-decoration-none"><button class='btn btn-outline-danger'>補簽到</button></a></c:when>
-										     	  <c:when test="${checksystem.isNeedRepair == 'N'}" >無須補簽到</c:when>
-						       				</c:choose>
+												  <c:when test="${checksystem.isNeedOvertime == 'Y'}" ><a href="<c:url value='/employeeOvertime' />"
+													class="text-decoration-none"><button class='btn btn-outline-info'>補加班</button></a></c:when>	
+										     	  <c:when test="${checksystem.isNeedRepair == 'N'}" >無任何異常</c:when>
+						       				 </c:choose>
 						       				 </td>
 										     
 										 </tr>    

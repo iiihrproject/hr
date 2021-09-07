@@ -194,6 +194,7 @@
 						    <option value="HR">HR</option>
 						    <option value="RD">RD</option>
 						    <option value="SALES">SALES</option>
+						    <option value="PU">PU</option>
 						</select>
 						
 						<button id="search" class="btn btn-secondary">搜尋</button>

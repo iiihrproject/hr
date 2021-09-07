@@ -67,6 +67,9 @@ public class Checksystem {
 	private String isNeedRepair = "N";
 
 	@Transient
+	private String isNeedOvertime = "N";
+
+	@Transient
 	private Date showTime = null;
 //	private String checkInLate = null;
 //	
@@ -74,6 +77,14 @@ public class Checksystem {
 
 	public String getIsNeedRepair() {
 		return isNeedRepair;
+	}
+
+	public String getIsNeedOvertime() {
+		return isNeedOvertime;
+	}
+
+	public void setIsNeedOvertime(String isNeedOvertime) {
+		this.isNeedOvertime = isNeedOvertime;
 	}
 
 	public void setIsNeedRepair(String isNeedRepair) {

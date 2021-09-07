@@ -51,7 +51,7 @@
         .switch-txt::after {
             content: attr(turnOn);
             padding-left: 10px;
-            background: #1ba0ef;
+            background:  rgb(26, 196, 167);
             color: #fff;
         }
 
@@ -60,7 +60,7 @@
             content: attr(turnOff);
             padding-right: 10px;
             background: rgb(26, 196, 167);
-            color: #ccc;
+            color: #fff;
             text-align: right;
         }
 

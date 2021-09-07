@@ -39,7 +39,7 @@ public class LoginAuthenticationProvider implements AuthenticationProvider {
 		
 		LoginModel loginModel = loginService.getLoginModelByEmpNo(empNo);
 		if (loginModel != null) {
-			if (passwordEncoder.matches(pwd, loginModel.getEmployeePassword())) {
+			if (loginModel.getIsEnable() && passwordEncoder.matches(pwd, loginModel.getEmployeePassword())) {
 				return new UsernamePasswordAuthenticationToken(empNo, pwd, getGrantedAuthorities(loginModel.getAuthorities()));
 			} 
 			else {

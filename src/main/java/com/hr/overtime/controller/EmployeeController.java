@@ -83,7 +83,7 @@ public class EmployeeController {
 		
 		Sort sort = Sort.by(Direction.DESC, "dateOfApplication");
 		
-		Pageable page = PageRequest.of(pageNumber, 10, sort);
+		Pageable page = PageRequest.of(pageNumber, 5, sort);
 		
 		Page<OverTimePending> result = overTimePendingRepository.findByEmpNo(page, empNo, date, depart,null);
 		
@@ -110,7 +110,8 @@ public class EmployeeController {
 		
 		int pageNumber = pageNo == null || "null".equals(pageNo) ? 0 : Integer.parseInt(pageNo) -1;
 		
-		Pageable page = PageRequest.of(pageNumber, 10);	
+		Sort sort = Sort.by(Direction.DESC, "dateOfApplication");
+		Pageable page = PageRequest.of(pageNumber, 5,sort);	
 		
 		Page<OverTimeAuditted> result = overTimeAuditingRepository.findByEmpNo(page, empNo, date, depart);
 		

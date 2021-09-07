@@ -83,7 +83,7 @@ public class ComplementSignController {
 			LoginModel loginModel) {
 		String empNo = loginModel.getEmpNo();
 		int pageNumber = pageNo == null || "null".equals(pageNo) ? 0 : Integer.parseInt(pageNo) -1;
-		Sort sort = Sort.by(Direction.DESC, "date");
+		Sort sort = Sort.by(Direction.DESC, "Serial_Number");
 		Pageable page = PageRequest.of(pageNumber, 5, sort);
 		Page<PendingComplementSign> result = pendingSignRepository.findPendingSignByEmpNo(page, empNo, date, null);
 		List<PendingComplementSign> pendingComplementSign = result.getContent();
@@ -102,7 +102,7 @@ public class ComplementSignController {
 			@RequestParam(value="keyword",required = false)String keyword,@RequestParam(value="date",required = false)String date,LoginModel loginModel) {
 		String empNo = loginModel.getEmpNo();
 		int pageNumber = pageNo == null || "null".equals(pageNo) ? 0 : Integer.parseInt(pageNo) -1;
-		Sort sort = Sort.by(Direction.DESC, "date");
+		Sort sort = Sort.by(Direction.DESC, "Serial_Number");
 		Pageable page = PageRequest.of(pageNumber, 5, sort);
 		Page<AudittedComplementSign> result = audittedSignRepository.findAudittedSignByEmpNo(page, empNo, date, null);
 		List<AudittedComplementSign> audittedComplementSign = result.getContent();
@@ -128,7 +128,7 @@ public class ComplementSignController {
 			LoginModel loginModel) {
 		int managerEmpId = loginModel.getDepartmentDetail().getManagerEmpId();
 		int pageNumber = pageNo == null || "null".equals(pageNo) ? 0 : Integer.parseInt(pageNo) -1;
-		Sort sort = Sort.by(Direction.DESC, "date");
+		Sort sort = Sort.by(Direction.DESC, "Serial_Number");
 		Pageable page = PageRequest.of(pageNumber, 5, sort);
 		Page<PendingComplementSign> result = pendingSignRepository.findPendingSignByEmpNo(page, null, date, managerEmpId);
 		List<PendingComplementSign> pendingComplementSign = result.getContent();
