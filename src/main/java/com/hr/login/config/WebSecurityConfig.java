@@ -49,7 +49,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			    .antMatchers("/calendartasks", "/calendarTaskUpdate", "/calendarTaskDelete", "/shiftsforcalendar").authenticated()
 			    .anyRequest().hasRole("ADMIN")
 			    
-      
 			    .and()
 		    .formLogin()
 			    .loginPage("/login").permitAll() // Rewrite the default login page
