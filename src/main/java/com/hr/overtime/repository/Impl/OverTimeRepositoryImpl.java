@@ -70,7 +70,7 @@ public class OverTimeRepositoryImpl implements OverTimeRepository {
 	
 	@Override
 	public Double sumOverTimeHours(String empNo) {
-		String hql = "SELECT SUM (convert(float,OverTimeHours)) FROM overtimeapplicationauditted where empNo= :empNo";
+		String hql = "SELECT SUM (convert(float,OverTimeHours)) FROM overtimeapplicationauditted where empNo= :empNo and  Convert(varchar(7), overTimeDate,120) = Convert(varchar(7),getDate(),120)";
 		
 		Query query = entityManager.createNativeQuery(hql);
 		query.setParameter("empNo", empNo);

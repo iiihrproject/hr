@@ -37,13 +37,13 @@ public class OverTimeServiceImpl implements OverTimeService {
 	
 	@Override
 	public List<OverTimePending> findPartByEmpnoPending(String empNo) {
-	List<OverTimePending>overtimepending = overTimeRepository.findPartByEmpnoPending(empNo);
+		List<OverTimePending>overtimepending = overTimeRepository.findPartByEmpnoPending(empNo);
 		return overtimepending;
 	}
 	
 	@Override
 	public List<OverTimeAuditted> findPartByEmpnoAuditted(String empNo) {
-	List<OverTimeAuditted>overtimeauditted = overTimeRepository.findByEmpnoAuditted(empNo);
+		List<OverTimeAuditted>overtimeauditted = overTimeRepository.findPartByEmpnoAuditted(empNo);
 		return overtimeauditted;
 	}
 	
@@ -82,7 +82,6 @@ public class OverTimeServiceImpl implements OverTimeService {
 	@Override
 	public void deletePending(OverTimePending overTimePending) {
 		overTimeRepository.deletePending(overTimePending);
-		
 	}
 	
 //	@Override

@@ -325,7 +325,7 @@
 						</select>
 						
 						<button id="search" class="btn btn-secondary">搜尋</button>
-						
+						<a href="<c:url value='/empCheck' />" class="text-decoration-none"><button  class="btn btn-secondary" style="float:right;">回出勤首頁</button></a>
 							<div id="overtimepending" data-toggle='table' align=center ></div>
 							<br><br>
 							<div id="overtimeauditted" data-toggle='table' align=center ></div>
