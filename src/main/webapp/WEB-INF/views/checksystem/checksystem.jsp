@@ -252,8 +252,8 @@
 							            	
 								            <c:when test="${factSchedule.start != null}" > 
 								            
-									            <h4 id="worktime"style="float:left; margin-left: 120px;font-weight: bold;font-size: 30px;"><nobr>上班時間:${fn:substring(factSchedule.start,11,16)}</nobr></h4>
-									            <h4 id="offworktime" style="float:right; margin-right: 120px; font-weight: bold;font-size: 30px;"><nobr>下班時間:${fn:substring(factSchedule.end,11,16)}</nobr></h4>
+									            <h4 id="worktime"style="float:left; margin-left: 120px;font-weight: bold;font-size: 30px; color:navy;"><nobr>上班時間:${fn:substring(factSchedule.start,11,16)}</nobr></h4>
+									            <h4 id="offworktime" style="float:right; margin-right: 120px; font-weight: bold;font-size: 30px; color:navy;"><nobr>下班時間:${fn:substring(factSchedule.end,11,16)}</nobr></h4>
 								            
 								            </c:when>
 								            <c:when test="${factSchedule.start == null}">

@@ -99,7 +99,7 @@ public class CheckServiceImpl implements CheckService {
 	}
 	
 	//判斷是否補簽到 補加班
-	public void filterIsNeedRepair(List<Checksystem> checkSystemList) {
+	public void filterIsNeedRepair(List<Checksystem> checkSystemList){
 		
 		Date today = transferDate(new Date());
 		for(Checksystem checksystem : checkSystemList) {
@@ -128,14 +128,15 @@ public class CheckServiceImpl implements CheckService {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 					Date rosterdate = null;
 					if(factSchedule != null) {
+						double min = 0;
+						
 						try {
 							rosterdate = sdf.parse(factSchedule.getEnd());
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
+							min =judgmentDate(rosterdate, offdate); 
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
-						
-						if( rosterdate.before(checksystem.getCheckOutTime()) && overtimeautidded == null ) {
+						if( rosterdate.before(checksystem.getCheckOutTime()) && overtimeautidded == null && min >= 30) {
 							checksystem.setIsNeedOvertime("Y");
 						}else checksystem.setIsNeedOvertime("N");
 					}
