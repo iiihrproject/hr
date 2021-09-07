@@ -520,6 +520,12 @@ INSERT [dbo].[personnel] ([emp_id], [phoneNumber], [address], [email]) VALUES (1
 INSERT [dbo].[personnel] ([emp_id], [phoneNumber], [address], [email]) VALUES (11, N'0945678123', N'Asgard', N'loki@hr.com')
 GO
 
+USE HRDB;
+
+DROP TABLE IF EXISTS [dbo].[calendartask];
+
+USE HRDB;
+
 CREATE TABLE calendartask(
 	no int not null primary key IDENTITY,
 	empNO nvarchar(max) not null,
@@ -595,22 +601,22 @@ VALUES('rd1', '2021-09-05 08:00', '2021-09-05 09:48', '#ff0d00', '盤點', '8點
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
 VALUES('rd1', '2021-09-07 13:00', '2021-09-07 18:59', '#0048e8', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd1', '2021-09-14 13:00', '2021-09-07 18:59', '#ff0d00', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd1', '2021-09-14 13:00', '2021-09-14 18:59', '#ff0d00', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd1', '2021-09-21 13:00', '2021-09-07 18:59', '#0048e8', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd1', '2021-09-21 13:00', '2021-09-21 18:59', '#0048e8', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd1', '2021-09-28 13:00', '2021-09-07 18:59', '#ff0d00', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd1', '2021-09-28 13:00', '2021-09-28 18:59', '#ff0d00', '進度報告', '每個禮拜都要回報東尼', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
 VALUES('rd2', '2021-09-03 09:00', '2021-09-03 21:56', '#327a3d', '開會', '開會', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
 VALUES('rd2', '2021-09-07 13:00', '2021-09-07 18:59', '#187031', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd2', '2021-09-14 13:00', '2021-09-07 18:59', '#14a346', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd2', '2021-09-14 13:00', '2021-09-14 18:59', '#14a346', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd2', '2021-09-21 13:00', '2021-09-07 18:59', '#2e522b', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd2', '2021-09-21 13:00', '2021-09-21 18:59', '#2e522b', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
-VALUES('rd2', '2021-09-28 13:00', '2021-09-07 18:59', '#1f2e07', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
+VALUES('rd2', '2021-09-28 13:00', '2021-09-28 18:59', '#1f2e07', '報告', '報告', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 INSERT INTO calendartask(empNo, starttime, endtime, colortag, tasktitle, tasktext, createtime, edittime, taskstatus)
 VALUES('rd2', '2021-10-07 08:00', '2021-10-07 19:30', '#2e522b', '盤點', '盤點', '2021-08-31 16:55', '2021-08-31 16:55', '0');
 
@@ -1042,7 +1048,7 @@ CREATE TABLE [dbo].[bulEnroll](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[bulletin]    Script Date: 2021/9/2 下午 02:48:01 ******/
+/****** Object:  Table [dbo].[bulletin]    Script Date: 2021/9/5 上午 12:08:06 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1064,7 +1070,7 @@ CREATE TABLE [dbo].[bulletin](
 	[endDate] [date] NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[bulLike]    Script Date: 2021/9/2 下午 02:48:01 ******/
+/****** Object:  Table [dbo].[bulLike]    Script Date: 2021/9/5 上午 12:08:06 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1080,7 +1086,7 @@ CREATE TABLE [dbo].[bulLike](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[bulMessage]    Script Date: 2021/9/2 下午 02:48:01 ******/
+/****** Object:  Table [dbo].[bulMessage]    Script Date: 2021/9/5 上午 12:08:06 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1106,10 +1112,13 @@ INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStat
 INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (2, N'HR', N'神盾局長', N'hrmanager', N'參加', 11, CAST(N'2021-09-02T00:03:46.0470000' AS DateTime2), CAST(N'2021-09-02T00:03:46.0470000' AS DateTime2))
 INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (3, N'SALES', N'洛基', N'sales3', N'參加', 11, CAST(N'2021-09-02T00:04:03.8440000' AS DateTime2), CAST(N'2021-09-02T00:04:03.8440000' AS DateTime2))
 INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (4, N'SALES', N'美國隊長', N'salesmanager', N'參加', 11, CAST(N'2021-09-02T00:05:10.7680000' AS DateTime2), CAST(N'2021-09-02T00:05:10.7680000' AS DateTime2))
-INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (5, N'RD', N'蜘蛛人', N'rd1', N'取消參加', 14, CAST(N'2021-09-02T14:31:18.9610000' AS DateTime2), CAST(N'2021-09-02T12:50:53.2710000' AS DateTime2))
+INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (5, N'RD', N'蜘蛛人', N'rd1', N'參加', 14, CAST(N'2021-09-05T00:03:57.5520000' AS DateTime2), CAST(N'2021-09-02T12:50:53.2710000' AS DateTime2))
 INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (6, N'HR', N'黑寡婦', N'hr1', N'取消參加', 11, CAST(N'2021-09-02T12:53:46.1190000' AS DateTime2), CAST(N'2021-09-02T12:53:34.9910000' AS DateTime2))
 INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (7, N'SALES', N'鷹眼', N'sales2', N'參加', 11, CAST(N'2021-09-02T12:55:00.3670000' AS DateTime2), CAST(N'2021-09-02T12:55:00.3670000' AS DateTime2))
-INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (8, N'RD', N'蜘蛛人', N'rd1', N'參加', 22, CAST(N'2021-09-02T14:31:01.8260000' AS DateTime2), CAST(N'2021-09-02T14:31:01.8260000' AS DateTime2))
+INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (8, N'RD', N'浩克', N'rd2', N'參加', 16, CAST(N'2021-09-05T00:04:39.5640000' AS DateTime2), CAST(N'2021-09-05T00:04:39.5640000' AS DateTime2))
+INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (9, N'RD', N'浩克', N'rd2', N'參加', 14, CAST(N'2021-09-05T00:04:52.3650000' AS DateTime2), CAST(N'2021-09-05T00:04:52.3650000' AS DateTime2))
+INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (10, N'RD', N'鋼鐵人', N'rdmanager', N'參加', 14, CAST(N'2021-09-05T00:05:12.8870000' AS DateTime2), CAST(N'2021-09-05T00:05:12.8870000' AS DateTime2))
+INSERT [dbo].[bulEnroll] ([enrollId], [empDept], [empName], [empNo], [enrollStatus], [postno], [updateTime], [createTime]) VALUES (11, N'HR', N'神盾局長', N'hrmanager', N'參加', 14, CAST(N'2021-09-05T00:05:27.9500000' AS DateTime2), CAST(N'2021-09-05T00:05:27.9500000' AS DateTime2))
 SET IDENTITY_INSERT [dbo].[bulEnroll] OFF
 GO
 SET IDENTITY_INSERT [dbo].[bulletin] ON 
@@ -1183,6 +1192,12 @@ INSERT [dbo].[bulLike] ([id], [empNo], [likeStatus], [postno]) VALUES (44, N'rd4
 INSERT [dbo].[bulLike] ([id], [empNo], [likeStatus], [postno]) VALUES (45, N'sales3', N'喜歡', 7)
 INSERT [dbo].[bulLike] ([id], [empNo], [likeStatus], [postno]) VALUES (46, N'sales3', N'喜歡', 11)
 INSERT [dbo].[bulLike] ([id], [empNo], [likeStatus], [postno]) VALUES (47, N'rd1', N'喜歡', 11)
+INSERT [dbo].[bulLike] ([id], [empNo], [likeStatus], [postno]) VALUES (48, N'rd2', N'喜歡', 16)
+INSERT [dbo].[bulLike] ([id], [empNo], [likeStatus], [postno]) VALUES (49, N'rdmanager', N'喜歡', 16)
+INSERT [dbo].[bulLike] ([id], [empNo], [likeStatus], [postno]) VALUES (50, N'hrmanager', N'喜歡', 16)
+INSERT [dbo].[bulLike] ([id], [empNo], [likeStatus], [postno]) VALUES (51, N'hrmanager', N'喜歡', 15)
+INSERT [dbo].[bulLike] ([id], [empNo], [likeStatus], [postno]) VALUES (52, N'hrmanager', N'喜歡', 12)
+INSERT [dbo].[bulLike] ([id], [empNo], [likeStatus], [postno]) VALUES (53, N'hrmanager', N'喜歡', 13)
 SET IDENTITY_INSERT [dbo].[bulLike] OFF
 GO
 SET IDENTITY_INSERT [dbo].[bulMessage] ON 

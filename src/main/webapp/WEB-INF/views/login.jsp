@@ -41,6 +41,10 @@
     	document.getElementById('username').value = 'rd2';
     	document.getElementById('password').value = 'password';
     }
+    function generalButton4 () {
+    	document.getElementById('username').value = 'rd4';
+    	document.getElementById('password').value = 'password';
+    }
     function managerButton () {
     	document.getElementById('username').value = 'rdmanager';
     	document.getElementById('password').value = 'password';
@@ -84,6 +88,7 @@
             <span>
             <button type="button" class="buttonst" onclick="generalButton1()">RD1</button>
             <button type="button" class="buttonst" onclick="generalButton2()">RD2</button>
+            <button type="button" class="buttonst" onclick="generalButton4()">RD4</button>
             <button type="button" class="buttonst" onclick="managerButton()">RDManager</button>
             <button type="button" class="buttonst" onclick="hrButton()">HR</button>
             <button type="button" class="buttonst" onclick="hrmanagerButton()">HR Manager</button>

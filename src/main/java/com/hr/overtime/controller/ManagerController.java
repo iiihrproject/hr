@@ -37,8 +37,7 @@ public class ManagerController {
 	@PostMapping(path = "/manageAudit")
 	@ResponseBody
 	public void saveOvertimeAuditted(@RequestParam("type")String type ,@RequestParam("id")int id ,LoginModel loginModel) {
-		
-		System.out.println("start");
+
 //		HttpSession httpSession = request.getSession(true);
 //		String empNo = (String)httpSession.getAttribute("empNo");
 //		empNo = "123";
