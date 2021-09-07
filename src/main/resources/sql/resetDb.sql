@@ -759,7 +759,7 @@ INSERT [dbo].[dimShift] ([KeyShift], [DimShift], [StartTime], [EndTime], [Hours]
 INSERT [dbo].[dimShift] ([KeyShift], [DimShift], [StartTime], [EndTime], [Hours], [Position]) VALUES (3, N'晚班', CAST(N'14:00:00' AS Time), CAST(N'23:00:00' AS Time), 8, N'結算')
 SET IDENTITY_INSERT [dbo].[dimShift] OFF
 GO
-SET IDENTITY_INSERT [dbo].[factSchedule] ON 
+SET IDENTITY_INSERT [dbo].[factSchedule] OFF
 
 INSERT [dbo].[factSchedule] ([empID], [HoursOfWork], [Start], [EndOfShift], [Title], [KeyAvailability], [IsHoliday], [Date], [ShiftId]) VALUES (N'1', NULL, N'2021-08-21T09:00:00', N'2021-08-21T18:00:00', N'指揮中心坐鎮', NULL, NULL, NULL, NULL);
 INSERT [dbo].[factSchedule] ([empID], [HoursOfWork], [Start], [EndOfShift], [Title], [KeyAvailability], [IsHoliday], [Date], [ShiftId]) VALUES (N'2', NULL, N'2021-08-22T09:00:00', N'2021-08-22T18:00:00', N'日常訓練', NULL, NULL, NULL, NULL);

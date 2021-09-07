@@ -33,8 +33,10 @@ function loadLeaveData() {
 	xhr.open("GET", "<c:url value='/Leave/findLeaveByDeptNo' />?departmentNumber=" + myDeptNo, true);
 // 	xhr.open("GET", "<c:url value='/Leave/findAllLeave' />", true);
 	xhr.send();
+	$("#loaderimg").show();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
+			$("#loaderimg").hide();
 			document.getElementById("tbodycontent").innerHTML = processData(xhr.responseText);
 // 							let leaveList = JSON.parse(xhr.responseText);
 // 							console.log(leaveList);
@@ -127,7 +129,8 @@ function seeMore(appNo){
 			$("#m_end").html(data.endDate+'<br>'+data.endTime.slice(0,5));
 			$("#m_days").text(data.days);
 			$("#m_comments").text(data.comments);
-			$("#m_supportingDoc").text(data.supportingDoc);
+			$("#m_supportingDoc").attr("src",data.supportingDoc);
+			$("#m_fileName").text(data.fileName);
 			$("#m_date").text(d.toDateString().slice(4));
 			$("#m_status").text(data.statusList.desc_zh);
 			if(data.statusList.desc_zh == "通過"){
@@ -185,6 +188,7 @@ function setCSS(){
 </head>
 <body>
 <div class="container-fluid h-75 pt-4">
+	<img id="loaderimg" src='<c:url value="/img/ajaxloader.gif" />' style='position:absolute; left:50%; top:50%;transform: translate(-50%, -50%);z-index:2;display=none'>
 	<!-- Page Heading -->
 	<h1 class="h3 mb-2 text-gray-800">${sessionScope.loginModel.departmentDetail.name}的請假簽核</h1>
 	<!-- DataTales Example -->
@@ -311,7 +315,7 @@ function setCSS(){
 								</tr>
 								<tr>
 									<th>相關檔案上傳</th>
-									<td><span id="m_supportingDoc"></span></td>
+									<td><i class="fas fa-file-alt fa-2x" role="button" data-toggle="modal" data-target="#fileModal"></i> <span id="m_fileName"></span></td>
 								</tr>
 								<tr>
 									<th>主管簽核
@@ -352,6 +356,26 @@ function setCSS(){
 	</div>
 </div>
 <!-- End of Detail Modal -->
+<!-- File Modal -->
+<div class="modal fade" id="fileModal" tabindex="-1" role="dialog" aria-labelledby="fileModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="fileModalLabel">相關檔案</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body justify-content-center">
+        <img id="m_supportingDoc" class="m-auto d-block" src="" alt="" />
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of File Modal -->
 <script>
 //固定高度
 $(window).resize(function() {
@@ -567,7 +591,10 @@ $("#approveBtn").click(function(){
 });
 //審核結果-否決
 $("#rejectBtn").click(function(){
-	
+	if($("#sig-image").attr("src") == ""){
+		Swal.fire('忘了按「簽名完成」?','','warning',);
+		return false;
+	}
 	Swal.fire({
 		  title: '確定否決此申請?',
 		  icon: 'error',

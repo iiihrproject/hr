@@ -8,7 +8,6 @@
 <script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
 <title>Leave Of Absence</title>
 <script>
-
 	window.addEventListener("DOMContentLoaded", function() {
 		initialCSS();
 		initialDate();
@@ -21,7 +20,7 @@
 		var handOffSelect = document.getElementById('handOffSelect');
 		var xhr = new XMLHttpRequest();
 		var myDeptNo = ${sessionScope.loginModel.getDepartmentDetail().getDepartmentNumber()};
-		var myDept = "${sessionScope.loginModel.getDepartmentDetail().getName()}";
+		var myDept = "${sessionScope.loginModel.departmentDetail.name}";
 		xhr.open("GET", "<c:url value='/G/findEmpsByDept'/>" + "?departmentNumber=" + myDeptNo, true);
 		xhr.send();
 		xhr.onreadystatechange = function() {
@@ -39,6 +38,9 @@
 					//用Option物件塞剩下的選項
 					var option = new Option(empNames[i][0], empNames[i][1]);
 					handOffSelect.options[handOffSelect.options.length] = option;
+					if(handOffSelect.options[i+1].text == "${sessionScope.loginModel.name}"){
+						handOffSelect.options[i+1].disabled = true;
+					}
 				}
 			}
 		}
@@ -194,6 +196,7 @@
 			<div class="form-group form-inline">
 				<label for="supportingDoc">相關檔案上傳</label>
 				<input type="file" class="form-inline col-md-10" id="supportingDoc" name="supportingDoc" multiple>
+				<div id="fileString" class="d-none"></div>
 			</div>
 			<div id="messageBox" class="alert alert-danger d-none" role="alert"></div>
 			<input type="button" class="btn btn-primary btn-user btn-block" id="submitBtn" value="送出">
@@ -286,7 +289,5 @@
 			$(this).removeClass("is-invalid");
 		});
 		</script>
-	
 </body>
-
 </html>

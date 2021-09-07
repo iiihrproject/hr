@@ -137,39 +137,39 @@ public class LeaveController {
 
 	
 	
-	@GetMapping("/crm/picture/{appNo}")
-	public ResponseEntity<byte[]> getPicture(@PathVariable("appNo") String appNo) {
-		byte[] body = null;
-		ResponseEntity<byte[]> re = null;
-		MediaType mediaType = null;
-		HttpHeaders headers = new HttpHeaders();
-		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-
-		LeaveBean leave = service.findLeaveByAppNo(appNo);
-		if (leave == null) {
-			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
-		}
-		String filename = leave.getFileName();
-		if (filename != null) {
-			if (filename.toLowerCase().endsWith("jfif")) {
-				mediaType = MediaType.valueOf(context.getMimeType("dummy.jpeg"));
-			} else {
-				mediaType = MediaType.valueOf(context.getMimeType(filename));
-				headers.setContentType(mediaType);
-			}
-		}
-		Blob blob = leave.getSupportingDoc();
-		if (blob != null) {
-			body = blobToByteArray(blob);
-		} else {
-			String path = "img/noFile.jpg";
-			
-			body = fileToByteArray(path);
-		}
-		re = new ResponseEntity<byte[]>(body, headers, HttpStatus.OK);
-
-		return re;
-	}
+//	@GetMapping("/crm/picture/{appNo}")
+//	public ResponseEntity<byte[]> getPicture(@PathVariable("appNo") String appNo) {
+//		byte[] body = null;
+//		ResponseEntity<byte[]> re = null;
+//		MediaType mediaType = null;
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+//
+//		LeaveBean leave = service.findLeaveByAppNo(appNo);
+//		if (leave == null) {
+//			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
+//		}
+//		String filename = leave.getFileName();
+//		if (filename != null) {
+//			if (filename.toLowerCase().endsWith("jfif")) {
+//				mediaType = MediaType.valueOf(context.getMimeType("dummy.jpeg"));
+//			} else {
+//				mediaType = MediaType.valueOf(context.getMimeType(filename));
+//				headers.setContentType(mediaType);
+//			}
+//		}
+//		Blob blob = leave.getSupportingDoc();
+//		if (blob != null) {
+//			body = blobToByteArray(blob);
+//		} else {
+//			String path = "img/noFile.jpg";
+//			
+//			body = fileToByteArray(path);
+//		}
+//		re = new ResponseEntity<byte[]>(body, headers, HttpStatus.OK);
+//
+//		return re;
+//	}
 	
 //	憲春老師的範例
 	private byte[] fileToByteArray(String path) {

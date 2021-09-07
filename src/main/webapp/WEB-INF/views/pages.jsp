@@ -2,8 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-TW">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,27 +11,31 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <title>HR有限公司 人力資源系統</title>
-
 <!-- Custom fonts for this template-->
-
 <link href="<c:url value='vendor/fontawesome-free/css/all.min.css' />"
 	rel="stylesheet" type="text/css">
-<link
-	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
 	rel="stylesheet">
 
 <!-- Custom styles for this template-->
-
-<link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
 <link rel="icon" href="<c:url value='img/favicon.png' />">
+<link rel="stylesheet" href="<c:url value='css/sb-admin-2.min.css' />">
 <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
 <script src="js/jquery-3.6.0.min.js"></script>
+<style>
+.myPageLink:hover {
+	z-index: 2;
+	color: #224abe;
+	text-decoration: none;
+	background-color: RGBA(121, 115, 174, 0.2);
+	border-color: #dddfeb;
+}
+</style>
 <script>
 <!-- .js請從此後寫 -->
 	window.addEventListener("load", function() {
 		isAuthMoreThanGEN();
 	});
-
 	//判斷AUTH是否不只General
 	function isAuthMoreThanGEN() {
 		var isAuthMoreThanGEN = false;
@@ -45,13 +48,10 @@
 	}
 </script>
 </head>
-
 <body id="page-top">
 	<jsp:include page="header.jsp"></jsp:include>
-
 	<!-- Begin Page Content -->
 				<div class="container-fluid h-75">
-				
 <!-- 					<div class="row fornone"> -->
 <!-- 					<div class="row"> -->
 <!-- 						展示模板用，之後要置換掉，換成有fornone的上面那個 -->
@@ -70,10 +70,9 @@
 <!-- 							</div> -->
 <!-- 						</div> -->
 <!-- 					</div> -->
-
 					<div class="row h-25">
 						<div class="col-12 col-md-6 mb-4">
-							<div class="card border-left-primary shadow h-100 py-2">
+							<div class="card border-left-primary shadow h-100 py-2 myPageLink">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
@@ -92,9 +91,8 @@
 								</div>
 							</div>
 						</div>
-
 						<div class="col-12 col-md-6 mb-4">
-							<div class="card border-left-danger shadow h-100 py-2">
+							<div class="card border-left-danger shadow h-100 py-2 myPageLink">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
@@ -113,12 +111,10 @@
 								</div>
 							</div>
 						</div>
-
-
 					</div>
 					<div class="row h-25">
 						<div class="col-12 col-md-6 mb-4">
-							<div class="card border-left-success shadow h-100 py-2">
+							<div class="card border-left-success shadow h-100 py-2 myPageLink">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
@@ -137,9 +133,8 @@
 								</div>
 							</div>
 						</div>
-
 						<div class="col-12 col-md-6 mb-4">
-							<div class="card border-left-warning shadow h-100 py-2">
+							<div class="card border-left-warning shadow h-100 py-2 myPageLink">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
@@ -169,37 +164,36 @@
 					</div>
 					<div class="row h-25 invisible" id="managerCard">
 						<div class="col-12 col-md-6 mb-4">
-							<div class="card border-left-info shadow h-100 py-2">
-								<div class="card-body"
+							<div class="card border-left-light bg-gradient-info text-white border-light shadow h-100 py-2">
+								<div class="card-body myPageLink"
 									onclick="location.href='<c:url value="/schedule/TimelineScheduling" />';">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
 											<div
-												class="text-lg font-weight-bold text-info text-uppercase mb-1">Scheduling</div>
+												class="text-lg font-weight-bold text-light text-uppercase mb-1">Scheduling</div>
 											<div class="h4 mb-0 font-weight-bold text-center">
 												<a href="<c:url value='/schedule/TableScheduling' />"
-													class="text-decoration-none">排班</a>
+													class="text-decoration-none text-light">排班</a>
 											</div>
 										</div>
 										<div class="sidebar-brand-text mx-auto">
-											<i class="fas fa-calendar-plus fa-4x text-info"></i>
+											<i class="fas fa-calendar-plus fa-4x text-light"></i>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-
 						<div class="col-12 col-md-6 mb-4">
-							<div class="card border-left-secondary shadow h-100 py-2">
-								<div class="card-body">
+							<div class="card border-left-light bg-gradient-secondary border-light shadow h-100 py-2">
+								<div class="card-body myPageLink">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
 											<div
-												class="text-lg font-weight-bold text-secondary text-uppercase mb-1">
+												class="text-lg font-weight-bold text-white text-uppercase mb-1">
 												Application Review</div>
 											<div class="h4 mb-0 font-weight-bold text-center">
 												<a href="#" id="ApplicationReview"
-													class="text-decoration-none dropdown-toggle" role="button"
+													class="text-decoration-none dropdown-toggle text-white" role="button"
 													data-toggle="dropdown" aria-haspopup="true"
 													aria-expanded="true"> 簽核管理 </a>
 												<div
@@ -213,7 +207,7 @@
 											</div>
 										</div>
 										<div class="sidebar-brand-text mx-auto">
-											<i class="fas fa-stamp fa-4x text-secondary"></i>
+											<i class="fas fa-stamp fa-4x text-white"></i>
 										</div>
 									</div>
 								</div>
@@ -248,6 +242,5 @@
 
 	<!-- Custom scripts for all pages-->
 	<script src="js/sb-admin-2.min.js"></script>
-
 </body>
 </html>

@@ -58,7 +58,7 @@ public class LeaveBean {
 	@Column(name = "HANDOFFEMAIL")
 	private String handOffEmail;
 	@Column(name = "SUPPORTINGDOC")
-	private Blob supportingDoc;
+	private String supportingDoc;
 	@Column(name = "fileNAME")
 	private String fileName;
 	
@@ -227,11 +227,11 @@ public class LeaveBean {
 		this.handOffEmail = handOffEmail;
 	}
 
-	public Blob getSupportingDoc() {
+	public String getSupportingDoc() {
 		return supportingDoc;
 	}
 
-	public void setSupportingDoc(Blob supportingDoc) {
+	public void setSupportingDoc(String supportingDoc) {
 		this.supportingDoc = supportingDoc;
 	}
 

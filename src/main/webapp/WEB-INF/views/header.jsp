@@ -110,7 +110,7 @@ $(function (){
 	let preAnnivD = new Date("${sessionScope.loginModel.employedDate}")
 	preAnnivD.setFullYear(new Date().getFullYear());
 	//無條件進位年差
-	let diff = Math.ceil(Math.round((annivD.setTime(annivD.getTime())-recruitD.setTime(recruitD.getTime()))/1000/60/60/24/365));
+	let diff = Math.ceil(((annivD.setTime(annivD.getTime())-recruitD.setTime(recruitD.getTime()))/1000/60/60/24+1)/365);
 	annivLDay = diff*7;
 	if(new Date > annivD){
 	// 	console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 已過去, 今年特休總額："+annivLDay+"天");

@@ -23,8 +23,10 @@
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET","<c:url value='/Leave/findLeaveByEmpNo' />?EmpNo=${sessionScope.loginModel.getEmpNo()}",true);
 		xhr.send();
+		$("#loaderimg").show();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
+				$("#loaderimg").hide();
 				document.getElementById("tbodycontent").innerHTML = processData(xhr.responseText);
 // 					let leaveList = JSON.parse(xhr.responseText);
 //					console.log(leaveList);
@@ -101,6 +103,7 @@
 <body>
 	<!-- 最外層 -->
 	<div class="container-fluid h-75 pt-4">
+		<img id="loaderimg" src='<c:url value="/img/ajaxloader.gif" />' style='position:absolute; left:50%; top:50%;transform: translate(-50%, -50%);z-index:2;display=none'>
 		<!-- Page Heading -->
 		<div class="d-sm-flex align-items-center justify-content-between mb-2">
 			<h1 class="h3 mb-0 text-gray-800">請假申請資訊</h1>
@@ -191,6 +194,44 @@
 		return r;
 	};
 	
+// 	Encoding a File as a DataURL
+	$("#supportingDoc").change(function(e){
+		let fName = $("#supportingDoc")[0].files[0].name;
+		console.log($("#supportingDoc")[0].files[0].name.indexOf(".pdf"));
+		const file = e.target.files[0];
+		if(!file) return;
+		if($("#supportingDoc")[0].files[0].name.indexOf(".pdf")>0){
+			$("#fileString").text(URL.createObjectURL(file));
+// 			URL.revokeObjectURL(fileUrl);
+		} else {
+			//encode the file using the FileReader API
+			const reader =new FileReader();
+			reader.onloadend = () =>{
+// 				console.log(reader.result);
+				$("#fileString").text(reader.result);
+			};
+			reader.readAsDataURL(file);
+		}
+	});
+	
+// 	Encoding the File as a Base64 string
+// 	$("#supportingDoc").change(function(e){
+// 		const file = e.target.files[0];
+// 		if(!file) return;
+// 		//encode the file using the FileReader API
+// 		const reader =new FileReader();
+// 		reader.onloadend = () =>{
+// 		// use a regex to remove data url part
+// 	    const base64String = reader.result
+// 	        .replace("data:", "")
+// 	        .replace(/^.+,/, "");
+// // 			console.log(base64String);
+// // 			console.log($("#supportingDoc")[0].files[0].name);
+// 			$("#fileString").text(base64String);
+// 		};
+// 		reader.readAsDataURL(file);
+// 	});
+	
 	//新增資料
 	$("#submitBtn").click(function() {
 		var hasError = false;
@@ -206,6 +247,8 @@
 		var comments = document.getElementById("comments").value;
 		var handOffSelect = document.getElementById("handOffSelect");
 		var handOffEmail = document.getElementById("handOffEmail");
+		var supportingDoc = $("#fileString").text();
+		var fileName = $("#supportingDoc")[0].files[0].name;
 		if (reasonList.selectedIndex != 0) {
 		} else{	hasError = true;
 			$("#reasonSelect").addClass("is-invalid");
@@ -256,7 +299,9 @@
 			"comments" : comments,
 			"handOff" : handOffSelect.value,
 			"handOffEmail" : handOffEmail.value,
-			"statusList" : {"code": "S01"}
+			"statusList" : {"code": "S01"},
+			"supportingDoc" : supportingDoc,
+			"fileName" : fileName
 		}
 		xhr1.setRequestHeader("Content-Type", "application/json");
 		xhr1.send(JSON.stringify(jsonData));

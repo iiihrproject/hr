@@ -391,6 +391,7 @@
 </head>
 <body>
 	<div class="container-fluid h-75 pt-4">
+		<img id="loaderimg" src='<c:url value="/img/ajaxloader.gif" />' style='position:absolute; left:50%; top:50%;transform: translate(-50%, -50%);z-index:2;display=none'>
 		<!-- Basic Card Example -->
 		<div class="card shadow mb-4">
 			<!-- Begin of card-header -->
@@ -398,7 +399,6 @@
 				<div class="row">
 					<div class="col-auto">
 						<h6 class="m-0 font-weight-bold text-primary">排班表</h6></div>
-						<img id="loaderimg" src='<c:url value="/img/ajaxloader.gif" />' style='position:absolute; left:50%; top:50%;transform: translate(-50%, -50%);z-index:2;display=none'>
 					<div class="col-auto">
 						<strong>今天想要預設...</strong> <input type="number" value="9"
 							id="defStartH" style="width: 45px;" />點開始，工作+休息共<input
