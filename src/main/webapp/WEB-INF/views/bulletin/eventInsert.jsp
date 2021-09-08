@@ -188,6 +188,10 @@
        }
     
     function quotaEnter() {
+    	document.getElementById('quotanid').value = 50; 
+       }
+    
+    function endDateEnter() {
     	document.getElementById('enddate').value = '2021-09-30'; 
        }
     
