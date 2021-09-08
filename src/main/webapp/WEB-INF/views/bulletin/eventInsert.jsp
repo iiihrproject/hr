@@ -188,7 +188,11 @@
        }
     
     function quotaEnter() {
-    	document.getElementById('quotanid').value = 50; 
+    	document.getElementById('enddate').value = '2021-09-30'; 
+       }
+    
+    function expEnter() {
+    	document.getElementById('exp').value = '2021-10-31'; 
        }
 
     
@@ -255,7 +259,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                          	<td style="text-align: right">
+                                          	<td style="text-align: right" onclick="endDateEnter()">
                                             	<label for="" class="col-form-label ">報名截止 :</label>
                                             </td>
                                             <td>
@@ -271,7 +275,7 @@
                     						</td>
                                         </tr>
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">貼文下架 :</label></td>
+                                            <td style="text-align: right" onclick="expEnter()"><label for="" class="col-form-label">貼文下架 :</label></td>
                 							<td>
                     						<input type="date" id="exp" name="exp" class="form-control" style="width:200px;" required >
                     						<span id=result3c class="form-text"></span>
