@@ -77,15 +77,8 @@ Double remainingHours = (Double) httpSession.getAttribute("remainingHours");
 </div>
 <script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
 <script>
-// //放頭圖
-// $(function(){
-// 	$.get("<c:url value='/G/findEmpByPk' />?empId=" + ${sessionScope.loginModel.pk},function(data,status){
-// 		$("#profilePic").attr("src",data.photo);
-// 	});
-// });
-
-//計算請假
 $(function (){
+	//計算請假
 	let recruitD = new Date("${sessionScope.loginModel.employedDate}");
 	let todayD = new Date().toISOString().slice(0,10);
 	let annivD = new Date("${sessionScope.loginModel.employedDate}");
@@ -128,6 +121,9 @@ $(function (){
 				    '<i class="fa fa-thumbs-up"></i> 超棒的!'
 			})
 	});
-
+	//放頭圖
+	$.get("<c:url value='/G/findEmpPicByPk' />?empId=" + ${sessionScope.loginModel.pk},function(data,status){
+		$("#profilePic").attr("src",data.photo);
+	});
 });
 </script>

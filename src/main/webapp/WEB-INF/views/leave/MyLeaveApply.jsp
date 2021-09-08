@@ -413,7 +413,7 @@ function setCSS(){
         </button>
       </div>
       <div class="modal-body justify-content-center">
-        <img id="m_supportingDoc" class="m-auto d-block" src="" alt="" />
+        <img id="m_supportingDoc" class="m-auto d-block" style="width:400px;object-fit:contain" src="" alt="" />
       </div>
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
@@ -431,7 +431,7 @@ function setCSS(){
 	
 // 	彈出視窗的CSS
 	$("#modalTable th").addClass("table-secondary");
-	$("#sig-canvas").css("cursor", "crosshair").css("border","2px dotted #CCCCCC");
+	$("#sig-canvas").css("border","2px dotted #CCCCCC");
 
 // 	列印按鈕的功能
 	$("#printTable").click(function() {

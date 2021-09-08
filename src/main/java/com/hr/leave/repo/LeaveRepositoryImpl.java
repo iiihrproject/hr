@@ -12,6 +12,7 @@ import com.hr.leave.model.LeaveBean;
 import com.hr.leave.model.ListBean;
 import com.hr.login.model.LoginModel;
 import com.hr.personnel.model.Personnel;
+import com.hr.schedule.model.ProfilePic;
 @Repository
 public class LeaveRepositoryImpl implements LeaveRepository {
 
@@ -110,6 +111,14 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 		return r != null ? r.floatValue() : 0;
 		}
 		return 0;
+	}
+
+	@Override
+	public ProfilePic findEmpPicByPk(Integer empId) {
+		ProfilePic p = null;
+		String hql = "FROM ProfilePic WHERE empId = :empId";
+		p = entityManager.createQuery(hql, ProfilePic.class).setParameter("empId", empId).getSingleResult();
+		return p;
 	}
 
 }

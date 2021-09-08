@@ -6,6 +6,7 @@ import com.hr.leave.model.LeaveBean;
 import com.hr.leave.model.ListBean;
 import com.hr.login.model.LoginModel;
 import com.hr.personnel.model.Personnel;
+import com.hr.schedule.model.ProfilePic;
 
 public interface LeaveRepository {
 
@@ -28,4 +29,6 @@ public interface LeaveRepository {
 	public void updateSupervisorComment(String applicationNo, String approval01Sig, String approval01MGR, String status);
 
 	float findAnnualLTook(String empNo, String preAnnivD);
+
+	ProfilePic findEmpPicByPk(Integer empId);
 }

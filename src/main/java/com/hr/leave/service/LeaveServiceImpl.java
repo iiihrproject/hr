@@ -16,6 +16,7 @@ import com.hr.leave.model.ListBean;
 import com.hr.leave.repo.LeaveRepository;
 import com.hr.login.model.LoginModel;
 import com.hr.personnel.model.Personnel;
+import com.hr.schedule.model.ProfilePic;
 @Service
 @Transactional
 public class LeaveServiceImpl implements LeaveService {
@@ -95,5 +96,10 @@ public class LeaveServiceImpl implements LeaveService {
 	@Override
 	public float findAnnualLTook(String empNo, String preAnnivD) {
 		return leaveRepo.findAnnualLTook(empNo,preAnnivD);
+	}
+
+	@Override
+	public ProfilePic findEmpPicByPk(Integer empId) {
+		return leaveRepo.findEmpPicByPk(empId);
 	}
 }

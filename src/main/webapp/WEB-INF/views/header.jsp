@@ -87,7 +87,7 @@ Double remainingHours = (Double) httpSession.getAttribute("remainingHours");
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="###" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">${sessionScope.loginModel.name}</span>
-                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                <img class="img-profile rounded-circle" id="profilePic" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -145,6 +145,10 @@ $(function (){
 				    '<i class="fa fa-thumbs-up"></i> 超棒的!'
 			})
 	});
-
+	
+	//放頭圖
+	$.get("<c:url value='/G/findEmpPicByPk' />?empId=" + ${sessionScope.loginModel.pk},function(data,status){
+		$("#profilePic").attr("src",data.photo);
+	});
 });
 </script>

@@ -18,6 +18,7 @@ import com.hr.login.model.Authorities;
 import com.hr.login.model.LoginModel;
 import com.hr.login.service.LoginService;
 import com.hr.personnel.model.Personnel;
+import com.hr.schedule.model.ProfilePic;
 
 @Controller
 @RequestMapping("/G")
@@ -40,6 +41,12 @@ public class GlobalController {
 	@GetMapping(value="/findEmpByPk")
 	public @ResponseBody Personnel findEmpByPk(@RequestParam("empId") Integer empId) {
 		return leaveService.findEmpByPk(empId);
+	}
+	
+//	找頭圖
+	@GetMapping(value="/findEmpPicByPk")
+	public @ResponseBody ProfilePic findEmpPicByPk(@RequestParam("empId") Integer empId) {
+		return leaveService.findEmpPicByPk(empId);
 	}
 	
 //	找員工資訊
