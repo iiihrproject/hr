@@ -33,18 +33,20 @@ public class Personnel {
 	private String phoneNumber;
 	private String address;
 	private String email;
+	private String photo;
 	
 	public Personnel() {
 		super();
 	}
 
-	public Personnel(Integer empId, LoginModel loginModelInfo, String phoneNumber, String address, String email) {
+	public Personnel(Integer empId, LoginModel loginModelInfo, String phoneNumber, String address, String email, String photo) {
 		super();
 		this.empId = empId;
 		this.loginModelInfo = loginModelInfo;
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 		this.email = email;
+		this.photo = photo;
 	}
 
 	public Integer getEmpId() {
@@ -85,6 +87,14 @@ public class Personnel {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
 	}
 
 }
