@@ -247,8 +247,13 @@
 		var comments = document.getElementById("comments").value;
 		var handOffSelect = document.getElementById("handOffSelect");
 		var handOffEmail = document.getElementById("handOffEmail");
-		var supportingDoc = $("#fileString").text();
-		var fileName = $("#supportingDoc")[0].files[0].name;
+		if ($("#supportingDoc").get(0).files.length === 0){
+			var supportingDoc = "";
+			var fileName = "";
+		} else{
+			supportingDoc = $("#fileString").text();
+			fileName = $("#supportingDoc")[0].files[0].name;
+		}
 		if (reasonList.selectedIndex != 0) {
 		} else{	hasError = true;
 			$("#reasonSelect").addClass("is-invalid");
