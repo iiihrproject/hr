@@ -305,8 +305,7 @@ public class BulletinRepoImpl implements BulletinRepo {
 		bulletin.setPostStatus(bul.getPostStatus());
 		bulletin.setCreateTime(bul.getCreateTime());
 
-		System.out.println("----:" + bulletin.getFile1().equals("undefined"));
-		if (bulletin.getFile1().equals("undefined")) {
+		if (bulletin.getFile1()=="undefined"||bulletin.getFile1()=="null") {
 			System.out.println("----filename:" + bulletin.getFile1());
 			bul.setFile1(null);
 		}
@@ -405,10 +404,10 @@ public class BulletinRepoImpl implements BulletinRepo {
 		for (Object[] object : objects) {
 			ab = new BulName();
 
-			ab.setPostno((int) object[0]);
-			ab.setEnrollStatus((String) object[1]);
-			ab.setTitle((String) object[2]);
-			ab.setPostDate((Date) object[3]);		
+			ab.setPostno((int)object[0]);
+			ab.setEnrollStatus((String)object[1]);
+			ab.setTitle((String)object[2]);
+			ab.setPostDate((Date)object[3]);		
 
 			mylist.add(ab);
 

@@ -86,5 +86,4 @@ public class Personnel {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 }

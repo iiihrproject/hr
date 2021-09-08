@@ -111,21 +111,22 @@ public class ComplementSignServiceImpl implements ComplementSignService {
 			
 			int empID = loginModel.getPk();
 			String depName = loginModel.getDepartmentDetail().getName();
+			String empName = loginModel.getName();
 			Date checkTime = checkService.getTimeByType(type,dateString,empID);
 			
 			double times = checkService.judgmentDate(checkTime, appliedDate);
 			
 			if(checksystem == null) {
 				checksystem = new Checksystem();
+				checksystem.setEmpName(empName);
 				checksystem.setEmpNo(empNo);
 				checksystem.setDepName(depName);
-				System.out.println(" checkSystem == null");
 				//判斷是否上班或下班遲到 早退
 				boolean isNotOnTime = false;
 				if("CheckIn".equals(type)) {
 					isNotOnTime = times > 0;
 				}else {
-					isNotOnTime = times > 0;
+					isNotOnTime = times >= 0;
 				}
 				String isLate = isNotOnTime ? "Y" : "N";
 				
@@ -144,7 +145,7 @@ public class ComplementSignServiceImpl implements ComplementSignService {
 				if("CheckIn".equals(type)) {
 					isNotOnTime = times > 0;
 				}else {
-					isNotOnTime = times > 0;
+					isNotOnTime = times >= 0;
 				}
 				String isLate = isNotOnTime ? "Y" : "N";
 				

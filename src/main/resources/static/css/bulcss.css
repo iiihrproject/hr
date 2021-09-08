@@ -1,0 +1,45 @@
+
+.table-hover-color tbody tr:hover {
+  color: #373840;
+}
+
+.btn-outline-heart {
+	color: #D0D0D0;
+	background-color: #fff;
+	border-color: #fff;
+}
+
+.btn-outline-heart:hover {
+	color: #CE0000;
+  	background-color: #fff;
+  	border-color: #fff;
+}
+
+/* .btn-heart:hover  {
+	color: #D0D0D0;
+	background-color: #fff;
+	border-color: #fff;
+} */
+
+.btn-heart{
+	color: #CE0000;
+  	background-color: #fff;
+  	border-color: #fff;
+}
+
+#datatableid tr {
+	height: 50px;
+
+}
+
+#datatableid td {
+	vertical-align: middle;
+}
+
+#datatableid th {
+	vertical-align: middle;
+}
+
+/* #dataTable {
+	color:#5a5c69;
+} */

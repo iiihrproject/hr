@@ -26,6 +26,7 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+    <link rel="stylesheet" href="<c:url value='css/bulcss.css' />">
     
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->
@@ -99,6 +100,7 @@
             formData.append("desText", destextValue);
             formData.append("file1", file);
             formData.append("quotatype", quotaValue);
+            formData.append("quota", 0);
             formData.append("postdate", postdateValue);
             formData.append("exp", expValue);
             

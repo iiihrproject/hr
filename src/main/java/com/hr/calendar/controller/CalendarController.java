@@ -56,9 +56,7 @@ public class CalendarController {
 	//新增項目&//修改項目
 	@PostMapping("/calendarTaskUpdate")
 	public @ResponseBody CalendarTask updatCeTask(
-//			@ModelAttribute LoginModel loginModel,
 			@SessionAttribute LoginModel loginModel,
-//			@RequestParam("task") CalendarTask theTask
 			@RequestBody CalendarTask theTask
 			) {
 		String result = "";   //to-do

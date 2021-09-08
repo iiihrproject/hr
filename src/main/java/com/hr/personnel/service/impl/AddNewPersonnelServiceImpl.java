@@ -33,13 +33,18 @@ public class AddNewPersonnelServiceImpl implements AddNewPersonnelService{
 	
 	@Override
 	public boolean createNewPersonnel(Map<String, String> inputMap) {
+		LoginModel checkLoginModel = addNewPersonnelRepository.getLoginModelByEmpNo(inputMap.get("empNo"));
+		if(checkLoginModel != null) {
+			return false;
+		}
+		
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
 		String employedDate = sdf.format(date);
 		
 		String empNo = inputMap.get("empNo");
-		CharSequence rawPassword = empNo.subSequence(0, empNo.length());
+		CharSequence rawPassword = "password";
 		String encryptedPassword = passwordEncoder.encode(rawPassword);
 		
 		DepartmentDetail departmentDetail = addNewPersonnelRepository.findDepartment(Integer.parseInt(inputMap.get("departmentDetail")));

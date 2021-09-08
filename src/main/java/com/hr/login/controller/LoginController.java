@@ -60,7 +60,16 @@ public class LoginController {
 	}
 	
 	@GetMapping(path="/pages")
-	public String loginPage() {
+	public String loginPage(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String empNo = authentication.getName();
+		LoginModel loginModel = loginService.getLoginModelByEmpNo(empNo);
+		Double sumHours = overTimeService.sumOverTimeHours(empNo);
+		Double remainingHours = 46 - sumHours ;
+
+		model.addAttribute("sumHours",sumHours);
+		model.addAttribute("remainingHours",remainingHours);
+		model.addAttribute("loginModel", loginModel);
 		return "pages";
 
 	}	

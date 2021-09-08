@@ -1,6 +1,7 @@
 package com.hr.leave.model;
 
 import java.io.File;
+import java.sql.Blob;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -57,7 +58,9 @@ public class LeaveBean {
 	@Column(name = "HANDOFFEMAIL")
 	private String handOffEmail;
 	@Column(name = "SUPPORTINGDOC")
-	private File supportingDoc;
+	private String supportingDoc;
+	@Column(name = "fileNAME")
+	private String fileName;
 	
 	@OneToOne(targetEntity = ListBean.class, cascade = { CascadeType.DETACH })
 	@JoinColumn(name = "STATUS", referencedColumnName = "code")
@@ -72,7 +75,6 @@ public class LeaveBean {
 
 	public LeaveBean() {
 	}
-
 
 	@Override
 	public String toString() {
@@ -107,7 +109,9 @@ public class LeaveBean {
 		builder.append(handOffEmail);
 		builder.append(", supportingDoc=");
 		builder.append(supportingDoc);
-		builder.append(", status=");
+		builder.append(", fileName=");
+		builder.append(fileName);
+		builder.append(", statusList=");
 		builder.append(statusList);
 		builder.append(", approval01MGR=");
 		builder.append(approval01MGR);
@@ -223,11 +227,11 @@ public class LeaveBean {
 		this.handOffEmail = handOffEmail;
 	}
 
-	public File getSupportingDoc() {
+	public String getSupportingDoc() {
 		return supportingDoc;
 	}
 
-	public void setSupportingDoc(File supportingDoc) {
+	public void setSupportingDoc(String supportingDoc) {
 		this.supportingDoc = supportingDoc;
 	}
 
@@ -269,6 +273,14 @@ public class LeaveBean {
 
 	public void setApproval01Date(Date approval01Date) {
 		this.approval01Date = approval01Date;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }

@@ -42,7 +42,7 @@
     <!-- .js請從此後寫 -->
     <style type="text/css">
 		.currentPage{
-			background-color: #008F8F;
+			background-color: lavender;
 		}
 		table{
 			text-align: center;
@@ -143,12 +143,14 @@
 			
 			for(let n = 0 ; n< signpendings.length; n++){
 				let signpending = signpendings[n];
+				var status = signpending.status;
+				if(status =='pending') status ='待審核'
 				segment += "<tr>";
 				segment += "<td>"+ (signpending.date).substring(0,10) + "</td>";
 				segment += "<td>"+ signpending.empNo + "</td>";
 				segment += "<td>"+ (signpending.appliedDate).substring(0,10) + "</td>";
 				segment += "<td>"+ (signpending.appliedDate).substring(11,16) + "</td>";
-				segment += "<td>"+ signpending.status + "</td>";
+				segment += "<td>"+ status + "</td>";
 				segment += "<td>"+ signpending.reason + "</td>";
 			}
 			segment += "</table>";
@@ -186,12 +188,15 @@
 			segment += "<tr><th>申請日期</th><th>員編</th><th>補簽日期</th><th>補簽時間</th><th>審核狀態</th><th>原由</th></tr>";
 			for(let n = 0 ; n< signauditteds.length; n++){
 				let signauditted = signauditteds[n];
+				var status = signauditted.status;
+				if(status =='Pass') status ='通過'
+				else status = '退件';
 				segment += "<tr>";
 				segment += "<td>"+ (signauditted.date).substring(0,10) + "</td>";
 				segment += "<td>"+ signauditted.empNo + "</td>";
 				segment += "<td>"+ (signauditted.appliedDate).substring(0,10) + "</td>";
 				segment += "<td>"+ (signauditted.appliedDate).substring(11,16) + "</td>";
-				segment += "<td>"+ signauditted.status + "</td>";
+				segment += "<td>"+ status + "</td>";
 				segment += "<td>"+ signauditted.reason + "</td>";
 			}
 			segment += "</table>";
@@ -302,7 +307,7 @@
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Leave query</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800 text-center">
-                                            <a href="<c:url value='/checkInto' />" class="text-decoration-none">請假查詢</a></div>
+                                            <a href="<c:url value='/Leave/MyLeaveApply' />" class="text-decoration-none">請假查詢</a></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-power-off fa-3x text-warning"></i>
@@ -320,7 +325,7 @@
 							</select>
 							
 							<button id="search" class="btn btn-secondary">搜尋</button>
-							
+							<a href="<c:url value='/empCheck' />" class="text-decoration-none"><button  class="btn btn-secondary" style="float:right;">回出勤首頁</button></a>
 							<div id="signpending" data-toggle='table' align=center ></div>
 							<br><br>
 							<div id="signauditted" data-toggle='table' align=center ></div>

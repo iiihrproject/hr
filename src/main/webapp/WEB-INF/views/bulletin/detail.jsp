@@ -26,6 +26,7 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+    <link rel="stylesheet" href="<c:url value='css/bulcss.css' />">
     
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->
@@ -44,8 +45,11 @@
 	
 	window.onload = function() {
  		msgData();
- 		loadenrollnum();
- 		loadenrollment();
+ 		if(`${bulletin.type}` =='公告'){
+ 		} else {
+ 			loadenrollnum();
+ 	 		/* loadenrollment(); */
+ 		}
  		loadLike();
  		
  		
@@ -142,15 +146,14 @@
 			for (let n = 0; n < le; n++) {
 				let BulMessage = posts[n];
 			
-				segment += "<tr>";
+				segment += "<tr style=' color:#484a55'>";
 				if(BulMessage.msgStatus=="已刪除"){
-					segment += "<td style='font-style:italic; color:#BEBEBE'>（此筆留言已刪除）</td>";
-					segment += "<td></td>";
+					segment += "<td  colspan='2' style='font-style:italic; color:#BEBEBE'>（這筆留言已刪除）</td>";
 					segment += "<td></td>";
 				}else{
-					segment += "<td>"+ BulMessage.message +"</td>";
-			
+
 					segment += "<td>"+ BulMessage.empName +"</td>";
+					segment += "<td>"+ BulMessage.message +"</td>";
 					if(BulMessage.empNo==`${sessionScope.loginModel.getEmpNo()}`){
 						segment += "<td>"+ BulMessage.messageDate +"&emsp;";
 						segment += "<a onclick='delMsg("+BulMessage.id+")' style='color:#ac2c20' data-toggle='modal' data-target='#massgaeModal'>刪除</a></td>";
@@ -181,7 +184,7 @@ function delMsg (id){
 	$("#delCheck").click(function(){
 
 	let xhr3 = new XMLHttpRequest();
-	xhr3.open("GET", "<c:url value='/bulletinDelMsg' />/?id=" + id);
+	xhr3.open("GET", "<c:url value='/bulletinDelMsg' />?id=" + id);
 	xhr3.send();
 	xhr3.onreadystatechange = function() {
 		if (xhr3.readyState == 4 && xhr3.status == 200){
@@ -230,19 +233,19 @@ function loadLike (){
 				likeS += '<span class="icon btn-outline-heart" id="like" onclick="changelike()">';
 				likeS += '<i class="bi bi-suit-heart-fill" style="font-size:24px; vertical-align:middle"></i></span>';
 				$("#likespan").html(likeS);
-				console.log("likeS1:"+likeS);	
+				console.log("likeS1");	
 			}
 			else if (bulLike.likeStatus=='喜歡'){
 				likeS += '<span class="icon btn-heart" id="like" onclick="changelike()">';
 				likeS += '<i class="bi bi-suit-heart-fill" style="font-size:24px; vertical-align:middle"></i></span>';
 				$("#likespan").html(likeS);
-				console.log("likeS2:"+likeS);	
+				console.log("likeS2");	
 				
 			} else{
 				likeS += '<span class="icon btn-outline-heart" id="like" onclick="changelike()">';
 				likeS += '<i class="bi bi-suit-heart-fill" style="font-size:24px; vertical-align:middle"></i></span>';
 				$("#likespan").html(likeS);
-				console.log("likeS3:"+likeS);	
+				console.log("likeS3");	
 			}
 			console.log("likeS:"+bulLike.likeStatus);
 		}
@@ -261,7 +264,8 @@ function changelike() {
 }
 
 
-function loadenrollment (){
+function loadenrollment (enrollNum){
+	
 	let xhr6 = new XMLHttpRequest();
 	let url = "<c:url value='/bulletinFindEnroll' />";
 	let empnoo = `${sessionScope.loginModel.getEmpNo()}`;
@@ -279,12 +283,10 @@ function loadenrollment (){
 			}
 
  			let num = $("#numspan").text();
-			console.log("----num:"+num); 
+			console.log("--bulletin.quota:"+`${bulletin.quota}`);
 			console.log("--enrollNum:"+enrollNum);
-			console.log("--${bulletin.quota}:"+${bulletin.quota});
 			if (!bulEnroll){
-				if (enrollNum>=${bulletin.quota}) {
-					
+				if (enrollNum>=${bulletin.quota} && `${bulletin.quotatype}` =='限制') {
 					enrollS += '報名額滿';
 					$("#applyspan").html(enrollS);
 					$("#apply").removeAttr("data-toggle");
@@ -355,15 +357,23 @@ function loadenrollnum(){
 	xhr8.onreadystatechange = function() {
 		if (xhr8.readyState == 4 && xhr8.status == 200) {
 			enrollNum = xhr8.responseText;
+			if(`${bulletin.quotatype}` =='不限'){
+				console.log("執行loadenrollment前enrollNum:"+enrollNum)
+				loadenrollment(enrollNum);
+			} else {
 			numspan.innerHTML = enrollNum;
 			console.log("執行完enrollNum:"+enrollNum)
+			loadenrollment(enrollNum);
+			}
 
 		}
-		
-
 	}
+
 }
 	
+function titleEnter() {
+ 	 document.getElementById('message').value = '截止了好可惜，'; 
+   }
 	
 	</script>
 
@@ -418,7 +428,7 @@ function loadenrollnum(){
                                         </c:when>
                                         <c:otherwise>
                                         	<tr>
-                                            	<td>已報名人數：<span id="numspan">0</span>&nbsp;／&nbsp;可報名人數：${bulletin.quota}</td>
+                                            	<td style=' color:#5a5c69'>已報名人數：<span id="numspan">0</span>&nbsp;／&nbsp;可報名人數：${bulletin.quota}</td>
                                         	</tr>
                                         </c:otherwise>
                                         </c:choose>
@@ -465,8 +475,8 @@ function loadenrollnum(){
                             <!-- 留言區 -->
                             <div  id="messageArea">
                             
-                    		<div class="card mb-4 py-3 border-left-warning">
-                    			<div class="card-body">
+                    		<div class="card mb-4 py-3 border-left-warning"  style="width:80%">
+                    			<div class="card-body" >
                     				<div class="table-responsive">
                     				
                     					<table class="" width="100%" cellspacing="0" style="border: 0px solid #fff;">
@@ -481,6 +491,7 @@ function loadenrollnum(){
                                         			<button class="btn btn-success btn-icon-split btn-sm" id="sendMsg">
                                         			<span class="text">留言</span>
                                     				</button>
+                                    				<span onclick="titleEnter()" style="color:white">輸入</span>
                                     			</td>
                                     		</tr>
                                     		<tr>
@@ -492,8 +503,8 @@ function loadenrollnum(){
                                 		<table class="table table-bordered" width="100%" cellspacing="0">
                                    			<thead>
                                     			<tr>
-                                    				<th width=55%>留言</th>
                                     				<th width=20%>留言者</th>
+                                    				<th width=55%>留言</th>
                                     				<th width=25%>留言日期</th>
                                     			</tr>
                                     		</thead>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import = "com.hr.login.model.LoginModel"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +26,8 @@
     
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
-    <link rel="stylesheet" href="<c:url value='css/mycss.css' />">    
+    <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+    <link rel="stylesheet" href="<c:url value='css/bulcss.css' />">    
     <script src="<c:url value='js/jquery-3.6.0.min.js' />"></script>
     <!-- .js請從此後寫 -->
     
@@ -75,7 +77,6 @@
 			customButtons: {
 				custom: {
 			      click: function initCalendar(){		    	  
-			    	  	console.log("--*");
 			    	  	if(shifeCheck){
 				    	 	let xhrLoad = new XMLHttpRequest();
 							xhrLoad.open("GET", "<c:url value='/shiftsforcalendar' />");
@@ -97,7 +98,7 @@
 				 							shiftsAryObj["start"] = userShifts[n].start;
 				 							shiftsAryObj["end"] = userShifts[n].end;
 				 							shiftsAryObj["title"] = userShifts[n].title;	
-				 							shiftsAryObj["color"] = "#FF8000";
+				 							shiftsAryObj["color"] = "#7973AE";
 				 							shiftsAryObj["description"] = userShifts[n].title;
 				 	 						
 				 	 						shiftsAry.push(shiftsAryObj);
@@ -110,7 +111,7 @@
 				 							$(this).addClass("shift-btn-hover")
 				 						})
 				 						shifeCheck = false;
-				 						console.log(shifeCheck);
+// 				 						console.log(shifeCheck);
 				 					}
 	
 								}
@@ -121,7 +122,7 @@
 							document.getElementsByClassName("fc-custom-button")[0].innerHTML = "顯示班表";
 							$(".fc-custom-button").css("opacity","0.9");
 							shifeCheck = true;	
-							console.log(shifeCheck);
+// 							console.log(shifeCheck);
 						}
 			    	  	
 					}		//end of click						
@@ -159,22 +160,23 @@
 // 				click for existEvent
 				eventClick : function(info) {
 					modalInit();					
-					console.log(info);
-					
+
 					let monthStr = "00,01,02,03,04,05,06,07,08,09,10,11,12".split(",");
-					let realStMon = monthStr[(info.event.start).toLocaleDateString().split("/")[1]]
-					let realEdMon = monthStr[(info.event.end).toLocaleDateString().split("/")[1]]
+					let realStMon = monthStr[(info.event.start).toLocaleDateString().split("/")[1]];
+					let realEdMon = monthStr[(info.event.end).toLocaleDateString().split("/")[1]];
+// 					console.log("realEdMon: " + realEdMon);
+// 					console.log("realMon: " + realMon);
 					let dayStr = "00,01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31".split(",");
-					let realStDay = dayStr[(info.event.start).toLocaleDateString().split("/")[2]]
-					let realEdDay = dayStr[(info.event.end).toLocaleDateString().split("/")[2]]
+					let realStDay = dayStr[(info.event.start).toLocaleDateString().split("/")[2]];
+					let realEdDay = dayStr[(info.event.end).toLocaleDateString().split("/")[2]];
 					let sDateStr = (info.event.start).toLocaleDateString().split("/");
 					let sTimeStr = (info.event.start).toTimeString();
 					let sTime1 = sDateStr[0] + "-" + realStMon + "-" + realStDay + "T" + sTimeStr.substr(0,8);
-
+// 					console.log("**st " + sTime1);
 					let eDateStr = (info.event.end).toLocaleDateString().split("/");
 					let eTimeStr = (info.event.end).toTimeString();
 					let eTime1 = eDateStr[0] + "-" + realEdMon + "-" + realEdDay + "T" + eTimeStr.substr(0,8);
-
+// 					console.log("**ed " + eTime1);
 					
 					
 					startInput.value = sTime1;
@@ -185,10 +187,10 @@
 					textInput.value = info.event.extendedProps.description;
 					let taskNo = document.getElementById("taskNo_");
 					taskNo.value = info.event.extendedProps.no;
-					console.log(taskNo.value);
 
 					console.log("edit");
 					$("#AddEvent").modal("show");
+	
 					
 					if(taskNo.value == "shift"){
 						document.getElementById("AddEventTitle").innerHTML = "班別查詢";
@@ -216,7 +218,7 @@
 			
 			eventDidMount: function(info) {
 					$(info.el).tooltip({
-			        title: info.event.extendedProps.description,
+			        title: "【" + info.event.title + "】：" + info.event.extendedProps.description,
 			        placement: 'top',
 			        trigger: 'hover',
 			        container: 'body'
@@ -228,6 +230,8 @@
 			calendar.render();
 			document.getElementsByClassName("fc-custom-button")[0].innerHTML = "顯示班表";
 		};
+		
+		
 	</script>
 
 
@@ -263,15 +267,14 @@
 				eventsAryObj["end"] = calendarTasks[n].end;
 				eventsAryObj["title"] = calendarTasks[n].title;	
 				eventsAryObj["color"] = calendarTasks[n].color;
-// 				eventsAryObj["textColor"] = calendarTasks[n].color;
 				eventsAryObj["description"] = calendarTasks[n].description;
 				
 			
 				eventsAry.push(eventsAryObj);
 			}
 			if(shifeCheck){
-				console.log(shifeCheck);
-				console.log(eventsAry);    //format for fullcalendar
+// 				console.log(shifeCheck);
+// 				console.log(eventsAry);    //format for fullcalendar
 				newCalendar(eventsAry);
 			}else{
 				newCalendar(eventsAry, shiftsAry);
@@ -304,7 +307,6 @@
 			}else{
 				startArea.innerHTML = "";
 			}
-			console.log(startVal + " + " + endVal);
 			if(!endVal){
 				alertWords(endArea, "※請選擇時間");
 				inpuCheck = false;			
@@ -347,9 +349,9 @@
 				"description": textVal,
 				"no": taskNoVal,
 			};
-			console.log(jsonTask);
-			console.log("here=" + jsonTask.no);
-			console.log("here=" + jsonTask.title);
+// 			console.log(jsonTask);
+// 			console.log("==>" + jsonTask.no);
+// 			console.log("==>" + jsonTask.title);
 						
 			
 			let xhrNew = new XMLHttpRequest();
@@ -359,13 +361,13 @@
 			
 			let taskContent = JSON.stringify(jsonTask);		
 			xhrNew.send(taskContent);
-			console.log(taskContent);	
+// 			console.log(taskContent);	
 				
 
 			xhrNew.onreadystatechange = function(){
 				if(xhrNew.readyState == 4){
 					if(xhrNew.status == 200 || xhrNew.status == 201){
-						console.log(xhrNew.responseText);
+// 						console.log(xhrNew.responseText);
 						taskResult = JSON.parse(xhrNew.responseText);
 						initCalendar();
 						$("#AddEvent").modal("hide");
@@ -397,7 +399,7 @@
 			let jsonTask ={
 					"no": document.getElementById("taskNo_").value,
 				};
-			console.log(jsonTask);
+// 			console.log(jsonTask);
 			
 			let xhrDelete = new XMLHttpRequest();
 			xhrDelete.open("POST", "<c:url value='/calendarTaskDelete' />", true);
@@ -405,11 +407,11 @@
 			
 			let taskContent = JSON.stringify(jsonTask);
 			xhrDelete.send(taskContent);
-			console.log(taskContent);
+// 			console.log(taskContent);
 			xhrDelete.onreadystatechange = function(){
 				if(xhrDelete.readyState == 4){
 					if(xhrDelete.status == 200 || xhrDelete.status == 201){
-						console.log(xhrDelete.responseText);
+// 						console.log(xhrDelete.responseText);
 						taskResult = xhrDelete.responseText;						
 						initCalendar();
 						$("#deleteAlert").modal("hide");
@@ -421,6 +423,29 @@
 				
 			}
 		}
+		
+// 		一鍵輸入行程
+		$("#AddEventTitle").click(function(){
+			startInput.value = "2021-09-20T11:30";
+			endInput.value = "2021-09-23T15:30";
+			colorInput.value = "#FF8040";
+			titleInput.value = "例行會議";
+			textInput.value = "分部巡視";
+		});
+		$("#titleTest_").click(function(){
+			startInput.value = "2021-09-20T11:30";
+			endInput.value = "2021-09-23T15:30";
+			colorInput.value = "#FF8040";
+			titleInput.value = "例行會議議議議議議議議議議議議議議議議議議議議議";
+			textInput.value = "分部巡視";
+		});
+		$("#textTest_").click(function(){
+			startInput.value = "2021-09-20T11:30";
+			endInput.value = "2021-09-23T15:30";
+			colorInput.value = "#FF8040";
+			titleInput.value = "例行會議";
+			textInput.value = "分部巡視 局長也要出席，早上11點就要提醒他，記得要帶公事包還有行李出門，不然又要幫他找便利商店(野外真的很難找，不要忘記提醒他!!!!!!!!!)";
+		});
 
 		
 		
@@ -479,7 +504,7 @@
 			if(bulletin.type == '公告' ){
 				segment += "<td style='text-align:center'>-</td>";
 			} else if (bulletin.quotatype == '不限') {
-				segment += "<td>不限</td>";
+				segment += "<td style='text-align:center'>不限</td>";
 			} else {
 				segment += "<td style='text-align:center'>" + bulletin.enCount +"&nbsp;/&nbsp;"+ bulletin.quota + "</td>";
 			}
@@ -500,7 +525,8 @@ function processBulButton(result) {
 		console.log("執行false");
 	}
 }
-	
+	let ped = `${sessionScope.loginModel.getEmployeePassword()}`;
+	console.log(ped);
 	</script>
 
 </head>
@@ -551,11 +577,11 @@ function processBulButton(result) {
                                                                 <input type="color" class="form-control" id="color_" value="#7973AE">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="title_" class="col-form-label">主旨</label><span id="titleArea_"></span>
+                                                                <label for="title_" class="col-form-label" id="titleTest_">主旨</label><span id="titleArea_"></span>
                                                                 <input type="text" class="form-control" id="title_" autocomplete="on">
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="message_" class="col-form-label">內容</label><span id="messageArea_"></span>
+                                                                <label for="message_" class="col-form-label" id="textTest_">內容</label><span id="messageArea_"></span>
                                                                 <textarea class="form-control" id="message_"></textarea>
                                                             </div>
                                                         </form>
@@ -563,8 +589,7 @@ function processBulButton(result) {
                                                     <div class="modal-footer justify-content-center">
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="backSumbit_">取消</button>
                                                             <button type="submit" class="btn btn-danger" id="deleteSumbit_">刪除</button>
-                                                            <button type="submit" class="btn btn-primary" id="taskSumbit_" >送出</button>
-                                                            <!-- sumit+click(ajax)     //onclick="insertMessage();"      maxlength="20"-->
+                                                            <button type="submit" class="btn btn-primary" id="taskSumbit_" >送出</button>                                                            
                                                     </div>                                                   
 													                                                   
                                                 </div>

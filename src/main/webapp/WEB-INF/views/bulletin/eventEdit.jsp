@@ -26,6 +26,7 @@
     <link href="<c:url value='css/sb-admin-2.min.css' />" rel="stylesheet">
     <link rel="icon" href="<c:url value='img/favicon.png' />">
     <link rel="stylesheet" href="<c:url value='css/mycss.css' />">
+    <link rel="stylesheet" href="<c:url value='css/bulcss.css' />">
     
     <script src="js/jquery-3.6.0.min.js"></script>
     <!-- .js請從此後寫 -->
@@ -39,9 +40,10 @@
 
     var hasError = false;
     var ofile = "notchange";
+   
     
     window.onload = function () {
-    	
+    	let divResult = document.getElementById('resultMsg');
     	//送出修改
         let sendData = document.getElementById("sendData");
         sendData.onclick = function () {
@@ -54,7 +56,7 @@
             let quotanValue = "";
         	if(quotaValue!=null){
         	quotanValue = document.getElementById("quotanid").value;
-        	let enddateValue = document.getElementById("enddate").value;
+        	var enddateValue = document.getElementById("enddate").value;
         	}
         	
             let postdateValue = document.getElementById("postdate").value;
@@ -117,6 +119,7 @@
         	}
             	
             if (hasError) {
+            	divResult.innerHTML = "<font color='red' >請確認資料是否正確輸入</font>";
                 return false;
             }
             console.log(hasError);
@@ -177,11 +180,11 @@
                 contentType: false,
                 success: function (data) { 
                 	printresult(data);
-                    console.log("送出成功");
+                    console.log("送出成功:"+data);
                 },
                 fail: function (data) { 
-                	printresult("送出失敗");
-                    console.log("送出失敗");
+                	printresult("送出失敗:"+data);
+                    console.log("送出失敗:"+data);
                 }
             });
             }
@@ -191,7 +194,7 @@
     }
     
     function printresult(data){
-    var divResult = document.getElementById('resultMsg');
+     var divResult = document.getElementById('resultMsg'); 
         if (data=="修改失敗") {
             divResult.innerHTML = "<font color='red' >" + data + "</font>";
         } else if (data=="修改成功") {
@@ -238,6 +241,8 @@
     	ofile = "change";
     	console.log("ofile(selectImgFile):"+ofile);
     }
+  
+
 
     
 	</script>
@@ -272,7 +277,7 @@
                                     <tbody>
                                     <form enctype="multipart/form-data;charset=utf-8" id="inserForm">
                                         <tr>
-                                            <td style="text-align: right"><label for="" class="col-form-label">主&emsp;&emsp;旨 :</label>
+                                            <td style="text-align: right" ><label for="" class="col-form-label"  >主&emsp;&emsp;旨 :</label>
                                             </td>
                                             <td><input type="text" id="title" name="title" class="form-control"  size="30" maxlength="30" style="width:600px;" value="${bulletin.title}" required />
                                             	<span id="result0c" class="form-text"></span>
@@ -495,7 +500,7 @@
                     <h5 class="modal-title mx-auto" id="resultModalLabel">貼文修改</h5>
                 </div>
                 <div class="modal-body">
-                    <span id="resultMsg" style="margin:3px auto"><font color='red' >未完成，請再確認</font></span><br/>
+                    <span id="resultMsg" style="margin:3px auto"><font color='red' ></font></span><br/>
                 </div>
                 <div class="modal-footer justify-content-center" id="resultbutton">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal" id="resultbutton">返回編輯</button>

@@ -41,6 +41,10 @@
     	document.getElementById('username').value = 'rd2';
     	document.getElementById('password').value = 'password';
     }
+    function generalButton4 () {
+    	document.getElementById('username').value = 'rd4';
+    	document.getElementById('password').value = 'password';
+    }
     function managerButton () {
     	document.getElementById('username').value = 'rdmanager';
     	document.getElementById('password').value = 'password';
@@ -54,6 +58,15 @@
     	document.getElementById('password').value = 'password';
     }
     
+    function puButton () {
+    	document.getElementById('username').value = 'pu1';
+    	document.getElementById('password').value = 'password';
+    }
+    
+    function pumanagerButton () {
+    	document.getElementById('username').value = 'pumanager';
+    	document.getElementById('password').value = 'password';
+    }
     </script>
   </head>
   <body>
@@ -75,9 +88,12 @@
             <span>
             <button type="button" class="buttonst" onclick="generalButton1()">RD1</button>
             <button type="button" class="buttonst" onclick="generalButton2()">RD2</button>
+            <button type="button" class="buttonst" onclick="generalButton4()">RD4</button>
             <button type="button" class="buttonst" onclick="managerButton()">RDManager</button>
             <button type="button" class="buttonst" onclick="hrButton()">HR</button>
             <button type="button" class="buttonst" onclick="hrmanagerButton()">HR Manager</button>
+            <button type="button" class="buttonst" onclick="pumanagerButton()">PU Manager</button>
+            <button type="button" class="buttonst" onclick="puButton()">PU1</button>
             </span>
             <br/>
           </form>

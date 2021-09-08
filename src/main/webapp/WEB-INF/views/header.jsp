@@ -1,21 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!-- 引用SweetAlert2 -->
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!-- 引用SweetAlert2 funsa-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.4/sweetalert2.all.min.js" type="text/javascript"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.4/sweetalert2.min.css" />
-
+<!--     引用SweetAlert2.js kai yu-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.0/sweetalert2.all.js"></script>
+<!--     引用SweetAlert2.css kai yu-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.3/sweetalert2.css" />
+<!-- 計算加班 -->
 <%
 	request.setCharacterEncoding("UTF-8");
-	HttpSession httpSession = request.getSession(true);
-
-	Double sumHours = (Double)httpSession.getAttribute("sumHours");
-	
-	Double remainingHours =(Double)httpSession.getAttribute("remainingHours");
+HttpSession httpSession = request.getSession(true);
+Double sumHours = (Double) httpSession.getAttribute("sumHours");
+Double remainingHours = (Double) httpSession.getAttribute("remainingHours");
 %>
 
-
-    <!-- Page Wrapper -->
+<!-- Page Wrapper -->
     <div id="wrapper">
 
         <!-- Sidebar -->
@@ -72,7 +73,7 @@
                         <div class="narbar-brand">
                             <h2 class="font-weight-bold mb-3">HR有限公司 人力資源系統</h2>
                             <span class="text-dark">特休剩餘：<strong id="annivLDay"></strong>日</span><a href="#" id="annivCD" class="text-danger warning"> (請於 <strong id="anniDate"></strong> 前使用完畢)</a><br/>
-                            <span class="text-dark">加班總計時數：【${sessionScope.sumHours}】小時&nbsp</span><span class="text-danger warning">(請注意加班時數是否正確)</span><br/>
+                            <span class="text-dark">加班總計時數：【${sessionScope.sumHours}】小時&nbsp</span><span class="text-danger warning">(請注意加班時數是否正確)</span>&emsp;
                             <span class="text-dark">加班剩餘時數：【${sessionScope.remainingHours}】小時&nbsp</span><span class="text-danger warning">(請注意剩餘時數)</span>
                         </div>  
 
@@ -100,29 +101,42 @@
                 </nav>
                 <!-- End of Topbar -->                
 <script>
+// 計算請假
+$(function (){
 	let recruitD = new Date("${sessionScope.loginModel.employedDate}");
-	let todayD = new Date();
+	let todayD = new Date().toISOString().slice(0,10);
 	let annivD = new Date("${sessionScope.loginModel.employedDate}");
 	annivD.setFullYear(new Date().getFullYear());
+	let preAnnivD = new Date("${sessionScope.loginModel.employedDate}")
+	preAnnivD.setFullYear(new Date().getFullYear());
 	//無條件進位年差
-	var diff = Math.ceil(Math.round((annivD.setTime(annivD.getTime())-recruitD.setTime(recruitD.getTime()))/1000/60/60/24/365));
+	let diff = Math.ceil(((annivD.setTime(annivD.getTime())-recruitD.setTime(recruitD.getTime()))/1000/60/60/24+1)/365);
 	annivLDay = diff*7;
-	$("#annivLDay").text(annivLDay);
 	if(new Date > annivD){
-		console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 已過去, 今年特休總額："+annivLDay+"天");
+	// 	console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 已過去, 今年特休總額："+annivLDay+"天");
 		annivD.setFullYear(annivD.getFullYear()+1);
 	} else{
-		console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 還沒到, 今年特休總額："+annivLDay+"天");
+		preAnnivD.setFullYear(preAnnivD.getFullYear()-1);
+	// 	console.log("到職日：${sessionScope.loginModel.employedDate}, 年資周年紀念 還沒到, 今年特休總額："+annivLDay+"天");
 	}
-	var due = annivD.toISOString().slice(0,10);
+	let a = preAnnivD.toISOString().slice(0,10);
+	let due = annivD.toISOString().slice(0,10);
 	$("#anniDate").text(due);
+	
+	let queryString = "?preAnnivD=" + a;
+	$.get("<c:url value='/Leave/findAnnualLTook' />"+queryString,function(data,status){
+		return $("#annivLDay").text(annivLDay-data);
+	});
+
 	$("#annivCD").click(function(){
-		let sD = new Date(td);
+		let sD = new Date(todayD);
 		let eD = new Date(due);
 		let dD = Math.ceil(Math.round((eD.getTime()-sD.getTime())/1000/60/60/24));
+	// 	var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+	// 	var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
 		Swal.fire({
 			  title: '再'+dD+'天!',
-			  html: '就是第'+diff+'個里程碑了! 想想年假~~',
+			  html: '就是第'+diff+'個里程碑了! 想想年假怎麼安排好~~',
 			  imageUrl: '<c:url value="/img/work-anniversary.png" />',
 			  imageWidth: 400,
 			  imageHeight: 300,
@@ -131,4 +145,6 @@
 				    '<i class="fa fa-thumbs-up"></i> 超棒的!'
 			})
 	});
+
+});
 </script>

@@ -69,7 +69,7 @@ public class BulletinUpdController implements Serializable {
 			bulletinService.updateop(bulletin);
 			result = "修改成功";
 		} catch (Exception e) {
-			result = "修改失敗";
+			result = "修改失敗，請再確認";
 		}
 		return result;
 	}
@@ -84,8 +84,8 @@ public class BulletinUpdController implements Serializable {
 			@RequestParam(value = "file1", required = false) MultipartFile multipartFile,
 			@RequestParam("quotatype") String quotatype,
 			@RequestParam(value = "quota", defaultValue = "0") Integer quota, 
-			@RequestParam("enddate") Date endDate,
-			@RequestParam("postdate") Date postdate,
+			@RequestParam("endDate") Date endDate,
+			@RequestParam("postDate") Date postdate,
 			@RequestParam("exp") Date exp, 
 			HttpServletRequest request)
 			throws IllegalStateException, IOException, SerialException, SQLException {
@@ -135,9 +135,11 @@ public class BulletinUpdController implements Serializable {
 		try {
 			bulletinService.update(bulletin);
 			result = "修改成功";
+			System.out.println("result1:"+result);
 
 		} catch (Exception e) {
-			result = "修改失敗";
+			result = "修改失敗，請再確認";
+			System.out.println("result2:"+result);
 
 		}
 		return result;
@@ -153,7 +155,7 @@ public class BulletinUpdController implements Serializable {
 			bulletinService.delete(postno);
 			result = "刪除成功";
 		} catch (Exception e) {
-			result = "刪除失敗";
+			result = "刪除失敗，請再確認";
 		}
 		return result;
 	}
@@ -168,7 +170,7 @@ public class BulletinUpdController implements Serializable {
 			bulletinService.updateop(bulletin);
 			result = "刪除成功";
 		} catch (Exception e) {
-			result = "刪除失敗";
+			result = "刪除失敗，請再確認";
 		}
 		return result;
 	}

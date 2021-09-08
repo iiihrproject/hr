@@ -1,10 +1,20 @@
 package com.hr.leave.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +38,9 @@ import com.hr.login.model.LoginModel;
 public class LeaveController {
 	@Autowired
 	private LeaveService service;
+	
+	@Autowired
+	ServletContext context;
 	
 	//	@DeleteMapping("/leave/{applicationNo}")
 //	public String deleteOne(@RequestParam("applicationNo") String applicationNo) {
@@ -73,6 +86,13 @@ public class LeaveController {
 		return service.findLeaveByEmpNo(loginModel.getEmpNo());
 	}
 
+//	查詢今年度用申請的特休數
+	@GetMapping("/findAnnualLTook")
+	public @ResponseBody float findAnnualLTook(@ModelAttribute("loginModel") LoginModel loginModel,
+												@RequestParam("preAnnivD") String preAnnivD) {
+		return service.findAnnualLTook(loginModel.getEmpNo(),preAnnivD);
+	}
+	
 //	新增請假
 	@PostMapping("/Insert")
 	public @ResponseBody Map<String, String> save(@RequestBody LeaveBean leave,LoginModel loginModel) {
@@ -96,6 +116,7 @@ public class LeaveController {
 		return service.findLeaveByAppNo(applicationNo);
 	}
 	
+//	更新主管簽呈資訊
 	@PutMapping("/updateSupervisorComment/{applicationNo}")
 	public @ResponseBody Map<String, String> updateSupervisorComment(@RequestBody LeaveBean leaveBean,
 			@PathVariable("applicationNo") String applicationNo) {
@@ -114,49 +135,72 @@ public class LeaveController {
 		return map;
 	}
 
-//	@PostMapping("/Insert")
-//	public String Insert(HttpServletRequest request, @RequestParam("reason") String reason_id,
-//			@RequestParam("startDate") String startDate, @RequestParam("startTime") String startTime,
-//			@RequestParam("endDate") String endDate, @RequestParam("endTime") String endTime,
-//			@RequestParam("comments") String comments, @RequestParam("hand-off") String handOff,
-//			@RequestParam("hand-offemail") String handOffemail, @RequestParam("supportingDoc") String supportingDoc,
-//			Model m) throws ParseException {
-//		try {
-//			HttpSession session2 = request.getSession();
-//			String empNo = (String) session2.getAttribute("empid");
-//			LeaveBean leave = service.insert(empNo, reason_id, startDate, startTime, endDate, endTime, comments,
-//					handOff, handOffemail, supportingDoc);
-//			m.addAttribute("leave", leave);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return "LeaveApplication/InsertLeaveResult";
-//	}
+	
+	
+//	@GetMapping("/crm/picture/{appNo}")
+//	public ResponseEntity<byte[]> getPicture(@PathVariable("appNo") String appNo) {
+//		byte[] body = null;
+//		ResponseEntity<byte[]> re = null;
+//		MediaType mediaType = null;
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 //
-//	@PostMapping("/Leave/update")
-//	public String Update(@RequestParam("applicationNo") String applicationNo, @RequestParam("reason") String reason,
-//			@RequestParam("startDate") String startDate, @RequestParam("startTime") String startTime,
-//			@RequestParam("endDate") String endDate, @RequestParam("endTime") String endTime,
-//			@RequestParam("comments") String comments, @RequestParam("hand-off") String handOff,
-//			@RequestParam("hand-offemail") String handOffemail, @RequestParam("supportingDoc") String supportingDoc,
-//			HttpServletRequest request, Model m) throws ParseException {
-//		HttpSession session2 = request.getSession();
-//		String empNo = (String) session2.getAttribute("empid");
-//		String days = "0.5";
-//		try {
-//			LeaveBean leave = service.update(empNo, applicationNo, reason, startDate, startTime, endDate, endTime, days,
-//					comments, handOff, handOffemail, supportingDoc);
-//			m.addAttribute("leave", leave);
-//		} catch (Exception e) {
-//			e.printStackTrace();
+//		LeaveBean leave = service.findLeaveByAppNo(appNo);
+//		if (leave == null) {
+//			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
 //		}
-//		return "LeaveApplication/InsertLeaveResult";
+//		String filename = leave.getFileName();
+//		if (filename != null) {
+//			if (filename.toLowerCase().endsWith("jfif")) {
+//				mediaType = MediaType.valueOf(context.getMimeType("dummy.jpeg"));
+//			} else {
+//				mediaType = MediaType.valueOf(context.getMimeType(filename));
+//				headers.setContentType(mediaType);
+//			}
+//		}
+//		Blob blob = leave.getSupportingDoc();
+//		if (blob != null) {
+//			body = blobToByteArray(blob);
+//		} else {
+//			String path = "img/noFile.jpg";
+//			
+//			body = fileToByteArray(path);
+//		}
+//		re = new ResponseEntity<byte[]>(body, headers, HttpStatus.OK);
+//
+//		return re;
 //	}
+	
+//	憲春老師的範例
+	private byte[] fileToByteArray(String path) {
+		byte[] result = null;
+		try (InputStream is = context.getResourceAsStream(path);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();) {
+			byte[] b = new byte[819200];
+			int len = 0;
+			while ((len = is.read(b)) != -1) {
+				baos.write(b, 0, len);
+			}
+			result = baos.toByteArray();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+//	憲春老師的範例
+	public byte[] blobToByteArray(Blob blob) {
+		byte[] result = null;
+		try (InputStream is = blob.getBinaryStream(); ByteArrayOutputStream baos = new ByteArrayOutputStream();) {
+			byte[] b = new byte[819200];
+			int len = 0;
+			while ((len = is.read(b)) != -1) {
+				baos.write(b, 0, len);
+			}
+			result = baos.toByteArray();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 
-//	@PostMapping("/LeaveApplication/")
-//	public String SetSession(@RequestParam("account") String empNo, HttpServletRequest request) {
-//		HttpSession session = request.getSession();
-//		session.setAttribute("empid", empNo);
-//		return "frame/index";
-//	}
+	}
 }

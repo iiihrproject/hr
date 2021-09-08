@@ -36,10 +36,12 @@ function loadSchedule(){
 	let xhr = new XMLHttpRequest();
 	xhr.open("GET", "<c:url value='/schedule/findAllScheduleAjax'/>");
 	xhr.send();
+	$("#loaderimg").show();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
-		 processScheduleData(xhr.responseText);
-		 loadEmps();
+			$("#loaderimg").hide();
+	processScheduleData(xhr.responseText);
+	loadEmps();
 		}
 	}
 }
@@ -118,7 +120,11 @@ function renderScheduler(events,resources) {
       resourceAreaWidth: '10%',
       resourceAreaHeaderContent: '${sessionScope.loginModel.departmentDetail.name}',
       allDaySlot: false,
-      businessHours:true,
+      businessHours:{
+    	  daysOfWeek:[1,2,3,4,5],
+    	  startTime: '09:00',
+    	  endTime: '18:00',
+      },
 //       [ // 可以設定上班日，其他暗掉
 //     	  {
 //     	    daysOfWeek: [ 1, 2, 3 ], // Monday, Tuesday, Wednesday
@@ -231,6 +237,7 @@ body {
 </head>
 <body>
 	<div class="container-fluid h-75 pt-4">
+		<img id="loaderimg" src='<c:url value="/img/ajaxloader.gif" />' style='position:absolute; left:50%; top:50%;transform: translate(-50%, -50%);z-index:2;display=none'>
 		<!-- Basic Card Example -->
 		<div class="card shadow mb-4">
 			<!-- Begin of Card-body -->

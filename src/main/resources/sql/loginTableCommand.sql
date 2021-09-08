@@ -51,7 +51,7 @@ create table loginModel(
 create table authorities(
 	id int not null identity primary key,
 	emp_id int not null foreign key references loginModel(emp_id),
-	authorityName nvarchar(20) not null
+	authorityName nvarchar(max) not null
 );
 
 insert into loginModel( 

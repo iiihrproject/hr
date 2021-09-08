@@ -8,17 +8,21 @@
 <title>Scheduling</title>
 <script src="<c:url value='/js/jquery-3.6.0.min.js' />"></script>
 <script>
-	window.onload = function() {
+	$(function() {
 		loadData();
-	}
+	});
+	
 	function loadData() {
 		var empName = [];
 		let dataArea = document.getElementById("dataArea");
 		let xhr = new XMLHttpRequest();
-		xhr.open("GET", "<c:url value='/schedule/findAllScheduleAjax'/>");
+		let query="?deptNo="+${sessionScope.loginModel.departmentDetail.departmentNumber};
+		xhr.open("GET", "<c:url value='/schedule/findScheduleByDeptNo'/>"+query);
 		xhr.send();
+		$("#loaderimg").show();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
+				$("#loaderimg").hide();
 				dataArea.innerHTML = processScheduleData(xhr.responseText);
 				loadEmps(empName);
 				loadCSS();
@@ -34,7 +38,7 @@
 				+ "<td><select name='empList' id='empList' onfocus='setToday (this.id)' class='form-control'></select></td>"
 				+ "<td><input type='datetime-local' name='start' id='start' onchange='setEnd (this.id)' step='1800' class='form-control' /></td>"
 				+ "<td><input type='datetime-local' name='end' id='end' step='1800'  class='form-control'/></td>"
-				+ "<td><input type='text' name='titleList' id='titleList' value='到公司上班' class='form-control' /></td>"
+				+ "<td><input type='text' name='titleList' id='titleList' value='保衛地球' class='form-control' /></td>"
 				+ "<td><button id='sendData' onclick='sendData()' class=''>新增</button>"
 				+ "<button id='updateData' onclick='updateData()' style='visibility:hidden' class=''>更新</button>"
 				+ "<button id='cancelUpdate' onclick='cancelUpdate()' style='visibility:hidden' class=''>取消</button></td>"
@@ -79,12 +83,16 @@
 		var empListDef = document.getElementById('empListDef');
 // 		Option物件的方法
 		var option = new Option("選擇",-1);
+		var option2 = new Option("選擇",-1);
+		$("#empListDef option").detach();
 		selectEmps.options[selectEmps.options.length] = option;
 		selectEmps.options[0].disabled = true;
+		empListDef.options[empListDef.options.length] = option2;
+		empListDef.options[0].disabled = true;
 		for(let i = 0 ;i<empName.length; i++){
-			var option = new Option(empName[i][0],empName[i][1]);
+			option = new Option(empName[i][0],empName[i][1]);
 			selectEmps.options[selectEmps.options.length]=option;
-			var option2 = new Option(empName[i][0],empName[i][1]);
+			option2 = new Option(empName[i][0],empName[i][1]);
 			empListDef.options[empListDef.options.length]=option2;
 		}
 		//forEach的方法
@@ -171,7 +179,7 @@
 			messageBox.innerHTML = "<font color='red'>請選擇人員</font>";
 		} else if(start > end) {
 			hasError = true;
-			messageBox.innerHTML = "<font color='red'>日期錯誤，結束早於開始，是在哈囉?</font>";
+			messageBox.innerHTML = "<font color='red'>日期錯誤，結束早於開始，醒醒阿!</font>";
 		} else if(title == ""){
 			hasError = true;
 			messageBox.innerHTML = "<font color='red'>請填入職務</font>";
@@ -293,12 +301,72 @@
 					console.log("result.fail: " + result.fail)
 					messageBox.innerHTML = "<font color='red'>出現錯誤，請詢問相關人員</font>";
 				} else if (result.success) {
-					messageBox.innerHTML = "<font color='Green'>新增成功</font>";
+					console.log("result.success: " + result.success)
+					messageBox.innerHTML = "<font color='Green'>新增1筆成功</font>";
 					loadData();
 				}
 			}
 		}
 	}
+	
+	//新增多筆資料
+	$(document).ready(function() {
+		$("#add31Days").click(function() {
+			var hasError = false;
+			var messageBox = document.getElementById("messageBox");
+			let empList = document.getElementById("empList");
+			let empNo = empList.options[empList.selectedIndex].value;
+			let start = document.getElementById("start").value;
+			let end = document.getElementById("end").value;
+			let title = document.getElementById("titleList").value;
+			if (empList.selectedIndex == 0) {
+				hasError = true;
+				messageBox.innerHTML = "<font color='red'>請選擇人員</font>";
+			} else if (start > end) {
+				hasError = true;
+				messageBox.innerHTML = "<font color='red'>日期錯誤，結束早於開始，累了嗎?</font>";
+			} else if (title == "") {
+				hasError = true;
+				messageBox.innerHTML = "<font color='red'>請填入職務</font>";
+			}
+			if (hasError) {
+				return false;
+			}
+			//前端把秒移除，後端須加回去
+			if (start.length == 16) {
+				start += ":00"
+			}
+			if (end.length == 16) {
+				end += ":00"
+			}
+			var xhr1 = new XMLHttpRequest();
+			xhr1.open("POST","<c:url value='/schedule/addScheduleMonthly'/>",true);
+			var jsonSchedule = {
+				"emps" : {
+					"pk" : empNo
+				},
+				"start" : start,
+				"end" : end,
+				"title" : title,
+			}
+			xhr1.setRequestHeader("Content-Type","application/json");
+			xhr1.send(JSON.stringify(jsonSchedule));
+			xhr1.onreadystatechange = function() {
+				// 伺服器請求完成
+				if (xhr1.readyState == 4 && (xhr1.status == 200 || xhr1.status == 201)) {
+					result = JSON.parse(xhr1.responseText);
+					if (result.fail) {
+						console.log("result.fail: " + result.fail)
+						messageBox.innerHTML = "<font color='red'>出現錯誤，請詢問相關人員</font>";
+					} else if (result.success) {
+						messageBox.innerHTML = "<font color='Green'>新增一個月完成</font>";
+						loadData();
+					}
+				}
+			}
+		});
+	});
+
 	function loadCSS() {
 		$("button").addClass("btn btn-sm");
 		$("#sendData").addClass("btn-secondary");
@@ -306,47 +374,52 @@
 		$("tbody button").addClass("btn-light");
 		$("#cancelUpdate").addClass("btn-light");
 	}
-	
+	$(document).ready(function() {
+		$("#empListDef").change(function() {
+			$("#empList").val($("#empListDef").val());
+			setToday();
+		});
+		$("#DefTitle").keyup(function() {
+			$("#titleList").val($("#DefTitle").val());
+		});
+		$(window).resize(function() {
+			var winH = $(this).height();
+			$("#cardBody").height(winH * 0.6);
+		}).resize();
+	});
 </script>
 </head>
 <body>
 	<div class="container-fluid h-75 pt-4">
+		<img id="loaderimg" src='<c:url value="/img/ajaxloader.gif" />' style='position:absolute; left:50%; top:50%;transform: translate(-50%, -50%);z-index:2;display=none'>
 		<!-- Basic Card Example -->
 		<div class="card shadow mb-4">
 			<!-- Begin of card-header -->
 			<div class="card-header py-3">
 				<div class="row">
-						<div class="col-auto"><h6
-								class="m-0 font-weight-bold text-primary">排班表</h6></div>
-						<div class="col-auto"><strong>今天想要預設...</strong>
-							<input type="number" value="9" id="defStartH" style="width: 45px;" />點開始，工作+休息共<input
+					<div class="col-auto">
+						<h6 class="m-0 font-weight-bold text-primary">排班表</h6></div>
+					<div class="col-auto">
+						<strong>今天想要預設...</strong> <input type="number" value="9"
+							id="defStartH" style="width: 45px;" />點開始，工作+休息共<input
 							type="number" value="9" id="defPeriod" style="width: 45px;" />小時，專心排
-							<select name='empListDef' id='empListDef' onfocus='setToday (this.id)'></select>的班，職務都寫
-							<input type="text" value="到公司上班"/>
-							</div>
-						<div class="col-auto" id="messageBox"></div>
+						<select name='empListDef' id='empListDef'
+							onfocus='setToday (this.id)'></select>的班，職務都寫 <input type="text"
+							id="DefTitle" value="" />
+						<button type="button" id="add31Days"
+							class="btn btn-warning btn-sm text-dark ml-2">排一個月</button>
+					</div>
+					<div class="col-auto" id="messageBox"></div>
 				</div>
-
 			</div>
 			<!-- End of Card-header -->
 			<!-- Begin of Card-body -->
-			<div id ="cardBody" class="card-body navbar-nav-scroll">
+			<div id="cardBody" class="card-body navbar-nav-scroll">
 				<div id="dataArea"></div>
 			</div>
 			<!-- End of Card-body -->
 		</div>
 		<!-- End of Card -->
 	</div>
-<script>
-$("#empListDef").mouseover(function(){
-	$("#empListDef").val("4");
-	$("#empList").val($("#empListDef" ).val());
-	setToday();
-});
-$(window).resize(function() {
-    var winH = $(this).height();
-    $("#cardBody").height(winH*0.6);
-}).resize();
-</script>
 </body>
 </html>
