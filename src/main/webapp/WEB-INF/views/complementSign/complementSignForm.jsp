@@ -142,7 +142,7 @@
 		})
 		
 		$("#fast2").click(function(){
-			$("#date").val("2021-09-04T09:00");
+			$("#date").val("2021-09-07T09:00");
 			$(".selector").find("option:contains('上班')").attr("selected",true);
 			$("#reason").val("早上忘記打卡");
 		})
