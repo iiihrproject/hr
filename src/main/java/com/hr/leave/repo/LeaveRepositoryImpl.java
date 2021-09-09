@@ -100,7 +100,7 @@ public class LeaveRepositoryImpl implements LeaveRepository {
 		Query query = entityManager.createNativeQuery("select SUM (convert(decimal,days)) as total_annualLTook "
 				+ "from LeaveofAbsense "
 				+ "where empNo=? and status = 'S03' and "
-				+ "reason_id= 'R03' and STARTDATE > ? "
+				+ "reason_id= 'R03' and STARTDATE >= ? "
 				+ "group by empno")
 			.setParameter(1, empNo)
 			.setParameter(2, preAnnivD)

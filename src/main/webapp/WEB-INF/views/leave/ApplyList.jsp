@@ -169,7 +169,7 @@
 	<script>
 	$("#autofill").mouseover(function(){
 		$("#reasonSelect").val("R"+getRandom2digit(1,11));
-		$("#startDate").val("2021-"+getRandom2digit(1,12)+"-"+getRandom2digit(1,30));
+		$("#startDate").val("2021-09-"+getRandom2digit(1,30));
 		$("#endDate").val($("#startDate").val());
 		$("#comments").val("需要請假");
 		document.getElementById("handOffSelect").selectedIndex = getRandomNum(1,$("#handOffSelect option").length-1);
