@@ -367,7 +367,7 @@ function setCSS(){
         </button>
       </div>
       <div class="modal-body justify-content-center">
-        <img id="m_supportingDoc" class="m-auto d-block" src="" alt="" />
+        <img id="m_supportingDoc" class="m-auto d-block" style="object-fit:contain;width:400px" src="" alt="" />
       </div>
       <div class="modal-footer justify-content-center">
         <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>

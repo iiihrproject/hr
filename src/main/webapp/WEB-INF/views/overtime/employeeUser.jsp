@@ -172,10 +172,10 @@
 		$("#fast2").click(function(){
 			$('#pos').attr("value","RD");
 			$('#nday').attr("checked",true);
-			$("#OvertimeDate").val("2021-09-07");
+			$("#OvertimeDate").val("2021-09-09");
 			$('#stime').val("18:00"); 
 			$('#endtime').val("20:00");
-			$('#Cause').attr("value","研發新型蜘蛛絲發射器");
+			$('#Cause').attr("value","研發二代蜘蛛絲發射器");
 			$('#Remarks').html("完成度100%");
 		})
 	});
